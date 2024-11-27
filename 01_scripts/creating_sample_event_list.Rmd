@@ -27,22 +27,34 @@ plots <-c("p1", "p2", "d")
 #create vector for transects
 transect <-c("t1", "t2")
 
-#create vector for sections
-section <-c("rod-s1", "rod-s2", "rod-s3", "rod-s4", "rod-s5", 
-            "veg-q1e", "veg-q2e", "veg-q3e", "veg-q1m", "veg-q2m", "veg-q3m")
+#create vector for sections for veg survey
+section <-c("veg-q1e", "veg-q2e", "veg-q3e", "veg-q1m", "veg-q2m", "veg-q3m")
 
 #combine vectors into dataframe 
-Robin_samples <- site_names %>%
+Robin_samples1 <- site_names %>%
   expand_grid(round, plots, transect, section)
 
-#change transect and section vector to only contain those associated with bumble 
+#change round, transect and section vector to only contain those associated with bumble 
 #bee net surveys
+round <- c("r1", "r2")
 transect <- c("full-plot")
 section <- c("net")
 
 #add rows to dataframe
-site_names %>%
+Robin_samples2 <- site_names %>%
   expand_grid(round, plots, transect, section) %>% 
-  bind_rows(Robin_samples) %>% View()
+  bind_rows(Robin_samples1) 
+
+#change round, transect and section vector to only contain those associated with rodent 
+#surveys
+round <- c("r1", "r2")
+transect <-c("t1", "t2")
+section <- c("rod-s1", "rod-s2", "rod-s3", "rod-s4", "rod-s5")
+
+#add rows to dataframe
+Robin_samples3 <- site_names %>%
+  expand_grid(round, plots, transect, section) %>% 
+  bind_rows(Robin_samples2) %>% View()
+
 ```
 
