@@ -1,0 +1,34 @@
+---
+title: "Creating sampling event file"
+author: "Robin Glover"
+csl: https://www.zotero.org/styles/elsevier-harvard
+output: pdf_document
+bibliography: 
+---
+Load packages
+```{r}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+```
+
+
+```{r}
+site_names <- c("bates_57b", "bks_56", "chong_68", "bks_68", "chong_96", "bks_96", "gwb_neaves", "bks_neaves", "avtar_168", "surjit_168", "sandhu_ladnertrunk", "lbf_ladnertrunk")
+round <-c("r1", "r2", "r3")
+plots <-c("p1", "p2", "d")
+transect <-c("t1", "t2")
+section <-c("rod-s1", "rod-s2", "rod-s3", "rod-s4", "rod-s5", 
+            "veg-q1e", "veg-q2e", "veg-q3e", "veg-q1m", "veg-q2m", "veg-q3m")
+
+Robin_samples <- site_names %>%
+  expand_grid(round, plots, transect, section)
+
+transect <- c("full-plot")
+section <- c("net")
+
+site_names %>%
+  expand_grid(round, plots, transect, section) %>% 
+  bind_rows(Robin_samples) %>% View()
+```
+
