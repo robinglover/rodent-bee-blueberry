@@ -12,7 +12,7 @@ library(dplyr)
 library(tidyr)
 ```
 
-
+Creating sample event list
 ```{r}
 site_names <- c("bates_57b", "bks_56", "chong_68", "bks_68", "chong_96", "bks_96", "gwb_neaves", "bks_neaves", "avtar_168", "surjit_168", "sandhu_ladnertrunk", "lbf_ladnertrunk")
 round <-c("r1", "r2", "r3")
