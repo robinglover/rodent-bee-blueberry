@@ -1,0 +1,5 @@
+# Methods Tracking Document
+
+1) created sample event list (creating_sample_event_list.Rmd)
+
+2)
