@@ -1,0 +1,102 @@
+Date,Region name,Site name,Survey type,Plot number,Round,Include in analysis?,Sheet uploaded?,Entered?
+2024-04-01,pittmeadows,bks_neaves,rodent (holes only),p1 and p2. ditch sampled May 1.,1,y,y,
+2024-04-01,pittpeadows,gwb_neaves,rodent (holes only),p1 and p2. ditch sampled April 17,1,y,y,
+2024-04-01,pittmeadows,bks_neaves,vegetation (rodent),ditch sampled April 30.,1,n,don't include (R1 rod),don't enter yet
+2024-04-01,pittpeadows,gwb_neaves,vegetation (rodent),all,1,n,don't include (R1 rod),don't enter yet
+2024-04-16,delta_3,bates_57b,rodent (holes only),"p1 and p2. ditch sampled on May 6, 2024.",1,y,y,
+2024-04-16,delta_3,bates_57b,vegetation (rodent),"p1 and p2. ditch sampled on May 16, 2024.",1,n,don't include (R1 rod),don't enter yet
+2024-04-17,pittpeadows,gwb_neaves,rodent (holes only),d,1,y,y,
+2024-04-23,surrey,avtar_168,vegetation (bee and rodent),all except p1 t2 (redone on April 26),NS,n,y,don't enter yet
+2024-04-24,surrey,surjit_168,rodent (holes only),"p1 and p2. ditch sampled April 26, 2024",1,y,y,
+2024-04-24,surrey,surjit_168,vegetation (bee and rodent),all,NS,n,,don't enter yet
+2024-04-26,surrey,avtar_168,bombus,all,NS,n,y,NC
+2024-04-26,surrey,surjit_168,bombus,all,NS,n,y,don't enter yet
+2024-04-26,surrey,avtar_168,rodent (holes only),d,1,y,y,
+2024-04-26,surrey,surjit_168,rodent (holes only),d,1,y,y,
+2024-04-26,surrey,avtar_168,vegetation (bee and rodent),p1 t2,NS,n,y,don't enter yet
+2024-04-30,pittmeadows,bks_neaves,vegetation (rodent),d,1,n,don't include (R1 rod),don't enter yet
+2024-05-01,pittmeadows,bks_neaves,rodent (holes only),d,1,y,y,
+2024-05-03,delta_1,bks_68,rodent (holes only),all,1,y,y,
+2024-05-03,delta_1,chong_68,rodent (holes only),all,1,y,y,
+2024-05-06,delta_2,bks_96,rodent (holes only),all,1,y,y,
+2024-05-06,delta_2,chong_96,rodent (holes only),all,1,y,y,
+2024-05-06,delta_3,bates_57b,rodent (holes only),d,1,y,y,
+2024-05-06,delta_3,bks_56,rodent (holes only),all,1,y,y,
+2024-05-14,delta_1,bks_68,bombus,all,1,y,y,NC
+2024-05-14,delta_1,chong_68,bombus,all,1,y,y,NC
+2024-05-14,delta_1,bks_68,vegetation (bee and rodent),all,1,y,y,
+2024-05-14,delta_1,chong_68,vegetation (bee and rodent),all,1,y,y,
+2024-05-15,delta_2,bks_96,bombus,all,1,y,y,NC
+2024-05-15,delta_2,chong_96,bombus,all,1,y,y,NC
+2024-05-15,delta_2,bks_96,vegetation (bee and rodent),all,1,y,y,
+2024-05-15,delta_2,chong_96,vegetation (bee and rodent),all,1,y,y,
+2024-05-16,delta_3,bates_57b,vegetation (rodent),d,1,n,don't include (R1 rod),don't enter yet
+2024-05-16,delta_3,bks_56,vegetation (rodent),all,1,n,don't include (R1 rod),don't enter yet
+2024-05-22,pittmeadows,bks_neaves,bombus,all,1,y,y,NC
+2024-05-22,pittpeadows,gwb_neaves,bombus,all,1,y,y,NC
+2024-05-22,pittmeadows,bks_neaves,vegetation (bee),all,1,y,y,
+2024-05-22,pittpeadows,gwb_neaves,vegetation (bee),all,1,y,y,
+2024-05-23,surrey,avtar_168,rodent (holes only),"p1 and p2. ditch sampled April 26, 2024",1,y,y,
+2024-05-23,surrey,avtar_168,bombus,all,1,y,y,NC
+2024-05-23,surrey,avtar_168,vegetation (bee),all,1,y,y,
+2024-05-23,surrey,surjit_168,vegetation (bee),p1 and ditch floral abundance,1,y,y,
+2024-05-24,surrey,surjit_168,bombus,all,1,y,y,NC
+2024-05-24,surrey,surjit_168,vegetation (bee),"p2 and ditch (p1 and ditch floral abundance surveyed on May 23, 2024)",,y,y,
+2024-06-05,delta_4,lbf_ladnertrunk,bombus,all,1,y,y,NC
+2024-06-05,delta_4,sandhu_ladnertrunk,bombus,all,1,y,y,NC
+2024-06-05,delta_4,lbf_ladnertrunk,vegetation (bee and rodent),all,1,y,y,
+2024-06-05,delta_4,sandhu_ladnertrunk,vegetation (bee and rodent),all,1,y,y,
+2024-06-06,delta_3,bates_57b,bombus,all,1,y,y,
+2024-06-06,delta_3,bks_56,bombus,all,1,y,y,
+2024-06-06,delta_3,bates_57b,vegetation (bee),all,1,y,y,
+2024-06-06,delta_3,bks_56,vegetation (bee),all,1,y,y,
+2024-06-07,delta_4,lbf_ladnertrunk,rodent (holes only),all,1,y,y,
+2024-06-07,delta_4,sandhu_ladnertrunk,rodent (holes only),all,1,y,y,
+2024-06-18,delta_1,bks_68,bombus,all,2,y,y,NC
+2024-06-18,delta_1,chong_68,bombus,all,2,y,y,NC
+2024-06-18,delta_1,bks_68,vegetation (bee),all,2,y,y,
+2024-06-18,delta_1,chong_68,vegetation (bee),all,2,y,y,
+2024-06-19,delta_2,bks_96,bombus,all,2,y,y,NC
+2024-06-19,delta_2,chong_96,bombus,all,2,y,y,
+2024-06-19,delta_2,bks_96,vegetation (bee),all,2,y,y,
+2024-06-19,delta_2,chong_96,vegetation (bee),all,2,y,y,
+2024-06-20,pittmeadows,bks_neaves,bombus,all,2,y,y,NC
+2024-06-20,pittpeadows,gwb_neaves,bombus,all,2,y,y,NC
+2024-06-20,pittmeadows,bks_neaves,vegetation (bee),all,2,y,y,
+2024-06-20,pittpeadows,gwb_neaves,vegetation (bee),all,2,y,y,
+2024-06-21,delta_3,bates_57b,bombus,all,2,y,y,
+2024-06-21,delta_3,bks_56,bombus,all,2,y,y,
+2024-06-21,delta_3,bates_57b,vegetation (bee),all,2,y,y,
+2024-06-21,delta_3,bks_56,vegetation (bee),all,2,y,y,
+2024-07-02,delta_4,lbf_ladnertrunk,bombus,all,2,y,y,
+2024-07-02,delta_4,sandhu_ladnertrunk,bombus,all,2,y,y,
+2024-07-02,delta_4,lbf_ladnertrunk,vegetation (bee),all,2,y,y,
+2024-07-02,delta_4,sandhu_ladnertrunk,vegetation (bee),all,2,y,y,
+2024-07-03,surrey,avtar_168,bombus,all,2,y,y,
+2024-07-03,surrey,surjit_168,bombus,all,2,y,y,
+2024-07-03,surrey,surjit_168,vegetation (bee),all,2,y,y,
+2024-07-03,surrey,avtar_168,vegetation (bee),all,2,y,y,
+2024-07-09,delta_1,bks_68,rodent (powder),p1 and p2,2,y,na (already entered),RG/AD
+2024-07-09,delta_1,chong_68,rodent (powder),p1 and p2,2,y,na (already entered),RG/AD
+2024-07-10,delta_2,bks_96,rodent (powder),p1 and p2,2,y,na (already entered),RG/AD
+2024-07-10,delta_2,chong_96,rodent (powder),p1 and p2,2,y,na (already entered),RG/AD
+2024-07-10,delta_1,bks_68,vegetation (rodent),p1 and p2,3,y,y,
+2024-07-10,delta_2,bks_96,vegetation (rodent),p1 and p2,3,y,y,
+2024-07-10,delta_1,chong_68,vegetation (rodent),p1 and p2,3,y,y,
+2024-07-10,delta_2,chong_96,vegetation (rodent),p1 and p2,3,y,y,
+2024-07-23,delta_3,bates_57b,rodent (powder),p1 and p2,2,y,na (already entered),RG/AD
+2024-07-24,delta_4,lbf_ladnertrunk,rodent (powder),p1 and p2,2,y,na (already entered),RG/AD
+2024-07-24,delta_3,bates_57b,vegetation (rodent),p1 and p2,3,y,y,
+2024-07-24,delta_3,bks_56,vegetation (rodent),p1 and p2,3,y,y,
+2024-07-26,delta_4,lbf_ladnertrunk,vegetation (rodent),p1 and p2,3,y,y,
+2024-07-29,delta_4,sandhu_ladnertrunk,vegetation (rodent),p1 and p2,3,y,y (excel doc),
+2024-08-06,surrey,surjit_168,rodent (powder),all,2,y,na (already entered),RG/AD
+2024-08-06,surrey,avtar_168,rodent (powder),all,2,y,na (already entered),RG/AD
+2024-08-06,surrey,surjit_168,vegetation (rodent),all,3,y,y (excel doc),
+2024-08-06,surrey,avtar_168,vegetation (rodent),all,3,y,y (excel doc),
+2024-08-07,delta_3,bks_56,rodent (powder),p1 and p2,2,y,na (already entered),RG/AD
+2024-08-12,delta_4,sandhu_ladnertrunk,rodent (powder),p1 and p2,2,y,na (already entered),RG/AD
+2024-08-14,pittmeadows,bks_neaves,vegetation (rodent),p1 and p2,3,y,y (excel doc),
+2024-08-14,pittpeadows,gwb_neaves,vegetation (rodent),p1 and p2,3,y,y (excel doc),
+2024-10-01,pittmeadows,bks_neaves,rodent (powder),p1 and p2,2,y,na (already entered),RG/AD
+2024-10-01,pittpeadows,gwb_neaves,rodent (powder),p1 and p2,2,y,na (already entered),RG/AD

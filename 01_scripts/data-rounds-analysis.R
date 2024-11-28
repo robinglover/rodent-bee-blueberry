@@ -4,7 +4,7 @@ library(dplyr)
 library(tidyr)
 
 #read csv
-round_data <- read.csv("00_rawdata/data-entry-checklist.csv")
+round_data <- read.csv("00_rawdata/data-entry-checklist(checklist).csv")
 site_data <- read.csv("00_rawdata/site-info.csv")
 
 #add column to round data for site type (either grass or bare)
@@ -13,9 +13,10 @@ round_data1 <- round_data %>%
   rename(julien.date = Date) %>% #change date column name to "julien.date" 
   rename (field.type = grass) #change date column name to "julien.date" 
 
-#change fieldtype to a factor
+#change field type to a factor
 round_data1$field.type <- as.factor(round_data1$field.type)
 
+#change julien date to a date
 round_data1$julien.date <- as.Date(round_data1$julien.date)
 
 #plot date vs field type 
