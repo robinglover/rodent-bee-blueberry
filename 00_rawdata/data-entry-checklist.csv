@@ -1,0 +1,102 @@
+Date,Region name,Site name,Survey type,Plot number,Round,Include in analysis?,Sheet uploaded?,Entered?
+"Monday, April 1, 2024",pittmeadows,bks_neaves,rodent (holes only),p1 and p2. ditch sampled May 1.,1,y,y,
+"Monday, April 1, 2024",pittpeadows,gwb_neaves,rodent (holes only),p1 and p2. ditch sampled April 17,1,y,y,
+"Monday, April 1, 2024",pittmeadows,bks_neaves,vegetation (rodent),ditch sampled April 30.,1,n,don't include (R1 rod),don't enter yet
+"Monday, April 1, 2024",pittpeadows,gwb_neaves,vegetation (rodent),all,1,n,don't include (R1 rod),don't enter yet
+"Tuesday, April 16, 2024",delta_3,bates_57b,rodent (holes only),"p1 and p2. ditch sampled on May 6, 2024.",1,y,y,
+"Tuesday, April 16, 2024",delta_3,bates_57b,vegetation (rodent),"p1 and p2. ditch sampled on May 16, 2024.",1,n,don't include (R1 rod),don't enter yet
+"Wednesday, April 17, 2024",pittpeadows,gwb_neaves,rodent (holes only),d,1,y,y,
+"Tuesday, April 23, 2024",surrey,avtar_168,vegetation (bee and rodent),all except p1 t2 (redone on April 26),NS,n,y,don't enter yet
+"Wednesday, April 24, 2024",surrey,surjit_168,rodent (holes only),"p1 and p2. ditch sampled April 26, 2024",1,y,y,
+"Wednesday, April 24, 2024",surrey,surjit_168,vegetation (bee and rodent),all,NS,n,,don't enter yet
+"Friday, April 26, 2024",surrey,avtar_168,bombus,all,NS,n,y,NC
+"Friday, April 26, 2024",surrey,surjit_168,bombus,all,NS,n,y,don't enter yet
+"Friday, April 26, 2024",surrey,avtar_168,rodent (holes only),d,1,y,y,
+"Friday, April 26, 2024",surrey,surjit_168,rodent (holes only),d,1,y,y,
+"Friday, April 26, 2024",surrey,avtar_168,vegetation (bee and rodent),p1 t2,NS,n,y,don't enter yet
+"Tuesday, April 30, 2024",pittmeadows,bks_neaves,vegetation (rodent),d,1,n,don't include (R1 rod),don't enter yet
+"Wednesday, May 1, 2024",pittmeadows,bks_neaves,rodent (holes only),d,1,y,y,
+"Friday, May 3, 2024",delta_1,bks_68,rodent (holes only),all,1,y,y,
+"Friday, May 3, 2024",delta_1,chong_68,rodent (holes only),all,1,y,y,
+"Monday, May 6, 2024",delta_2,bks_96,rodent (holes only),all,1,y,y,
+"Monday, May 6, 2024",delta_2,chong_96,rodent (holes only),all,1,y,y,
+"Monday, May 6, 2024",delta_3,bates_57b,rodent (holes only),d,1,y,y,
+"Monday, May 6, 2024",delta_3,bks_56,rodent (holes only),all,1,y,y,
+"Tuesday, May 14, 2024",delta_1,bks_68,bombus,all,1,y,y,NC
+"Tuesday, May 14, 2024",delta_1,chong_68,bombus,all,1,y,y,NC
+"Tuesday, May 14, 2024",delta_1,bks_68,vegetation (bee and rodent),all,1,y,y,
+"Tuesday, May 14, 2024",delta_1,chong_68,vegetation (bee and rodent),all,1,y,y,
+"Wednesday, May 15, 2024",delta_2,bks_96,bombus,all,1,y,y,NC
+"Wednesday, May 15, 2024",delta_2,chong_96,bombus,all,1,y,y,NC
+"Wednesday, May 15, 2024",delta_2,bks_96,vegetation (bee and rodent),all,1,y,y,
+"Wednesday, May 15, 2024",delta_2,chong_96,vegetation (bee and rodent),all,1,y,y,
+"Thursday, May 16, 2024",delta_3,bates_57b,vegetation (rodent),d,1,n,don't include (R1 rod),don't enter yet
+"Thursday, May 16, 2024",delta_3,bks_56,vegetation (rodent),all,1,n,don't include (R1 rod),don't enter yet
+"Wednesday, May 22, 2024",pittmeadows,bks_neaves,bombus,all,1,y,y,NC
+"Wednesday, May 22, 2024",pittpeadows,gwb_neaves,bombus,all,1,y,y,NC
+"Wednesday, May 22, 2024",pittmeadows,bks_neaves,vegetation (bee),all,1,y,y,
+"Wednesday, May 22, 2024",pittpeadows,gwb_neaves,vegetation (bee),all,1,y,y,
+"Thursday, May 23, 2024",surrey,avtar_168,rodent (holes only),"p1 and p2. ditch sampled April 26, 2024",1,y,y,
+"Thursday, May 23, 2024",surrey,avtar_168,bombus,all,1,y,y,NC
+"Thursday, May 23, 2024",surrey,avtar_168,vegetation (bee),all,1,y,y,
+"Thursday, May 23, 2024",surrey,surjit_168,vegetation (bee),p1 and ditch floral abundance,1,y,y,
+"Friday, May 24, 2024",surrey,surjit_168,bombus,all,1,y,y,NC
+"Friday, May 24, 2024",surrey,surjit_168,vegetation (bee),"p2 and ditch (p1 and ditch floral abundance surveyed on May 23, 2024)",,y,y,
+"Wednesday, June 5, 2024",delta_4,lbf_ladnertrunk,bombus,all,1,y,y,NC
+"Wednesday, June 5, 2024",delta_4,sandhu_ladnertrunk,bombus,all,1,y,y,NC
+"Wednesday, June 5, 2024",delta_4,lbf_ladnertrunk,vegetation (bee and rodent),all,1,y,y,
+"Wednesday, June 5, 2024",delta_4,sandhu_ladnertrunk,vegetation (bee and rodent),all,1,y,y,
+"Thursday, June 6, 2024",delta_3,bates_57b,bombus,all,1,y,y,
+"Thursday, June 6, 2024",delta_3,bks_56,bombus,all,1,y,y,
+"Thursday, June 6, 2024",delta_3,bates_57b,vegetation (bee),all,1,y,y,
+"Thursday, June 6, 2024",delta_3,bks_56,vegetation (bee),all,1,y,y,
+"Friday, June 7, 2024",delta_4,lbf_ladnertrunk,rodent (holes only),all,1,y,y,
+"Friday, June 7, 2024",delta_4,sandhu_ladnertrunk,rodent (holes only),all,1,y,y,
+"Tuesday, June 18, 2024",delta_1,bks_68,bombus,all,2,y,y,NC
+"Tuesday, June 18, 2024",delta_1,chong_68,bombus,all,2,y,y,NC
+"Tuesday, June 18, 2024",delta_1,bks_68,vegetation (bee),all,2,y,y,
+"Tuesday, June 18, 2024",delta_1,chong_68,vegetation (bee),all,2,y,y,
+"Wednesday, June 19, 2024",delta_2,bks_96,bombus,all,2,y,y,NC
+"Wednesday, June 19, 2024",delta_2,chong_96,bombus,all,2,y,y,
+"Wednesday, June 19, 2024",delta_2,bks_96,vegetation (bee),all,2,y,y,
+"Wednesday, June 19, 2024",delta_2,chong_96,vegetation (bee),all,2,y,y,
+"Thursday, June 20, 2024",pittmeadows,bks_neaves,bombus,all,2,y,y,NC
+"Thursday, June 20, 2024",pittpeadows,gwb_neaves,bombus,all,2,y,y,NC
+"Thursday, June 20, 2024",pittmeadows,bks_neaves,vegetation (bee),all,2,y,y,
+"Thursday, June 20, 2024",pittpeadows,gwb_neaves,vegetation (bee),all,2,y,y,
+"Friday, June 21, 2024",delta_3,bates_57b,bombus,all,2,y,y,
+"Friday, June 21, 2024",delta_3,bks_56,bombus,all,2,y,y,
+"Friday, June 21, 2024",delta_3,bates_57b,vegetation (bee),all,2,y,y,
+"Friday, June 21, 2024",delta_3,bks_56,vegetation (bee),all,2,y,y,
+"Tuesday, July 2, 2024",delta_4,lbf_ladnertrunk,bombus,all,2,y,y,
+"Tuesday, July 2, 2024",delta_4,sandhu_ladnertrunk,bombus,all,2,y,y,
+"Tuesday, July 2, 2024",delta_4,lbf_ladnertrunk,vegetation (bee),all,2,y,y,
+"Tuesday, July 2, 2024",delta_4,sandhu_ladnertrunk,vegetation (bee),all,2,y,y,
+"Wednesday, July 3, 2024",surrey,avtar_168,bombus,all,2,y,y,
+"Wednesday, July 3, 2024",surrey,surjit_168,bombus,all,2,y,y,
+"Wednesday, July 3, 2024",surrey,surjit_168,vegetation (bee),all,2,y,y,
+"Wednesday, July 3, 2024",surrey,avtar_168,vegetation (bee),all,2,y,y,
+"Tuesday, July 9, 2024",delta_1,bks_68,rodent (powder),p1 and p2,2,y,na (already entered),RG/AD
+"Tuesday, July 9, 2024",delta_1,chong_68,rodent (powder),p1 and p2,2,y,na (already entered),RG/AD
+"Wednesday, July 10, 2024",delta_2,bks_96,rodent (powder),p1 and p2,2,y,na (already entered),RG/AD
+"Wednesday, July 10, 2024",delta_2,chong_96,rodent (powder),p1 and p2,2,y,na (already entered),RG/AD
+"Wednesday, July 10, 2024",delta_1,bks_68,vegetation (rodent),p1 and p2,3,y,y,
+"Wednesday, July 10, 2024",delta_2,bks_96,vegetation (rodent),p1 and p2,3,y,y,
+"Wednesday, July 10, 2024",delta_1,chong_68,vegetation (rodent),p1 and p2,3,y,y,
+"Wednesday, July 10, 2024",delta_2,chong_96,vegetation (rodent),p1 and p2,3,y,y,
+"Tuesday, July 23, 2024",delta_3,bates_57b,rodent (powder),p1 and p2,2,y,na (already entered),RG/AD
+"Wednesday, July 24, 2024",delta_4,lbf_ladnertrunk,rodent (powder),p1 and p2,2,y,na (already entered),RG/AD
+"Wednesday, July 24, 2024",delta_3,bates_57b,vegetation (rodent),p1 and p2,3,y,y,
+"Wednesday, July 24, 2024",delta_3,bks_56,vegetation (rodent),p1 and p2,3,y,y,
+"Friday, July 26, 2024",delta_4,lbf_ladnertrunk,vegetation (rodent),p1 and p2,3,y,y,
+"Monday, July 29, 2024",delta_4,sandhu_ladnertrunk,vegetation (rodent),p1 and p2,3,y,y (excel doc),
+"Tuesday, August 6, 2024",surrey,surjit_168,rodent (powder),all,2,y,na (already entered),RG/AD
+"Tuesday, August 6, 2024",surrey,avtar_168,rodent (powder),all,2,y,na (already entered),RG/AD
+"Tuesday, August 6, 2024",surrey,surjit_168,vegetation (rodent),all,3,y,y (excel doc),
+"Tuesday, August 6, 2024",surrey,avtar_168,vegetation (rodent),all,3,y,y (excel doc),
+"Wednesday, August 7, 2024",delta_3,bks_56,rodent (powder),p1 and p2,2,y,na (already entered),RG/AD
+"Monday, August 12, 2024",delta_4,sandhu_ladnertrunk,rodent (powder),p1 and p2,2,y,na (already entered),RG/AD
+"Wednesday, August 14, 2024",pittmeadows,bks_neaves,vegetation (rodent),p1 and p2,3,y,y (excel doc),
+"Wednesday, August 14, 2024",pittpeadows,gwb_neaves,vegetation (rodent),p1 and p2,3,y,y (excel doc),
+"Tuesday, October 1, 2024",pittmeadows,bks_neaves,rodent (powder),p1 and p2,2,y,na (already entered),RG/AD
+"Tuesday, October 1, 2024",pittpeadows,gwb_neaves,rodent (powder),p1 and p2,2,y,na (already entered),RG/AD

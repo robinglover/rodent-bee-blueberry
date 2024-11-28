@@ -1,9 +1,11 @@
 # Methods Tracking Document
 
-1) created sample event list (creating_sample_event_list.Rmd)
+1)  created sample event list (creating_sample_event_list.Rmd)
 
-2)
+2)  data-rounds-analysis.rmd
 
-3) rodent-burrow-analysis.rmd
+    -   
+
+3)  rodent-burrow-analysis.rmd
 
 -   
