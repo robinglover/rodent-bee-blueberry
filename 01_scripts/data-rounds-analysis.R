@@ -2,6 +2,7 @@
 library(ggplot2)
 library(dplyr)
 library(tidyr)
+library(lubridate)
 
 #read csv
 round_data <- read.csv("00_rawdata/data-entry-checklist(checklist).csv")
@@ -10,18 +11,47 @@ site_data <- read.csv("00_rawdata/site-info.csv")
 #add column to round data for site type (either grass or bare)
 round_data1 <- round_data %>%
   left_join(site_data, by = c("Site.name" = "name")) %>%
-  rename(julien.date = Date) %>% #change date column name to "julien.date" 
+  rename(date = Date) %>% #change date column name to "julien.date" 
   rename (field.type = grass) #change date column name to "julien.date" 
 
 #change field type to a factor
 round_data1$field.type <- as.factor(round_data1$field.type)
 
-#change julien date to a date
-round_data1$julien.date <- as.Date(round_data1$julien.date)
+#change area to a factor
+round_data1$area <- as.factor(round_data1$area)
 
-#plot date vs field type 
-ggplot(round_data1, aes(y=field.type, x=julien.date, colour = field.type))+ geom_point()
+#change date to a date
+round_data1$date <- as.Date(round_data1$date)
 
+#add column for julian date
+round_data1$julian.date <- yday(round_data1$date)
 
+#filter to only vegetation surveys
+veg_round_data <- filter(round_data1, Survey.type == "vegetation (rodent)" | Survey.type == "vegetation (bee)" | Survey.type == "vegetation (bee and rodent)")
 
+#plot date vs field type for veg data
+ggplot(veg_round_data, aes(y=field.type, x=julian.date))+ geom_boxplot()
 
+#plot date vs field type, grouped by area
+ggplot(veg_round_data, aes(y=area, x=julian.date, colour = field.type))+ geom_boxplot()
+
+#filter to only bee surveys
+bee_round_data <- filter(round_data1, Survey.type == "bombus")
+
+#plot date vs field type for bee data
+ggplot(bee_round_data, aes(y=field.type, x=julian.date))+ geom_boxplot()
+
+#plot date vs field type, grouped by area
+ggplot(bee_round_data, aes(y=area, x=julian.date, colour = field.type))+ geom_boxplot()
+
+#filter to only rodent surveys
+rodent_round_data <- filter(round_data1, Survey.type == "rodent (holes only)" | Survey.type == "rodent (powder)")
+
+#plot date vs field type for veg data
+ggplot(rodent_round_data, aes(y=field.type, x=julian.date))+ geom_boxplot()
+
+#plot date vs field type, grouped by area
+ggplot(rodent_round_data, aes(y=area, x=julian.date, colour = field.type))+ geom_boxplot()
+
+#
+z <- lm(julian.date ~ field.type + (1|area), data = round_data1)
