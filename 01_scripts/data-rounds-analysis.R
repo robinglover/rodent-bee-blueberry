@@ -13,10 +13,14 @@ round_data1 <- round_data %>%
   rename(julien.date = Date) %>% #change date column name to "julien.date" 
   rename (field.type = grass) #change date column name to "julien.date" 
 
+#change fieldtype to a factor
+round_data1$field.type <- as.factor(round_data1$field.type)
+
+round_data1$julien.date <- as.Date(round_data1$julien.date)
 
 #plot date vs field type 
+ggplot(round_data1, aes(y=field.type, x=julien.date, colour = field.type))+ geom_point()
 
-ggplot(round_data1, aes(x="field.type"))+ geom_histogram(stat = "count")
 
-round_data1$field.type
+
 
