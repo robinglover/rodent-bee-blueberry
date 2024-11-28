@@ -27,3 +27,6 @@ ggplot(rodent_certain2, aes(x=field.type, fill=powder_active_final))+ geom_bar(p
 
 #plot hole diameter vs species guess
 ggplot(rodent_certain, aes(x=field.type, fill=species_guess_final))+ geom_bar(position="dodge", stat="count")
+
+#plot hole diameter vs species guess
+ggplot(rodent1, aes(x=field.type, fill=species_guess_final))+ geom_bar(position="dodge", stat="count")
