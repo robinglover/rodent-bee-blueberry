@@ -4,7 +4,7 @@
 library(ggplot2)
 library(dplyr)
 library(tidyr)
-library(lubridate)
+library(lubridate) #package used to generate julian date from calendar date
 
 #read csv
 round_data <- read.csv("00_rawdata/data-entry-checklist(checklist).csv")
