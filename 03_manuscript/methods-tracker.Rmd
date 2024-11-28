@@ -4,8 +4,22 @@
 
 2)  data-rounds-analysis.rmd
 
-    -   
+    -   assigned julian date to each survey based on calendar date using yday() function in lubridate R package
+
+    -   plotted field type vs julian date for each type of data (bee, veg, rodent) to check for systematic differences in timing among the two field types
+
+        -   overall and grouped by site pair
 
 3)  rodent-burrow-analysis.rmd
 
--   
+-   plotted number of each species ID (dm, v, unknown, other) in each field type
+
+-   filtered to only burrows with certain species IDs
+
+    -   plotted hole id vs diameter size
+
+    -   plotted number of burrows of each species in each field type
+
+-   filtered to only burrows with certain activity IDs (active or inactive)
+
+    -   plotted active vs inactive in each field type
