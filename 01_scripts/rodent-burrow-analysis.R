@@ -27,13 +27,23 @@ rodent_certain_activity <- filter(rodent1, powder_active_final == "y" | powder_a
 #####PLOTS######
 
 #plot hole diameter vs species guess (for certain species guesses)
-ggplot(rodent_certain_species, aes(y=diameter_cm, x=species_guess_final))+ geom_boxplot()
+ggplot(rodent_certain_species, aes(y=diameter_cm, x=species_guess_final))+ 
+  geom_boxplot() +
+  theme_classic(base_size = 15)
 
 #plot number of active and inactive burrows in each field type
-ggplot(rodent_certain_activity, aes(x=field.type, fill=powder_active_final))+ geom_bar(position="dodge", stat="count")
+ggplot(rodent_certain_activity, aes(x=field.type, fill=powder_active_final))+ 
+  geom_bar(position="dodge", stat="count") +
+  theme_classic(base_size = 15)
 
 #plot number of active burrows of each species (v or dm) in each field type
-ggplot(rodent_certain_species, aes(x=field.type, fill=species_guess_final))+ geom_bar(position="dodge", stat="count")
+ggplot(rodent_certain_species, aes(x=field.type, fill=species_guess_final))+ 
+  geom_bar(position="dodge", stat="count") +
+  theme_classic(base_size = 15)
 
 #plot number of active burrows of all species guesses (v,dm, unknown) in each field type
 ggplot(rodent1, aes(x=field.type, fill=species_guess_final))+ geom_bar(position="dodge", stat="count")
+
+
+
+
