@@ -46,7 +46,9 @@ rodent_round_data <- filter(round_data1, Survey.type == "rodent (holes only)" | 
 ##VEG
 
 #plot date vs field type for veg data
-ggplot(veg_round_data, aes(y=field.type, x=julian.date))+ geom_boxplot()
+ggplot(veg_round_data, aes(y=field.type, x=julian.date, colour = field.type))+ 
+  geom_boxplot()+
+  theme_classic(base_size = 15)
 
 #plot date vs field type for veg data, grouped by area
 ggplot(veg_round_data, aes(y=area, x=julian.date, colour = field.type))+ geom_boxplot()
@@ -54,7 +56,9 @@ ggplot(veg_round_data, aes(y=area, x=julian.date, colour = field.type))+ geom_bo
 ##BEE
 
 #plot date vs field type for bee data
-ggplot(bee_round_data, aes(y=field.type, x=julian.date))+ geom_boxplot()
+ggplot(bee_round_data, aes(y=field.type, x=julian.date, colour = field.type))+ 
+  geom_boxplot()+
+  theme_classic(base_size = 15)
 
 #plot date vs field type for bee data, grouped by area
 ggplot(bee_round_data, aes(y=area, x=julian.date, colour = field.type))+ geom_boxplot()
@@ -62,7 +66,9 @@ ggplot(bee_round_data, aes(y=area, x=julian.date, colour = field.type))+ geom_bo
 ##RODENT
 
 #plot date vs field type for rodent data
-ggplot(rodent_round_data, aes(y=field.type, x=julian.date))+ geom_boxplot()
+ggplot(rodent_round_data, aes(y=field.type, x=julian.date, colour = field.type))+ 
+  geom_boxplot()+
+  theme_classic(base_size = 15)
 
 #plot date vs field type for rodent data, grouped by area
 ggplot(rodent_round_data, aes(y=area, x=julian.date, colour = field.type))+ geom_boxplot()
