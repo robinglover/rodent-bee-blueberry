@@ -49,4 +49,9 @@ ggplot(rodent1, aes(x=field.type))+
   geom_bar(position="dodge", stat="count") +
   theme_classic(base_size = 15)
 
+#plot number of rodent burrow found in each field type, grouped by area
+ggplot(rodent1, aes(x=area, fill = field.type))+ 
+  geom_bar(position="dodge", stat="count") +
+  theme_classic(base_size = 15)
+
 
