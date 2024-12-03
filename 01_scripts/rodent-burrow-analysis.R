@@ -41,9 +41,12 @@ ggplot(rodent_certain_species, aes(x=field.type, fill=species_guess_final))+
   geom_bar(position="dodge", stat="count") +
   theme_classic(base_size = 15)
 
-#plot number of active burrows of all species guesses (v,dm, unknown) in each field type
+#plot number of burrows of all species guesses (v,dm, unknown) in each field type
 ggplot(rodent1, aes(x=field.type, fill=species_guess_final))+ geom_bar(position="dodge", stat="count")
 
-
+#plot total number of burrows in each field type
+ggplot(rodent1, aes(x=field.type))+ 
+  geom_bar(position="dodge", stat="count") +
+  theme_classic(base_size = 15)
 
 
