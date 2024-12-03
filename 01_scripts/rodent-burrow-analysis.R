@@ -29,29 +29,42 @@ rodent_certain_activity <- filter(rodent1, powder_active_final == "y" | powder_a
 #plot hole diameter vs species guess (for certain species guesses)
 ggplot(rodent_certain_species, aes(y=diameter_cm, x=species_guess_final))+ 
   geom_boxplot() +
-  theme_classic(base_size = 15)
+  theme_classic(base_size = 15)+
+  xlab("RG Species Guess")+
+  ylab("Diameter (cm)")
 
 #plot number of active and inactive burrows in each field type
 ggplot(rodent_certain_activity, aes(x=field.type, fill=powder_active_final))+ 
   geom_bar(position="dodge", stat="count") +
-  theme_classic(base_size = 15)
+  theme_classic(base_size = 15)+
+  xlab("Field Type")+
+  ylab("Rodent Burrow Abundance (count)")
 
 #plot number of active burrows of each species (v or dm) in each field type
 ggplot(rodent_certain_species, aes(x=field.type, fill=species_guess_final))+ 
   geom_bar(position="dodge", stat="count") +
-  theme_classic(base_size = 15)
+  theme_classic(base_size = 15)+
+  xlab("Field Type")+
+  ylab("Rodent Burrow Abundance (count)")
 
 #plot number of burrows of all species guesses (v,dm, unknown) in each field type
-ggplot(rodent1, aes(x=field.type, fill=species_guess_final))+ geom_bar(position="dodge", stat="count")
+ggplot(rodent1, aes(x=field.type, fill=species_guess_final))+ 
+  geom_bar(position="dodge", stat="count")+
+  xlab("Field Type")+
+  ylab("Rodent Burrow Abundance (count)")
 
 #plot total number of burrows in each field type
 ggplot(rodent1, aes(x=field.type))+ 
   geom_bar(position="dodge", stat="count") +
-  theme_classic(base_size = 15)
+  theme_classic(base_size = 15)+
+  xlab("Field Type")+
+  ylab("Rodent Burrow Abundance (count)")
 
 #plot number of rodent burrow found in each field type, grouped by area
 ggplot(rodent1, aes(x=area, fill = field.type))+ 
   geom_bar(position="dodge", stat="count") +
-  theme_classic(base_size = 15)
+  theme_classic(base_size = 15)+
+  xlab("Area")+
+  ylab("Rodent Burrow Abundance (count)")
 
 
