@@ -41,27 +41,6 @@ ggplot(bee1, aes(fill=field.type, x=behaviour))+
 
 ####FILTER#####
 
-#filter to bees not flying
-bees_not_flying <- filter(bee1, behaviour != "flying")
-
-####PLOT#####
-
-#plot number of bees (not flying) found in each field type
-ggplot(bees_not_flying, aes(x=field.type))+ 
-  geom_bar(position="dodge", stat="count") +
-  theme_classic(base_size = 15)+
-  xlab("Field Type")+
-  ylab("Bee abundance (not flying)")
-
-#plot number of bee (not flying) found in each field type, grouped by area
-ggplot(bees_not_flying, aes(x=area, fill = field.type))+ 
-  geom_bar(position="dodge", stat="count") +
-  theme_classic(base_size = 15)+
-  xlab("Area")+
-  ylab("Bee abundance (not flying)")
-
-####FILTER#####
-
 #filter to bees foraging
 bees_foraging <- filter(bee1, behaviour == "foraging")
 
@@ -74,7 +53,7 @@ ggplot(bees_foraging, aes(x=field.type))+
   xlab("Field Type")+
   ylab("Bee abundance (foraging only)")
 
-#plot number of bee (not flying) found in each field type, grouped by area
+#plot number of bee (foraging) found in each field type, grouped by area
 ggplot(bees_foraging, aes(x=area, fill = field.type))+ 
   geom_bar(position="dodge", stat="count") +
   theme_classic(base_size = 15)+
@@ -88,17 +67,39 @@ bees_nestsearching <- filter(bee1, behaviour == "nest_searching")
 
 ####PLOT#####
 
-#plot number of bees (foraging only) found in each field type
+#plot number of bees (nest searching only) found in each field type
 ggplot(bees_nestsearching, aes(x=field.type))+ 
   geom_bar(position="dodge", stat="count") +
   theme_classic(base_size = 15)+
   xlab("Field Type")+
   ylab("Bee abundance (nest searching only)")
 
-#plot number of bee (not flying) found in each field type, grouped by area
+#plot number of bee (nest searching) found in each field type, grouped by area
 ggplot(bees_nestsearching, aes(x=area, fill = field.type))+ 
   geom_bar(position="dodge", stat="count") +
   theme_classic(base_size = 15)+
   xlab("Area")+
   ylab("Bee abundance (nest searching only)")
+
+####FILTER#####
+View(bee1)
+#filter to bees flying
+bees_flying <- filter(bee1, behaviour == "flying")
+
+####PLOT#####
+
+#plot number of bees (flying only) found in each field type
+ggplot(bees_flying, aes(x=field.type))+ 
+  geom_bar(position="dodge", stat="count") +
+  theme_classic(base_size = 15)+
+  xlab("Field Type")+
+  ylab("Bee abundance (flying only)")
+
+#plot number of bee (flying only) found in each field type, grouped by area
+ggplot(bees_flying, aes(x=area, fill = field.type))+ 
+  geom_bar(position="dodge", stat="count") +
+  theme_classic(base_size = 15)+
+  xlab("Area")+
+  ylab("Bee abundance (flying only)")
+
 
