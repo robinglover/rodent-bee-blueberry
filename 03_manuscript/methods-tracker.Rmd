@@ -2,7 +2,7 @@
 
 1)  created sample event list (creating_sample_event_list.Rmd)
 
-2)  data-rounds-analysis.rmd
+2)  **data-rounds-analysis.R**
 
     -   assigned julian date to each survey based on calendar date using yday() function in lubridate R package
 
@@ -10,7 +10,7 @@
 
         -   overall and grouped by site pair
 
-3)  rodent-burrow-analysis.rmd
+3)  **rodent-burrow-analysis.R**
 
 -   plotted number of each species ID (dm, v, unknown, other) in each field type
 
@@ -23,3 +23,19 @@
 -   filtered to only burrows with certain activity IDs (active or inactive)
 
     -   plotted active vs inactive in each field type
+
+-   plotted total number of burrows in each field type
+
+4.  **bee-analysis.R**
+
+-   plotted number of bees found in each field type
+
+    -   overall and grouped by area
+
+-   plotted number of bees in each field type grouped by behaviour
+
+-   plotted number of bees foraging in each field type
+
+-   plotted number of bees nest searching in each field type
+
+-   plotted number of bees flying in each field type
