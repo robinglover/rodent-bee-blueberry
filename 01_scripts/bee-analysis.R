@@ -6,7 +6,7 @@ library(dplyr) #for working with dataframes
 library(tidyr) #for working with datasets
 
 #read csv
-bee <- read.csv("00_rawdata/bee-data.csv") #bee data
+bee <- read.csv("00_rawdata/bee-data1.csv") #bee data
 site_data <- read.csv("00_rawdata/site-info.csv") #site data
 
 #add column to round data for site type (either grass or bare) by joining 
@@ -15,7 +15,7 @@ bee1 <- bee %>%
   left_join(site_data, by = c("site_id" = "name")) %>%
   rename (field.type = grass) #column listing field condition (either bare or 
 #grass)  to "field.type" 
-
+View(bee)
 #####PLOTS#####
 
 #plot number of bees found in each field type
@@ -37,6 +37,13 @@ ggplot(bee1, aes(fill=field.type, x=behaviour))+
   geom_bar(position="dodge", stat="count") +
   theme_classic(base_size = 15)+
   xlab("Behaviour")+
+  ylab("Bee abundance")
+
+#plot number of bees found in each field type, grouped by round
+ggplot(bee1, aes(fill=field.type, x=round))+ 
+  geom_bar(position="dodge", stat="count") +
+  theme_classic(base_size = 15)+
+  xlab("Round")+
   ylab("Bee abundance")
 
 ####FILTER#####
