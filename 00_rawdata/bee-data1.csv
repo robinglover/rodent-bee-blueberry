@@ -1,0 +1,346 @@
+date,observers,site_id,round,plot_id,transect_id,transect_section,sample_code,behaviour,caste,flower_code,flower_species,bee_code,bee_species,caught,photo_series,notes
+5/14/2024,RG,chong_68,1,p2,full-plot,net-floral,chong_68_1_p2_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,boim,bombus_impatiens,unknown,Cloud,na
+5/14/2024,RG,chong_68,1,p2,full-plot,net-floral,chong_68_1_p2_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,bovo,bombus_vosnesenskii,unknown,Cloud,na
+5/14/2024,RG,chong_68,1,p2,full-plot,net-floral,chong_68_1_p2_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,boim,bombus_impatiens,unknown,Cloud,na
+5/14/2024,RG,chong_68,1,p2,full-plot,net-floral,chong_68_1_p2_full-plot_net-floral,flying,queen,na,na,boim,bombus_impatiens,unknown,Cloud,na
+5/14/2024,RG,chong_68,1,p2,full-plot,net-floral,chong_68_1_p2_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,boim,bombus_impatiens,unknown,Cloud,na
+5/14/2024,RG,chong_68,1,p1,full-plot,net-floral,chong_68_1_p1_full-plot_net-floral,flying,queen,na,na,boim,bombus_impatiens,unknown,Cloud,na
+5/14/2024,RG,chong_68,1,p1,full-plot,net-floral,chong_68_1_p1_full-plot_net-floral,flying,queen,na,na,na,unknown,unknown,Cloud,na
+5/14/2024,RG,bks_68,1,ditch,full-plot,net-floral,bks_68_1_ditch_full-plot_net-floral,flying,queen,na,na,boim,bombus_impatiens,unknown,Cloud,na
+5/14/2024,RG,bks_68,1,p2,full-plot,net-floral,bks_68_1_p2_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,na,unknown,unknown,,rufosinctus?
+5/14/2024,RG,bks_68,1,p2,full-plot,net-floral,bks_68_1_p2_full-plot_net-floral,flying,queen,na,na,na,unknown,unknown,,na
+5/14/2024,RG,bks_68,1,p2,full-plot,net-floral,bks_68_1_p2_full-plot_net-floral,flying,queen,na,na,na,unknown,unknown,,na
+5/14/2024,RG,bks_68,1,p2,full-plot,net-floral,bks_68_1_p2_full-plot_net-floral,flying,queen,na,na,na,unknown,unknown,,na
+5/14/2024,RG,bks_68,1,p2,full-plot,net-floral,bks_68_1_p2_full-plot_net-floral,flying,queen,na,na,na,unknown,unknown,,na
+5/14/2024,RG,bks_68,1,p2,full-plot,net-floral,bks_68_1_p2_full-plot_net-floral,flying,queen,na,na,boim,bombus_impatiens,unknown,,na
+5/14/2024,RG,bks_68,1,p2,full-plot,net-floral,bks_68_1_p2_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,boim,bombus_impatiens,unknown,,na
+6/18/2024,RG,chong_68,2,p1,full-plot,net-floral,chong_68_2_p1_full-plot_net-floral,flying,queen,na,na,na,unknown,unknown,,na
+6/18/2024,RG,chong_68,2,p1,full-plot,net-floral,chong_68_2_p1_full-plot_net-floral,flying,worker,na,na,na,unknown,unknown,,na
+6/18/2024,RG,chong_68,2,p1,full-plot,net-floral,chong_68_2_p1_full-plot_net-floral,flying,worker,na,na,na,unknown,unknown,,na
+6/18/2024,RG,chong_68,2,ditch,full-plot,net-floral,chong_68_2_ditch_full-plot_net-floral,foraging,worker,vaco,vaccinium_corymbosum,bomi,bombus_mixtus,unknown,,na
+6/18/2024,RG,chong_68,2,ditch,full-plot,net-floral,chong_68_2_ditch_full-plot_net-floral,foraging,worker,vaco,vaccinium_corymbosum,na,unknown,unknown,,na
+6/18/2024,RG,bks_68,2,p2,full-plot,net-floral,bks_68_2_p2_full-plot_net-floral,flying,queen,na,na,na,unknown,unknown,,na
+6/18/2024,RG,bks_68,2,p2,full-plot,net-floral,bks_68_2_p2_full-plot_net-floral,flying,queen,na,na,na,unknown,unknown,,na
+6/18/2024,RG,bks_68,2,p2,full-plot,net-floral,bks_68_2_p2_full-plot_net-floral,flying,worker,na,na,na,unknown,unknown,,na
+5/15/2024,RG,chong_96,1,p2,full-plot,net-floral,chong_96_1_p2_full-plot_net-floral,flying,queen,na,na,na,unknown,unknown,,na
+5/15/2024,RG,chong_96,1,p2,full-plot,net-floral,chong_96_1_p2_full-plot_net-floral,nest_searching,queen,na,na,bovo,bombus_vosnesenskii,unknown,,na
+5/15/2024,RG,chong_96,1,p1,full-plot,net-floral,chong_96_1_p1_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,bome,bombus_melanopygus,unknown,,na
+5/15/2024,RG,chong_96,1,p1,full-plot,net-floral,chong_96_1_p1_full-plot_net-floral,flying,queen,na,na,boim,bombus_impatiens,unknown,,flying low
+5/15/2024,RG,bks_96,1,p2,full-plot,net-floral,bks_96_1_p2_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,bovo,bombus_vosnesenskii,unknown,,na
+5/15/2024,RG,bks_96,1,p2,full-plot,net-floral,bks_96_1_p2_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,boim,bombus_impatiens,unknown,,na
+5/15/2024,RG,bks_96,1,p2,full-plot,net-floral,bks_96_1_p2_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,boim,bombus_impatiens,unknown,,na
+5/15/2024,RG,bks_96,1,p2,full-plot,net-floral,bks_96_1_p2_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,bome,bombus_melanopygus,unknown,,small
+5/15/2024,RG,bks_96,1,p1,full-plot,net-floral,bks_96_1_p1_full-plot_net-floral,flying,queen,na,na,boim,bombus_impatiens,unknown,,na
+5/15/2024,RG,bks_96,1,p1,full-plot,net-floral,bks_96_1_p1_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,boim,bombus_impatiens,unknown,,na
+5/15/2024,RG,bks_96,1,p1,full-plot,net-floral,bks_96_1_p1_full-plot_net-floral,flying,queen,na,na,na,unknown,unknown,,na
+5/15/2024,RG,bks_96,1,p1,full-plot,net-floral,bks_96_1_p1_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,na,unknown,unknown,,na
+5/15/2024,RG,bks_96,1,p1,full-plot,net-floral,bks_96_1_p1_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,na,unknown,unknown,,na
+5/15/2024,RG,bks_96,1,ditch,full-plot,net-floral,bks_96_1_ditch_full-plot_net-floral,nest_searching,worker,na,na,bome,bombus_melanopygus,unknown,,tiny
+5/15/2024,RG,bks_96,1,ditch,full-plot,net-floral,bks_96_1_ditch_full-plot_net-floral,nest_searching,worker,na,na,bomi,bombus_mixtus,unknown,,"tiny, rested on a leaf"
+5/15/2024,RG,bks_96,1,ditch,full-plot,net-floral,bks_96_1_ditch_full-plot_net-floral,flying,queen,na,na,bome,bombus_melanopygus,unknown,,small
+4/26/2024,"RG, CN",avtar_168,NS,ditch,full-plot,net-floral,avtar_168_NS_ditch_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,unknown,,on other side of ditch
+4/26/2024,"RG, CN",avtar_168,NS,ditch,full-plot,net-floral,avtar_168_NS_ditch_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,unknown,,on other side of ditch
+4/26/2024,"RG, CN",avtar_168,NS,ditch,full-plot,net-floral,avtar_168_NS_ditch_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,unknown,,on other side of ditch
+4/26/2024,"RG, CN",avtar_168,NS,ditch,full-plot,net-floral,avtar_168_NS_ditch_full-plot_net-floral,nest_searching,queen,na,na,bovo,bombus_vosnesenskii,unknown,,on other side of ditch
+4/26/2024,"RG, CN",avtar_168,NS,ditch,full-plot,net-floral,avtar_168_NS_ditch_full-plot_net-floral,flying,queen,na,na,na,unknown,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p1,full-plot,net-floral,avtar_168_NS_p1_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,boru,bombus_rufocinctus,y,,na
+4/26/2024,"RG, CN",avtar_168,NS,p1,full-plot,net-floral,avtar_168_NS_p1_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,boim,bombus_impatiens,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p1,full-plot,net-floral,avtar_168_NS_p1_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,boim,bombus_impatiens,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p1,full-plot,net-floral,avtar_168_NS_p1_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,boim,bombus_impatiens,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p1,full-plot,net-floral,avtar_168_NS_p1_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,boim,bombus_impatiens,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p1,full-plot,net-floral,avtar_168_NS_p1_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,bovo,bombus_vosnesenskii,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p1,full-plot,net-floral,avtar_168_NS_p1_full-plot_net-floral,foraging,unknown,vaco,vaccinium_corymbosum,na,unknown,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p1,full-plot,net-floral,avtar_168_NS_p1_full-plot_net-floral,foraging,unknown,vaco,vaccinium_corymbosum,na,unknown,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p1,full-plot,net-floral,avtar_168_NS_p1_full-plot_net-floral,foraging,unknown,vaco,vaccinium_corymbosum,na,unknown,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p1,full-plot,net-floral,avtar_168_NS_p1_full-plot_net-floral,foraging,unknown,vaco,vaccinium_corymbosum,na,unknown,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p1,full-plot,net-floral,avtar_168_NS_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p1,full-plot,net-floral,avtar_168_NS_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p1,full-plot,net-floral,avtar_168_NS_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p1,full-plot,net-floral,avtar_168_NS_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p1,full-plot,net-floral,avtar_168_NS_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p1,full-plot,net-floral,avtar_168_NS_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p1,full-plot,net-floral,avtar_168_NS_p1_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,boru,bombus_rufocinctus,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p1,full-plot,net-floral,avtar_168_NS_p1_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,boru,bombus_rufocinctus,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p1,full-plot,net-floral,avtar_168_NS_p1_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,boru,bombus_rufocinctus,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p1,full-plot,net-floral,avtar_168_NS_p1_full-plot_net-floral,nest_searching,queen,vaco,vaccinium_corymbosum,boim,bombus_impatiens,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p2,full-plot,net-floral,avtar_168_NS_p2_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p2,full-plot,net-floral,avtar_168_NS_p2_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,boru,bombus_rufocinctus,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p2,full-plot,net-floral,avtar_168_NS_p2_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,boru,bombus_rufocinctus,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p2,full-plot,net-floral,avtar_168_NS_p2_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,boru,bombus_rufocinctus,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p2,full-plot,net-floral,avtar_168_NS_p2_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,boru,bombus_rufocinctus,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p2,full-plot,net-floral,avtar_168_NS_p2_full-plot_net-floral,foraging,unknown,vaco,vaccinium_corymbosum,na,unknown,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p2,full-plot,net-floral,avtar_168_NS_p2_full-plot_net-floral,foraging,unknown,vaco,vaccinium_corymbosum,na,unknown,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p2,full-plot,net-floral,avtar_168_NS_p2_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,boim,bombus_impatiens,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p2,full-plot,net-floral,avtar_168_NS_p2_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,boim,bombus_impatiens,unknown,,na
+4/26/2024,"RG, CN",avtar_168,NS,p2,full-plot,net-floral,avtar_168_NS_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,na
+4/26/2024,RG,surjit_168,NS,p1,full-plot,net-floral,surjit_168_NS_p1_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,boim,bombus_impatiens,unknown,,na
+5/22/2024,RG,gwb_neaves,1,p2,full-plot,net-floral,gwb_neaves_1_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,saw 1 impatiens queen nest searching before survey
+5/22/2024,RG,gwb_neaves,1,ditch,full-plot,net-floral,gwb_neaves_1_ditch_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,unknown,,na
+5/22/2024,RG,gwb_neaves,1,ditch,full-plot,net-floral,gwb_neaves_1_ditch_full-plot_net-floral,nest_searching,queen,na,na,bovo,bombus_vosnesenskii,unknown,,na
+5/22/2024,RG,bks_neaves,1,p1,full-plot,net-floral,bks_neaves_1_p1_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,bohu,bombus_huntii,unknown,,na
+5/22/2024,RG,bks_neaves,1,p1,full-plot,net-floral,bks_neaves_1_p1_full-plot_net-floral,foraging,worker,vaco,vaccinium_corymbosum,na,unknown,unknown,,sent to Tyler
+5/22/2024,RG,bks_neaves,1,p1,full-plot,net-floral,bks_neaves_1_p1_full-plot_net-floral,flying,queen,na,na,boim,bombus_impatiens,unknown,,na
+5/22/2024,RG,bks_neaves,1,p1,full-plot,net-floral,bks_neaves_1_p1_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,boim,bombus_impatiens,unknown,,na
+5/22/2024,RG,bks_neaves,1,p2,full-plot,net-floral,bks_neaves_1_p2_full-plot_net-floral,foraging,unknown,vaco,vaccinium_corymbosum,na,unknown,unknown,,na
+5/22/2024,RG,bks_neaves,1,p2,full-plot,net-floral,bks_neaves_1_p2_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,bohu,bombus_huntii,unknown,,na
+5/22/2024,RG,bks_neaves,1,p2,full-plot,net-floral,bks_neaves_1_p2_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,bome,bombus_melanopygus,unknown,,na
+5/22/2024,RG,bks_neaves,1,ditch,full-plot,net-floral,bks_neaves_1_ditch_full-plot_net-floral,flying,queen,na,na,na,unknown,unknown,,maybe huntii?
+6/5/2024,AD,lbf_ladnertrunk,1,p1,full-plot,net-floral,lbf_ladnertrunk_1_p1_full-plot_net-floral,flying,queen,na,na,boim,bombus_impatiens,unknown,,na
+6/5/2024,AD,lbf_ladnertrunk,1,p1,full-plot,net-floral,lbf_ladnertrunk_1_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,na
+6/5/2024,AD,lbf_ladnertrunk,1,p1,full-plot,net-floral,lbf_ladnertrunk_1_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,na
+6/5/2024,AD,lbf_ladnertrunk,1,p1,full-plot,net-floral,lbf_ladnertrunk_1_p1_full-plot_net-floral,foraging,worker,vaco,vaccinium_corymbosum,boim,bombus_impatiens,unknown,,na
+6/5/2024,RG,lbf_ladnertrunk,1,p2,full-plot,net-floral,lbf_ladnertrunk_1_p2_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,bomi,bombus_mixtus,unknown,,~1.5-2cm long
+6/5/2024,RG,lbf_ladnertrunk,1,p2,full-plot,net-floral,lbf_ladnertrunk_1_p2_full-plot_net-floral,foraging,worker,vaco,vaccinium_corymbosum,bomi,bombus_mixtus,unknown,,na
+6/5/2024,RG,lbf_ladnertrunk,1,p2,full-plot,net-floral,lbf_ladnertrunk_1_p2_full-plot_net-floral,foraging,worker,vaco,vaccinium_corymbosum,bomi,bombus_mixtus,unknown,,na
+6/5/2024,RG,lbf_ladnertrunk,1,p2,full-plot,net-floral,lbf_ladnertrunk_1_p2_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,boru,bombus_rufocinctus,unknown,,na
+6/5/2024,RG,lbf_ladnertrunk,1,p2,full-plot,net-floral,lbf_ladnertrunk_1_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,na
+6/5/2024,RG,lbf_ladnertrunk,1,p2,full-plot,net-floral,lbf_ladnertrunk_1_p2_full-plot_net-floral,foraging,worker,vaco,vaccinium_corymbosum,na,unknown,unknown,,na
+6/5/2024,RG,lbf_ladnertrunk,1,p2,full-plot,net-floral,lbf_ladnertrunk_1_p2_full-plot_net-floral,flying,queen,na,na,na,unknown,unknown,,na
+6/5/2024,RG,lbf_ladnertrunk,1,p2,full-plot,net-floral,lbf_ladnertrunk_1_p2_full-plot_net-floral,flying,queen,na,na,na,unknown,unknown,,na
+6/5/2024,NC,lbf_ladnertrunk,1,ditch,full-plot,net-floral,lbf_ladnertrunk_1_ditch_full-plot_net-floral,foraging,worker,ruar,0,bomi,bombus_mixtus,unknown,,na
+6/5/2024,NC,lbf_ladnertrunk,1,ditch,full-plot,net-floral,lbf_ladnertrunk_1_ditch_full-plot_net-floral,foraging,worker,ruar,0,bome,bombus_melanopygus,unknown,,na
+6/5/2024,NC,lbf_ladnertrunk,1,ditch,full-plot,net-floral,lbf_ladnertrunk_1_ditch_full-plot_net-floral,foraging,worker,ruar,0,na,unknown,unknown,,na
+6/5/2024,NC,lbf_ladnertrunk,1,ditch,full-plot,net-floral,lbf_ladnertrunk_1_ditch_full-plot_net-floral,flying,worker,na,na,na,unknown,unknown,,na
+6/5/2024,NC,lbf_ladnertrunk,1,ditch,full-plot,net-floral,lbf_ladnertrunk_1_ditch_full-plot_net-floral,flying,queen,na,na,na,unknown,unknown,,na
+6/5/2024,NC,lbf_ladnertrunk,1,ditch,full-plot,net-floral,lbf_ladnertrunk_1_ditch_full-plot_net-floral,nest_searching,queen,na,na,na,unknown,unknown,,na
+6/5/2024,NC,sandhu_ladnertrunk,1,ditch,full-plot,net-floral,sandhu_ladnertrunk_1_ditch_full-plot_net-floral,resting,queen,na,na,boru,bombus_rufocinctus,unknown,,na
+6/5/2024,NC,sandhu_ladnertrunk,1,ditch,full-plot,net-floral,sandhu_ladnertrunk_1_ditch_full-plot_net-floral,flying,worker,na,na,bomi,bombus_mixtus,unknown,,na
+6/5/2024,NC,sandhu_ladnertrunk,1,ditch,full-plot,net-floral,sandhu_ladnertrunk_1_ditch_full-plot_net-floral,flying,worker,na,na,bomi,bombus_mixtus,unknown,,na
+6/5/2024,NC,sandhu_ladnertrunk,1,ditch,full-plot,net-floral,sandhu_ladnertrunk_1_ditch_full-plot_net-floral,flying,worker,na,na,bomi,bombus_mixtus,unknown,,na
+6/5/2024,NC,sandhu_ladnertrunk,1,ditch,full-plot,net-floral,sandhu_ladnertrunk_1_ditch_full-plot_net-floral,flying,worker,na,na,bomi,bombus_mixtus,unknown,,na
+6/5/2024,NC,sandhu_ladnertrunk,1,ditch,full-plot,net-floral,sandhu_ladnertrunk_1_ditch_full-plot_net-floral,flying,worker,na,na,bomi,bombus_mixtus,unknown,,na
+6/5/2024,NC,sandhu_ladnertrunk,1,ditch,full-plot,net-floral,sandhu_ladnertrunk_1_ditch_full-plot_net-floral,flying,worker,na,na,bomi,bombus_mixtus,unknown,,na
+6/5/2024,NC,sandhu_ladnertrunk,1,ditch,full-plot,net-floral,sandhu_ladnertrunk_1_ditch_full-plot_net-floral,flying,queen,na,na,boru,bombus_rufocinctus,unknown,,na
+6/5/2024,NC,sandhu_ladnertrunk,1,ditch,full-plot,net-floral,sandhu_ladnertrunk_1_ditch_full-plot_net-floral,flying,worker,na,na,na,unknown,unknown,,na
+6/5/2024,NC,sandhu_ladnertrunk,1,ditch,full-plot,net-floral,sandhu_ladnertrunk_1_ditch_full-plot_net-floral,flying,worker,na,na,na,unknown,unknown,,na
+6/5/2024,AD,sandhu_ladnertrunk,1,p1,full-plot,net-floral,sandhu_ladnertrunk_1_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,na
+6/5/2024,AD,sandhu_ladnertrunk,1,p1,full-plot,net-floral,sandhu_ladnertrunk_1_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,na
+6/5/2024,AD,sandhu_ladnertrunk,1,p1,full-plot,net-floral,sandhu_ladnertrunk_1_p1_full-plot_net-floral,foraging,unknown,vaco,vaccinium_corymbosum,bome,bombus_melanopygus,unknown,,na
+6/5/2024,RG,sandhu_ladnertrunk,1,p2,full-plot,net-floral,sandhu_ladnertrunk_1_p2_full-plot_net-floral,flying,worker,na,na,bovo,bombus_vosnesenskii,unknown,,na
+6/5/2024,RG,sandhu_ladnertrunk,1,p2,full-plot,net-floral,sandhu_ladnertrunk_1_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,na
+6/5/2024,RG,sandhu_ladnertrunk,1,p2,full-plot,net-floral,sandhu_ladnertrunk_1_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,na
+6/5/2024,RG,sandhu_ladnertrunk,1,p2,full-plot,net-floral,sandhu_ladnertrunk_1_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,na
+6/5/2024,RG,sandhu_ladnertrunk,1,p2,full-plot,net-floral,sandhu_ladnertrunk_1_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,na
+6/5/2024,RG,sandhu_ladnertrunk,1,p2,full-plot,net-floral,sandhu_ladnertrunk_1_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,na
+6/5/2024,RG,sandhu_ladnertrunk,1,p2,full-plot,net-floral,sandhu_ladnertrunk_1_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,na
+6/5/2024,RG,sandhu_ladnertrunk,1,p2,full-plot,net-floral,sandhu_ladnertrunk_1_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,na
+6/5/2024,RG,sandhu_ladnertrunk,1,p2,full-plot,net-floral,sandhu_ladnertrunk_1_p2_full-plot_net-floral,foraging,worker,vaco,vaccinium_corymbosum,bomi,bombus_mixtus,unknown,,na
+6/5/2024,RG,sandhu_ladnertrunk,1,p2,full-plot,net-floral,sandhu_ladnertrunk_1_p2_full-plot_net-floral,foraging,worker,vaco,vaccinium_corymbosum,bohu,bombus_huntii,unknown,,na
+5/24/2024,AD,surjit_168,1,p1,full-plot,net-floral,surjit_168_1_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,na
+5/24/2024,AD,surjit_168,1,p1,full-plot,net-floral,surjit_168_1_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,na
+5/24/2024,RG,surjit_168,1,p2,full-plot,net-floral,surjit_168_1_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,na
+5/24/2024,RG,surjit_168,1,p2,full-plot,net-floral,surjit_168_1_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,na
+5/24/2024,RG,surjit_168,1,p2,full-plot,net-floral,surjit_168_1_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,na
+5/24/2024,RG,surjit_168,1,p2,full-plot,net-floral,surjit_168_1_p2_full-plot_net-floral,foraging,worker,vaco,vaccinium_corymbosum,bovo,bombus_vosnesenskii,unknown,,na
+5/24/2024,RG,surjit_168,1,p2,full-plot,net-floral,surjit_168_1_p2_full-plot_net-floral,foraging,worker,vaco,vaccinium_corymbosum,bovo,bombus_vosnesenskii,unknown,,na
+5/24/2024,RG,surjit_168,1,p2,full-plot,net-floral,surjit_168_1_p2_full-plot_net-floral,foraging,unknown,vaco,vaccinium_corymbosum,na,unknown,unknown,,Huntii? worker?
+5/24/2024,"RG, AD",surjit_168,1,ditch,full-plot,net-floral,surjit_168_1_ditch_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,one imp Q flying after survey
+5/23/2024,"RG, AD",avtar_168,1,p1,full-plot,net-floral,avtar_168_1_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+5/23/2024,"RG, AD",avtar_168,1,p1,full-plot,net-floral,avtar_168_1_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+5/23/2024,"RG, AD",avtar_168,1,p1,full-plot,net-floral,avtar_168_1_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+5/23/2024,"RG, AD",avtar_168,1,p1,full-plot,net-floral,avtar_168_1_p1_full-plot_net-floral,flying,queen,na,na,na,unknown,unknown,,
+5/23/2024,"RG, AD",avtar_168,1,p1,full-plot,net-floral,avtar_168_1_p1_full-plot_net-floral,foraging,worker,vaco,vaccinium_corymbosum,boru,bombus_rufocinctus,unknown,,
+5/23/2024,"RG, AD",avtar_168,1,p1,full-plot,net-floral,avtar_168_1_p1_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,na,unknown,unknown,,
+5/23/2024,"RG, AD",avtar_168,1,p1,full-plot,net-floral,avtar_168_1_p1_full-plot_net-floral,foraging,unknown,vaco,vaccinium_corymbosum,na,unknown,y,,Mixtus? Photo on AD phone
+5/23/2024,"RG, AD",avtar_168,1,p1,full-plot,net-floral,avtar_168_1_p1_full-plot_net-floral,foraging,worker,vaco,vaccinium_corymbosum,na,unknown,y,,Rufo? Photo on AD phone
+5/23/2024,"RG, AD",avtar_168,1,p2,full-plot,net-floral,avtar_168_1_p2_full-plot_net-floral,foraging,worker,vaco,vaccinium_corymbosum,na,unknown,unknown,,Melanopygus? Photo on AD phone
+5/23/2024,"RG, AD",avtar_168,1,p2,full-plot,net-floral,avtar_168_1_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+5/23/2024,"RG, AD",avtar_168,1,p2,full-plot,net-floral,avtar_168_1_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+5/23/2024,"RG, AD",avtar_168,1,p2,full-plot,net-floral,avtar_168_1_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+5/23/2024,"RG, AD",avtar_168,1,p2,full-plot,net-floral,avtar_168_1_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+5/23/2024,"RG, AD",avtar_168,1,p2,full-plot,net-floral,avtar_168_1_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+5/23/2024,"RG, AD",avtar_168,1,p2,full-plot,net-floral,avtar_168_1_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+5/23/2024,"RG, AD",avtar_168,1,p2,full-plot,net-floral,avtar_168_1_p2_full-plot_net-floral,foraging,worker,vaco,vaccinium_corymbosum,boim,bombus_impatiens,unknown,,
+5/23/2024,"RG, AD",avtar_168,1,p2,full-plot,net-floral,avtar_168_1_p2_full-plot_net-floral,foraging,worker,vaco,vaccinium_corymbosum,boim,bombus_impatiens,unknown,,
+5/23/2024,"RG, AD",avtar_168,1,p2,full-plot,net-floral,avtar_168_1_p2_full-plot_net-floral,foraging,worker,vaco,vaccinium_corymbosum,boim,bombus_impatiens,unknown,,
+5/23/2024,"RG, AD",avtar_168,1,p2,full-plot,net-floral,avtar_168_1_p2_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,bome,bombus_melanopygus,unknown,,
+5/23/2024,"RG, AD",avtar_168,1,p2,full-plot,net-floral,avtar_168_1_p2_full-plot_net-floral,foraging,worker,vaco,vaccinium_corymbosum,boru,bombus_rufocinctus,unknown,,
+5/23/2024,"RG, AD",avtar_168,1,ditch,full-plot,net-floral,avtar_168_1_ditch_full-plot_net-floral,flying,worker,na,na,na,unknown,unknown,,flying low
+5/23/2024,"RG, AD",avtar_168,1,ditch,full-plot,net-floral,avtar_168_1_ditch_full-plot_net-floral,,unknown,na,na,na,unknown,unknown,,Mixtus? Photo on Robin's phone. All info except for species left blank.
+6/20/2024,AD,gwb_neaves,2,p2,full-plot,net-floral,gwb_neaves_2_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+6/20/2024,"RG, AD",gwb_neaves,2,ditch,full-plot,net-floral,gwb_neaves_2_ditch_full-plot_net-floral,foraging,male,ruul,0,boim,bombus_impatiens,unknown,,1 unknown imp foraging on RUUL seen outside of survey time
+6/20/2024,AD,bks_neaves,2,p1,full-plot,net-floral,bks_neaves_2_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+6/20/2024,AD,bks_neaves,2,ditch,full-plot,net-floral,bks_neaves_2_ditch_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+6/20/2024,AD,bks_neaves,2,ditch,full-plot,net-floral,bks_neaves_2_ditch_full-plot_net-floral,flying,worker,na,na,boim,bombus_impatiens,unknown,,
+6/20/2024,AD,bks_neaves,2,ditch,full-plot,net-floral,bks_neaves_2_ditch_full-plot_net-floral,flying,queen,na,na,na,unknown,unknown,,
+6/20/2024,AD,bks_neaves,2,ditch,full-plot,net-floral,bks_neaves_2_ditch_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,unknown,,flying low in tall grass
+6/6/2024,AD,bks_56,1,ditch,full-plot,net-floral,bks_56_1_ditch_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+6/6/2024,AD,bks_56,1,ditch,full-plot,net-floral,bks_56_1_ditch_full-plot_net-floral,flying,worker,na,na,boru,bombus_rufocinctus,unknown,,flying low
+6/6/2024,AD,bks_56,1,ditch,full-plot,net-floral,bks_56_1_ditch_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+6/6/2024,AD,bks_56,1,ditch,full-plot,net-floral,bks_56_1_ditch_full-plot_net-floral,foraging,worker,ronu,rosa_nutkana,boru,bombus_rufocinctus,unknown,,
+6/6/2024,AD,bks_56,1,ditch,full-plot,net-floral,bks_56_1_ditch_full-plot_net-floral,foraging,worker,ronu,rosa_nutkana,boim,bombus_impatiens,unknown,,
+6/6/2024,AD,bks_56,1,ditch,full-plot,net-floral,bks_56_1_ditch_full-plot_net-floral,foraging,worker,ronu,rosa_nutkana,boim,bombus_impatiens,unknown,,
+6/6/2024,AD,bks_56,1,ditch,full-plot,net-floral,bks_56_1_ditch_full-plot_net-floral,foraging,worker,ronu,rosa_nutkana,boim,bombus_impatiens,unknown,,
+6/6/2024,AD,bks_56,1,ditch,full-plot,net-floral,bks_56_1_ditch_full-plot_net-floral,foraging,worker,ronu,rosa_nutkana,boim,bombus_impatiens,unknown,,
+6/6/2024,AD,bks_56,1,ditch,full-plot,net-floral,bks_56_1_ditch_full-plot_net-floral,foraging,worker,ronu,rosa_nutkana,boim,bombus_impatiens,unknown,,
+6/6/2024,AD,bks_56,1,ditch,full-plot,net-floral,bks_56_1_ditch_full-plot_net-floral,foraging,worker,ronu,rosa_nutkana,boim,bombus_impatiens,unknown,,
+6/6/2024,AD,bks_56,1,ditch,full-plot,net-floral,bks_56_1_ditch_full-plot_net-floral,foraging,worker,ronu,rosa_nutkana,boim,bombus_impatiens,unknown,,
+6/6/2024,AD,bks_56,1,ditch,full-plot,net-floral,bks_56_1_ditch_full-plot_net-floral,foraging,worker,ronu,rosa_nutkana,bovo,bombus_vosnesenskii,unknown,,
+6/6/2024,AD,bks_56,1,ditch,full-plot,net-floral,bks_56_1_ditch_full-plot_net-floral,foraging,worker,ronu,rosa_nutkana,bovo,bombus_vosnesenskii,unknown,,
+6/6/2024,AD,bks_56,1,ditch,full-plot,net-floral,bks_56_1_ditch_full-plot_net-floral,foraging,worker,ronu,rosa_nutkana,bovo,bombus_vosnesenskii,unknown,,
+6/6/2024,AD,bks_56,1,ditch,full-plot,net-floral,bks_56_1_ditch_full-plot_net-floral,foraging,worker,ronu,rosa_nutkana,bovo,bombus_vosnesenskii,unknown,,
+6/6/2024,AD,bks_56,1,ditch,full-plot,net-floral,bks_56_1_ditch_full-plot_net-floral,foraging,worker,ronu,rosa_nutkana,bovo,bombus_vosnesenskii,unknown,,
+6/6/2024,RG,bks_56,1,p2,full-plot,net-floral,bks_56_1_p2_full-plot_net-floral,flying,worker,na,na,bome,bombus_melanopygus,unknown,,
+6/6/2024,RG,bks_56,1,p2,full-plot,net-floral,bks_56_1_p2_full-plot_net-floral,flying,worker,na,na,bome,bombus_melanopygus,unknown,,
+6/6/2024,RG,bks_56,1,p2,full-plot,net-floral,bks_56_1_p2_full-plot_net-floral,resting,worker,na,na,bovo,bombus_vosnesenskii,unknown,,
+6/6/2024,RG,bks_56,1,p2,full-plot,net-floral,bks_56_1_p2_full-plot_net-floral,flying,worker,na,na,na,unknown,unknown,,Tiny (<1cm)
+6/6/2024,RG,bks_56,1,p2,full-plot,net-floral,bks_56_1_p2_full-plot_net-floral,foraging,worker,vaco,vaccinium_corymbosum,bomi,bombus_mixtus,unknown,,
+6/6/2024,RG,bks_56,1,p2,full-plot,net-floral,bks_56_1_p2_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,bomi,bombus_mixtus,unknown,,Photo to show Tyler
+6/6/2024,RG,bks_56,1,p2,full-plot,net-floral,bks_56_1_p2_full-plot_net-floral,foraging,worker,vaco,vaccinium_corymbosum,boim,bombus_impatiens,unknown,,
+6/6/2024,RG,bks_56,1,p2,full-plot,net-floral,bks_56_1_p2_full-plot_net-floral,foraging,worker,vaco,vaccinium_corymbosum,boru,bombus_rufocinctus,unknown,,
+6/6/2024,RG,bks_56,1,p2,full-plot,net-floral,bks_56_1_p2_full-plot_net-floral,foraging,worker,vaco,vaccinium_corymbosum,bome,bombus_melanopygus,unknown,,
+6/6/2024,RG,bks_56,1,p2,full-plot,net-floral,bks_56_1_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+6/6/2024,RG,bks_56,1,p2,full-plot,net-floral,bks_56_1_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+6/6/2024,RG,bks_56,1,p2,full-plot,net-floral,bks_56_1_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+6/6/2024,RG,bks_56,1,p2,full-plot,net-floral,bks_56_1_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+6/6/2024,RG,bks_56,1,p1,full-plot,net-floral,bks_56_1_p1_full-plot_net-floral,foraging,unknown,vaco,vaccinium_corymbosum,na,unknown,unknown,,
+6/6/2024,RG,bks_56,1,p1,full-plot,net-floral,bks_56_1_p1_full-plot_net-floral,foraging,unknown,vaco,vaccinium_corymbosum,na,unknown,unknown,,
+6/6/2024,RG,bks_56,1,p1,full-plot,net-floral,bks_56_1_p1_full-plot_net-floral,flying,unknown,vaco,vaccinium_corymbosum,na,unknown,unknown,,
+6/6/2024,AD,bates_57b,1,ditch,full-plot,net-floral,bates_57b_1_ditch_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+6/6/2024,AD,bates_57b,1,ditch,full-plot,net-floral,bates_57b_1_ditch_full-plot_net-floral,foraging,queen,trre,trifolium_repens,boim,bombus_impatiens,unknown,,
+6/6/2024,AD,bates_57b,1,ditch,full-plot,net-floral,bates_57b_1_ditch_full-plot_net-floral,foraging,queen,trre,trifolium_repens,boim,bombus_impatiens,unknown,,
+6/6/2024,AD,bates_57b,1,ditch,full-plot,net-floral,bates_57b_1_ditch_full-plot_net-floral,foraging,unknown,trre,trifolium_repens,bomi,bombus_mixtus,unknown,,
+6/6/2024,AD,bates_57b,1,ditch,full-plot,net-floral,bates_57b_1_ditch_full-plot_net-floral,foraging,worker,trre,trifolium_repens,boim,bombus_impatiens,unknown,,
+6/6/2024,AD,bates_57b,1,ditch,full-plot,net-floral,bates_57b_1_ditch_full-plot_net-floral,foraging,worker,trre,trifolium_repens,boim,bombus_impatiens,unknown,,maybe male
+6/6/2024,RG,bates_57b,1,p1,full-plot,net-floral,bates_57b_1_p1_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,unknown,,
+6/6/2024,RG,bates_57b,1,p1,full-plot,net-floral,bates_57b_1_p1_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,unknown,,
+6/6/2024,RG,bates_57b,1,p1,full-plot,net-floral,bates_57b_1_p1_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,na,unknown,unknown,,
+6/6/2024,RG,bates_57b,1,p1,full-plot,net-floral,bates_57b_1_p1_full-plot_net-floral,foraging,unknown,vaco,vaccinium_corymbosum,na,unknown,unknown,,
+6/6/2024,RG,bates_57b,1,p1,full-plot,net-floral,bates_57b_1_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+6/6/2024,RG,bates_57b,1,p2,full-plot,net-floral,bates_57b_1_p2_full-plot_net-floral,foraging,worker,vaco,vaccinium_corymbosum,na,unknown,unknown,,mixtus?
+6/6/2024,RG,bates_57b,1,p2,full-plot,net-floral,bates_57b_1_p2_full-plot_net-floral,flying,unknown,vaco,vaccinium_corymbosum,na,unknown,unknown,,
+6/6/2024,RG,bates_57b,1,p2,full-plot,net-floral,bates_57b_1_p2_full-plot_net-floral,flying,unknown,vaco,vaccinium_corymbosum,na,unknown,unknown,,
+6/6/2024,RG,bates_57b,1,p2,full-plot,net-floral,bates_57b_1_p2_full-plot_net-floral,flying,unknown,vaco,vaccinium_corymbosum,na,unknown,unknown,,
+6/19/2024,RG,bks_96,2,p2,full-plot,net-floral,bks_96_2_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+6/19/2024,RG,bks_96,2,p2,full-plot,net-floral,bks_96_2_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+6/19/2024,RG,bks_96,2,p2,full-plot,net-floral,bks_96_2_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+6/19/2024,RG,bks_96,2,p2,full-plot,net-floral,bks_96_2_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+6/19/2024,RG,bks_96,2,p2,full-plot,net-floral,bks_96_2_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+6/19/2024,RG,bks_96,2,p2,full-plot,net-floral,bks_96_2_p2_full-plot_net-floral,flying,queen,na,na,na,unknown,unknown,,
+6/19/2024,RG,bks_96,2,p2,full-plot,net-floral,bks_96_2_p2_full-plot_net-floral,flying,queen,na,na,boim,bombus_impatiens,unknown,,
+6/19/2024,"RG, AD",bks_96,2,ditch,full-plot,net-floral,bks_96_2_ditch_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,flew into tall grass. Saw 1 rufo worker foraging on nootka rose after survey.
+6/19/2024,RG,chong_96,2,ditch,full-plot,net-floral,chong_96_2_ditch_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+6/19/2024,RG,chong_96,2,ditch,full-plot,net-floral,chong_96_2_ditch_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+6/19/2024,AD,chong_96,2,ditch,full-plot,net-floral,chong_96_2_ditch_full-plot_net-floral,foraging,unknown,trre,trifolium_repens,bohu,bombus_huntii,unknown,,worker/male?
+6/19/2024,AD,chong_96,2,ditch,full-plot,net-floral,chong_96_2_ditch_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+7/2/2024,NC,sandhu_ladnertrunk,2,p1,full-plot,net-floral,sandhu_ladnertrunk_2_p1_full-plot_net-floral,flying,worker,na,na,boru,bombus_rufocinctus,unknown,,
+7/2/2024,AD,sandhu_ladnertrunk,2,ditch,full-plot,net-floral,sandhu_ladnertrunk_2_ditch_full-plot_net-floral,foraging,unknown,chan,chamaenerion_angustifolium,na,unknown,unknown,,
+7/2/2024,AD,sandhu_ladnertrunk,2,ditch,full-plot,net-floral,sandhu_ladnertrunk_2_ditch_full-plot_net-floral,foraging,unknown,chan,chamaenerion_angustifolium,na,unknown,unknown,,
+7/2/2024,AD,sandhu_ladnertrunk,2,ditch,full-plot,net-floral,sandhu_ladnertrunk_2_ditch_full-plot_net-floral,foraging,unknown,chan,chamaenerion_angustifolium,na,unknown,unknown,,
+7/2/2024,AD,sandhu_ladnertrunk,2,ditch,full-plot,net-floral,sandhu_ladnertrunk_2_ditch_full-plot_net-floral,foraging,unknown,chan,chamaenerion_angustifolium,na,unknown,unknown,,
+7/2/2024,AD,sandhu_ladnertrunk,2,ditch,full-plot,net-floral,sandhu_ladnertrunk_2_ditch_full-plot_net-floral,foraging,male,chan,chamaenerion_angustifolium,boru,bombus_rufocinctus,y,,male? rufo?
+7/2/2024,AD,sandhu_ladnertrunk,2,ditch,full-plot,net-floral,sandhu_ladnertrunk_2_ditch_full-plot_net-floral,foraging,male,chan,chamaenerion_angustifolium,boru,bombus_rufocinctus,y,,male? rufo?
+7/2/2024,AD,sandhu_ladnertrunk,2,ditch,full-plot,net-floral,sandhu_ladnertrunk_2_ditch_full-plot_net-floral,foraging,male,chan,chamaenerion_angustifolium,na,unknown,y,,male?
+7/2/2024,AD,sandhu_ladnertrunk,2,ditch,full-plot,net-floral,sandhu_ladnertrunk_2_ditch_full-plot_net-floral,foraging,male,chan,chamaenerion_angustifolium,boru,bombus_rufocinctus,y,,male? rufo?
+7/2/2024,AD,sandhu_ladnertrunk,2,ditch,full-plot,net-floral,sandhu_ladnertrunk_2_ditch_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+7/2/2024,AD,sandhu_ladnertrunk,2,ditch,full-plot,net-floral,sandhu_ladnertrunk_2_ditch_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+7/2/2024,AD,sandhu_ladnertrunk,2,ditch,full-plot,net-floral,sandhu_ladnertrunk_2_ditch_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+7/2/2024,AD,sandhu_ladnertrunk,2,ditch,full-plot,net-floral,sandhu_ladnertrunk_2_ditch_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+7/2/2024,AD,sandhu_ladnertrunk,2,ditch,full-plot,net-floral,sandhu_ladnertrunk_2_ditch_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+7/2/2024,AD,sandhu_ladnertrunk,2,ditch,full-plot,net-floral,sandhu_ladnertrunk_2_ditch_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+7/2/2024,AD,sandhu_ladnertrunk,2,ditch,full-plot,net-floral,sandhu_ladnertrunk_2_ditch_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+7/2/2024,AD,sandhu_ladnertrunk,2,ditch,full-plot,net-floral,sandhu_ladnertrunk_2_ditch_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+7/2/2024,AD,sandhu_ladnertrunk,2,ditch,full-plot,net-floral,sandhu_ladnertrunk_2_ditch_full-plot_net-floral,foraging,unknown,ropa,0,boru,bombus_rufocinctus,unknown,,worker or male
+7/2/2024,AD,sandhu_ladnertrunk,2,ditch,full-plot,net-floral,sandhu_ladnertrunk_2_ditch_full-plot_net-floral,flying,worker,na,na,bovo,bombus_vosnesenskii,unknown,,pollen
+7/3/2024,NC,surjit_168,2,p1,full-plot,net-floral,surjit_168_2_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+7/3/2024,NC,surjit_168,2,p1,full-plot,net-floral,surjit_168_2_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+7/3/2024,AD,avtar_168,2,p2,full-plot,net-floral,avtar_168_2_p2_full-plot_net-floral,flying,unknown,na,na,boru,bombus_rufocinctus,unknown,,
+7/3/2024,NC,avtar_168,2,p1,full-plot,net-floral,avtar_168_2_p1_full-plot_net-floral,resting,male,na,na,boru,bombus_rufocinctus,unknown,,
+7/3/2024,NC,avtar_168,2,p1,full-plot,net-floral,avtar_168_2_p1_full-plot_net-floral,resting,male,na,na,boru,bombus_rufocinctus,unknown,,
+7/3/2024,NC,avtar_168,2,p1,full-plot,net-floral,avtar_168_2_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+7/3/2024,NC,avtar_168,2,p1,full-plot,net-floral,avtar_168_2_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+7/3/2024,NC,avtar_168,2,p1,full-plot,net-floral,avtar_168_2_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+7/3/2024,NC,avtar_168,2,p1,full-plot,net-floral,avtar_168_2_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+7/3/2024,NC,avtar_168,2,p1,full-plot,net-floral,avtar_168_2_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+7/3/2024,NC,avtar_168,2,p1,full-plot,net-floral,avtar_168_2_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+7/3/2024,NC,avtar_168,2,p1,full-plot,net-floral,avtar_168_2_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+7/3/2024,NC,avtar_168,2,p1,full-plot,net-floral,avtar_168_2_p1_full-plot_net-floral,nest_searching,unknown,na,na,na,unknown,unknown,,
+7/3/2024,"RG, IWW",avtar_168,2,ditch,full-plot,net-floral,avtar_168_2_ditch_full-plot_net-floral,foraging,worker,rare,0,boru,bombus_rufocinctus,unknown,,"pollen, photo"
+7/2/2024,AD,lbf_ladnertrunk,2,p2,full-plot,net-floral,lbf_ladnertrunk_2_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+7/2/2024,RG,lbf_ladnertrunk,2,ditch,full-plot,net-floral,lbf_ladnertrunk_2_ditch_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,impatiens maybe
+7/2/2024,RG,lbf_ladnertrunk,2,ditch,full-plot,net-floral,lbf_ladnertrunk_2_ditch_full-plot_net-floral,resting,unknown,ruul,0,boru,bombus_rufocinctus,unknown,,M or W resting on a leaf. Likely a worker but didn't see pollen before it flew away
+6/21/2024,RG,bates_57b,2,ditch,full-plot,net-floral,bates_57b_2_ditch_full-plot_net-floral,flying,male,na,na,boru,bombus_rufocinctus,y,,Check photo
+6/21/2024,RG,bates_57b,2,ditch,full-plot,net-floral,bates_57b_2_ditch_full-plot_net-floral,flying,male,na,na,boru,bombus_rufocinctus,y,,Check photo
+6/21/2024,RG,bates_57b,2,ditch,full-plot,net-floral,bates_57b_2_ditch_full-plot_net-floral,flying,male,na,na,boru,bombus_rufocinctus,y,,Check photo
+6/21/2024,RG,bates_57b,2,ditch,full-plot,net-floral,bates_57b_2_ditch_full-plot_net-floral,foraging,male,trre,trifolium_repens,boim,bombus_impatiens,unknown,,
+5/1/2024,RG,bks_neaves,NS,ditch,full-plot,net-floral,bks_neaves_NS_ditch_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,unknown,,near pump hut
+5/1/2024,RG,bks_neaves,NS,ditch,full-plot,net-floral,bks_neaves_NS_ditch_full-plot_net-floral,nest_searching,queen,na,na,bovo,bombus_vosnesenskii,unknown,,near pump hut
+5/1/2024,RG,bks_neaves,NS,p1,full-plot,net-floral,bks_neaves_NS_p1_full-plot_net-floral,flying,queen,na,na,na,unknown,unknown,,
+4/30/2024,RG,gwb_neaves,NS,ditch,full-plot,net-floral,gwb_neaves_NS_ditch_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,unknown,,
+4/30/2024,RG,gwb_neaves,NS,ditch,full-plot,net-floral,gwb_neaves_NS_ditch_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,unknown,,
+4/30/2024,RG,gwb_neaves,NS,p2,full-plot,net-floral,gwb_neaves_NS_p2_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,unknown,,
+4/30/2024,RG,gwb_neaves,NS,p1,full-plot,net-floral,gwb_neaves_NS_p1_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,unknown,,
+4/30/2024,RG,gwb_neaves,NS,p1,full-plot,net-floral,gwb_neaves_NS_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,unknown,,
+4/30/2024,RG,gwb_neaves,NS,p1,full-plot,net-floral,gwb_neaves_NS_p1_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,unknown,,
+4/30/2024,RG,gwb_neaves,NS,p1,full-plot,net-floral,gwb_neaves_NS_p1_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,unknown,,went into a rodent hole
+4/19/2024,RG,bks_56,NS,p1,full-plot,net-floral,bks_56_NS_p1_full-plot_net-floral,nest_searching,unknown,na,na,na,unknown,unknown,,"black, orange, white on butt? hard to see"
+4/19/2024,TK,bks_56,NS,ditch,full-plot,net-floral,bks_56_NS_ditch_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,unknown,,
+4/19/2024,TK,bks_56,NS,ditch,full-plot,net-floral,bks_56_NS_ditch_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,unknown,,
+4/19/2024,TK,bks_56,NS,ditch,full-plot,net-floral,bks_56_NS_ditch_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,unknown,,
+4/19/2024,TK,bks_56,NS,ditch,full-plot,net-floral,bks_56_NS_ditch_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,unknown,,
+4/19/2024,RG,bks_56,NS,p2,full-plot,net-floral,bks_56_NS_p2_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,unknown,,
+4/19/2024,RG,bates_57b,NS,ditch,full-plot,net-floral,bates_57b_NS_ditch_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,n,,
+4/19/2024,RG,bates_57b,NS,ditch,full-plot,net-floral,bates_57b_NS_ditch_full-plot_net-floral,nest_searching,queen,na,na,na,unknown,n,,
+4/19/2024,RG,bates_57b,NS,ditch,full-plot,net-floral,bates_57b_NS_ditch_full-plot_net-floral,flying,queen,na,na,boim,bombus_impatiens,n,,
+4/19/2024,RG,bates_57b,NS,ditch,full-plot,net-floral,bates_57b_NS_ditch_full-plot_net-floral,flying,queen,na,na,bovo,bombus_vosnesenskii,n,,
+4/19/2024,RG,bates_57b,NS,ditch,full-plot,net-floral,bates_57b_NS_ditch_full-plot_net-floral,flying,queen,na,na,bovo,bombus_vosnesenskii,n,,
+4/19/2024,RG,bates_57b,NS,ditch,full-plot,net-floral,bates_57b_NS_ditch_full-plot_net-floral,flying,queen,na,na,na,unknown,n,,
+4/19/2024,RG,bates_57b,NS,ditch,full-plot,net-floral,bates_57b_NS_ditch_full-plot_net-floral,flying,queen,na,na,na,unknown,n,,
+4/19/2024,RG,bates_57b,NS,ditch,full-plot,net-floral,bates_57b_NS_ditch_full-plot_net-floral,flying,male,na,na,boim,bombus_impatiens,y,,
+4/19/2024,RG,bates_57b,NS,ditch,full-plot,net-floral,bates_57b_NS_ditch_full-plot_net-floral,flying,male,na,na,boim,bombus_impatiens,y,,
+4/19/2024,RG,bates_57b,NS,ditch,full-plot,net-floral,bates_57b_NS_ditch_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,n,,
+4/19/2024,RG,bates_57b,NS,ditch,full-plot,net-floral,bates_57b_NS_ditch_full-plot_net-floral,nest_searching,queen,na,na,boru,bombus_rufocinctus,y,,
+4/19/2024,RG,bates_57b,NS,ditch,full-plot,net-floral,bates_57b_NS_ditch_full-plot_net-floral,flying,male,na,na,boim,bombus_impatiens,n,,
+4/19/2024,RG,bates_57b,NS,ditch,full-plot,net-floral,bates_57b_NS_ditch_full-plot_net-floral,flying,male,na,na,boim,bombus_impatiens,n,,
+4/19/2024,RG,bates_57b,NS,ditch,full-plot,net-floral,bates_57b_NS_ditch_full-plot_net-floral,flying,male,na,na,boim,bombus_impatiens,n,,
+4/19/2024,RG,bates_57b,NS,ditch,full-plot,net-floral,bates_57b_NS_ditch_full-plot_net-floral,flying,male,na,na,boim,bombus_impatiens,n,,
+4/19/2024,RG,bates_57b,NS,ditch,full-plot,net-floral,bates_57b_NS_ditch_full-plot_net-floral,foraging,queen,taof,taraxacum_officinale,boim,bombus_impatiens,n,,
+4/19/2024,RG,bates_57b,NS,ditch,full-plot,net-floral,bates_57b_NS_ditch_full-plot_net-floral,flying,queen,na,na,boim,bombus_impatiens,n,,
+4/15/2024,RG,bates_57b,NS,p1,full-plot,net-floral,bates_57b_NS_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,n,,
+4/15/2024,RG,bates_57b,NS,p1,full-plot,net-floral,bates_57b_NS_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,n,,
+4/15/2024,RG,bates_57b,NS,p1,full-plot,net-floral,bates_57b_NS_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,n,,
+4/15/2024,RG,bates_57b,NS,p1,full-plot,net-floral,bates_57b_NS_p1_full-plot_net-floral,flying,unknown,na,na,na,unknown,n,,
+4/15/2024,RG,bates_57b,NS,p1,full-plot,net-floral,bates_57b_NS_p1_full-plot_net-floral,nest_searching,queen,na,na,na,unknown,n,,impatiens or vos
+4/15/2024,RG,bates_57b,NS,p1,full-plot,net-floral,bates_57b_NS_p1_full-plot_net-floral,nest_searching,queen,na,na,na,unknown,n,,impatiens or vos
+4/15/2024,RG,bates_57b,NS,p1,full-plot,net-floral,bates_57b_NS_p1_full-plot_net-floral,foraging,unknown,vaco,vaccinium_corymbosum,na,unknown,n,,impatiens or vos
+4/15/2024,RG,bates_57b,NS,p1,full-plot,net-floral,bates_57b_NS_p1_full-plot_net-floral,foraging,unknown,taof,taraxacum_officinale,na,unknown,y,,worker? impatiens?
+4/15/2024,RG,bates_57b,NS,p1,full-plot,net-floral,bates_57b_NS_p1_full-plot_net-floral,foraging,worker,taof,taraxacum_officinale,boim,bombus_impatiens,y,,
+4/15/2024,RG,bates_57b,NS,p1,full-plot,net-floral,bates_57b_NS_p1_full-plot_net-floral,nest_searching,queen,na,na,bovo,bombus_vosnesenskii,y,,
+4/15/2024,RG,bates_57b,NS,p2,full-plot,net-floral,bates_57b_NS_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,n,,
+4/15/2024,RG,bates_57b,NS,p2,full-plot,net-floral,bates_57b_NS_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,n,,
+4/15/2024,RG,bates_57b,NS,p2,full-plot,net-floral,bates_57b_NS_p2_full-plot_net-floral,foraging,unknown,vaco,vaccinium_corymbosum,bovo,bombus_vosnesenskii,n,,queen? big
+4/15/2024,RG,bates_57b,NS,p2,full-plot,net-floral,bates_57b_NS_p2_full-plot_net-floral,foraging,unknown,vaco,vaccinium_corymbosum,boim,bombus_impatiens,y,,queen?
+4/15/2024,RG,bates_57b,NS,p2,full-plot,net-floral,bates_57b_NS_p2_full-plot_net-floral,flying,unknown,na,na,na,unknown,y,,
+4/18/2024,RG,bks_68,NS,p1,full-plot,net-floral,bks_68_NS_p1_full-plot_net-floral,nest_searching,queen,na,na,na,unknown,unknown,,red on butt
+4/18/2024,RG,bks_68,NS,p1,full-plot,net-floral,bks_68_NS_p1_full-plot_net-floral,flying,unknown,na,na,boim,bombus_impatiens,unknown,,
+4/18/2024,RG,bks_68,NS,p1,full-plot,net-floral,bks_68_NS_p1_full-plot_net-floral,foraging,unknown,vaco,vaccinium_corymbosum,boim,bombus_impatiens,unknown,,
+4/18/2024,RG,bks_68,NS,p2,full-plot,net-floral,bks_68_NS_p2_full-plot_net-floral,flying,unknown,na,na,boim,bombus_impatiens,unknown,,
+4/18/2024,RG,bks_68,NS,p2,full-plot,net-floral,bks_68_NS_p2_full-plot_net-floral,foraging,worker,vaco,vaccinium_corymbosum,boim,bombus_impatiens,unknown,,
+4/18/2024,RG,bks_96,NS,p1,full-plot,net-floral,bks_96_NS_p1_full-plot_net-floral,foraging,worker,vaco,vaccinium_corymbosum,boim,bombus_impatiens,n,,
+4/18/2024,TK,bks_96,NS,p2,full-plot,net-floral,bks_96_NS_p2_full-plot_net-floral,flying,queen,na,na,bomi,bombus_mixtus,y,,full of pollen
+4/18/2024,TK,bks_96,NS,p2,full-plot,net-floral,bks_96_NS_p2_full-plot_net-floral,flying,queen,na,na,bomi,bombus_mixtus,y,,full of pollen
+4/18/2024,TK,bks_96,NS,p2,full-plot,net-floral,bks_96_NS_p2_full-plot_net-floral,flying,queen,na,na,na,unknown,n,,"flying fast around blueberry, hard to say species"
+4/18/2024,TK,bks_96,NS,p2,full-plot,net-floral,bks_96_NS_p2_full-plot_net-floral,flying,queen,na,na,na,unknown,n,,vos?
+4/18/2024,TK,bks_96,NS,p2,full-plot,net-floral,bks_96_NS_p2_full-plot_net-floral,flying,queen,na,na,na,unknown,n,,mixtus?
+4/18/2024,TK,bks_96,NS,p2,full-plot,net-floral,bks_96_NS_p2_full-plot_net-floral,flying,queen,na,na,na,unknown,n,,impatiens?
+4/21/2024,RG,chong_68,NS,p1,full-plot,net-floral,chong_68_NS_p1_full-plot_net-floral,foraging,unknown,vaco,vaccinium_corymbosum,bomi,bombus_mixtus,y,,caught
+4/21/2024,RG,chong_68,NS,p1,full-plot,net-floral,chong_68_NS_p1_full-plot_net-floral,nest_searching,queen,na,na,bovo,bombus_vosnesenskii,n,,
+4/21/2024,RG,chong_68,NS,p1,full-plot,net-floral,chong_68_NS_p1_full-plot_net-floral,nest_searching,unknown,na,na,na,unknown,n,,
+4/21/2024,RG,chong_68,NS,p1,full-plot,net-floral,chong_68_NS_p1_full-plot_net-floral,nest_searching,unknown,na,na,na,unknown,n,,
+4/21/2024,RG,chong_68,NS,p1,full-plot,net-floral,chong_68_NS_p1_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,n,,
+4/21/2024,RG,chong_68,NS,p1,full-plot,net-floral,chong_68_NS_p1_full-plot_net-floral,foraging,queen,vaco,vaccinium_corymbosum,bovo,bombus_vosnesenskii,n,,
+4/21/2024,RG,chong_68,NS,p1,full-plot,net-floral,chong_68_NS_p1_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,n,,went into 1in hole then came out
+4/21/2024,RG,chong_68,NS,p1,full-plot,net-floral,chong_68_NS_p1_full-plot_net-floral,foraging,unknown,vaco,vaccinium_corymbosum,na,unknown,n,,mixtus? red butt
+4/21/2024,RG,chong_68,NS,p2,full-plot,net-floral,chong_68_NS_p2_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,n,,
+4/21/2024,RG,chong_68,NS,p2,full-plot,net-floral,chong_68_NS_p2_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,n,,
+4/21/2024,RG,chong_68,NS,p2,full-plot,net-floral,chong_68_NS_p2_full-plot_net-floral,flying,queen,na,na,boim,bombus_impatiens,n,,
+4/21/2024,RG,chong_68,NS,p2,full-plot,net-floral,chong_68_NS_p2_full-plot_net-floral,flying,queen,na,na,boim,bombus_impatiens,n,,
+4/13/2024,RG,chong_96,NS,p1,full-plot,net-floral,chong_96_NS_p1_full-plot_net-floral,flying,queen,na,na,na,unknown,n,,could not ID
+4/13/2024,RG,chong_96,NS,p2,full-plot,net-floral,chong_96_NS_p2_full-plot_net-floral,flying,queen,na,na,na,unknown,n,,could not ID
+4/13/2024,RG,chong_96,NS,ditch,full-plot,net-floral,chong_96_NS_ditch_full-plot_net-floral,flying,queen,na,na,boim,bombus_impatiens,y,,
+4/13/2024,RG,chong_96,NS,ditch,full-plot,net-floral,chong_96_NS_ditch_full-plot_net-floral,nest_searching,queen,na,na,bovo,bombus_vosnesenskii,n,,
+4/13/2024,RG,chong_96,NS,ditch,full-plot,net-floral,chong_96_NS_ditch_full-plot_net-floral,flying,queen,na,na,boim,bombus_impatiens,unknown,,
+4/13/2024,RG,chong_96,NS,ditch,full-plot,net-floral,chong_96_NS_ditch_full-plot_net-floral,flying,queen,na,na,boim,bombus_impatiens,unknown,,
+4/13/2024,RG,chong_96,NS,ditch,full-plot,net-floral,chong_96_NS_ditch_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,unknown,,
+4/13/2024,RG,chong_96,NS,ditch,full-plot,net-floral,chong_96_NS_ditch_full-plot_net-floral,nest_searching,queen,na,na,boim,bombus_impatiens,unknown,,
+4/13/2024,RG,chong_96,NS,ditch,full-plot,net-floral,chong_96_NS_ditch_full-plot_net-floral,flying,queen,na,na,na,unknown,unknown,,
