@@ -60,6 +60,13 @@ ggplot(rodent1, aes(x=field.type))+
   xlab("Field Type")+
   ylab("Rodent Burrow Abundance (count)")
 
+#plot total number of burrows at each site
+ggplot(rodent1, aes(x=site_id))+ 
+  geom_bar(position="dodge", stat="count") +
+  theme_classic(base_size = 15)+
+  xlab("Field Type")+
+  ylab("Rodent Burrow Abundance (count)")
+
 #plot number of rodent burrow found in each field type, grouped by area
 ggplot(rodent1, aes(x=area, fill = field.type))+ 
   geom_bar(position="dodge", stat="count") +
