@@ -89,8 +89,15 @@ ggplot(bees_nestsearching, aes(x=field.type))+
 ggplot(bees_nestsearching, aes(x=plot_id))+ 
   geom_bar(position="dodge", stat="count") +
   theme_classic(base_size = 15)+
-  xlab("Field Type")+
+  xlab("Plot Type")+
   ylab("Bee abundance (nest searching only)")
+
+#plot number of bees found at each plot (p1, p2, d)
+ggplot(bee1, aes(x=plot_id))+ 
+  geom_bar(position="dodge", stat="count") +
+  theme_classic(base_size = 15)+
+  xlab("Plot Type")+
+  ylab("Bee abundance (all behaviours)")
 
 #plot number of bees (flying only) found in each field type
 ggplot(bees_flying, aes(x=field.type))+ 
