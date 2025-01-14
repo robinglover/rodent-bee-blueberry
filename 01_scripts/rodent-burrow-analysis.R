@@ -6,7 +6,7 @@ library(dplyr) #for working with dataframes
 library(tidyr) #for working with datasets
 
 #read csv
-rodent <- read.csv("00_rawdata/rodent-data.csv") #rodent burrow data
+rodent <- read.csv("00_rawdata/rodent tracks ID(rodents).csv") #rodent burrow data
 site_data <- read.csv("00_rawdata/site-info.csv") #site data
 
 #add column to round data for site type (either grass or bare) by joining 
@@ -19,29 +19,29 @@ rodent1 <- rodent %>%
 #####FILTERED DATAFRAMES########
 
 #filter dataframe to only contain holes with certain IDs (either vole or dm)
-rodent_certain_species <- filter(rodent1, species_guess_final == "dm" | species_guess_final == "v")
+rodent_certain_species <- filter(rodent1, powder_species_guess_photo2 == "A" | powder_species_guess_photo2 == "B")
 
 #filter dataframe to only include holes with certain IDs for activity (either yes or no)
-rodent_certain_activity <- filter(rodent1, powder_active_final == "y" | powder_active_final == "n")
+rodent_certain_activity <- filter(rodent1, powder_active_photo2 == "y" | powder_active_photo2 == "n")
 
 #####PLOTS######
 
 #plot hole diameter vs species guess (for certain species guesses)
-ggplot(rodent_certain_species, aes(y=diameter_cm, x=species_guess_final))+ 
+ggplot(rodent_certain_species, aes(y=diameter_cm, x=powder_species_guess_photo2))+ 
   geom_boxplot() +
   theme_classic(base_size = 15)+
   xlab("RG Species Guess")+
   ylab("Diameter (cm)")
 
 #plot number of active and inactive burrows in each field type
-ggplot(rodent_certain_activity, aes(x=field.type, fill=powder_active_final))+ 
+ggplot(rodent_certain_activity, aes(x=field.type, fill=powder_active_photo2))+ 
   geom_bar(position="dodge", stat="count") +
   theme_classic(base_size = 15)+
   xlab("Field Type")+
   ylab("Rodent Burrow Abundance (count)")
 
 #plot number of active burrows of each species (v or dm) in each field type
-ggplot(rodent_certain_species, aes(x=field.type, fill=species_guess_final))+ 
+ggplot(rodent_certain_species, aes(x=field.type, fill=powder_species_guess_photo2))+ 
   geom_bar(position="dodge", stat="count") +
   theme_classic(base_size = 15)+
   xlab("Field Type")+
