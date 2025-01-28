@@ -138,3 +138,33 @@ ggplot(bee1, aes(x=behaviour, fill=plot_id))+
   xlab("Plot")+
   ylab("Bee abundance (nest searching only)")+
   facet_wrap(~site_id)
+
+##for Jenna: 
+
+#plot number of nest-searching bees for each species (**note: this does not 
+#account for the fact that there were varying numbers of bees sampled across 
+#different species during the survey)
+ggplot(bees_nestsearching, aes(x=bee_species))+ 
+  geom_bar(position="dodge", stat="count") +
+  theme_classic(base_size = 15)+
+  xlab("Species")+
+  ylab("Bee abundance (nest searching only)")
+
+#plot number of bees found nest-searching along the ditch vs within the blueberry
+#field, grouped by species (**note: this does not account for the fact there 
+#there were twice as many plot surveys as ditch surveys, or the varying numbers 
+#of bees sampled across different species during the survey)
+ggplot(bees_nestsearching, aes(x=bee_species, fill = location))+ 
+  geom_bar(position="dodge", stat="count") +
+  theme_classic(base_size = 15)+
+  xlab("Species")+
+  ylab("Bee abundance (nest searching only)")
+
+#plot number of bees nest-searching along ditch vs in field (**note: this does 
+#not account for the fact there there were twice as many plot surveys as ditch surveys)
+ggplot(bees_nestsearching, aes(x = location))+ 
+  geom_bar(position="dodge", stat="count") +
+  theme_classic(base_size = 15)+
+  xlab("Location")+
+  ylab("Bee abundance (nest searching only)")
+
