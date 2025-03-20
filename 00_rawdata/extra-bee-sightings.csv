@@ -1,0 +1,54 @@
+date,observers,site_id,round,plot_id,transect_id,transect_section,sample_code,survey_type,behaviour,caste,flower_code,flower_species,bee_code,bee_species,notes
+15-May-24,RG,chong_96,1,ditch,full-plot,net-floral,chong_96_1_ditch_full-plot_net-floral,bombus,nest_searching,unknown,na,na,boim,bombus_impatiens,"no bees during survey, saw 1 impatiens nest searching after survey time"
+May-22-2024,RG,gwb_neaves,1,p2,full-plot,net-floral,gwb_neaves_1_p2_full-plot_net-floral,bombus,nest_searching,queen,na,na,boim,bombus_impatiens,saw 1 impatiens queen nest searching before survey
+24-May,"RG, AD",surjit_168,1,ditch,full-plot,net-floral,surjit_168_1_ditch_full-plot_net-floral,bombus,flying,queen,na,na,boim,bombus_impatiens,one imp Q flying after survey
+23-May,"RG, AD",avtar_168,1,p1,full-plot,net-floral,avtar_168_1_p1_full-plot_net-floral,bombus,,worker,na,na,boim,bombus_impatiens,1 imp worker seen after survey
+20-Jun-24,"RG, AD",gwb_neaves,2,ditch,full-plot,net-floral,gwb_neaves_2_ditch_full-plot_net-floral,bombus,foraging,unknown,ruul,rubus_ulmifolius,boim,bombus_impatiens,1 unknown imp foraging on RUUL seen outside of survey time
+20-Jun-24,RG,bks_neaves,2,p2,full-plot,net-floral,bks_neaves_2_p2_full-plot_net-floral,bombus,resting,unknown,vaco,vaccinium_corymbosum,boim,bombus_impatiens,saw 1 bombus sitting on blueberry bush outside of plot
+19-Jun-24,"RG, AD",bks_96,2,ditch,full-plot,net-floral,bks_96_2_ditch_full-plot_net-floral,bombus,foraging,worker,ronu,rosa_nutkana,boru,bombus_rufocinctus,Saw 1 rufo worker foraging on a nootka rose after survey
+19-Jun-24,AD,chong_96,2,p2,full-plot,net-floral,chong_96_2_p2_full-plot_net-floral,bombus,foraging,worker,trre,trifolium_repens,boim,bombus_impatiens,1 imp worker outside of plot foraging on white clover (trre)
+21-Jun-24,RG,bks_56,2,p1,full-plot,net-floral,bks_56_2_p1_full-plot_net-floral,bombus,foraging,unknown,rasc,ranunculus_sceleratus,na,unknown,"bumblebee, (possibly Rufo, either M or W) foraging on RASC after survey"
+21-Jun-24,RG,bks_56,2,ditch,full-plot,net-floral,bks_56_2_ditch_full-plot_net-floral,bombus,flying,queen,na,na,na,unknown,saw one unknown Q flying after survey
+02-Jul-24,RG,lbf_ladnertrunk,2,ditch,full-plot,net-floral,lbf_ladnertrunk_2_ditch_full-plot_net-floral,bombus,flying,unknown,na,na,na,unknown,saw 2 bombus after survey
+02-Jul-24,RG,lbf_ladnertrunk,2,ditch,full-plot,net-floral,lbf_ladnertrunk_2_ditch_full-plot_net-floral,bombus,flying,unknown,na,na,na,unknown,saw 2 bombus after survey
+21-Jun-24,RG,bates_57b,2,p1,full-plot,net-floral,bates_57b_2_p1_full-plot_net-floral,bombus,foraging,worker,trre,trifolium_repens,boru,bombus_rufocinctus,"saw 2 bees before surveys (1 rufo W for on TRRE, 1 unknown Q flying)"
+21-Jun-24,RG,bates_57b,2,p1,full-plot,net-floral,bates_57b_2_p1_full-plot_net-floral,bombus,flying,queen,na,na,na,unknown,"saw 2 bees before surveys (1 rufo W for on TRRE, 1 unknown Q flying)"
+21-Jun-24,RG,bates_57b,2,p2,full-plot,net-floral,bates_57b_2_p2_full-plot_net-floral,bombus,flying,unknown,na,na,na,unknown,1 unknown flying outside of plot
+21-Jun-24,RG,bates_57b,2,ditch,full-plot,net-floral,bates_57b_2_ditch_full-plot_net-floral,bombus,flying,male,na,na,boru,bombus_rufocinctus,"saw 2 bees outside of survey time on ditch (1 rufo M flying, 1 unknown foraging clover)"
+21-Jun-24,RG,bates_57b,2,ditch,full-plot,net-floral,bates_57b_2_ditch_full-plot_net-floral,bombus,foraging,unknown,trre,trifolium_repens,na,unknown,"saw 2 bees outside of survey time on ditch (1 rufo M flying, 1 unknown foraging clover)"
+21-Apr-24,RG,chong_68,NS,,full-plot,net-floral,chong_68_NS__full-plot_net-floral,bombus,nest_searching,queen,na,na,boim,bombus_impatiens,went into rodent (deer mouse?) hole and then came back out after survey 
+21-Apr-24,RG,chong_68,NS,,full-plot,net-floral,chong_68_NS__full-plot_net-floral,bombus,nest_searching,queen,na,na,boim,bombus_impatiens,went into rodent (deer mouse?) hole and then came back out after survey 
+13-Apr-24,RG,chong_96,NS,,full-plot,net-floral,chong_96_NS__full-plot_net-floral,bombus,flying,queen,na,na,na,unknown,looked like impatiens
+13-Apr-24,RG,chong_96,NS,,full-plot,net-floral,chong_96_NS__full-plot_net-floral,bombus,flying,queen,na,na,na,unknown,looked like impatiens
+13-Apr-24,RG,chong_96,NS,,full-plot,net-floral,chong_96_NS__full-plot_net-floral,bombus,flying,queen,na,na,na,unknown,looked like impatiens
+13-Apr-24,RG,chong_96,NS,,full-plot,net-floral,chong_96_NS__full-plot_net-floral,bombus,flying,queen,na,na,na,unknown,looked like impatiens
+13-Apr-24,RG,chong_96,NS,,full-plot,net-floral,chong_96_NS__full-plot_net-floral,bombus,flying,queen,na,na,na,unknown,looked like impatiens
+18-Jun-24,AD,chong_68,2,p2,full-plot,net-floral,chong_68_2_p2_full-plot_net-floral,vegetation,nest_searching,queen,na,na,na,unknown,1 queen seen flying low (NS)
+18-Jun-24,AD,chong_68,2,p2,full-plot,net-floral,chong_68_2_p2_full-plot_net-floral,vegetation,flying,worker,na,na,na,unknown,worker seen flying
+21-Jun-24,AD,bks_56,2,p1,full-plot,net-floral,bks_56_2_p1_full-plot_net-floral,vegetation,foraging,unknown,rasc,ranunculus_sceleratus,na,unknown,"Bumblebee on RASC, possibly Ruf."
+02-Jul-24,AD,sandhu_ladnertrunk,2,p2,full-plot,net-floral,sandhu_ladnertrunk_2_p2_full-plot_net-floral,vegetation,resting,male,ropa,rorippa_palustris,boim,bombus_impatiens,1 male impatiens resting on bog yellowcress
+10-Jul-24,RG,chong_68,3,p2,full-plot,net-floral,chong_68_3_p2_full-plot_net-floral,vegetation,foraging,unknown,trre,trifolium_repens,boru,bombus_rufocinctus,
+23-Apr-24,"RG, CN",avtar_168,NS,d,full-plot,net-floral,avtar_168_NS_d_full-plot_net-floral,vegetation,nest_searching,unknown,na,na,na,unknown,
+,,,,,,,____,,,,,0,,0,
+,,,,,,,____,,,,,0,,0,
+,,,,,,,____,,,,,0,,0,
+,,,,,,,____,,,,,0,,0,
+,,,,,,,____,,,,,0,,0,
+,,,,,,,____,,,,,0,,0,
+,,,,,,,____,,,,,0,,0,
+,,,,,,,____,,,,,0,,0,
+,,,,,,,____,,,,,0,,0,
+,,,,,,,____,,,,,0,,0,
+,,,,,,,____,,,,,0,,0,
+,,,,,,,____,,,,,0,,0,
+,,,,,,,____,,,,,0,,0,
+,,,,,,,____,,,,,0,,0,
+,,,,,,,____,,,,,0,,0,
+,,,,,,,____,,,,,0,,,
+,,,,,,,____,,,,,0,,,
+,,,,,,,____,,,,,0,,,
+,,,,,,,____,,,,,0,,,
+,,,,,,,____,,,,,0,,,
+,,,,,,,____,,,,,0,,,
+,,,,,,,____,,,,,0,,,
+,,,,,,,____,,,,,0,,,
