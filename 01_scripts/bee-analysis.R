@@ -69,10 +69,24 @@ ggplot(bee2, aes(fill=field.type, x=behaviour, y = n))+
   xlab("Behaviour")+
   ylab("Bee abundance")
 
+#BOX PLOT: plot number of bees found in each field type, grouped by round
+ggplot(bee2, aes(fill=field.type, x=behaviour, y = n))+ 
+  geom_boxplot() +
+  theme_classic(base_size = 15)+
+  xlab("Behaviour")+
+  ylab("Bee abundance") +
+  scale_fill_manual(values = c("bare" = "chocolate4", "grass" = "darkgreen")) +
+  stat_compare_means(
+    aes(group = field.type),  # group by field.type
+    method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
+    label = "p.format",  # Display p-value 
+    size = 3.7,  # Adjust this value to make the asterisks larger
+    vjust = -1)  # Adjust horizontal position of the p-value label
+
+
 ##stats:
 #create datasheet with transect code, round #, web type, and count number of each web type
 bee2 <- bee1 %>% count(site_id, round, plot_id, sample_code, behaviour, field.type)
-View(bee2)
 
 #set field.type as a factor
 bee2$field.type <- factor(bee2$field.type, levels = c("bare", "grass"))
@@ -116,16 +130,16 @@ ggplot(bee1, aes(fill=field.type, x=factor(round, levels=c("NS", "1", "2"))))+
 #BOX PLOT: plot number of bees found in each field type, grouped by round
 ggplot(bee2, aes(fill=field.type, x=factor(round, levels=c("nest-searching", "1", "2")), y = n))+ 
   geom_boxplot() +
-  theme_classic(base_size = 12)+
+  theme_classic(base_size = 15)+
   xlab("Round")+
   ylab("Bee abundance") +
   scale_fill_manual(values = c("bare" = "chocolate4", "grass" = "darkgreen")) +
   stat_compare_means(
     aes(group = field.type),  # group by field.type
     method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
-    label = "p.signif",  # Display p-value or asterisks (significance stars)
-    size = 7  # Adjust this value to make the asterisks larger
-    )
+    label = "p.format",  # Display p-value 
+    size = 3.7,  # Adjust this value to make the asterisks larger
+    vjust = -1)  # Adjust horizontal position of the p-value label
 
 ##stats:
 
