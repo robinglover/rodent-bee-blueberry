@@ -4,6 +4,8 @@
 library(ggplot2) #for plots
 library(dplyr) #for working with dataframes
 library(tidyr) #for working with datasets
+library(lme4) #for mixed effects models
+library(ggpubr) #for adding significance asterisks to graph
 
 #read csv
 bee <- read.csv("00_rawdata/bee-data.csv") #bee data
@@ -37,9 +39,7 @@ bees_nestsearching <- filter(bee1, behaviour == "nest_searching")
 #filter to bees flying
 bees_flying <- filter(bee1, behaviour == "flying")
 
-#####PLOTS#####
-
-##influence of field type
+#####Influence of field type####
 
 #plot number of bees found in each field type
 ggplot(bee1, aes(x=field.type))+ 
@@ -62,12 +62,93 @@ ggplot(bee1, aes(fill=field.type, x=behaviour))+
   xlab("Behaviour")+
   ylab("Bee abundance")
 
+#BOX PLOT: number of bees found in each field type, grouped by behaviour
+ggplot(bee2, aes(fill=field.type, x=behaviour, y = n))+ 
+  geom_boxplot() +
+  theme_classic(base_size = 15)+
+  xlab("Behaviour")+
+  ylab("Bee abundance")
+
+##stats:
+#create datasheet with transect code, round #, web type, and count number of each web type
+bee2 <- bee1 %>% count(site_id, round, plot_id, sample_code, behaviour, field.type)
+View(bee2)
+
+#set field.type as a factor
+bee2$field.type <- factor(bee2$field.type, levels = c("bare", "grass"))
+
+# Change "NS" to "nest-searching" in the 'round' column
+bee2 <- bee2 %>%
+  mutate(round = recode(round, "NS" = "nest-searching"))
+
+#run anova on mixed linear model
+anova.behaviour <- aov(n ~ field.type + behaviour, data = bee2)
+summary(anova.behaviour)
+
+#run tukey test
+
+TukeyHSD(anova.behaviour)
+
+#run 3 separate t-tests for each web type
+##flying
+onlyFlying <- filter(bee2, behaviour == "flying")
+t.test(n ~ field.type, data = onlyFlying, var.equal = FALSE)
+
+##foraging
+onlyForaging <- filter(bee2, behaviour == "foraging")
+t.test(n ~ field.type, data = onlyForaging, var.equal = FALSE)
+
+##nest_searching
+onlyNestSearching <- filter(bee2, behaviour == "nest_searching")
+t.test(n ~ field.type, data = onlyNestSearching, var.equal = FALSE)
+
+##resting
+onlyResting <- filter(bee2, behaviour == "resting")
+t.test(n ~ field.type, data = onlyResting, var.equal = FALSE)
+
 #plot number of bees found in each field type, grouped by round
-ggplot(bee1, aes(fill=field.type, x=factor(round, level=c("NS", "1", "2"))))+ 
+ggplot(bee1, aes(fill=field.type, x=factor(round, levels=c("NS", "1", "2"))))+ 
   geom_bar(position="dodge", stat="count") +
   theme_classic(base_size = 15)+
   xlab("Round")+
   ylab("Bee abundance")
+
+#BOX PLOT: plot number of bees found in each field type, grouped by round
+ggplot(bee2, aes(fill=field.type, x=factor(round, levels=c("nest-searching", "1", "2")), y = n))+ 
+  geom_boxplot() +
+  theme_classic(base_size = 12)+
+  xlab("Round")+
+  ylab("Bee abundance") +
+  scale_fill_manual(values = c("bare" = "chocolate4", "grass" = "darkgreen")) +
+  stat_compare_means(
+    aes(group = field.type),  # group by field.type
+    method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
+    label = "p.signif",  # Display p-value or asterisks (significance stars)
+    size = 7  # Adjust this value to make the asterisks larger
+    )
+
+##stats:
+
+####run anova on mixed linear model
+a <- aov(n ~ field.type + round, data = bee2)
+summary(a)
+
+####run tukey test
+
+TukeyHSD(a)
+
+####run 3 separate t-tests for each web type
+#######NS
+onlyNS <- filter(bee2, round == "NS")
+t.test(n ~ field.type, data = onlyNS, var.equal = FALSE)
+
+#######1
+onlyR1 <- filter(bee2, round == "1")
+t.test(n ~ field.type, data = onlyR1, var.equal = FALSE)
+
+#######2
+onlyR2 <- filter(bee2, round == "2")
+t.test(n ~ field.type, data = onlyR2, var.equal = FALSE)
 
 #plot number of bees (foraging on blueberry only) found in each field type
 ggplot(bees_foraging_vaco, aes(x=field.type))+ 
@@ -76,7 +157,7 @@ ggplot(bees_foraging_vaco, aes(x=field.type))+
   xlab("Field Type")+
   ylab("Bee abundance (foraging on blueberry only)")
 
-##behaviour-specific analyses
+####behaviour-specific analyses#####
 
 #plot number of bees (nest searching only) found in each field type
 ggplot(bees_nestsearching, aes(x=field.type))+ 
@@ -107,64 +188,7 @@ ggplot(bees_flying, aes(x=field.type))+
   ylab("Bee abundance (flying only)")
 
 
-###For farmers:
 
-#plot number of bees found in each site
-ggplot(bee1, aes(x = site_id))+ 
-  geom_bar(position="dodge", stat="count") +
-  theme_classic(base_size = 15)+
-  xlab("Site")+
-  ylab("Bee abundance")
 
-#plot number of bees (nest searching only) found at each site
-ggplot(bees_nestsearching, aes(x=site_id))+ 
-  geom_bar(position="dodge", stat="count") +
-  theme_classic(base_size = 15)+
-  xlab("Site")+
-  ylab("Bee abundance (nest searching only)")
 
-#plot number of bees (nest searching only) found at each plot within each plot
-ggplot(bees_nestsearching, aes(x=plot_id, fill=location))+ 
-  geom_bar(position="dodge", stat="count") +
-  theme_classic(base_size = 15)+
-  xlab("Plot")+
-  ylab("Bee abundance (nest searching only)")+
-  facet_wrap(~site_id)
-
-#plot number of bees found at each site, grouped by behaviour
-ggplot(bee1, aes(x=behaviour, fill=plot_id))+ 
-  geom_bar(position="dodge", stat="count") +
-  theme_classic()+
-  xlab("Plot")+
-  ylab("Bee abundance (nest searching only)")+
-  facet_wrap(~site_id)
-
-##for Jenna: 
-
-#plot number of nest-searching bees for each species (**note: this does not 
-#account for the fact that there were varying numbers of bees sampled across 
-#different species during the survey)
-ggplot(bees_nestsearching, aes(x=bee_species))+ 
-  geom_bar(position="dodge", stat="count") +
-  theme_classic(base_size = 15)+
-  xlab("Species")+
-  ylab("Bee abundance (nest searching only)")
-
-#plot number of bees found nest-searching along the ditch vs within the blueberry
-#field, grouped by species (**note: this does not account for the fact there 
-#there were twice as many plot surveys as ditch surveys, or the varying numbers 
-#of bees sampled across different species during the survey)
-ggplot(bees_nestsearching, aes(x=bee_species, fill = location))+ 
-  geom_bar(position="dodge", stat="count") +
-  theme_classic(base_size = 15)+
-  xlab("Species")+
-  ylab("Bee abundance (nest searching only)")
-
-#plot number of bees nest-searching along ditch vs in field (**note: this does 
-#not account for the fact there there were twice as many plot surveys as ditch surveys)
-ggplot(bees_nestsearching, aes(x = location))+ 
-  geom_bar(position="dodge", stat="count") +
-  theme_classic(base_size = 15)+
-  xlab("Location")+
-  ylab("Bee abundance (nest searching only)")
 

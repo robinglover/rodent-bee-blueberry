@@ -74,4 +74,104 @@ ggplot(rodent1, aes(x=area, fill = field.type))+
   xlab("Area")+
   ylab("Rodent Burrow Abundance (count)")
 
+###planning rodent fieldwork 2025
+
+#how many burrows were found at each plot at bates farm?
+##filter to just bates farm
+bates57_rodent <- filter(rodent1, site_id == "bates_57b")
+bates57_rodent_filtered <- filter(rodent1, site_id == "bates_57b" & plot_id == "p2")
+
+ggplot(bates57_rodent_filtered, aes(x=transect_id, fill = powder_species_guess_photo2))+ 
+  geom_bar(position="dodge", stat="count") +
+  theme_classic(base_size = 15)+
+  xlab("Species Guess")+
+  ylab("Rodent Burrow Abundance on Bates Farm (count)")
+
+summary_data3 <- bates57_rodent_filtered %>%
+  group_by(transect_id) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count))
+
+# Display the summarized data as a table
+kable(summary_data3, col.names = c("Transect", "Rodent Burrow Abundance (Count)"), 
+      caption = "Rodent Burrow Abundance Summary")
+
+# Enhanced table appearance
+summary_data2 %>%
+  kable("html", col.names = c("Activity Guess", "Rodent Burrow Abundance (Count)"), 
+        caption = "Rodent Burrow Abundance Summary Overall") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+
+
+
+
+ggplot(bates57_rodent, aes(x=powder_species_guess_photo2))+ 
+  geom_bar(position="dodge", stat="count") +
+  theme_classic(base_size = 15)+
+  xlab("Species Guess")+
+  ylab("Rodent Burrow Abundance on Bates Farm (count)")
+
+ggplot(rodent1, aes(x=powder_species_guess_photo2))+ 
+  geom_bar(position="dodge", stat="count") +
+  theme_classic(base_size = 15)+
+  xlab("Species Guess")+
+  ylab("Rodent Burrow Abundance Overall (count)")
+
+
+summary_data <- rodent1 %>%
+  group_by(powder_species_guess_photo2) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count))
+
+library(knitr)
+
+# Display the summarized data as a table
+kable(summary_data, col.names = c("Species Guess", "Rodent Burrow Abundance (Count)"), 
+      caption = "Rodent Burrow Abundance Summary")
+
+
+library(kableExtra)
+
+# Enhanced table appearance
+summary_data %>%
+  kable("html", col.names = c("Species Guess", "Rodent Burrow Abundance (Count)"), 
+        caption = "Rodent Burrow Abundance Summary Overall") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+
+
+summary_data2 <- rodent1 %>%
+  group_by(powder_active_photo2) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count))
+
+# Display the summarized data as a table
+kable(summary_data2, col.names = c("Activity Guess", "Rodent Burrow Abundance (Count)"), 
+      caption = "Rodent Burrow Abundance Summary")
+
+# Enhanced table appearance
+summary_data2 %>%
+  kable("html", col.names = c("Activity Guess", "Rodent Burrow Abundance (Count)"), 
+        caption = "Rodent Burrow Abundance Summary Overall") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+
+
+#filter to rodent active only
+
+active <- filter(rodent1, powder_active_photo2 == "y")
+
+summary_data4 <- active %>%
+  group_by(powder_species_guess_photo2) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count))
+
+# Display the summarized data as a table
+kable(summary_data4, col.names = c("Species Guess", "Rodent Burrow Abundance (Count)"), 
+      caption = "Rodent Burrow Abundance Summary")
+
+# Enhanced table appearance
+summary_data4 %>%
+  kable("html", col.names = c("Activity Guess", "Rodent Burrow Abundance (Count)"), 
+        caption = "Rodent Burrow Abundance Summary Overall") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+
 
