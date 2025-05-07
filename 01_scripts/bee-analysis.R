@@ -164,6 +164,32 @@ t.test(n ~ field.type, data = onlyR1, var.equal = FALSE)
 onlyR2 <- filter(bee2, round == "2")
 t.test(n ~ field.type, data = onlyR2, var.equal = FALSE)
 
+##finding mean and SD for NS bee data
+# Filter data for "grass" field.type and "NS" round
+grass_ns_data <- bee2 %>%
+  filter(field.type == "grass", round == "NS")  # Adjust according to your exact field type and round names
+
+# Calculate the mean and standard deviation of the bumblebee counts
+mean_bumblebees <- mean(grass_ns_data$n, na.rm = TRUE)  # 'n' should be the count column
+sd_bumblebees <- sd(grass_ns_data$n, na.rm = TRUE)
+
+# Print results
+cat("Mean number of bumblebees at grass sites during NS round:", mean_bumblebees, "\n")
+cat("Standard deviation of bumblebees at grass sites during NS round:", sd_bumblebees, "\n")
+
+# Filter data for "bare" field.type and "NS" round
+bare_ns_data <- bee2 %>%
+  filter(field.type == "bare", round == "NS")  # Adjust according to your exact field type and round names
+
+# Calculate the mean and standard deviation of the bumblebee counts
+mean_bumblebees <- mean(bare_ns_data$n, na.rm = TRUE)  # 'n' should be the count column
+sd_bumblebees <- sd(bare_ns_data$n, na.rm = TRUE)
+
+# Print results
+cat("Mean number of bumblebees at grass sites during NS round:", mean_bumblebees, "\n")
+cat("Standard deviation of bumblebees at grass sites during NS round:", sd_bumblebees, "\n")
+
+
 #plot number of bees (foraging on blueberry only) found in each field type
 ggplot(bees_foraging_vaco, aes(x=field.type))+ 
   geom_bar(position="dodge", stat="count") +
