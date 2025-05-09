@@ -103,7 +103,7 @@ summary(anova.behaviour)
 
 TukeyHSD(anova.behaviour)
 
-#run 3 separate t-tests for each web type
+#run separate t-tests for each behaviour
 ##flying
 onlyFlying <- filter(bee2, behaviour == "flying")
 t.test(n ~ field.type, data = onlyFlying, var.equal = FALSE)
