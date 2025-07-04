@@ -1,0 +1,28 @@
+---
+title: "dataframe_setup_doc"
+output: pdf_document
+date: "2025-07-04"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_analysis/rodent-bee-blueberry")
+```
+
+#Loading the dataframes
+
+```{r }
+
+#load tidyverse
+library(tidyverse)
+
+#read in data
+bee <- read.csv("06_cleandata/bees_CLEAN.csv")
+bee_sampling_events <- read.csv("06_cleandata/bee_sampling_events_CLEAN.csv")
+floral <- read.csv("06_cleandata/flowers_CLEAN.csv")
+rodent <- read.csv("06_cleandata/rodents_CLEAN.csv")
+veg <- read.csv("06_cleandata/vegetation_CLEAN.csv")
+
+
+```
+
