@@ -5,6 +5,11 @@ csl: https://www.zotero.org/styles/elsevier-harvard
 output: pdf_document
 bibliography: 
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_analysis/rodent-bee-blueberry")
+```
+
 Load packages
 ```{r}
 library(ggplot2)
@@ -56,5 +61,79 @@ Robin_samples3 <- site_names %>%
   expand_grid(round, plots, transect, section) %>% 
   bind_rows(Robin_samples2) %>% View()
 
+```
+
+Creating a list of sampling events at plot level only
+
+```{r}
+#create vector for site names
+site_names <- c("bates_57b", "bks_56", "chong_68", "bks_68", "chong_96", "bks_96", "gwb_neaves", "bks_neaves", "avtar_168", "surjit_168", "sandhu_ladnertrunk", "lbf_ladnertrunk")
+
+#create vector for round numbers
+round <-c("2024_r1_floral","2024_r2_floral","2024_r3_floral","2024_r4_floral",
+          "2025_r1_floral","2025_r2_floral","2025_r3_floral")
+
+#create vector for plots
+plots <-c("p1", "p2", "d")
+
+#combine vectors into dataframe 
+samples_plot <- tibble(site = site_names) %>%
+  expand_grid(round, plots)
+
+#change round vector to only contain those associated with veg surveys
+round <-c("2024_r1_veg","2024_r2_veg","2024_r3_veg","2024_r4_veg",
+          "2025_r1_veg","2025_r2_veg","2025_r3_veg")
+
+#combine vectors into dataframe 
+samples_plot2 <- tibble(site = site_names) %>%
+  expand_grid(round, plots) %>% 
+  bind_rows(samples_plot) 
+
+#change round vector to only contain those associated with bumble 
+#bee net surveys
+round <- c("2024_ns_bee","2024_w1_bee","2024_w2_bee","2025_ns1_bee",
+           "2025_ns2_bee","2025_w_bee")
+
+#add rows to dataframe
+samples_plot3 <- tibble(site = site_names) %>%
+  expand_grid(round, plots) %>% 
+  bind_rows(samples_plot2)
+
+#change round, transect and section vector to only contain those associated with rodent 
+#surveys
+round <- c("2024_r1_rod")
+
+#create vector for plots
+plots <-c("d")
+
+#add rows to dataframe
+samples_plot4 <- tibble(site = site_names) %>%
+  expand_grid(round, plots) %>% 
+  bind_rows(samples_plot3)
+
+#change round, transect and section vector to only contain those associated with rodent 
+#surveys
+round <- c("2024_r2_rod")
+
+#create vector for plots
+plots <-c("p1", "p2")
+
+#add rows to dataframe
+samples_plot5 <- tibble(site = site_names) %>%
+  expand_grid(round, plots) %>% 
+  bind_rows(samples_plot4)
+
+#remove rows from 2024 NS bee round and 2024 R1 veg for Sandhu farms and LBF farms (not sampled during that round)
+surveys <- samples_plot5 %>%
+  filter(!(site == "sandhu_ladnertrunk" & round == "2024_r1_veg"))
+surveys <- surveys %>%
+  filter(!(site == "lbf_ladnertrunk" & round == "2024_r1_veg"))
+surveys <- samples_plot5 %>%
+  filter(!(site == "sandhu_ladnertrunk" & round == "2024_ns_bee"))
+surveys <- surveys %>%
+  filter(!(site == "lbf_ladnertrunk" & round == "2024_ns_bee"))
+
+#create new csv for resulting survey data
+write_csv(surveys, file = file.path("06_cleandata","surveys.csv"))
 ```
 
