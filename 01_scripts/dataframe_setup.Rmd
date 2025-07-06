@@ -47,6 +47,7 @@ surveys <- surveys %>%
   rename(site_id = site)
 surveys <- surveys %>%
   rename(plot_id = plots)
+
 ```
 
 # Assign round numbers for each row in each dataset
@@ -70,7 +71,7 @@ veg$date <- dmy(veg$date)
 ```
 
 Then, I need to assign round numbers to each survey depending on the
-julian date.
+survey date.
 
 ```{r}
 #Rodent
@@ -91,7 +92,6 @@ bee_r <- bee %>%
       date >= ymd("2025-04-27") & date <= ymd("2025-05-13") ~ "2025_ns2_bee",
       date > ymd("2025-05-13") ~ "2025_w_bee"
       ))
-
 #Veg
 veg_r <- veg %>%
   mutate(
@@ -142,14 +142,14 @@ variables to be at plot level, not transect or quadrat.
 \% bare ground
 
 ```{r}
-#create all combinations of sites, round, and plots for bee data
+#create all combinations of sites, round, and plots for veg data
 all_combinations_veg <- expand_grid(
   site_id = unique(veg_r$site_id),
   round = unique(veg_r$round),
   plot_id = unique(floral_r$plot_id)
 )
 
-#create summary dataframe for floral data
+#create summary dataframe for veg data
 veg_summary <- veg_r %>%
   group_by(site_id, round, plot_id) %>%
   summarise(bare_avg = sum(as.numeric(bare), na.rm = TRUE) / 12, .groups = "drop") ##drop the groupings
@@ -353,5 +353,10 @@ bee_summary3_full <- all_combinations_bee %>%
 #Add number of bees to surveys dataframe
 surveys <- surveys %>%
   left_join(bee_summary3_full, by = c("site_id", "round", "plot_id"))
+```
 
+# Save final combined surveys dataframe as new CSV
+
+```{r}
+write_csv(surveys, file = file.path("06_cleandata","combined_plot_data.csv"))
 ```
