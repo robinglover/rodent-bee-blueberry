@@ -96,26 +96,26 @@ bee_r <- bee %>%
 veg_r <- veg %>%
   mutate(
     round = case_when(
-      date < ymd("2024-05-01") ~ "2024_r1_veg",
-      date >= ymd("2024-05-14") & date <= ymd("2024-06-06") ~ "2024_r2_veg",
-      date >= ymd("2024-06-12") & date <= ymd("2024-07-03") ~ "2024_r3_veg",
-      date >= ymd("2024-07-10") & date <= ymd("2024-08-14") ~ "2024_r4_veg",
-      date >= ymd("2025-04-03") & date <= ymd("2025-04-24") ~ "2025_r1_veg",
-      date >= ymd("2025-04-27") & date <= ymd("2025-05-30") ~ "2025_r2_veg",
-      date > ymd("2025-05-30") ~ "2025_r3_veg"
+      date < ymd("2024-05-01") ~ "2024_v1_veg",
+      date >= ymd("2024-05-14") & date <= ymd("2024-06-06") ~ "2024_v2_veg",
+      date >= ymd("2024-06-12") & date <= ymd("2024-07-03") ~ "2024_v3_veg",
+      date >= ymd("2024-07-10") & date <= ymd("2024-08-14") ~ "2024_v4_veg",
+      date >= ymd("2025-04-03") & date <= ymd("2025-04-24") ~ "2025_v1_veg",
+      date >= ymd("2025-04-27") & date <= ymd("2025-05-30") ~ "2025_v2_veg",
+      date > ymd("2025-05-30") ~ "2025_v3_veg"
       ))
 
 #Flowers
 floral_r <- floral %>%
   mutate(
     round = case_when(
-      date < ymd("2024-05-01") ~ "2024_r1_floral",
-      date >= ymd("2024-05-14") & date <= ymd("2024-06-06") ~ "2024_r2_floral",
-      date >= ymd("2024-06-12") & date <= ymd("2024-07-03") ~ "2024_r3_floral",
-      date >= ymd("2024-07-10") & date <= ymd("2024-08-14") ~ "2024_r4_floral",
-      date >= ymd("2025-04-03") & date <= ymd("2025-04-24") ~ "2025_r1_floral",
-      date >= ymd("2025-04-27") & date <= ymd("2025-05-30") ~ "2025_r2_floral",
-      date > ymd("2025-05-30") ~ "2025_r3_floral"
+      date < ymd("2024-05-01") ~ "2024_v1_floral",
+      date >= ymd("2024-05-14") & date <= ymd("2024-06-06") ~ "2024_v2_floral",
+      date >= ymd("2024-06-12") & date <= ymd("2024-07-03") ~ "2024_v3_floral",
+      date >= ymd("2024-07-10") & date <= ymd("2024-08-14") ~ "2024_v4_floral",
+      date >= ymd("2025-04-03") & date <= ymd("2025-04-24") ~ "2025_v1_floral",
+      date >= ymd("2025-04-27") & date <= ymd("2025-05-30") ~ "2025_v2_floral",
+      date > ymd("2025-05-30") ~ "2025_v3_floral"
       ))
 ```
 
@@ -353,6 +353,29 @@ bee_summary3_full <- all_combinations_bee %>%
 #Add number of bees to surveys dataframe
 surveys <- surveys %>%
   left_join(bee_summary3_full, by = c("site_id", "round", "plot_id"))
+```
+
+# Split up round column into year, round, and survey type
+
+```{r}
+surveys <- surveys %>%
+  separate(round, into = c("year", "round_number", "survey_type"), sep = "_")%>%
+  unite("round", year, round_number, sep = "_", remove = TRUE)
+
+View(surveys)
+```
+
+# Create visit_id column to associate all surveys that were conducted around the same time together
+
+```{r}
+your_df <- your_df %>%
+  mutate(visit_id = case_when(
+    str_detect(round, "") ~ "2024_visit1",
+    str_detect(round, "") ~ "2024_visit2",
+    str_detect(round, "") ~ "2024_visit3",
+    str_detect(round, "") ~ "2024_visit4",
+    TRUE ~ NA_character_
+  ))
 ```
 
 # Save final combined surveys dataframe as new CSV
