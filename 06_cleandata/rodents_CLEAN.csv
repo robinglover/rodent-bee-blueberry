@@ -1,4 +1,4 @@
-﻿date_day,observers_day,date_night,observers_night,site_id,round,plot_id,transect_id,transect_section,burrow_code,location_m,location_side,row_alley,diameter_cm,species_guess,substrate,notes_hole,powder_active_field,powder_species_guess_field,notes_powder,photo_number,photo_location,powder_active_FI  L,powder_species_guess_FI  L,notes_extra_FI  L
+﻿date_day,observers_day,date_night,observers_night,site_id,round,plot_id,transect_id,transect_section,burrow_code,location_m,location_side,row_alley,diameter_cm,species_guess,substrate,notes_hole,powder_active_field,powder_species_guess_field,notes_powder,photo_number,photo_location,powder_active_FINAL,powder_species_guess_FINAL,notes_extra_FINAL
 17-Apr-24,"RG, AD",  ,  ,gwb_neaves,,d,t2,rod-s1,gwb_neaves__d_t2_rod-s1,0,  ,  ,2.5,  , ,rocky,,,,,,,,
 17-Apr-24,"RG, AD",  ,  ,gwb_neaves,,d ,t2,rod-s1,gwb_neaves__d _t2_rod-s1,0.2,  ,  ,5,  , ,rocky,,,,,,,,
 17-Apr-24,"RG, AD",  ,  ,gwb_neaves,,d,t2,rod-s1,gwb_neaves__d_t2_rod-s1,0.4,  ,  ,2.5,  , ,rocky,,,,,,,,
