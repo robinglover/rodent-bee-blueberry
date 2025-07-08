@@ -1,7 +1,7 @@
 ---
-title: "dataframe_setup_doc"
+title: "dataframe_setup2_doc"
 output: pdf_document
-date: "2025-07-04"
+date: "2025-07-07"
 editor_options: 
   markdown: 
     wrap: 72
@@ -10,11 +10,12 @@ editor_options:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_analysis/rodent-bee-blueberry")
+
 ```
 
 # Loading the dataframes
 
-```{r }
+```{r}
 #load packages
 library(tidyverse)
 library(lubridate) #package used to generate julian date from calendar date
@@ -39,6 +40,9 @@ veg <- veg %>%
   mutate(bare = as.numeric(bare))
 
 site_info <- read.csv("00_rawdata/exploratory/site-info.csv")
+site_info <- site_info %>%
+  rename(site_id = name)
+
 veg <- veg %>%
   mutate(bare = str_replace(bare, "unknown", ""))
 
@@ -47,7 +51,6 @@ surveys <- surveys %>%
   rename(site_id = site)
 surveys <- surveys %>%
   rename(plot_id = plots)
-
 ```
 
 # Assign round numbers for each row in each dataset
@@ -74,49 +77,90 @@ Then, I need to assign round numbers to each survey depending on the
 survey date.
 
 ```{r}
-#Rodent
 rodent_r <- rodent %>%
   mutate(
     round = case_when(
-      date_day < ymd("2024-06-08") ~ "2024_r1_rod",
-      date_day >= ymd("2024-06-09") & date_day <= ymd("2024-10-01") ~ "2024_r2_rod"))
+      date_day < ymd("2024-06-08") ~ "2024_r1",
+      date_day >= ymd("2024-06-09") & date_day <= ymd("2024-10-01") ~ "2024_r4"))
 
 #Bee
 bee_r <- bee %>%
   mutate(
     round = case_when(
-      date <= ymd("2024-05-01") ~ "2024_ns_bee",
-      date >= ymd("2024-05-14") & date <= ymd("2024-06-06") ~ "2024_w1_bee",
-      date >= ymd("2024-06-18") & date <= ymd("2024-07-03") ~ "2024_w2_bee",
-      date >= ymd("2025-04-03") & date <= ymd("2025-04-19") ~ "2025_ns1_bee",
-      date >= ymd("2025-04-27") & date <= ymd("2025-05-13") ~ "2025_ns2_bee",
-      date > ymd("2025-05-13") ~ "2025_w_bee"
+      date <= ymd("2024-05-01") ~ "2024_r1",
+      date >= ymd("2024-05-14") & date <= ymd("2024-06-06") ~ "2024_r2",
+      date >= ymd("2024-06-18") & date <= ymd("2024-07-03") ~ "2024_r3",
+      date >= ymd("2025-04-03") & date <= ymd("2025-04-19") ~ "2025_r1",
+      date >= ymd("2025-04-27") & date <= ymd("2025-05-13") ~ "2025_r2",
+      date > ymd("2025-05-13") ~ "2025_r3"
       ))
 #Veg
 veg_r <- veg %>%
   mutate(
     round = case_when(
-      date < ymd("2024-05-01") ~ "2024_v1_veg",
-      date >= ymd("2024-05-14") & date <= ymd("2024-06-06") ~ "2024_v2_veg",
-      date >= ymd("2024-06-12") & date <= ymd("2024-07-03") ~ "2024_v3_veg",
-      date >= ymd("2024-07-10") & date <= ymd("2024-08-14") ~ "2024_v4_veg",
-      date >= ymd("2025-04-03") & date <= ymd("2025-04-24") ~ "2025_v1_veg",
-      date >= ymd("2025-04-27") & date <= ymd("2025-05-30") ~ "2025_v2_veg",
-      date > ymd("2025-05-30") ~ "2025_v3_veg"
+      date < ymd("2024-05-01") ~ "2024_r1",
+      date >= ymd("2024-05-14") & date <= ymd("2024-06-06") ~ "2024_r2",
+      date >= ymd("2024-06-12") & date <= ymd("2024-07-03") ~ "2024_r3",
+      date >= ymd("2024-07-10") & date <= ymd("2024-08-14") ~ "2024_r4",
+      date >= ymd("2025-04-03") & date <= ymd("2025-04-24") ~ "2025_r1",
+      date >= ymd("2025-04-27") & date <= ymd("2025-05-30") ~ "2025_r2",
+      date > ymd("2025-05-30") ~ "2025_r3"
       ))
 
 #Flowers
 floral_r <- floral %>%
   mutate(
     round = case_when(
-      date < ymd("2024-05-01") ~ "2024_v1_floral",
-      date >= ymd("2024-05-14") & date <= ymd("2024-06-06") ~ "2024_v2_floral",
-      date >= ymd("2024-06-12") & date <= ymd("2024-07-03") ~ "2024_v3_floral",
-      date >= ymd("2024-07-10") & date <= ymd("2024-08-14") ~ "2024_v4_floral",
-      date >= ymd("2025-04-03") & date <= ymd("2025-04-24") ~ "2025_v1_floral",
-      date >= ymd("2025-04-27") & date <= ymd("2025-05-30") ~ "2025_v2_floral",
-      date > ymd("2025-05-30") ~ "2025_v3_floral"
+      date < ymd("2024-05-01") ~ "2024_r1",
+      date >= ymd("2024-05-14") & date <= ymd("2024-06-06") ~ "2024_r2",
+      date >= ymd("2024-06-12") & date <= ymd("2024-07-03") ~ "2024_r3",
+      date >= ymd("2024-07-10") & date <= ymd("2024-08-14") ~ "2024_r4",
+      date >= ymd("2025-04-03") & date <= ymd("2025-04-24") ~ "2025_r1",
+      date >= ymd("2025-04-27") & date <= ymd("2025-05-30") ~ "2025_r2",
+      date > ymd("2025-05-30") ~ "2025_r3"
       ))
+
+```
+
+# Add date of bee survey to the associated row survey data, based on site, plot and round.
+
+```{r}
+# Extract relevant bee dates first
+bee_dates <- bee_r %>%
+  select(site_id, plot_id, round, date) %>%
+  rename(bee_date = date)
+
+#Make bee_dates file only contain one row for each site/plot/round/date combination
+bee_dates_unique <- bee_dates %>%
+  group_by(site_id, round) %>%
+  summarise(bee_date = first(bee_date), .groups = "drop") #choose first date since all dates within a site/plot/round combo are the same
+
+## Join bee_date onto survey data
+surveys <- surveys %>%
+  left_join(bee_dates_unique, by = c("site_id", "round"))
+
+#Need to manually add in the dates for 2 surveys where I didn't find any bees (surjit_168 during 2025_r2, bks_neaves during 2025_r1, bks_56 during 2024_r3)
+missing_dates <- tibble::tribble(
+  ~site_id,       ~round,    ~bee_date,
+  "surjit_168",   "2025_r2", as.Date("2025-05-13"),  
+  "bks_neaves",   "2025_r1", as.Date("2025-04-14"),
+  "bks_56",   "2024_r3", as.Date("2025-06-21")
+)
+
+surveys <- surveys %>%
+  rows_patch(missing_dates, by = c("site_id", "round"))
+
+#add column for julian date
+surveys$julian.date <- yday(surveys$bee_date)
+
+```
+
+# Add area to survey dataframe based on site_id
+
+```{r}
+surveys <- surveys %>%
+  left_join(site_info, by = c("site_id"))
+
 ```
 
 # Adding all the desired variables summarized at plot level as columns to the surveys dataframe
@@ -162,7 +206,6 @@ veg_summary_full <- all_combinations_veg %>%
 #Add average % bare to surveys dataframe
 surveys <- surveys %>%
   left_join(veg_summary_full, by = c("site_id", "round", "plot_id"))
-
 ```
 
 grass height
@@ -181,6 +224,7 @@ veg_summary2_full <- all_combinations_veg %>%
 #Add average % bare to surveys dataframe
 surveys <- surveys %>%
   left_join(veg_summary2_full, by = c("site_id", "round", "plot_id"))
+
 ```
 
 forb height
@@ -235,55 +279,6 @@ Floral diversity
 
 ```{r}
 
-```
-
-### [Rodent]{.underline}
-
--   transect section level — conversion: add together \# of burrows
-    across all transect sections within the same plot
-
-Num burrows
-
-```{r}
-#create all combinations of sites, round, and plots for bee data
-all_combinations_rodent <- expand_grid(
-  site_id = unique(rodent_r$site_id),
-  round = unique(rodent_r$round),
-  plot_id = unique(rodent_r$plot_id)
-)
-
-#create summary dataframe for rodent data
-rodent_summary <- rodent_r %>%
-  group_by(site_id, round, plot_id) %>%
-  summarise(num_burrows = n(), .groups = "drop") ##drop the groupings
-
-#left join counts onto full combos and replace NAs with 0
-rodent_summary_full <- all_combinations_rodent %>%
-  left_join(rodent_summary, by = c("site_id", "round", "plot_id")) %>%
-  mutate(num_burrows = replace_na(num_burrows, 0))
-
-#Add number of burrows to surveys dataframe
-surveys <- surveys %>%
-  left_join(rodent_summary_full, by = c("site_id", "round", "plot_id"))
-```
-
-Num inactive burrows
-
-```{r}
-#create summary dataframe for rodent data
-rodent_summary2 <- rodent_r %>%
-  filter(powder_active_FI..L == "n") %>%
-  group_by(site_id, round, plot_id) %>%
-  summarise(num_inactive_burrows = n(), .groups = "drop") ##drop the groupings
-
-#left join counts onto full combos and replace NAs with 0
-rodent_summary2_full <- all_combinations_rodent %>%
-  left_join(rodent_summary2, by = c("site_id", "round", "plot_id")) %>%
-  mutate(num_inactive_burrows = replace_na(num_inactive_burrows, 0))
-
-#Add number of bees to surveys dataframe
-surveys <- surveys %>%
-  left_join(rodent_summary2_full, by = c("site_id", "round", "plot_id"))
 ```
 
 ### [Bee]{.underline}
@@ -353,65 +348,66 @@ bee_summary3_full <- all_combinations_bee %>%
 #Add number of bees to surveys dataframe
 surveys <- surveys %>%
   left_join(bee_summary3_full, by = c("site_id", "round", "plot_id"))
-```
-
-# Split up round column into year, round, and survey type
-
-```{r}
-surveys <- surveys %>%
-  separate(round, into = c("year", "round_number", "survey_type"), sep = "_")%>%
-  unite("round", year, round_number, sep = "_", remove = TRUE)
 
 ```
 
-# Create visit_id column to associate all surveys that were conducted around the same time together
+### [Rodent]{.underline}
+
+-   transect section level — conversion: add together \# of burrows
+    across all transect sections within the same plot
+-   rodent burrows were only surveyed once throughout the survey period.
+    Ditch burrows were surveyed during 2024 R1. P1 and P2 burrows were
+    surveyed during 2024 R4. Therefore, I want to apply the rodent data
+    (eg. num_burrows, num_inactive) for each site and plot across all
+    sampling rounds.
+
+Num burrows
 
 ```{r}
-surveys <- surveys %>%
-  mutate(visit_id = case_when(
-    str_detect(round, "2024_r1|2024_ns|2024_v1") ~ "2024_visit1",
-    str_detect(round, "2024_w1|2024_v2") ~ "2024_visit2",
-    str_detect(round, "2024_r2|2024_w2|2024_v3") ~ "2024_visit3",
-    str_detect(round, "2024_v4") ~ "2024_visit4",
-    str_detect(round, "2025_ns1|2025_v1") ~ "2025_visit1",
-    str_detect(round, "2025_ns2|2025_v2") ~ "2025_visit2",
-    str_detect(round, "2025_w|2025_v3") ~ "2025_visit3",
-    TRUE ~ NA_character_
-  ))
+#create all combinations of sites, round, and plots for bee data
+all_combinations_rodent <- expand_grid(
+  site_id = unique(rodent_r$site_id),
+  plot_id = unique(rodent_r$plot_id)
+)
 
-```
-
-# Change format of surveys from long to wide, so there is one row for each plot within site for each visit.
-
-In order to do this, I first need to account for the fact that my rodent
-data was only collected once throughout the survey period, whereas the
-bee and veg/floral data was recorded multiple times throughout the
-season. Therefore, I need to assign the rodent data (from both ditch
-(r1) and plots (r2)) to each bee and veg measurement.
-
-```{r}
-# Extract one-time burrow data from r1/r2
-rodent_burrows <- surveys %>%
-  filter(str_detect(round, "r1|r2")) %>%
-  select(site_id, plot_id, num_burrows, num_inactive_burrows) %>%
+#create summary dataframe for rodent data
+rodent_summary <- rodent_r %>%
   group_by(site_id, plot_id) %>%
-  summarise(across(everything(), mean, na.rm = TRUE), .groups = "drop")
+  summarise(num_burrows = n(), .groups = "drop") ##drop the groupings
 
-# Add burrow data to full survey dataset
+#left join counts onto full combos and replace NAs with 0
+rodent_summary_full <- all_combinations_rodent %>%
+  left_join(rodent_summary, by = c("site_id", "plot_id")) %>%
+  mutate(num_burrows = replace_na(num_burrows, 0))
+
+#Add number of burrows to surveys dataframe
 surveys <- surveys %>%
-  select(-num_burrows, -num_inactive_burrows) %>% #remove original rodent columns from survey dataframe so I don't get duplicate columns when I join the rodent_burrows dataframe to surveys
-  left_join(rodent_burrows, by = c("site_id", "plot_id"))
-
+  left_join(rodent_summary_full, by = c("site_id", "plot_id"))
 ```
 
-```{r}
+Num inactive burrows
 
+```{r}
+#create summary dataframe for rodent data
+rodent_summary2 <- rodent_r %>%
+  filter(powder_active_FI..L == "n") %>%
+  group_by(site_id, plot_id) %>%
+  summarise(num_inactive_burrows = n(), .groups = "drop") ##drop the groupings
+
+#left join counts onto full combos and replace NAs with 0
+rodent_summary2_full <- all_combinations_rodent %>%
+  left_join(rodent_summary2, by = c("site_id", "plot_id")) %>%
+  mutate(num_inactive_burrows = replace_na(num_inactive_burrows, 0))
+
+#Add number of bees to surveys dataframe
+surveys <- surveys %>%
+  left_join(rodent_summary2_full, by = c("site_id", "plot_id"))
 ```
 
 # Save final combined surveys dataframe as new CSV
 
 ```{r}
-write_csv(wide_surveys, file = file.path("06_cleandata","combined_plot_data.csv"))
+write_csv(surveys, file = file.path("06_cleandata","combined_plot_data.csv"))
 ```
 
 # 
