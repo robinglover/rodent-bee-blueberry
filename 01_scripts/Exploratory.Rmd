@@ -14,9 +14,15 @@ knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_anal
 #load packages
 library(tidyverse)
 library(ggplot2)
+library(lme4)
+library(visreg)
 
 #read in data
 data <- read.csv("06_cleandata/combined_plot_data.csv")
+
+#filter data to only include within field data
+field_data <- data %>%
+  filter(plot_id != "d")
 ```
 
 # Practice plotting data to see if data frame is set up correctly
@@ -25,11 +31,14 @@ data <- read.csv("06_cleandata/combined_plot_data.csv")
 
 
 #number NSQ vs % bare ground
-ggplot(data, aes(x = bare, y = bumble_bees)) +
+ggplot(field_data, aes(x = nest_searching_queens, y = bare_avg)) +
   geom_point(color = "blue", size = 3) +
+  geom_smooth(method = "lm", se = TRUE) +
   labs(title = "Bumble Bees vs. % Bare Ground",
-       x = "% Bare Ground",
-       y = "Number of Bumble Bees") +
+       x = "NSQ",
+       y = "% bare") +
   theme_minimal()
 
 ```
+
+# 
