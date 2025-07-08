@@ -44,7 +44,8 @@ site_info <- site_info %>%
   rename(site_id = name)
 
 veg <- veg %>%
-  mutate(bare = str_replace(bare, "unknown", ""))
+  mutate(bare = str_replace(bare, "unknown", "")) %>%
+  mutate(across(contains("perc"), ~as.numeric(.)))
 
 surveys <- read.csv("06_cleandata/surveys.csv")
 surveys <- surveys %>%
@@ -122,7 +123,7 @@ floral_r <- floral %>%
 
 ```
 
-# Add date of bee survey to the associated row survey data, based on site, plot and round.
+# Add date of bee survey to the associated row in the survey data, based on site, plot and round.
 
 ```{r}
 # Extract relevant bee dates first
@@ -159,7 +160,7 @@ surveys$julian.date <- yday(surveys$bee_date)
 
 ```{r}
 surveys <- surveys %>%
-  left_join(site_info, by = c("site_id"))
+  left_join(site_info %>% select(site_id, area), by = c("site_id"))
 
 ```
 
@@ -177,12 +178,6 @@ variables to be at plot level, not transect or quadrat.
     a plot and divide by total area of quadrats (1m2 x 12 quadrats =
     12m\^2).
 
-\% floral cover
-
-```{r}
-
-```
-
 \% bare ground
 
 ```{r}
@@ -196,34 +191,77 @@ all_combinations_veg <- expand_grid(
 #create summary dataframe for veg data
 veg_summary <- veg_r %>%
   group_by(site_id, round, plot_id) %>%
-  summarise(bare_avg = sum(as.numeric(bare), na.rm = TRUE) / 12, .groups = "drop") ##drop the groupings
+  summarise(bare_perc = sum(as.numeric(bare), na.rm = TRUE) / 12, .groups = "drop") ##drop the groupings
 
 #left join counts onto full combos and replace NAs with 0
 veg_summary_full <- all_combinations_veg %>%
   left_join(veg_summary, by = c("site_id", "round", "plot_id")) %>%
-  mutate(bare_avg = replace_na(bare_avg, 0))
+  mutate(bare_perc = replace_na(bare_perc, 0))
 
 #Add average % bare to surveys dataframe
 surveys <- surveys %>%
   left_join(veg_summary_full, by = c("site_id", "round", "plot_id"))
 ```
 
+\% grass
+
+```{r}
+#create summary dataframe for veg data
+veg_summary2 <- veg_r %>%
+  group_by(site_id, round, plot_id) %>%
+  summarise(grass_perc = sum(as.numeric(grass), na.rm = TRUE) / 12, .groups = "drop") ##drop the groupings
+
+#left join counts onto full combos and replace NAs with 0
+veg_summary_full2 <- all_combinations_veg %>%
+  left_join(veg_summary2, by = c("site_id", "round", "plot_id")) %>%
+  mutate(grass_perc = replace_na(grass_perc, 0))
+
+#Add average % bare to surveys dataframe
+surveys <- surveys %>%
+  left_join(veg_summary_full2, by = c("site_id", "round", "plot_id"))
+```
+
+\% forb
+
+```{r}
+#create summary dataframe for veg data
+veg_summary3 <- veg_r %>%
+  group_by(site_id, round, plot_id) %>%
+  summarise(forb_perc = sum(as.numeric(forb), na.rm = TRUE) / 12, .groups = "drop") ##drop the groupings
+
+#left join counts onto full combos and replace NAs with 0
+veg_summary_full3 <- all_combinations_veg %>%
+  left_join(veg_summary3, by = c("site_id", "round", "plot_id")) %>%
+  mutate(forb_perc = replace_na(forb_perc, 0))
+
+#Add average % bare to surveys dataframe
+surveys <- surveys %>%
+  left_join(veg_summary_full3, by = c("site_id", "round", "plot_id"))
+```
+
+\% grass+forb
+
+```{r}
+surveys <- surveys %>%
+  mutate(surveys, grass_forb_perc = grass_perc + forb_perc)
+```
+
 grass height
 
 ```{r}
 #create summary dataframe for floral data
-veg_summary2 <- veg_r %>%
+veg_summary5 <- veg_r %>%
   group_by(site_id, round, plot_id) %>%
-  summarise(grass_h_avg = sum(as.numeric(grass_height), na.rm = TRUE) / 12, .groups = "drop") ##drop the groupings
+  summarise(grass_h = sum(as.numeric(grass_height), na.rm = TRUE) / 12, .groups = "drop") ##drop the groupings
 
 #left join counts onto full combos and replace NAs with 0
-veg_summary2_full <- all_combinations_veg %>%
-  left_join(veg_summary2, by = c("site_id", "round", "plot_id")) %>%
-  mutate(grass_h_avg = replace_na(grass_h_avg, 0))
+veg_summary_full5 <- all_combinations_veg %>%
+  left_join(veg_summary5, by = c("site_id", "round", "plot_id")) %>%
+  mutate(grass_h = replace_na(grass_h, 0))
 
 #Add average % bare to surveys dataframe
 surveys <- surveys %>%
-  left_join(veg_summary2_full, by = c("site_id", "round", "plot_id"))
+  left_join(veg_summary_full5, by = c("site_id", "round", "plot_id"))
 
 ```
 
@@ -231,25 +269,119 @@ forb height
 
 ```{r}
 #create summary dataframe for floral data
-veg_summary3 <- veg_r %>%
+veg_summary6 <- veg_r %>%
   group_by(site_id, round, plot_id) %>%
-  summarise(forb_h_avg = sum(as.numeric(forb_height), na.rm = TRUE) / 12, .groups = "drop") ##drop the groupings
+  summarise(forb_h = sum(as.numeric(forb_height), na.rm = TRUE) / 12, .groups = "drop") ##drop the groupings
 
 #left join counts onto full combos and replace NAs with 0
-veg_summary3_full <- all_combinations_veg %>%
-  left_join(veg_summary3, by = c("site_id", "round", "plot_id")) %>%
-  mutate(forb_h_avg = replace_na(forb_h_avg, 0))
+veg_summary_full6 <- all_combinations_veg %>%
+  left_join(veg_summary6, by = c("site_id", "round", "plot_id")) %>%
+  mutate(forb_h = replace_na(forb_h, 0))
 
 #Add average % bare to surveys dataframe
 surveys <- surveys %>%
-  left_join(veg_summary3_full, by = c("site_id", "round", "plot_id"))
+  left_join(veg_summary_full6, by = c("site_id", "round", "plot_id"))
+```
+
+\% floral cover (add all floral % across all species)
+
+```{r}
+#create summary dataframe for floral data
+veg_summary7 <- veg_r %>%
+  rowwise() %>% #operate across rows
+  mutate(row_perc_sum = sum(c_across(contains("perc")), na.rm = TRUE)) %>% #sum across the row for each column that contains "perc" (ie. all floral perc)
+  ungroup() %>% # drop groups
+  group_by(site_id, round, plot_id) %>% 
+  summarise(floral_perc = sum(row_perc_sum, na.rm = TRUE)/12, .groups = "drop") #average across all rows in the each group
+
+#left join counts onto full combos and replace NAs with 0
+veg_summary_full7 <- all_combinations_veg %>%
+  left_join(veg_summary7, by = c("site_id", "round", "plot_id")) %>%
+  mutate(floral_perc = replace_na(floral_perc, 0))
+
+#Add average % bare to surveys dataframe
+surveys <- surveys %>%
+  left_join(veg_summary_full7, by = c("site_id", "round", "plot_id"))
+```
+
+\% grass+forb+floral
+
+```{r}
+surveys <- surveys %>%
+  mutate(surveys, grass_forb_floral_perc = grass_perc + forb_perc + floral_perc)
+```
+
+\% cover of bombus-relevant flowers
+
+```{r}
+
+```
+
+\% flood
+
+```{r}
+#create summary dataframe for floral data
+veg_summary8 <- veg_r %>%
+  group_by(site_id, round, plot_id) %>%
+  summarise(flood_perc = sum(as.numeric(flood), na.rm = TRUE) / 12, .groups = "drop") ##drop the groupings
+
+#left join counts onto full combos and replace NAs with 0
+veg_summary_full8 <- all_combinations_veg %>%
+  left_join(veg_summary8, by = c("site_id", "round", "plot_id")) %>%
+  mutate(flood_perc = replace_na(flood_perc, 0))
+
+#Add average % bare to surveys dataframe
+surveys <- surveys %>%
+  left_join(veg_summary_full8, by = c("site_id", "round", "plot_id"))
+```
+
+\% dry rooted
+
+```{r}
+#create summary dataframe for floral data
+veg_summary9 <- veg_r %>%
+  group_by(site_id, round, plot_id) %>%
+  summarise(dry_root_perc = sum(as.numeric(dry_root), na.rm = TRUE) / 12, .groups = "drop") ##drop the groupings
+
+#left join counts onto full combos and replace NAs with 0
+veg_summary_full9 <- all_combinations_veg %>%
+  left_join(veg_summary9, by = c("site_id", "round", "plot_id")) %>%
+  mutate(dry_root_perc = replace_na(dry_root_perc, 0))
+
+#Add average % bare to surveys dataframe
+surveys <- surveys %>%
+  left_join(veg_summary_full9, by = c("site_id", "round", "plot_id"))
+```
+
+\% bare+flood+dry rooted+bryophtye
+
+```{r}
+#Calculate % bryophyte
+
+#create summary dataframe for floral data
+veg_summary10 <- veg_r %>%
+  group_by(site_id, round, plot_id) %>%
+  summarise(bryo_perc = sum(as.numeric(bryophyte), na.rm = TRUE) / 12, .groups = "drop") ##drop the groupings
+
+#left join counts onto full combos and replace NAs with 0
+veg_summary_full10 <- all_combinations_veg %>%
+  left_join(veg_summary10, by = c("site_id", "round", "plot_id")) %>%
+  mutate(bryo_perc = replace_na(bryo_perc, 0))
+
+#Add average % bare to surveys dataframe
+surveys <- surveys %>%
+  left_join(veg_summary_full10, by = c("site_id", "round", "plot_id"))
+
+#Add together % bare, flood, dry root, and bryophyte
+surveys <- surveys %>%
+  mutate(surveys, bare_flood_dry_bryo_perc = bare_perc + flood_perc + dry_root_perc + bryo_perc)
 ```
 
 ### [Flower]{.underline}
 
 -   plot level – no conversion needed
 
-Num Floral species
+floral richness
 
 ```{r}
 #create all combinations of sites, round, and plots for bee data
@@ -262,12 +394,12 @@ all_combinations <- expand_grid(
 #create summary dataframe for floral data
 floral_summary <- floral_r %>%
   group_by(site_id, round, plot_id) %>%
-  summarise(floral_num = n(), .groups = "drop") ##drop the groupings
+  summarise(floral_richness = n(), .groups = "drop") ##drop the groupings
 
 #left join counts onto full combos and replace NAs with 0
 floral_summary_full <- all_combinations %>%
   left_join(floral_summary, by = c("site_id", "round", "plot_id")) %>%
-  mutate(floral_num = replace_na(floral_num, 0))
+  mutate(floral_num = replace_na(floral_richness, 0))
 
 #Add number of bees to surveys dataframe
 surveys <- surveys %>%
@@ -275,7 +407,19 @@ surveys <- surveys %>%
 
 ```
 
-Floral diversity
+floral richness – only bombus-relevant flowers
+
+```{r}
+
+```
+
+Floral abundance
+
+```{r}
+
+```
+
+floral abundance – only bombus-relevant flowers
 
 ```{r}
 
@@ -390,7 +534,7 @@ Num inactive burrows
 ```{r}
 #create summary dataframe for rodent data
 rodent_summary2 <- rodent_r %>%
-  filter(powder_active_FI..L == "n") %>%
+  filter(powder_active_FINAL == "n") %>%
   group_by(site_id, plot_id) %>%
   summarise(num_inactive_burrows = n(), .groups = "drop") ##drop the groupings
 
@@ -402,6 +546,103 @@ rodent_summary2_full <- all_combinations_rodent %>%
 #Add number of bees to surveys dataframe
 surveys <- surveys %>%
   left_join(rodent_summary2_full, by = c("site_id", "plot_id"))
+
+```
+
+Num active dm burrows
+
+```{r}
+#create summary dataframe for rodent data
+rodent_summary3 <- rodent_r %>%
+  filter(powder_species_guess_FINAL == "B") %>%
+  group_by(site_id, plot_id) %>%
+  summarise(num_active_dm = n(), .groups = "drop") ##drop the groupings
+
+#left join counts onto full combos and replace NAs with 0
+rodent_summary_full3 <- all_combinations_rodent %>%
+  left_join(rodent_summary3, by = c("site_id", "plot_id")) %>%
+  mutate(num_active_dm = replace_na(num_active_dm, 0))
+
+#Add number of bees to surveys dataframe
+surveys <- surveys %>%
+  left_join(rodent_summary_full3, by = c("site_id", "plot_id"))
+```
+
+Num dm burrows (by size)
+
+First, I need to determine the size of holes that must be deermouse,
+based on tracks
+
+```{r}
+#filter to only active holes
+rodent_active <- rodent %>%
+  filter(powder_active_FINAL == "y" ) 
+#plot hole diameter vs species guess (for certain species guesses)
+ggplot(rodent_active, aes(y=diameter_cm, x=powder_species_guess_FINAL))+ 
+  geom_boxplot() +
+  theme_classic(base_size = 15)+
+  xlab("Species Guess")+
+  ylab("Diameter (cm)")
+
+#calculate range of burrow sizes that only apply to species guess B and not A
+# Filter for only species A and B
+rodent_ab <- rodent_active %>%
+  filter(powder_species_guess_FINAL %in% c("A", "B"))
+
+# Get diameter values for each species
+diameter_A <- rodent_ab %>%
+  filter(powder_species_guess_FINAL == "A") %>%
+  pull(diameter_cm)
+
+diameter_B <- rodent_ab %>%
+  filter(powder_species_guess_FINAL == "B") %>%
+  pull(diameter_cm)
+
+# Get values unique to B (i.e., in B but not in A)
+diameter_B_only <- setdiff(diameter_B, diameter_A)
+
+###the only diameter value unique to rodent B (dm) is 1.5cm
+```
+
+Now, I will calculate the number of holes that must be dm (1.5cm
+diameter)
+
+```{r}
+#create summary dataframe for rodent data
+rodent_summary4 <- rodent_r %>%
+  filter(diameter_cm == 1.5) %>%
+  group_by(site_id, plot_id) %>%
+  summarise(num_dm_size = n(), .groups = "drop") ##drop the groupings
+
+#left join counts onto full combos and replace NAs with 0
+rodent_summary_full4 <- all_combinations_rodent %>%
+  left_join(rodent_summary4, by = c("site_id", "plot_id")) %>%
+  mutate(num_dm_size = replace_na(num_dm_size, 0))
+
+#Add number of bees to surveys dataframe
+surveys <- surveys %>%
+  left_join(rodent_summary_full4, by = c("site_id", "plot_id"))
+```
+
+Num inactive dm burrows (by size)
+
+```{r}
+#create summary dataframe for rodent data
+rodent_summary5 <- rodent_r %>%
+  filter(diameter_cm == 1.5 & powder_active_FINAL == "n") %>%
+  group_by(site_id, plot_id) %>%
+  summarise(num_inactive_dm = n(), .groups = "drop") ##drop the groupings
+
+#left join counts onto full combos and replace NAs with 0
+rodent_summary_full5 <- all_combinations_rodent %>%
+  left_join(rodent_summary5, by = c("site_id", "plot_id")) %>%
+  mutate(num_inactive_dm = replace_na(num_inactive_dm, 0))
+
+#Add number of bees to surveys dataframe
+surveys <- surveys %>%
+  left_join(rodent_summary_full5, by = c("site_id", "plot_id"))
+
+View(surveys)
 ```
 
 # Save final combined surveys dataframe as new CSV
