@@ -399,7 +399,7 @@ floral_summary <- floral_r %>%
 #left join counts onto full combos and replace NAs with 0
 floral_summary_full <- all_combinations %>%
   left_join(floral_summary, by = c("site_id", "round", "plot_id")) %>%
-  mutate(floral_num = replace_na(floral_richness, 0))
+  mutate(floral_richness = replace_na(floral_richness, 0))
 
 #Add number of bees to surveys dataframe
 surveys <- surveys %>%
