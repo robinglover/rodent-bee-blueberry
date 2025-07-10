@@ -362,13 +362,7 @@ cor_matrix <- cor(numeric_vars, use = "complete.obs")
 corrplot(cor_matrix, method = "circle")
 ```
 
-# Step 7: Check for zero-inflation or overdispersion
-
-```{r}
-
-```
-
-# Step 8: Plot bivariate relationships between each predictor and response variable
+# Step 7: Plot bivariate relationships between each predictor and response variable
 
 ```{r}
 
