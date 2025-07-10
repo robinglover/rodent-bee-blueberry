@@ -28,6 +28,8 @@ bee <- bee %>%
   mutate(plot_id = str_replace(plot_id, "^d $", "d"))
 
 floral <- read.csv("06_cleandata/flowers_CLEAN.csv")
+floral <- floral %>%
+  mutate(abundance = as.numeric(abundance))
 
 rodent <- read.csv("06_cleandata/rodents_CLEAN.csv")
 rodent <- rodent %>%
@@ -416,6 +418,25 @@ floral richness – only bombus-relevant flowers
 Floral abundance
 
 ```{r}
+#convert floral abundance estimates so they are properly on log scale (subtract 1 from each)
+floral_r$abundance = 10^(floral_r$abundance - 1)
+
+#exponentiate the remaining values (undo the log) and add the actual abundance estimates across all species together for each plot
+floral_summary3 <- floral_r %>%
+  group_by(site_id, round, plot_id) %>%
+  summarise(floral_abun = sum(abundance, na.rm = TRUE), .groups = "drop") ##drop the groupings
+
+#take log scale of the summed values
+floral_summary3$floral_abun = log10(floral_summary3$floral_abun + 1)
+
+#left join counts onto full combos and replace NAs with 0
+floral_summary_full3 <- all_combinations %>%
+  left_join(floral_summary3, by = c("site_id", "round", "plot_id")) %>%
+  mutate(floral_abun = replace_na(floral_abun, 0))
+
+#Add number of bees to surveys dataframe
+surveys <- surveys %>%
+  left_join(floral_summary_full3, by = c("site_id", "round", "plot_id"))
 
 ```
 
