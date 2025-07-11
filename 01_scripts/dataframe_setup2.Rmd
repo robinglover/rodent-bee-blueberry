@@ -666,6 +666,34 @@ surveys <- surveys %>%
 View(surveys)
 ```
 
+# Scale continuous predictors
+
+```{r}
+data$julian.date_scaled <- as.numeric(scale(data$julian.date))
+data$bare_perc_scaled <- as.numeric(scale(data$bare_perc))
+data$grass_perc_scaled <- as.numeric(scale(data$grass_perc))
+data$forb_perc_scaled <- as.numeric(scale(data$forb_perc))
+data$grass_forb_perc_scaled <- as.numeric(scale(data$grass_forb_perc))
+data$grass_h_scaled <- as.numeric(scale(data$grass_h))
+data$forb_h_scaled <- as.numeric(scale(data$forb_h))
+data$floral_perc_scaled <- as.numeric(scale(data$floral_perc))
+data$grass_forb_floral_perc_scaled <- as.numeric(scale(data$grass_forb_floral_perc))
+data$flood_perc_scaled <- as.numeric(scale(data$flood_perc))
+data$dry_root_perc_scaled <- as.numeric(scale(data$dry_root_perc))
+data$bryo_perc_scaled <- as.numeric(scale(data$bryo_perc))
+data$bare_flood_dry_bryo_perc_scaled <- as.numeric(scale(data$bare_flood_dry_bryo_perc))
+data$floral_richness_scaled <- as.numeric(scale(data$floral_richness))
+data$floral_abun_scaled <- as.numeric(scale(data$floral_abun))
+data$nest_searching_queens_scaled <- as.numeric(scale(data$nest_searching_queens))
+data$workers_scaled <- as.numeric(scale(data$workers))
+data$forage_vaco_scaled <- as.numeric(scale(data$forage_vaco))
+data$num_burrows_scaled <- as.numeric(scale(data$num_burrows))
+data$num_inactive_burrows_scaled <- as.numeric(scale(data$num_inactive_burrows))
+data$num_active_dm_scaled <- as.numeric(scale(data$num_active_dm))
+data$num_dm_size_scaled <- as.numeric(scale(data$num_dm_size))
+data$num_inactive_dm_scaled <- as.numeric(scale(data$num_inactive_dm))
+```
+
 # Save final combined surveys dataframe as new CSV
 
 ```{r}
