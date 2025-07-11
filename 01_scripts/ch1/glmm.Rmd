@@ -1,0 +1,276 @@
+---
+title: "glmm"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_analysis/rodent-bee-blueberry")
+```
+
+# Load data
+
+```{r}
+#load packages
+library(tidyverse)
+library(ggplot2)
+library(lme4)
+library(visreg)
+library(MASS)
+library(DHARMa)
+library(glmmTMB)
+
+
+#read in data
+data <- read.csv("06_cleandata/combined_plot_data.csv")
+
+#check that variables are in appropriate format
+str(data)
+
+#change character columns to factors
+data <- data %>%
+   mutate(
+     site_id = as.factor(site_id),
+     round = as.factor(round),
+     plot_id = as.factor(plot_id),
+     bee_date = as.Date(bee_date),
+     area = as.factor(area))
+
+#filter data to only include within field data
+field_data <- data %>%
+  filter(plot_id != "d")
+
+#add column that combines site with plot
+field_data <- field_data %>%
+  mutate(site_plot = interaction(site_id, plot_id, sep = "_"))
+```
+
+# Model 1: floral abun vs % cover
+
+```{r}
+#run model
+floral_cover_model <- glmer(floral_abun ~ grass_forb_perc + julian.date + (1|area) + (1|site_plot), data = field_data, family = Gamma(link = "log"))
+
+#test for zero-inflation
+
+sim_res <- simulateResiduals(fittedModel = floral_cover_model)
+testZeroInflation(sim_res)
+##since p-value > 0.05, there is not evidence of zero-inflation
+
+#The gamma distribution only works if all values are >0. Therefore, I need to adjust my floral abunance data to not inclued zeros by adding a very small number to all values. The zero values will therefore represent very low, non-negative measurements (e.g., zero abundance).
+field_data$floral_abun_adj <- field_data$floral_abun + 0.001
+
+#re-run the model with adjusted floral abundance estimates
+floral_cover_model <- glmer(floral_abun_adj ~ grass_forb_perc + julian.date + (1|area) + (1|site_plot), data = field_data, family = Gamma(link = "log"))
+
+#run summary(model) to check variation taken up by each random effect
+summary(floral_cover_model)
+##zero variance is taken up by either of the random effects. 
+
+#run model with area and plot as random effects
+floral_cover_model2 <- glmer(floral_abun_adj ~ grass_forb_perc + julian.date + (1|area) + (1|plot_id), data = field_data, family = Gamma(link = "log"))
+
+#run summary(model) to check variation taken up by each random effect
+summary(floral_cover_model2)
+##zero variance is taken up by either of the random effects. 
+
+#run model with area and site as random effects
+floral_cover_model3 <- glmer(floral_abun_adj ~ grass_forb_perc + julian.date + (1|area) + (1|site_id), data = field_data, family = Gamma(link = "log"))
+
+#run summary(model) to check variation taken up by each random effect
+summary(floral_cover_model3)
+##zero variance is taken up by either of the random effects. 
+
+#drop all random effects from model
+floral_cover_model4 <- glm(floral_abun_adj ~ grass_forb_perc + julian.date, data = field_data, family = Gamma(link = "log"))
+
+#look at results
+summary(floral_cover_model4)
+
+#visualize model
+visreg(floral_cover_model4, "grass_forb_perc", scale = "response", partial = TRUE) 
+
+
+```
+
+# Model 2: num burrows vs % cover
+
+```{r}
+#run model
+burrows_cover_model <- glmer(num_burrows ~ grass_forb_perc + julian.date + (1|area) + (1|site_id) + (1|plot_id), data = field_data, family = poisson(link = "log"))
+
+#check variance taken up by random effects
+summary(burrows_cover_model)
+
+#drop plot as random effect and scale predictor variables
+burrows_cover_model <- glmer(num_burrows ~ grass_forb_perc_scaled + julian.date_scaled + (1|area) + (1|site_id), data = field_data, family = poisson(link = "log"))
+
+#test for zero-inflation
+sim_res2 <- simulateResiduals(fittedModel = burrows_cover_model)
+testZeroInflation(sim_res2)
+##since p-value > 0.05, there is not evidence of zero-inflation
+
+#test for overdispersion
+testDispersion(sim_res2)
+
+#look at results
+summary(burrows_cover_model)
+
+#visualize model
+visreg(burrows_cover_model, "grass_forb_perc_scaled", scale = "response", partial = TRUE) 
+```
+
+# Model 3: num inactive burrows vs % cover
+
+```{r}
+#run model
+inactive_burrows_cover_model <- glmer(num_inactive_burrows ~ grass_forb_perc_scaled + julian.date_scaled + (1|area) + (1|site_id) + (1|plot_id), data = field_data, family = poisson(link = "log"))
+
+#test for zero-inflation
+sim_res3 <- simulateResiduals(fittedModel = inactive_burrows_cover_model)
+testZeroInflation(sim_res3)
+##since p-value > 0.05, there is not evidence of zero-inflation
+
+#test for overdispersion
+testDispersion(sim_res3)
+
+#i still tried the zero-inflation model, since there are a lot of zeros in the response dataset
+inactive_burrows_cover_model_zi <- glmmTMB(num_inactive_burrows ~ grass_forb_perc_scaled + julian.date_scaled + (1|area) + (1|site_id) + (1|plot_id), ziformula = ~1,family = nbinom2,data = field_data)
+
+#check AIC score
+summary(inactive_burrows_cover_model_zi)
+##AIC score of glmmTMB is much lower than the glmer model. Therefore, it better fits the data so I will plot that model
+
+#visualize model
+visreg(inactive_burrows_cover_model_zi, "grass_forb_perc_scaled", scale = "response", partial = TRUE) 
+```
+
+# Model 4: \# NSQ vs % cover
+
+```{r}
+#run model
+nsq_cover_model <- glmer(nest_searching_queens ~ grass_forb_perc_scaled + julian.date_scaled + (1|area) + (1|site_id) + (1|plot_id), data = field_data, family = poisson(link = "log"))
+
+summary(nsq_cover_model)
+
+#remove area as random effect
+nsq_cover_model <- glmer(nest_searching_queens ~ grass_forb_perc_scaled + julian.date_scaled + (1|site_id) + (1|plot_id), data = field_data, family = poisson(link = "log"))
+
+#test for zero-inflation
+sim_res4 <- simulateResiduals(fittedModel = nsq_cover_model)
+testZeroInflation(sim_res4)
+##since p-value > 0.05, there is not evidence of zero-inflation
+
+#test for overdispersion
+testDispersion(sim_res4)
+#borderline overdispersion
+
+#run negative binomial to account for this
+nsq_cover_model <- glmer.nb(nest_searching_queens ~ grass_forb_perc_scaled + julian.date_scaled + (1|site_id) + (1|plot_id), data = field_data)
+
+#check variance taken up by random effects
+summary(nsq_cover_model)
+
+#remove random effects
+nsq_cover_model <- glm.nb(nest_searching_queens ~ grass_forb_perc_scaled + julian.date_scaled, data = field_data)
+
+#look at results
+summary(nsq_cover_model)
+
+#visualize model
+visreg(nsq_cover_model, "grass_forb_perc_scaled", scale = "response", partial = TRUE) 
+```
+
+# Model 5: \# nsq vs floral abun
+
+```{r}
+#run model
+nsq_floral_model <- glmer(nest_searching_queens ~ floral_abun_scaled + julian.date_scaled + (1|area) + (1|site_id) + (1|plot_id), data = field_data, family = poisson(link = "log"))
+
+summary(nsq_cover_model)
+
+#remove area as random effect
+nsq_floral_model <- glmer(nest_searching_queens ~ floral_abun_scaled + julian.date_scaled + (1|site_id) + (1|plot_id), data = field_data, family = poisson(link = "log"))
+
+#test for zero-inflation
+sim_res5 <- simulateResiduals(fittedModel = nsq_floral_model)
+testZeroInflation(sim_res5)
+##since p-value > 0.05, there is not evidence of zero-inflation
+
+#test for overdispersion
+testDispersion(sim_res5)
+#no evidence of overdispersion
+
+#look at results
+summary(nsq_floral_model)
+
+#visualize model
+visreg(nsq_floral_model, "floral_abun_scaled", scale = "response", partial = TRUE) 
+```
+
+# Model 6: num workers vs floral abundance
+
+```{r}
+#run model
+workers_floral_model <- glmer(workers ~ floral_abun_scaled + julian.date_scaled + (1|site_id), data = field_data, family = poisson(link = "log"))
+
+#test for zero-inflation
+sim_res6 <- simulateResiduals(fittedModel = workers_floral_model)
+testZeroInflation(sim_res6)
+##since p-value > 0.05, there is not evidence of zero-inflation
+
+#test for overdispersion
+testDispersion(sim_res6)
+#evidence of overdispersion
+
+#run negative binomial to account for overdispersion
+workers_floral_model <- glmer.nb(workers ~ floral_abun_scaled + julian.date_scaled + (1|area) + (1|site_id) + (1|plot_id) , data = field_data)
+
+summary(workers_floral_model)
+
+#remove random effects
+workers_floral_model <- glm.nb(workers ~ floral_abun_scaled + julian.date_scaled , data = field_data)
+
+#look at results
+summary(workers_floral_model)
+
+#visualize model
+visreg(workers_floral_model, "floral_abun_scaled", scale = "response", partial = TRUE) 
+```
+
+# Model 7: foraging on vaco vs floral abun
+
+```{r}
+#run model
+foragingvaco_floral_model <- glmer(forage_vaco ~ floral_abun_scaled + julian.date_scaled + (1|area) + (1|site_id) + (1|plot_id), data = field_data, family = poisson(link = "log"))
+
+summary(foragingvaco_floral_model)
+
+#remove area and plot as random effects
+foragingvaco_floral_model <- glmer(forage_vaco ~ floral_abun_scaled + julian.date_scaled + (1|site_id) , data = field_data, family = poisson(link = "log"))
+
+#test for zero-inflation
+sim_res7 <- simulateResiduals(fittedModel = foragingvaco_floral_model)
+testZeroInflation(sim_res7)
+##p-value=0.056, not statistically significant but still worthwile to try a zero-inflated model and compare AIC 
+
+#test for overdispersion
+testDispersion(sim_res7)
+#borderline overdispersion
+
+#try plotting with zero-inflation model and compare AIC to glmer model
+foragingvaco_floral_model_zi <- glmmTMB(
+  forage_vaco ~ floral_abun_scaled + julian.date_scaled + (1|site_id),
+  ziformula = ~1,
+  family = nbinom2,
+  data = field_data
+)
+
+summary(foragingvaco_floral_model_zi) ##AIC = 301.9
+summary(foragingvaco_floral_model) ##AIC = 367.1
+
+##Zero inflated model fits my data much better. Therefore, I should use it in analysis.
+
+#visualize model
+visreg(foragingvaco_floral_model_zi, "floral_abun_scaled", scale = "response", partial = TRUE) 
+```
