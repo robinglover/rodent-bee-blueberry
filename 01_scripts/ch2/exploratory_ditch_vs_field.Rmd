@@ -1,0 +1,126 @@
+---
+title: "exploratory_ditch_vs_field"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_analysis/rodent-bee-blueberry")
+```
+
+# Load data
+
+```{r}
+#load packages
+library(ggplot2) #for plots
+library(dplyr) #for working with dataframes
+library(tidyr) #for working with datasets
+library(lme4) #for mixed effects models
+library(ggpubr) #for adding significance asterisks to graph
+
+#read in data
+data <- read.csv("06_cleandata/combined_plot_data.csv")
+
+#check that variables are in appropriate format
+str(data)
+
+#change character columns to factors
+data <- data %>%
+   mutate(
+     site_id = as.factor(site_id),
+     round = as.factor(round),
+     plot_id = as.factor(plot_id),
+     bee_date = as.Date(bee_date),
+     area = as.factor(area))
+
+#add column for ditch vs field
+data <- data %>%
+  mutate(field_ditch = case_when(
+    str_detect(plot_id, "p1|p2") ~ "field",
+    str_detect(plot_id, "d") ~ "ditch",
+    TRUE ~ NA_character_
+  ))
+```
+
+# Compare ditch vs field 
+
+## Num NSQ
+
+```{r}
+ggplot(data, aes(x = field_ditch, y = nest_searching_queens)) + 
+  geom_boxplot() +
+  theme_classic(base_size = 15) +
+  xlab("Plot Type") +
+  ylab("NSQ") +
+  stat_compare_means(
+    method = "t.test",        # or "wilcox.test"
+    label = "p.format",       # shows formatted p-value
+    size = 3.7,
+    vjust = 0
+  )
+
+```
+
+## Num workers
+
+```{r}
+ggplot(data, aes(x = field_ditch, y = workers)) + 
+  geom_boxplot() +
+  theme_classic(base_size = 15) +
+  xlab("Plot Type") +
+  ylab("Workers") +
+  stat_compare_means(
+    method = "t.test",        # or "wilcox.test"
+    label = "p.format",       # shows formatted p-value
+    size = 3.7,
+    vjust = 0
+  )
+```
+
+## Num burrows
+
+```{r}
+ggplot(data, aes(x = field_ditch, y = num_burrows)) + 
+  geom_boxplot() +
+  theme_classic(base_size = 15) +
+  xlab("Plot Type") +
+  ylab("Burrow Abun") +
+  stat_compare_means(
+    method = "t.test",        # or "wilcox.test"
+    label = "p.format",       # shows formatted p-value
+    size = 3.7,
+    vjust = 0
+  )
+```
+
+## Num inactive burrows
+
+```{r}
+ggplot(data, aes(x = field_ditch, y = num_inactive_burrows)) + 
+  geom_boxplot() +
+  theme_classic(base_size = 15) +
+  xlab("Plot Type") +
+  ylab("Inactive burrows") +
+  stat_compare_means(
+    method = "t.test",        # or "wilcox.test"
+    label = "p.format",       # shows formatted p-value
+    size = 3.7,
+    vjust = 0
+  )
+```
+
+## Bombus-relevant floral abundance
+
+```{r}
+ggplot(data, aes(x = field_ditch, y = bombus_floral_abun)) + 
+  geom_boxplot() +
+  theme_classic(base_size = 15) +
+  xlab("Plot Type") +
+  ylab("Bombus-relevant floral abun") +
+  stat_compare_means(
+    method = "t.test",        # or "wilcox.test"
+    label = "p.format",       # shows formatted p-value
+    size = 3.7,
+    vjust = 0
+  )
+```
