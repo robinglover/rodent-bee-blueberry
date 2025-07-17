@@ -1,689 +1,787 @@
 ﻿date,observers,site_id,round,plot_id,transect_id,transect_section,sample_code,flower_code,flower_species,abundance,notes
-2024-04-13,RG,chong_96,NS,p2,full-plot,net-floral,chong_96_NS_p2_full-plot_net-floral,taof,taraxacum_officinale,2,
-2024-04-16,RG,bates_57b,NS,p1,full-plot,net-floral,bates_57b_NS_p1_full-plot_net-floral,taof,taraxacum_officinale,4,
-2024-04-16,CN,bates_57b,NS,p2,full-plot,net-floral,bates_57b_NS_p2_full-plot_net-floral,taof,taraxacum_officinale,4,
-2024-04-18,RG,bks_96,NS,p1,full-plot,net-floral,bks_96_NS_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,4,
-2024-04-18,RG,bks_96,NS,p2,full-plot,net-floral,bks_96_NS_p2_full-plot_net-floral,taof,taraxacum_officinale,1,
-2024-04-18,RG,bks_96,NS,p2,full-plot,net-floral,bks_96_NS_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,4,
-2024-04-18,RG,bks_96,NS,d,full-plot,net-floral,bks_96_NS_d_full-plot_net-floral,arth,arabidopsis _thaliana,3,
-2024-04-18,RG,bks_96,NS,d,full-plot,net-floral,bks_96_NS_d_full-plot_net-floral,cahi,cardamine_hirsuta,4,
-2024-04-18,RG,bks_96,NS,d,full-plot,net-floral,bks_96_NS_d_full-plot_net-floral,cabu,capsella_bursa-pastoris,4,
-2024-04-18,RG,bks_96,NS,d,full-plot,net-floral,bks_96_NS_d_full-plot_net-floral,taof,taraxacum_officinale,2,
-2024-04-18,RG,bks_68,NS,p1,full-plot,net-floral,bks_68_NS_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,4,"no floral abundance recorded for this plot, assumed same blueberry as p2 and 1-10 MOLI since it was only observed in 0.5% of one quadrat"
-2024-04-18,RG,bks_68,NS,p1,full-plot,net-floral,bks_68_NS_p1_full-plot_net-floral,moli,montia_linearis,1,"no floral abundance recorded for this plot, assumed same blueberry as p2 and 1-10 MOLI since MOLI was only observed in 0.5% of one quadrat"
-2024-04-18,TK,bks_68,NS,p2,full-plot,net-floral,bks_68_NS_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,4,
-2024-04-18,TK,bks_68,NS,d,full-plot,net-floral,bks_68_NS_d_full-plot_net-floral,sevu,senecio_vulgaris,4,
-2024-04-18,TK,bks_68,NS,d,full-plot,net-floral,bks_68_NS_d_full-plot_net-floral,arth,arabidopsis _thaliana,5,
-2024-04-18,TK,bks_68,NS,d,full-plot,net-floral,bks_68_NS_d_full-plot_net-floral,cahi,cardamine_hirsuta,4,
-2024-04-18,TK,bks_68,NS,d,full-plot,net-floral,bks_68_NS_d_full-plot_net-floral,moli,montia_linearis,4,
-2024-04-18,TK,chong_96,NS,d,full-plot,net-floral,chong_96_NS_d_full-plot_net-floral,taof,taraxacum_officinale,2,
-2024-04-18,TK,chong_96,NS,d,full-plot,net-floral,chong_96_NS_d_full-plot_net-floral,mune,muscari_neglectum,1,
-2024-04-19,TK,bates_57b,NS,d,full-plot,net-floral,bates_57b_NS_d_full-plot_net-floral,taof,taraxacum_officinale,4,
-2024-04-19,TK,bates_57b,NS,d,full-plot,net-floral,bates_57b_NS_d_full-plot_net-floral,lapu,lamium_purpureum,3,
-2024-04-19,TK,bates_57b,NS,d,full-plot,net-floral,bates_57b_NS_d_full-plot_net-floral,cegl,cerastium_glomeratum,4,
-2024-04-19,TK,bks_56,NS,d,full-plot,net-floral,bks_56_NS_d_full-plot_net-floral,arth,arabidopsis _thaliana,5,
-2024-04-19,TK,bks_56,NS,d,full-plot,net-floral,bks_56_NS_d_full-plot_net-floral,cahi,cardamine_hirsuta,5,
-2024-04-19,TK,bks_56,NS,d,full-plot,net-floral,bks_56_NS_d_full-plot_net-floral,acer,ask tyler,4,
-2024-04-19,TK,bks_56,NS,d,full-plot,net-floral,bks_56_NS_d_full-plot_net-floral,brra,brassica_rapa,3,
-2024-04-19,TK,bks_56,NS,d,full-plot,net-floral,bks_56_NS_d_full-plot_net-floral,drve,draba_verna,5,
-2024-04-19,TK,bks_56,NS,d,full-plot,net-floral,bks_56_NS_d_full-plot_net-floral,cegl,cerastium_glomeratum,5,
-2024-04-19,TK,bks_56,NS,d,full-plot,net-floral,bks_56_NS_d_full-plot_net-floral,lapu,lamium_purpureum,3,
-2024-04-19,TK,bks_56,NS,d,full-plot,net-floral,bks_56_NS_d_full-plot_net-floral,crmo,crataegus_monogyna,5,
-2024-04-19,TK,bks_56,NS,d,full-plot,net-floral,bks_56_NS_d_full-plot_net-floral,sevu,senecio_vulgaris,4,
-2024-04-19,TK,bks_56,NS,d,full-plot,net-floral,bks_56_NS_d_full-plot_net-floral,cabu,capsella_bursa-pastoris,5,
-2024-04-19,"TK, RG",bks_56,NS,p1,full-plot,net-floral,bks_56_NS_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2024-04-19,"TK, RG",bks_56,NS,p2,full-plot,net-floral,bks_56_NS_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2024-04-21,CN,chong_68,NS,p1,full-plot,net-floral,chong_68_NS_p1_full-plot_net-floral,rare,ranunculus_repens,3,
-2024-04-21,CN,chong_68,NS,p1,full-plot,net-floral,chong_68_NS_p1_full-plot_net-floral,taof,taraxacum_officinale,3,
-2024-04-21,CN,chong_68,NS,p1,full-plot,net-floral,chong_68_NS_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,75% in bloom
-2024-04-21,CN,chong_68,NS,p2,full-plot,net-floral,chong_68_NS_p2_full-plot_net-floral,taof,taraxacum_officinale,4,
-2024-04-21,CN,chong_68,NS,p2,full-plot,net-floral,chong_68_NS_p2_full-plot_net-floral,rare,ranunculus_repens,2,
-2024-04-21,CN,chong_68,NS,p2,full-plot,net-floral,chong_68_NS_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,75% in bloom
-2024-04-21,CN,chong_68,NS,d,full-plot,net-floral,chong_68_NS_d_full-plot_net-floral,taof,taraxacum_officinale,3,
-2024-04-21,CN,chong_68,NS,d,full-plot,net-floral,chong_68_NS_d_full-plot_net-floral,cahi,cardamine_hirsuta,2,
-2024-04-23,CN,avtar_168,NS,p2,full-plot,net-floral,avtar_168_NS_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,75% in bloom
-2024-04-23,"RG, CN",avtar_168,NS,d,full-plot,net-floral,avtar_168_NS_d_full-plot_net-floral,clpa,claytonia_parviflora,1,
-2024-04-23,"RG, CN",avtar_168,NS,d,full-plot,net-floral,avtar_168_NS_d_full-plot_net-floral,cegl,cerastium_glomeratum,2,
-2024-04-24,RG,surjit_168,,p2,full-plot,net-floral,surjit_168__p2_full-plot_net-floral,vaco,vaccinium_corymbosum,4,75% in bloom but small bushes
-2024-04-24,RG,surjit_168,,p1,full-plot,net-floral,surjit_168__p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,"75% in bloom, taller bushes"
-2024-04-24,RG,surjit_168,,d,full-plot,net-floral,surjit_168__d_full-plot_net-floral,drve,draba_verna,3,common whitlow grass
-2024-04-24,RG,surjit_168,,d,full-plot,net-floral,surjit_168__d_full-plot_net-floral,cahi,cardamine_hirsuta,3,hairy bittercress
-2024-04-24,RG,surjit_168,,d,full-plot,net-floral,surjit_168__d_full-plot_net-floral,arth,arabidopsis _thaliana,4,mouse-ear cress
-2024-04-30,"TK, RG",bks_neaves,NS,p1,full-plot,net-floral,bks_neaves_NS_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,3,
-2024-04-30,"TK, RG",bks_neaves,NS,d,full-plot,net-floral,bks_neaves_NS_d_full-plot_net-floral,clpa,claytonia_parviflora,4,
-2024-04-30,"TK, RG",bks_neaves,NS,d,full-plot,net-floral,bks_neaves_NS_d_full-plot_net-floral,sara,sambucus_racemosa,5,
-2024-04-30,"TK, RG",bks_neaves,NS,d,full-plot,net-floral,bks_neaves_NS_d_full-plot_net-floral,mydi,myosotis_discolor,4,
-2024-04-30,"TK, RG",bks_neaves,NS,d,full-plot,net-floral,bks_neaves_NS_d_full-plot_net-floral,arth,arabidopsis _thaliana,3,
-2024-04-30,TK,bks_neaves,NS,p2,full-plot,net-floral,bks_neaves_NS_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,4,
-2024-04-30,TK,gwb_neaves,NS,p1,full-plot,net-floral,gwb_neaves_NS_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2024-04-30,TK,gwb_neaves,NS,p1,full-plot,net-floral,gwb_neaves_NS_p1_full-plot_net-floral,lapu,lamium_purpureum,2,
-2024-04-30,TK,gwb_neaves,NS,p1,full-plot,net-floral,gwb_neaves_NS_p1_full-plot_net-floral,cegl,cerastium_glomeratum,3,
-2024-04-30,TK,gwb_neaves,NS,p1,full-plot,net-floral,gwb_neaves_NS_p1_full-plot_net-floral,taof,taraxacum_officinale,2,
-2024-04-30,TK,gwb_neaves,NS,p1,full-plot,net-floral,gwb_neaves_NS_p1_full-plot_net-floral,rare,ranunculus_repens,1,
-2024-04-30,TK,gwb_neaves,NS,p2,full-plot,net-floral,gwb_neaves_NS_p2_full-plot_net-floral,taof,taraxacum_officinale,3,
-2024-04-30,TK,gwb_neaves,NS,p2,full-plot,net-floral,gwb_neaves_NS_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2024-04-30,TK,gwb_neaves,NS,p2,full-plot,net-floral,gwb_neaves_NS_p2_full-plot_net-floral,cegl,cerastium_glomeratum,5,
-2024-04-30,TK,gwb_neaves,NS,p2,full-plot,net-floral,gwb_neaves_NS_p2_full-plot_net-floral,arth,arabidopsis _thaliana,1,
-2024-04-30,TK,gwb_neaves,NS,p2,full-plot,net-floral,gwb_neaves_NS_p2_full-plot_net-floral,cahi,cardamine_hirsuta,3,
-2024-04-30,TK,gwb_neaves,NS,p2,full-plot,net-floral,gwb_neaves_NS_p2_full-plot_net-floral,mydi,myosotis_discolor,2,
-2024-04-30,TK,gwb_neaves,NS,d,full-plot,net-floral,gwb_neaves_NS_d_full-plot_net-floral,mydi,myosotis_discolor,2,
-2024-04-30,TK,gwb_neaves,NS,d,full-plot,net-floral,gwb_neaves_NS_d_full-plot_net-floral,lapu,lamium_purpureum,2,
-2024-04-30,TK,gwb_neaves,NS,d,full-plot,net-floral,gwb_neaves_NS_d_full-plot_net-floral,arth,arabidopsis _thaliana,3,
-2024-04-30,TK,gwb_neaves,NS,d,full-plot,net-floral,gwb_neaves_NS_d_full-plot_net-floral,taof,taraxacum_officinale,3,
-2024-04-30,TK,gwb_neaves,NS,d,full-plot,net-floral,gwb_neaves_NS_d_full-plot_net-floral,cegl,cerastium_glomeratum,2,
-2024-04-30,TK,gwb_neaves,NS,d,full-plot,net-floral,gwb_neaves_NS_d_full-plot_net-floral,rare,ranunculus_repens,1,
-2024-04-30,TK,gwb_neaves,NS,d,full-plot,net-floral,gwb_neaves_NS_d_full-plot_net-floral,sevu,senecio_vulgaris,3,
-2024-04-30,TK,gwb_neaves,NS,d,full-plot,net-floral,gwb_neaves_NS_d_full-plot_net-floral,drve,draba_verna,3,
-2024-05-14,AD,chong_68,1,p1,full-plot,net-floral,chong_68_1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,75% in bloom
-2024-05-14,AD,chong_68,1,p1,full-plot,net-floral,chong_68_1_p1_full-plot_net-floral,rare,ranunculus_repens,5,
-2024-05-14,AD,chong_68,1,p2,full-plot,net-floral,chong_68_1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,60% in bloom
-2024-05-14,AD,chong_68,1,p2,full-plot,net-floral,chong_68_1_p2_full-plot_net-floral,rare,ranunculus_repens,5,
-2024-05-14,AD,chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,visa,vicia_sativa,2,
-2024-05-14,AD,chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,trdu,trifolium_dubium,2,
-2024-05-14,AD,chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,rare,ranunculus_repens,3,
-2024-05-14,AD,chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,taof,taraxacum_officinale,2,
-2024-05-14,AD,chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,arth,arabidopsis _thaliana,2,
-2024-05-14,AD,bks_68,1,p1,full-plot,net-floral,bks_68_1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,"Bushes are more upright than chong farm, not as many flowers ocerhang into quadrat. 60% in bloom."
-2024-05-14,AD,bks_68,1,p2,full-plot,net-floral,bks_68_1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,60% in bloom
-2024-05-14,AD,bks_68,1,p2,full-plot,net-floral,bks_68_1_p2_full-plot_net-floral,rare,ranunculus_repens,1,~8
-2024-05-14,AD,bks_68,1,d,full-plot,net-floral,bks_68_1_d_full-plot_net-floral,gedi,geranium_dissectum,1,
-2024-05-14,AD,bks_68,1,d,full-plot,net-floral,bks_68_1_d_full-plot_net-floral,leca,lepidium_campestre,1,
-2024-05-14,AD,bks_68,1,d,full-plot,net-floral,bks_68_1_d_full-plot_net-floral,mydi,myosotis_discolor,3,
-2024-05-15,AD,chong_96,1,p1,full-plot,net-floral,chong_96_1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,VACO 65% in bloom
-2024-05-15,AD,chong_96,1,p1,full-plot,net-floral,chong_96_1_p1_full-plot_net-floral,rare,ranunculus_repens,3,
-2024-05-15,AD,chong_96,1,p2,full-plot,net-floral,chong_96_1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,VACO 65% in bloom
-2024-05-15,AD,chong_96,1,p2,full-plot,net-floral,chong_96_1_p2_full-plot_net-floral,rare,ranunculus_repens,3,
-2024-05-15,AD,chong_96,1,d,full-plot,net-floral,chong_96_1_d_full-plot_net-floral,rara,raphanus_raphanistrum,4,"~1300 flowers. Ditch very wide, middle, near, and far "
-2024-05-15,AD,chong_96,1,d,full-plot,net-floral,chong_96_1_d_full-plot_net-floral,crmo,crataegus_monogyna,5,"3 trees. Ditch very wide, middle, near, and far "
-2024-05-15,AD,chong_96,1,d,full-plot,net-floral,chong_96_1_d_full-plot_net-floral,rare,ranunculus_repens,2,"35 flowers. Ditch very wide, middle, near, and far "
-2024-05-15,AD,chong_96,1,d,full-plot,net-floral,chong_96_1_d_full-plot_net-floral,taof,taraxacum_officinale,1,"~5 flowers. Ditch very wide, middle, near, and far "
-2024-05-15,AD,chong_96,1,d,full-plot,net-floral,chong_96_1_d_full-plot_net-floral,rusp,rubus_spectabilis,2,"~15 flowers. Ditch very wide, middle, near, and far "
-2024-05-15,AD,chong_96,1,d,full-plot,net-floral,chong_96_1_d_full-plot_net-floral,sara,sambucus_racemosa,2,"~190 flowers. Ditch very wide, middle, near, and far "
-2024-05-15,AD,chong_96,1,d,full-plot,net-floral,chong_96_1_d_full-plot_net-floral,ronu,rosa_nutkana,1,"~2 flowers. Ditch very wide, middle, near, and far "
-2024-05-15,AD,bks_96,1,p1,full-plot,net-floral,bks_96_1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,"VACO 60% in bloom. Smaller plants, more dead (a couple per row)"
-2024-05-15,AD,bks_96,1,p1,full-plot,net-floral,bks_96_1_p1_full-plot_net-floral,clpa,claytonia_parviflora,2,"~32 flowers. Smaller plants, more dead (a couple per row)"
-2024-05-15,AD,bks_96,1,p2,full-plot,net-floral,bks_96_1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,"VACO 60% in bloom. Smaller plants, more dead (a couple per row)"
-2024-05-15,AD,bks_96,1,p2,full-plot,net-floral,bks_96_1_p2_full-plot_net-floral,clpa,claytonia_parviflora,2,"~17 flowers. Smaller plants, more dead (a couple per row)"
-2024-05-15,AD,bks_96,1,d,full-plot,net-floral,bks_96_1_d_full-plot_net-floral,rara,raphanus_raphanistrum,2,250; Jointed charlock
-2024-05-15,AD,bks_96,1,d,full-plot,net-floral,bks_96_1_d_full-plot_net-floral,clpa,claytonia_parviflora,3,220
-2024-05-15,AD,bks_96,1,d,full-plot,net-floral,bks_96_1_d_full-plot_net-floral,rare,ranunculus_repens,1,7
-2024-05-15,AD,bks_96,1,d,full-plot,net-floral,bks_96_1_d_full-plot_net-floral,trdu,trifolium_dubium,3,200; lesser hop trefoil
-2024-05-15,AD,bks_96,1,d,full-plot,net-floral,bks_96_1_d_full-plot_net-floral,sevu,senecio_vulgaris,3,700; Groundsel
-2024-05-15,AD,bks_96,1,d,full-plot,net-floral,bks_96_1_d_full-plot_net-floral,arth,arabidopsis _thaliana,,400; cress
-2024-05-15,AD,bks_96,1,d,full-plot,net-floral,bks_96_1_d_full-plot_net-floral,orum,ornithogalum_umbellatum,2,15; Common star of Bethlehem
-2024-05-15,AD,bks_96,1,d,full-plot,net-floral,bks_96_1_d_full-plot_net-floral,visa,vicia_sativa,2,15
-2024-05-15,AD,bks_96,1,d,full-plot,net-floral,bks_96_1_d_full-plot_net-floral,gedi,geranium_dissectum,2,20
-2024-05-22,AD,gwb_neaves,1,p1,full-plot,net-floral,gwb_neaves_1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,55%; this plot was very flooded
-2024-05-22,AD,gwb_neaves,1,p1,full-plot,net-floral,gwb_neaves_1_p1_full-plot_net-floral,trre,trifolium_repens,3,110; this plot was very flooded
-2024-05-22,AD,gwb_neaves,1,p1,full-plot,net-floral,gwb_neaves_1_p1_full-plot_net-floral,ruac,rumex_acetosa,2,50; this plot was very flooded
-2024-05-22,AD,gwb_neaves,1,p1,full-plot,net-floral,gwb_neaves_1_p1_full-plot_net-floral,rare,ranunculus_repens,1,5; this plot was very flooded
-2024-05-22,AD,gwb_neaves,1,p2,full-plot,net-floral,gwb_neaves_1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,55%
-2024-05-22,AD,gwb_neaves,1,p2,full-plot,net-floral,gwb_neaves_1_p2_full-plot_net-floral,rare,ranunculus_repens,3,150
-2024-05-22,AD,gwb_neaves,1,p2,full-plot,net-floral,gwb_neaves_1_p2_full-plot_net-floral,trre,trifolium_repens,3,190
-2024-05-22,AD,gwb_neaves,1,p2,full-plot,net-floral,gwb_neaves_1_p2_full-plot_net-floral,stme,stellaria_media,3,120
-2024-05-22,AD,gwb_neaves,1,p2,full-plot,net-floral,gwb_neaves_1_p2_full-plot_net-floral,taof,taraxacum_officinale,1,3
-2024-05-22,AD,gwb_neaves,1,p2,full-plot,net-floral,gwb_neaves_1_p2_full-plot_net-floral,ruac,rumex_acetosa,3,250
-2024-05-22,AD,gwb_neaves,1,d,full-plot,net-floral,gwb_neaves_1_d_full-plot_net-floral,ruac,rumex_acetosa,4,9000
-2024-05-22,AD,gwb_neaves,1,d,full-plot,net-floral,gwb_neaves_1_d_full-plot_net-floral,cahi,cardamine_hirsuta,2,55
-2024-05-22,AD,gwb_neaves,1,d,full-plot,net-floral,gwb_neaves_1_d_full-plot_net-floral,rosy,rorippa_sylvestris,2,25; 5 flowers per plant
-2024-05-22,AD,gwb_neaves,1,d,full-plot,net-floral,gwb_neaves_1_d_full-plot_net-floral,mydi,myosotis_discolor,3,300
-2024-05-22,AD,gwb_neaves,1,d,full-plot,net-floral,gwb_neaves_1_d_full-plot_net-floral,trre,trifolium_repens,3,365
-2024-05-22,AD,gwb_neaves,1,d,full-plot,net-floral,gwb_neaves_1_d_full-plot_net-floral,stme,stellaria_media,4,1500
-2024-05-22,AD,gwb_neaves,1,d,full-plot,net-floral,gwb_neaves_1_d_full-plot_net-floral,trdu,trifolium_dubium,2,90
-2024-05-22,AD,gwb_neaves,1,d,full-plot,net-floral,gwb_neaves_1_d_full-plot_net-floral,gedi,geranium_dissectum,2,80
-2024-05-22,AD,gwb_neaves,1,d,full-plot,net-floral,gwb_neaves_1_d_full-plot_net-floral,rare,ranunculus_repens,3,550
-2024-05-22,AD,gwb_neaves,1,d,full-plot,net-floral,gwb_neaves_1_d_full-plot_net-floral,taof,taraxacum_officinale,2,40
-2024-05-22,AD,bks_neaves,1,p1,full-plot,net-floral,bks_neaves_1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2024-05-22,AD,bks_neaves,1,p1,full-plot,net-floral,bks_neaves_1_p1_full-plot_net-floral,rare,ranunculus_repens,3,110
-2024-05-22,AD,bks_neaves,1,p1,full-plot,net-floral,bks_neaves_1_p1_full-plot_net-floral,sevu,senecio_vulgaris,3,250
-2024-05-22,AD,bks_neaves,1,p2,full-plot,net-floral,bks_neaves_1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,60%
-2024-05-22,AD,bks_neaves,1,p2,full-plot,net-floral,bks_neaves_1_p2_full-plot_net-floral,rasc,ranunculus_sceleratus,2,30
-2024-05-22,AD,bks_neaves,1,p2,full-plot,net-floral,bks_neaves_1_p2_full-plot_net-floral,rare,ranunculus_repens,3,210
-2024-05-22,AD,bks_neaves,1,p2,full-plot,net-floral,bks_neaves_1_p2_full-plot_net-floral,sevu,senecio_vulgaris,1,10
-2024-05-22,AD,bks_neaves,1,p2,full-plot,net-floral,bks_neaves_1_p2_full-plot_net-floral,myla,myosotis_laxa,2,20; bay forget-me-not
-2024-05-22,AD,bks_neaves,1,d,full-plot,net-floral,bks_neaves_1_d_full-plot_net-floral,rare,ranunculus_repens,2,30
-2024-05-22,AD,bks_neaves,1,d,full-plot,net-floral,bks_neaves_1_d_full-plot_net-floral,arth,arabidopsis _thaliana,3,110
-2024-05-22,AD,bks_neaves,1,d,full-plot,net-floral,bks_neaves_1_d_full-plot_net-floral,mydi,myosotis_discolor,3,280
-2024-05-22,AD,bks_neaves,1,d,full-plot,net-floral,bks_neaves_1_d_full-plot_net-floral,vese,veronica_serpyllifolia,1,5. thyme leafed speedwall
-2024-05-22,AD,bks_neaves,1,d,full-plot,net-floral,bks_neaves_1_d_full-plot_net-floral,sevu,senecio_vulgaris,4,1050
-2024-05-22,AD,bks_neaves,1,d,full-plot,net-floral,bks_neaves_1_d_full-plot_net-floral,ruac,rumex_acetosa,2,50
-2024-05-22,AD,bks_neaves,1,d,full-plot,net-floral,bks_neaves_1_d_full-plot_net-floral,stme,stellaria_media,1,10
-2024-05-22,AD,bks_neaves,1,d,full-plot,net-floral,bks_neaves_1_d_full-plot_net-floral,moli,montia_linearis,4,2110. narrow leaf montia
-2024-05-22,AD,bks_neaves,1,d,full-plot,net-floral,bks_neaves_1_d_full-plot_net-floral,cefo,cerastium_fontanum,1,5. mouse eared chickweed
-2024-05-22,AD,bks_neaves,1,d,full-plot,net-floral,bks_neaves_1_d_full-plot_net-floral,crdo,crataegus_douglasii,1,10. black hawthorn
-2024-05-22,AD,bks_neaves,1,d,full-plot,net-floral,bks_neaves_1_d_full-plot_net-floral,trdu,trifolium_dubium,2,25
-2024-05-23,AD,surjit_168,1,p1,full-plot,net-floral,surjit_168_1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,"~55% in bloom. Bushes starting to fruit (~30-40%), some berries full size but not ripe."
-2024-05-23,"AD, RG",surjit_168,1,d,full-plot,net-floral,surjit_168_1_d_full-plot_net-floral,ruac,rumex_acetosa,3,
-2024-05-23,"AD, RG",surjit_168,1,d,full-plot,net-floral,surjit_168_1_d_full-plot_net-floral,rara,raphanus_raphanistrum,2,
-2024-05-23,"AD, RG",surjit_168,1,d,full-plot,net-floral,surjit_168_1_d_full-plot_net-floral,visa,vicia_sativa,2,
-2024-05-23,"AD, RG",surjit_168,1,d,full-plot,net-floral,surjit_168_1_d_full-plot_net-floral,rasc,ranunculus_sceleratus,2,
-2024-05-23,"AD, RG",surjit_168,1,d,full-plot,net-floral,surjit_168_1_d_full-plot_net-floral,mydi,myosotis_discolor,1,
-2024-05-23,"AD, RG",surjit_168,1,d,full-plot,net-floral,surjit_168_1_d_full-plot_net-floral,arth,arabidopsis _thaliana,2,
-2024-05-23,"AD, RG",avtar_168,1,p1,full-plot,net-floral,avtar_168_1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,"~55% bloom. Bushes starting to fruit (40-45%), many fruits full sized (~10%) but none are ripe yet"
-2024-05-23,"AD, RG",avtar_168,1,p2,full-plot,net-floral,avtar_168_1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,"~55% bloom. Bushes starting to fruit (40-45%), many fruits full sized (~10%) but none are ripe yet"
-2024-05-24,"NC, AD",surjit_168,1,p2,full-plot,net-floral,surjit_168_1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,"~55% in bloom. Bushes starting to fruit (~30-40%), some berries full size."
-2024-06-05,"NC, RG",lbf_ladnertrunk,1,p1,full-plot,net-floral,lbf_ladnertrunk_1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,4,"around 2-5 flowers per bush, most fruiting"
-2024-06-05,"NC, RG",lbf_ladnertrunk,1,p1,full-plot,net-floral,lbf_ladnertrunk_1_p1_full-plot_net-floral,rare,ranunculus_repens,3,480
-2024-06-05,"NC, RG",lbf_ladnertrunk,1,p1,full-plot,net-floral,lbf_ladnertrunk_1_p1_full-plot_net-floral,trre,trifolium_repens,2,80
-2024-06-05,"NC, RG",lbf_ladnertrunk,1,p1,full-plot,net-floral,lbf_ladnertrunk_1_p1_full-plot_net-floral,gedi,geranium_dissectum,1,5
-2024-06-05,"NC, RG",lbf_ladnertrunk,1,p2,full-plot,net-floral,lbf_ladnertrunk_1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,4,"around 2-5 flowers per bush, most fruiting (5000)"
-2024-06-05,"NC, RG",lbf_ladnertrunk,1,p2,full-plot,net-floral,lbf_ladnertrunk_1_p2_full-plot_net-floral,rare,ranunculus_repens,3,250
-2024-06-05,"NC, RG",lbf_ladnertrunk,1,p2,full-plot,net-floral,lbf_ladnertrunk_1_p2_full-plot_net-floral,trre,trifolium_repens,2,40
-2024-06-05,"NC, RG",lbf_ladnertrunk,1,p2,full-plot,net-floral,lbf_ladnertrunk_1_p2_full-plot_net-floral,taof,taraxacum_officinale,2,17
-2024-06-05,"NC, RG",lbf_ladnertrunk,1,d,full-plot,net-floral,lbf_ladnertrunk_1_d_full-plot_net-floral,trre,trifolium_repens,3,200
-2024-06-05,"NC, RG",lbf_ladnertrunk,1,d,full-plot,net-floral,lbf_ladnertrunk_1_d_full-plot_net-floral,gedi,geranium_dissectum,3,150
-2024-06-05,"NC, RG",lbf_ladnertrunk,1,d,full-plot,net-floral,lbf_ladnertrunk_1_d_full-plot_net-floral,rare,ranunculus_repens,3,100
-2024-06-05,"NC, RG",lbf_ladnertrunk,1,d,full-plot,net-floral,lbf_ladnertrunk_1_d_full-plot_net-floral,ruar,rubus_armeniacus,2,20. Armenian blackberry
-2024-06-05,"NC, RG",lbf_ladnertrunk,1,d,full-plot,net-floral,lbf_ladnertrunk_1_d_full-plot_net-floral,trpr,trifolium_pratense,2,20. red clover
-2024-06-05,"NC, RG",lbf_ladnertrunk,1,d,full-plot,net-floral,lbf_ladnertrunk_1_d_full-plot_net-floral,trdu,trifolium_dubium,3,150
-2024-06-05,NC,sandhu_ladnertrunk,1,p1,full-plot,net-floral,sandhu_ladnertrunk_1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,4,"5000. 2-5% in bloom, mostly undeveloped berries"
-2024-06-05,NC,sandhu_ladnertrunk,1,p2,full-plot,net-floral,sandhu_ladnertrunk_1_p2_full-plot_net-floral,rare,ranunculus_repens,1,
-2024-06-05,NC,sandhu_ladnertrunk,1,p2,full-plot,net-floral,sandhu_ladnertrunk_1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,4,"5000. 2-5% in bloom, mostly undeveloped berries"
-2024-06-05,NC,sandhu_ladnertrunk,1,d,full-plot,net-floral,sandhu_ladnertrunk_1_d_full-plot_net-floral,gedi,geranium_dissectum,4,1500
-2024-06-05,NC,sandhu_ladnertrunk,1,d,full-plot,net-floral,sandhu_ladnertrunk_1_d_full-plot_net-floral,mydi,myosotis_discolor,4,1800
-2024-06-05,NC,sandhu_ladnertrunk,1,d,full-plot,net-floral,sandhu_ladnertrunk_1_d_full-plot_net-floral,raac,ranunculus_acris,3,105
-2024-06-05,NC,sandhu_ladnertrunk,1,d,full-plot,net-floral,sandhu_ladnertrunk_1_d_full-plot_net-floral,rare,ranunculus_repens,3,110
-2024-06-05,NC,sandhu_ladnertrunk,1,d,full-plot,net-floral,sandhu_ladnertrunk_1_d_full-plot_net-floral,cegl,cerastium_glomeratum,2,50
-2024-06-05,NC,sandhu_ladnertrunk,1,d,full-plot,net-floral,sandhu_ladnertrunk_1_d_full-plot_net-floral,trpr,trifolium_pratense,2,15
-2024-06-05,NC,sandhu_ladnertrunk,1,d,full-plot,net-floral,sandhu_ladnertrunk_1_d_full-plot_net-floral,ropa,rorippa_palustris,3,200
-2024-06-05,NC,sandhu_ladnertrunk,1,d,full-plot,net-floral,sandhu_ladnertrunk_1_d_full-plot_net-floral,trdu,trifolium_dubium,3,50
-2024-06-05,NC,sandhu_ladnertrunk,1,d,full-plot,net-floral,sandhu_ladnertrunk_1_d_full-plot_net-floral,vite,vicia_tetrasperma,3,105
-2024-06-05,NC,sandhu_ladnertrunk,1,d,full-plot,net-floral,sandhu_ladnertrunk_1_d_full-plot_net-floral,visa,vicia_sativa,3,110
-2024-06-05,NC,sandhu_ladnertrunk,1,d,full-plot,net-floral,sandhu_ladnertrunk_1_d_full-plot_net-floral,trre,trifolium_repens,2,20
-2024-06-06,RG,bates_57b,1,p1,full-plot,net-floral,bates_57b_1_p1_full-plot_net-floral,taof,taraxacum_officinale,1,
-2024-06-06,RG,bates_57b,1,p1,full-plot,net-floral,bates_57b_1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,3,2% bloom. Same note as plot 2
-2024-06-06,RG,bates_57b,1,p2,full-plot,net-floral,bates_57b_1_p2_full-plot_net-floral,taof,taraxacum_officinale,1,berries starting to ripen - blue/purple colour
-2024-06-06,RG,bates_57b,1,p2,full-plot,net-floral,bates_57b_1_p2_full-plot_net-floral,soar,sonchus_arvensis,1,10; berries starting to ripen - blue/purple colour
-2024-06-06,RG,bates_57b,1,p2,full-plot,net-floral,bates_57b_1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,3,2% bloom; berries starting to ripen - blue/purple colour
-2024-06-06,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,visa,vicia_sativa,3,200; velch
-2024-06-06,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,rara,raphanus_raphanistrum,2,100; charlock
-2024-06-06,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,mydi,myosotis_discolor,3,250; forget me not
-2024-06-06,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,ruac,rumex_acetosa,4,sorrel; 3000
-2024-06-06,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,scau,scorzoneroides_autumnalis,3,530; autumn hawkbit
-2024-06-06,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,rare,ranunculus_repens,4,1200; creeping butterfly
-2024-06-06,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,trre,trifolium_repens,3,700; clover
-2024-06-06,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,raac,ranunculus_acris,4,1500
-2024-06-06,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,trdu,trifolium_dubium,3,300
-2024-06-06,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,gedi,geranium_dissectum,3,150
-2024-06-06,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,trpr,trifolium_pratense,2,50
-2024-06-06,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,cefo,cerastium_fontanum,2,60
-2024-06-06,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,cegl,cerastium_glomeratum,3,500
-2024-06-06,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,phta,phacelia_tanacetifolia,1,5; lacy phacelia
-2024-06-06,RG,bks_56,1,p1,full-plot,net-floral,bks_56_1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,3,"2% bloom, mostly undeveloped berries; 1000"
-2024-06-06,RG,bks_56,1,p2,full-plot,net-floral,bks_56_1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,3,"1000. 2% bloom, mostly undeveloped berries"
-2024-06-06,RG,bks_56,1,p2,full-plot,net-floral,bks_56_1_p2_full-plot_net-floral,rasc,ranunculus_sceleratus,3,800
-2024-06-06,AD,bks_56,1,d,full-plot,net-floral,bks_56_1_d_full-plot_net-floral,vite,vicia_tetrasperma,2,80. smooth tare
-2024-06-06,AD,bks_56,1,d,full-plot,net-floral,bks_56_1_d_full-plot_net-floral,mydi,myosotis_discolor,2,50. forget me not
-2024-06-06,AD,bks_56,1,d,full-plot,net-floral,bks_56_1_d_full-plot_net-floral,sool,sonchus_oleraceus,1,5. sow thistle
-2024-06-06,AD,bks_56,1,d,full-plot,net-floral,bks_56_1_d_full-plot_net-floral,siir,sisymbrium_irio,2,15. London rocket
-2024-06-06,AD,bks_56,1,d,full-plot,net-floral,bks_56_1_d_full-plot_net-floral,rara,raphanus_raphanistrum,2,70. jointed charlock
-2024-06-06,AD,bks_56,1,d,full-plot,net-floral,bks_56_1_d_full-plot_net-floral,gedi,geranium_dissectum,2,70
-2024-06-06,AD,bks_56,1,d,full-plot,net-floral,bks_56_1_d_full-plot_net-floral,rusp,rubus_spectabilis,2,15
-2024-06-06,AD,bks_56,1,d,full-plot,net-floral,bks_56_1_d_full-plot_net-floral,soas,sonchus_asper,2,20. Prickly sow thistle
-2024-06-06,AD,bks_56,1,d,full-plot,net-floral,bks_56_1_d_full-plot_net-floral,ronu,rosa_nutkana,3,200. nootka rose
-2024-06-06,AD,bks_56,1,d,full-plot,net-floral,bks_56_1_d_full-plot_net-floral,sopa,solanum_parishii,2,15. parish nightshade
-2024-06-12,"RG, NC",chong_68,1,p1,full-plot,net-floral,chong_68_1_p1_full-plot_net-floral,rare,ranunculus_repens,3,<500 total
-2024-06-12,"RG, NC",chong_68,1,p1,full-plot,net-floral,chong_68_1_p1_full-plot_net-floral,trre,trifolium_repens,2,
-2024-06-12,"RG, NC",chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,taof,taraxacum_officinale,2,dandelion
-2024-06-12,"RG, NC",chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,rare,ranunculus_repens,3,short buttercups
-2024-06-12,"RG, NC",chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,raac,ranunculus_acris,1,tall buttercups
-2024-06-12,"RG, NC",chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,vicr,vicia_cracca,4,
-2024-06-12,"RG, NC",chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,gedi,geranium_dissectum,3,
-2024-06-12,"RG, NC",chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,visa,vicia_sativa,3,
-2024-06-12,"RG, NC",chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,trre,trifolium_repens,3,
-2024-06-12,"RG, NC",chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,lope,lotus_pedunculatus,4,
-2024-06-12,"RG, NC",chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,vite,vicia_tetrasperma,3,
-2024-06-12,"RG, NC",chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,lysa,lythrum_salicaria,1,
-2024-06-18,AD,chong_68,1,p2,full-plot,net-floral,chong_68_1_p2_full-plot_net-floral,rare,ranunculus_repens,3,
-2024-06-18,AD,chong_68,1,p2,full-plot,net-floral,chong_68_1_p2_full-plot_net-floral,trre,trifolium_repens,2,~500
-2024-06-18,AD,bks_68,2,d,full-plot,net-floral,bks_68_2_d_full-plot_net-floral,ropa,rorippa_palustris,4,"bog bittercress in the notes, yellow bittercress in Seek"
-2024-06-19,AD,bks_68,2,d,full-plot,net-floral,bks_68_2_d_full-plot_net-floral,rare,ranunculus_repens,1,
-2024-06-19,AD,chong_96,2,p1,full-plot,net-floral,chong_96_2_p1_full-plot_net-floral,rare,ranunculus_repens,4,
-2024-06-19,AD,chong_96,2,p1,full-plot,net-floral,chong_96_2_p1_full-plot_net-floral,trre,trifolium_repens,1,
-2024-06-19,AD,chong_96,2,p1,full-plot,net-floral,chong_96_2_p1_full-plot_net-floral,rara,raphanus_raphanistrum,3,
-2024-06-19,AD,chong_96,2,p1,full-plot,net-floral,chong_96_2_p1_full-plot_net-floral,taof,taraxacum_officinale,1,
-2024-06-19,AD,chong_96,2,p1,full-plot,net-floral,chong_96_2_p1_full-plot_net-floral,ruac,rumex_acetosa,3,
-2024-06-19,AD,chong_96,2,p1,full-plot,net-floral,chong_96_2_p1_full-plot_net-floral,gaap,galium_aparine,2,catchweed bedstraw. growing in ground under bushes
-2024-06-19,AD,chong_96,2,p2,full-plot,net-floral,chong_96_2_p2_full-plot_net-floral,rare,ranunculus_repens,4,
-2024-06-19,AD,chong_96,2,p2,full-plot,net-floral,chong_96_2_p2_full-plot_net-floral,trre,trifolium_repens,4,
-2024-06-19,AD,chong_96,2,p2,full-plot,net-floral,chong_96_2_p2_full-plot_net-floral,rara,raphanus_raphanistrum,4,
-2024-06-19,AD,chong_96,2,p2,full-plot,net-floral,chong_96_2_p2_full-plot_net-floral,trpr,trifolium_pratense,2,red clover
-2024-06-19,AD,chong_96,2,d,full-plot,net-floral,chong_96_2_d_full-plot_net-floral,rare,ranunculus_repens,4,
-2024-06-19,AD,chong_96,2,d,full-plot,net-floral,chong_96_2_d_full-plot_net-floral,rara,raphanus_raphanistrum,5,
-2024-06-19,AD,chong_96,2,d,full-plot,net-floral,chong_96_2_d_full-plot_net-floral,trre,trifolium_repens,3,
-2024-06-19,AD,chong_96,2,d,full-plot,net-floral,chong_96_2_d_full-plot_net-floral,trdu,trifolium_dubium,3,
-2024-06-19,AD,chong_96,2,d,full-plot,net-floral,chong_96_2_d_full-plot_net-floral,ruar,rubus_armeniacus,3,
-2024-06-19,AD,chong_96,2,d,full-plot,net-floral,chong_96_2_d_full-plot_net-floral,taof,taraxacum_officinale,1,
-2024-06-19,AD,chong_96,2,d,full-plot,net-floral,chong_96_2_d_full-plot_net-floral,sopa,solanum_parishii,2,parish's nightshade
-2024-06-19,AD,chong_96,2,d,full-plot,net-floral,chong_96_2_d_full-plot_net-floral,ruac,rumex_acetosa,4,
-2024-06-19,AD,chong_96,2,d,full-plot,net-floral,chong_96_2_d_full-plot_net-floral,spru,spergularia_rubra,2,red sand spurrey
-2024-06-19,AD,chong_96,2,d,full-plot,net-floral,chong_96_2_d_full-plot_net-floral,gaap,galium_aparine,2,catchweed bedstraw
-2024-06-19,AD,chong_96,2,d,full-plot,net-floral,chong_96_2_d_full-plot_net-floral,madi,matricaria_discoidea,2,pineapple weed
-2024-06-19,AD,chong_96,2,d,full-plot,net-floral,chong_96_2_d_full-plot_net-floral,plla,plantago_lanceolata,2,ribwart plantain
-2024-06-19,"RG, AD",bks_96,2,p1,full-plot,net-floral,bks_96_2_p1_full-plot_net-floral,rare,ranunculus_repens,3,Few ripe berries! no VACO flowers
-2024-06-19,"RG, AD",bks_96,2,p2,full-plot,net-floral,bks_96_2_p2_full-plot_net-floral,rara,raphanus_raphanistrum,3,Few ripe berries! no VACO flowers
-2024-06-19,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,rara,raphanus_raphanistrum,5,jointed charlock
-2024-06-19,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,ruar,rubus_armeniacus,2,
-2024-06-19,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,ronu,rosa_nutkana,1,
-2024-06-19,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,trre,trifolium_repens,2,
-2024-06-19,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,pema,persicaria_maculosa,4,spotted lady's thumb
-2024-06-19,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,ropa,rorippa_palustris,3,bog yellowcress
-2024-06-19,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,ruac,rumex_acetosa,4,
-2024-06-19,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,rare,ranunculus_repens,2,
-2024-06-19,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,trdu,trifolium_dubium,3,
-2024-06-19,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,spru,spergularia_rubra,3,
-2024-06-19,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,madi,matricaria_discoidea,3,
-2024-06-19,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,livu,linaria_vulgaris,2,common toadflax
-2024-06-19,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,visa,vicia_sativa,3,
-2024-06-19,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,vite,vicia_tetrasperma,3,
-2024-06-20,AD,bks_68,2,d,full-plot,net-floral,bks_68_2_d_full-plot_net-floral,cabu,capsella_bursa-pastoris,2,
-2024-06-20,AD,gwb_neaves,2,p1,full-plot,net-floral,gwb_neaves_2_p1_full-plot_net-floral,sevu,senecio_vulgaris,2,
-2024-06-20,AD,gwb_neaves,2,p1,full-plot,net-floral,gwb_neaves_2_p1_full-plot_net-floral,trre,trifolium_repens,4,
-2024-06-20,AD,gwb_neaves,2,p1,full-plot,net-floral,gwb_neaves_2_p1_full-plot_net-floral,ruac,rumex_acetosa,2,
-2024-06-20,AD,gwb_neaves,2,p1,full-plot,net-floral,gwb_neaves_2_p1_full-plot_net-floral,ropa,rorippa_palustris,1,
-2024-06-20,AD,gwb_neaves,2,p1,full-plot,net-floral,gwb_neaves_2_p1_full-plot_net-floral,rare,ranunculus_repens,1,
-2024-06-20,AD,gwb_neaves,2,p1,full-plot,net-floral,gwb_neaves_2_p1_full-plot_net-floral,pema,persicaria_maculosa,1,
-2024-06-20,AD,gwb_neaves,2,p1,full-plot,net-floral,gwb_neaves_2_p1_full-plot_net-floral,clpa,claytonia_parviflora,1,
-2024-06-20,AD,gwb_neaves,2,p2,full-plot,net-floral,gwb_neaves_2_p2_full-plot_net-floral,trre,trifolium_repens,4,
-2024-06-20,AD,gwb_neaves,2,p2,full-plot,net-floral,gwb_neaves_2_p2_full-plot_net-floral,ruac,rumex_acetosa,3,sorrel
-2024-06-20,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,rula,rubus_laciniatus,3,cutleaf blackberry
-2024-06-20,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,sevu,senecio_vulgaris,3,
-2024-06-20,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,pono,potentilla_norvegica,2,royal cinquefoil
-2024-06-20,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,epci,epilobium_ciliatum,2,fringe willowherb
-2024-06-20,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,ropa,rorippa_palustris,2,bog yellowcress
-2024-06-20,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,pema,persicaria_maculosa,4,
-2024-06-20,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,crca,crepis_capillaris,3,
-2024-06-20,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,cefo,cerastium_fontanum,3,
-2024-06-20,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,gedi,geranium_dissectum,1,
-2024-06-20,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,trre,trifolium_repens,4,
-2024-06-20,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,trpr,trifolium_pratense,2,
-2024-06-20,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,ruac,rumex_acetosa,4,
-2024-06-20,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,ruul,rubus_ulmifolius,4,
-2024-06-20,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,visa,vicia_sativa,2,
-2024-06-20,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,rara,raphanus_raphanistrum,2,
-2024-06-20,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,raca,ranunculus_californicus,1,california buttercup
-2024-06-20,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,lope,lotus_pedunculatus,3,
-2024-06-20,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,depi,descurainia_pinnata,3,
-2024-06-20,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,spru,spergularia_rubra,3,
-2024-06-20,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,madi,matricaria_discoidea,2,
-2024-06-20,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,ronu,rosa_nutkana,3,
-2024-06-20,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,mymu,mycelis_muralis,3,
-2024-06-20,AD,bks_neaves,2,p1,full-plot,net-floral,bks_neaves_2_p1_full-plot_net-floral,pema,persicaria_maculosa,2,
-2024-06-20,AD,bks_neaves,2,p1,full-plot,net-floral,bks_neaves_2_p1_full-plot_net-floral,rare,ranunculus_repens,1,
-2024-06-20,AD,bks_neaves,2,p1,full-plot,net-floral,bks_neaves_2_p1_full-plot_net-floral,epci,epilobium_ciliatum,3,Fringed willowherb
-2024-06-20,AD,bks_neaves,2,p1,full-plot,net-floral,bks_neaves_2_p1_full-plot_net-floral,ropa,rorippa_palustris,1,
-2024-06-20,AD,bks_neaves,2,p1,full-plot,net-floral,bks_neaves_2_p1_full-plot_net-floral,epci,epilobium_ciliatum,2,
-2024-06-20,AD,bks_neaves,2,p1,full-plot,net-floral,bks_neaves_2_p1_full-plot_net-floral,rare,ranunculus_repens,1,
-2024-06-20,AD,bks_neaves,2,p1,full-plot,net-floral,bks_neaves_2_p1_full-plot_net-floral,sevu,senecio_vulgaris,2,groundsel
-2024-06-20,AD,bks_neaves,2,p1,full-plot,net-floral,bks_neaves_2_p1_full-plot_net-floral,pema,persicaria_maculosa,1,spotted lady
-2024-06-20,AD,bks_neaves,2,p1,full-plot,net-floral,bks_neaves_2_p1_full-plot_net-floral,myla,myosotis_laxa,2,
-2024-06-20,AD,bks_neaves,2,d,full-plot,net-floral,bks_neaves_2_d_full-plot_net-floral,ruul,rubus_ulmifolius,4,elmleaf blackberry
-2024-06-20,AD,bks_neaves,2,d,full-plot,net-floral,bks_neaves_2_d_full-plot_net-floral,epci,epilobium_ciliatum,2,
-2024-06-20,AD,bks_neaves,2,d,full-plot,net-floral,bks_neaves_2_d_full-plot_net-floral,sapr,sagina_procumbens,2,procumbent pearlwort
-2024-06-20,AD,bks_neaves,2,d,full-plot,net-floral,bks_neaves_2_d_full-plot_net-floral,rasc,ranunculus_sceleratus,1,
-2024-06-21,AD,bks_68,2,d,full-plot,net-floral,bks_68_2_d_full-plot_net-floral,rasc,ranunculus_sceleratus,1,
-2024-06-21,AD,bates_57b,2,p1,full-plot,net-floral,bates_57b_2_p1_full-plot_net-floral,rare,ranunculus_repens,1,
-2024-06-21,AD,bates_57b,2,p1,full-plot,net-floral,bates_57b_2_p1_full-plot_net-floral,soar,sonchus_arvensis,2,
-2024-06-21,AD,bates_57b,2,p2,full-plot,net-floral,bates_57b_2_p2_full-plot_net-floral,taof,taraxacum_officinale,1,
-2024-06-21,AD,bates_57b,2,p2,full-plot,net-floral,bates_57b_2_p2_full-plot_net-floral,ruca,rubus_caesius,1,eurpean dewberry (maybe blackberry?)
-2024-06-21,AD,bates_57b,2,d,full-plot,net-floral,bates_57b_2_d_full-plot_net-floral,hygl,hypochaeris_glabra,4,smooth cat's ear
-2024-06-21,AD,bates_57b,2,d,full-plot,net-floral,bates_57b_2_d_full-plot_net-floral,trre,trifolium_repens,5,
-2024-06-21,AD,bates_57b,2,d,full-plot,net-floral,bates_57b_2_d_full-plot_net-floral,ruac,rumex_acetosa,5,
-2024-06-21,AD,bates_57b,2,d,full-plot,net-floral,bates_57b_2_d_full-plot_net-floral,cefo,cerastium_fontanum,2,
-2024-06-21,AD,bates_57b,2,d,full-plot,net-floral,bates_57b_2_d_full-plot_net-floral,rare,ranunculus_repens,3,
-2024-06-21,AD,bates_57b,2,d,full-plot,net-floral,bates_57b_2_d_full-plot_net-floral,trdu,trifolium_dubium,2,
-2024-06-21,AD,bates_57b,2,d,full-plot,net-floral,bates_57b_2_d_full-plot_net-floral,plla,plantago_lanceolata,2,
-2024-06-21,AD,bates_57b,2,d,full-plot,net-floral,bates_57b_2_d_full-plot_net-floral,rula,rubus_laciniatus,2,
-2024-06-21,AD,bates_57b,2,d,full-plot,net-floral,bates_57b_2_d_full-plot_net-floral,visa,vicia_sativa,3,
-2024-06-21,AD,bates_57b,2,d,full-plot,net-floral,bates_57b_2_d_full-plot_net-floral,gedi,geranium_dissectum,2,
-2024-06-21,AD,bates_57b,2,d,full-plot,net-floral,bates_57b_2_d_full-plot_net-floral,trpr,trifolium_pratense,1,
-2024-06-21,AD,bates_57b,2,d,full-plot,net-floral,bates_57b_2_d_full-plot_net-floral,raac,ranunculus_acris,2,
-2024-06-21,AD,bks_56,2,p1,full-plot,net-floral,bks_56_2_p1_full-plot_net-floral,epci,epilobium_ciliatum,2,
-2024-06-21,AD,bks_56,2,p1,full-plot,net-floral,bks_56_2_p1_full-plot_net-floral,ropa,rorippa_palustris,4,
-2024-06-21,AD,bks_56,2,p1,full-plot,net-floral,bks_56_2_p1_full-plot_net-floral,poav,polygonum_aviculare,2,
-2024-06-21,AD,bks_56,2,p1,full-plot,net-floral,bks_56_2_p1_full-plot_net-floral,rasc,ranunculus_sceleratus,1,
-2024-06-21,AD,bks_56,2,p1,full-plot,net-floral,bks_56_2_p1_full-plot_net-floral,madi,matricaria_discoidea,3,
-2024-06-21,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,ruar,rubus_armeniacus,1,
-2024-06-21,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,epci,epilobium_ciliatum,1,
-2024-06-21,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,trre,trifolium_repens,1,
-2024-06-21,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,vite,vicia_tetrasperma,4,
-2024-06-21,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,ropa,rorippa_palustris,2,
-2024-06-21,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,myla,myosotis_laxa,2,
-2024-06-21,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,brra,brassica_rapa,4,
-2024-06-21,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,cepu,centaurium_pulchellum,1,lesser centaury
-2024-06-21,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,rasc,ranunculus_sceleratus,2,
-2024-06-21,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,gedi,geranium_dissectum,2,
-2024-06-21,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,rara,raphanus_raphanistrum,1,
-2024-06-21,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,sevu,senecio_vulgaris,1,
-2024-06-21,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,ronu,rosa_nutkana,2,
-2024-06-21,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,syal,symphoricarpos_albus,1,common snowberry
-2024-06-21,AD,bks_56,2,d,full-plot,net-floral,bks_56_2_d_full-plot_net-floral,ropa,rorippa_palustris,2,
-2024-06-21,AD,bks_56,2,d,full-plot,net-floral,bks_56_2_d_full-plot_net-floral,madi,matricaria_discoidea,4,
-2024-06-21,AD,bks_56,2,d,full-plot,net-floral,bks_56_2_d_full-plot_net-floral,rasc,ranunculus_sceleratus,4,
-2024-06-22,AD,bks_68,2,d,full-plot,net-floral,bks_68_2_d_full-plot_net-floral,lapu,lamium_purpureum,1,
-2024-06-23,AD,bks_68,2,d,full-plot,net-floral,bks_68_2_d_full-plot_net-floral,vite,vicia_tetrasperma,1,
-2024-06-24,AD,bks_68,2,d,full-plot,net-floral,bks_68_2_d_full-plot_net-floral,gedi,geranium_dissectum,2,
-2024-06-25,AD,bks_68,2,d,full-plot,net-floral,bks_68_2_d_full-plot_net-floral,epci,epilobium_ciliatum,1,
-2024-06-26,AD,bks_68,2,d,full-plot,net-floral,bks_68_2_d_full-plot_net-floral,ephi,epilobium_hirsutum,1,
-2024-06-27,AD,bks_68,2,d,full-plot,net-floral,bks_68_2_d_full-plot_net-floral,pela,persicaria_lapathifolia,1,
-2024-07-02,NC,lbf_ladnertrunk,2,p1,full-plot,net-floral,lbf_ladnertrunk_2_p1_full-plot_net-floral,trre,trifolium_repens,4,
-2024-07-02,NC,lbf_ladnertrunk,2,p1,full-plot,net-floral,lbf_ladnertrunk_2_p1_full-plot_net-floral,rare,ranunculus_repens,3,
-2024-07-02,NC,lbf_ladnertrunk,2,p1,full-plot,net-floral,lbf_ladnertrunk_2_p1_full-plot_net-floral,poav,polygonum_aviculare,1,prostrate knotweed
-2024-07-02,NC,lbf_ladnertrunk,2,p2,full-plot,net-floral,lbf_ladnertrunk_2_p2_full-plot_net-floral,rare,ranunculus_repens,3,
-2024-07-02,NC,lbf_ladnertrunk,2,p2,full-plot,net-floral,lbf_ladnertrunk_2_p2_full-plot_net-floral,trre,trifolium_repens,3,
-2024-07-02,NC,lbf_ladnertrunk,2,p2,full-plot,net-floral,lbf_ladnertrunk_2_p2_full-plot_net-floral,taof,taraxacum_officinale,1,
-2024-07-02,NC,lbf_ladnertrunk,2,p2,full-plot,net-floral,lbf_ladnertrunk_2_p2_full-plot_net-floral,ropa,rorippa_palustris,2,
-2024-07-02,NC,lbf_ladnertrunk,2,p2,full-plot,net-floral,lbf_ladnertrunk_2_p2_full-plot_net-floral,epci,epilobium_ciliatum,2,
-2024-07-02,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,rupu,rumex_pulcher,3,fiddle dock
-2024-07-02,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,trre,trifolium_repens,3,
-2024-07-02,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,rare,ranunculus_repens,1,
-2024-07-02,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,ruul,rubus_ulmifolius,1,
-2024-07-02,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,spdo,spiraea_douglasii,3,rose spirea
-2024-07-02,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,epci,epilobium_ciliatum,2,
-2024-07-02,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,trdu,trifolium_dubium,2,
-2024-07-02,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,gedi,geranium_dissectum,1,
-2024-07-02,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,hyra,hypochaeris_radicata,1,common cats ear
-2024-07-02,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,taof,taraxacum_officinale,1,
-2024-07-02,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,suma,suaeda_maritima,4,herbaceous sapweed
-2024-07-02,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,ropa,rorippa_palustris,3,
-2024-07-02,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,plla,plantago_lanceolata,1,
-2024-07-02,"RG, AD",sandhu_ladnertrunk,2,p1,full-plot,net-floral,sandhu_ladnertrunk_2_p1_full-plot_net-floral,rara,raphanus_raphanistrum,1,bird deterrant noises. rodent bait stations
-2024-07-02,"RG, AD",sandhu_ladnertrunk,2,p1,full-plot,net-floral,sandhu_ladnertrunk_2_p1_full-plot_net-floral,ropa,rorippa_palustris,3,bird deterrant noises. rodent bait stations
-2024-07-02,"RG, AD",sandhu_ladnertrunk,2,p1,full-plot,net-floral,sandhu_ladnertrunk_2_p1_full-plot_net-floral,epci,epilobium_ciliatum,1,bird deterrant noises. rodent bait stations
-2024-07-02,AD,sandhu_ladnertrunk,2,p2,full-plot,net-floral,sandhu_ladnertrunk_2_p2_full-plot_net-floral,epci,epilobium_ciliatum,3,
-2024-07-02,AD,sandhu_ladnertrunk,2,p2,full-plot,net-floral,sandhu_ladnertrunk_2_p2_full-plot_net-floral,ropa,rorippa_palustris,4,
-2024-07-02,AD,sandhu_ladnertrunk,2,p2,full-plot,net-floral,sandhu_ladnertrunk_2_p2_full-plot_net-floral,anco,anthemis_cotula,1,stinking chamomile
-2024-07-02,AD,sandhu_ladnertrunk,2,p2,full-plot,net-floral,sandhu_ladnertrunk_2_p2_full-plot_net-floral,trre,trifolium_repens,3,
-2024-07-02,AD,sandhu_ladnertrunk,2,p2,full-plot,net-floral,sandhu_ladnertrunk_2_p2_full-plot_net-floral,pool,portulaca_oleracea,2,common purselane
-2024-07-02,AD,sandhu_ladnertrunk,2,p2,full-plot,net-floral,sandhu_ladnertrunk_2_p2_full-plot_net-floral,sevu,senecio_vulgaris,1,
-2024-07-02,NC,sandhu_ladnertrunk,2,d,full-plot,net-floral,sandhu_ladnertrunk_2_d_full-plot_net-floral,vite,vicia_tetrasperma,4,
-2024-07-02,NC,sandhu_ladnertrunk,2,d,full-plot,net-floral,sandhu_ladnertrunk_2_d_full-plot_net-floral,epci,epilobium_ciliatum,3,
-2024-07-02,NC,sandhu_ladnertrunk,2,d,full-plot,net-floral,sandhu_ladnertrunk_2_d_full-plot_net-floral,ropa,rorippa_palustris,5,
-2024-07-02,NC,sandhu_ladnertrunk,2,d,full-plot,net-floral,sandhu_ladnertrunk_2_d_full-plot_net-floral,gedi,geranium_dissectum,4,
-2024-07-02,NC,sandhu_ladnertrunk,2,d,full-plot,net-floral,sandhu_ladnertrunk_2_d_full-plot_net-floral,trdu,trifolium_dubium,1,
-2024-07-02,NC,sandhu_ladnertrunk,2,d,full-plot,net-floral,sandhu_ladnertrunk_2_d_full-plot_net-floral,trhy,trifolium_hybridum,2,
-2024-07-02,NC,sandhu_ladnertrunk,2,d,full-plot,net-floral,sandhu_ladnertrunk_2_d_full-plot_net-floral,anco,anthemis_cotula,2,
-2024-07-02,NC,sandhu_ladnertrunk,2,d,full-plot,net-floral,sandhu_ladnertrunk_2_d_full-plot_net-floral,raac,ranunculus_acris,1,meadow buttercup
-2024-07-02,NC,sandhu_ladnertrunk,2,d,full-plot,net-floral,sandhu_ladnertrunk_2_d_full-plot_net-floral,ruar,rubus_armeniacus,1,Himalayan blackberry
-2024-07-03,"RG, IWW",avtar_168,2,p2,full-plot,net-floral,avtar_168_2_p2_full-plot_net-floral,trre,trifolium_repens,1,
-2024-07-03,"AD, NC",avtar_168 ,2,d,full-plot,net-floral,avtar_168 _2_d_full-plot_net-floral,rara,raphanus_raphanistrum,2,
-2024-07-03,"AD, NC",avtar_168 ,2,d,full-plot,net-floral,avtar_168 _2_d_full-plot_net-floral,ropa,rorippa_palustris,2,
-2024-07-03,"AD, NC",avtar_168 ,2,d,full-plot,net-floral,avtar_168 _2_d_full-plot_net-floral,epci,epilobium_ciliatum,2,
-2024-07-03,"AD, NC",avtar_168 ,2,d,full-plot,net-floral,avtar_168 _2_d_full-plot_net-floral,vicr,vicia_cracca,3,
-2024-07-03,"AD, NC",avtar_168 ,2,d,full-plot,net-floral,avtar_168 _2_d_full-plot_net-floral,cape,cardamine_pensylvanica,1,
-2024-07-03,"RG, IWW",surjit_168,2,p1,full-plot,net-floral,surjit_168_2_p1_full-plot_net-floral,ropa,rorippa_palustris,5,
-2024-07-03,"RG, IWW",surjit_168,2,p1,full-plot,net-floral,surjit_168_2_p1_full-plot_net-floral,epci,epilobium_ciliatum,3,
-2024-07-03,"RG, IWW",surjit_168,2,p1,full-plot,net-floral,surjit_168_2_p1_full-plot_net-floral,pela,persicaria_lapathifolia,3,
-2024-07-03,"RG, IWW",surjit_168,2,p1,full-plot,net-floral,surjit_168_2_p1_full-plot_net-floral,spru,spergularia_rubra,3,
-2024-07-03,"RG, IWW",surjit_168,2,p1,full-plot,net-floral,surjit_168_2_p1_full-plot_net-floral,trre,trifolium_repens,1,
-2024-07-03,"AD, NC",surjit_168,2,p2,full-plot,net-floral,surjit_168_2_p2_full-plot_net-floral,ropa,rorippa_palustris,5,
-2024-07-03,"AD, NC",surjit_168,2,p2,full-plot,net-floral,surjit_168_2_p2_full-plot_net-floral,pela,persicaria_lapathifolia,2,
-2024-07-03,"AD, NC",surjit_168,2,p2,full-plot,net-floral,surjit_168_2_p2_full-plot_net-floral,epci,epilobium_ciliatum,4,
-2024-07-03,"AD, NC",surjit_168,2,p2,full-plot,net-floral,surjit_168_2_p2_full-plot_net-floral,pool,portulaca_oleracea,2,
-2024-07-03,"AD, NC",surjit_168,2,p2,full-plot,net-floral,surjit_168_2_p2_full-plot_net-floral,spru,spergularia_rubra,3,
-2024-07-03,"AD, NC",surjit_168,2,p2,full-plot,net-floral,surjit_168_2_p2_full-plot_net-floral,cabu,capsella_bursa-pastoris,1,
-2024-07-03,"AD, NC",surjit_168,2,p2,full-plot,net-floral,surjit_168_2_p2_full-plot_net-floral,trin,tripleurospermum_inodorum,1,
-2024-07-03,"RG, IWW",surjit_168,2,d,full-plot,net-floral,surjit_168_2_d_full-plot_net-floral,rara,raphanus_raphanistrum,4,
-2024-07-03,"RG, IWW",surjit_168,2,d,full-plot,net-floral,surjit_168_2_d_full-plot_net-floral,ropa,rorippa_palustris,5,
-2024-07-03,"RG, IWW",surjit_168,2,d,full-plot,net-floral,surjit_168_2_d_full-plot_net-floral,rasc,ranunculus_sceleratus,2,
-2024-07-03,"RG, IWW",surjit_168,2,d,full-plot,net-floral,surjit_168_2_d_full-plot_net-floral,brra,brassica_rapa,4,
-2024-07-03,"RG, IWW",surjit_168,2,d,full-plot,net-floral,surjit_168_2_d_full-plot_net-floral,sool,sonchus_oleraceus,1,
-2024-07-03,"RG, IWW",surjit_168,2,d,full-plot,net-floral,surjit_168_2_d_full-plot_net-floral,epci,epilobium_ciliatum,2,
-2024-07-03,"RG, IWW",surjit_168,2,d,full-plot,net-floral,surjit_168_2_d_full-plot_net-floral,spru,spergularia_rubra,3,
-2024-07-03,"RG, IWW",surjit_168,2,d,full-plot,net-floral,surjit_168_2_d_full-plot_net-floral,livu,linaria_vulgaris,3,
-2024-07-03,"RG, IWW",surjit_168,2,d,full-plot,net-floral,surjit_168_2_d_full-plot_net-floral,plla,plantago_lanceolata,3,
-2024-07-03,"RG, IWW",surjit_168,2,d,full-plot,net-floral,surjit_168_2_d_full-plot_net-floral,trin,tripleurospermum_inodorum,1,
-2024-07-03,"RG, IWW",surjit_168,2,d,full-plot,net-floral,surjit_168_2_d_full-plot_net-floral,trre,trifolium_repens,2,
-2024-07-03,"RG, IWW",surjit_168,2,d,full-plot,net-floral,surjit_168_2_d_full-plot_net-floral,pema,persicaria_maculosa,2,
-2024-07-10,"RG, AD",chong_96,3,p1,full-plot,net-floral,chong_96_3_p1_full-plot_net-floral,rare,ranunculus_repens,4,
-2024-07-10,"RG, AD",chong_96,3,p1,full-plot,net-floral,chong_96_3_p1_full-plot_net-floral,trre,trifolium_repens,3,
-2024-07-10,"RG, AD",chong_96,3,p2,full-plot,net-floral,chong_96_3_p2_full-plot_net-floral,rara,raphanus_raphanistrum,3,
-2024-07-10,"RG, AD",chong_96,3,p2,full-plot,net-floral,chong_96_3_p2_full-plot_net-floral,trre,trifolium_repens,2,
-2024-07-10,"RG, AD",chong_96,3,p2,full-plot,net-floral,chong_96_3_p2_full-plot_net-floral,taof,taraxacum_officinale,1,
-2024-07-10,"RG, AD",chong_96,3,p2,full-plot,net-floral,chong_96_3_p2_full-plot_net-floral,rare,ranunculus_repens,2,
-2024-07-10,"AD, RG",chong_68,3,p1,full-plot,net-floral,chong_68_3_p1_full-plot_net-floral,vicr,vicia_cracca,2,
-2024-07-10,"AD, RG",chong_68,3,p1,full-plot,net-floral,chong_68_3_p1_full-plot_net-floral,rare,ranunculus_repens,4,
-2024-07-10,"AD, RG",chong_68,3,p1,full-plot,net-floral,chong_68_3_p1_full-plot_net-floral,trre,trifolium_repens,3,
-2024-07-10,"AD, RG",chong_68,3,p1,full-plot,net-floral,chong_68_3_p1_full-plot_net-floral,crca,crepis_capillaris,1,
-2024-07-10,RG,chong_68,3,p2,full-plot,net-floral,chong_68_3_p2_full-plot_net-floral,rare,ranunculus_repens,4,
-2024-07-10,RG,chong_68,3,p2,full-plot,net-floral,chong_68_3_p2_full-plot_net-floral,trre,trifolium_repens,4,
-2024-07-10,RG,chong_68,3,p2,full-plot,net-floral,chong_68_3_p2_full-plot_net-floral,vicr,vicia_cracca,3,
-2024-07-10,"AD, RG",bks_96,3,p1,full-plot,net-floral,bks_96_3_p1_full-plot_net-floral,rara,raphanus_raphanistrum,5,
-2024-07-10,"AD, RG",bks_96,3,p1,full-plot,net-floral,bks_96_3_p1_full-plot_net-floral,gedi,geranium_dissectum,3,
-2024-07-10,AD,bks_96,3,p2,full-plot,net-floral,bks_96_3_p2_full-plot_net-floral,gedi,geranium_dissectum,4,
-2024-07-10,AD,bks_96,3,p2,full-plot,net-floral,bks_96_3_p2_full-plot_net-floral,rara,raphanus_raphanistrum,5,
-2024-07-10,AD,bks_96,3,p2,full-plot,net-floral,bks_96_3_p2_full-plot_net-floral,sevu,senecio_vulgaris,3,
-2024-07-24,RG,bates_57b,3,p1,full-plot,net-floral,bates_57b_3_p1_full-plot_net-floral,poav,polygonum_aviculare,4,
-2024-07-24,RG,bates_57b,3,p1,full-plot,net-floral,bates_57b_3_p1_full-plot_net-floral,plla,plantago_lanceolata,2,
-2024-07-24,RG,bates_57b,3,p1,full-plot,net-floral,bates_57b_3_p1_full-plot_net-floral,scau,scorzoneroides_autumnalis,5,autumn hawkbit
-2024-07-24,RG,bates_57b,3,p1,full-plot,net-floral,bates_57b_3_p1_full-plot_net-floral,ruac,rumex_acetosa,2,
-2024-07-24,RG,bates_57b,3,p1,full-plot,net-floral,bates_57b_3_p1_full-plot_net-floral,trre,trifolium_repens,4,
-2024-07-24,RG,bks_56,3,p1,full-plot,net-floral,bks_56_3_p1_full-plot_net-floral,ropa,rorippa_palustris,4,
-2024-07-24,RG,bks_56,3,p1,full-plot,net-floral,bks_56_3_p1_full-plot_net-floral,pema,persicaria_maculosa,3,
-2024-07-24,RG,bks_56,3,p1,full-plot,net-floral,bks_56_3_p1_full-plot_net-floral,amre,amaranthus_retroflexus,2,red root amaranth
-2024-07-24,AD,bks_56,3,p2,full-plot,net-floral,bks_56_3_p2_full-plot_net-floral,ropa,rorippa_palustris,5,
-2024-07-24,AD,bks_56,3,p2,full-plot,net-floral,bks_56_3_p2_full-plot_net-floral,epci,epilobium_ciliatum,3,
-2024-07-24,AD,bates_57b,3,p2,full-plot,net-floral,bates_57b_3_p2_full-plot_net-floral,scau,scorzoneroides_autumnalis,4,
-2024-07-24,AD,bates_57b,3,p2,full-plot,net-floral,bates_57b_3_p2_full-plot_net-floral,poav,polygonum_aviculare,4,
-2024-07-24,AD,bates_57b,3,p2,full-plot,net-floral,bates_57b_3_p2_full-plot_net-floral,trre,trifolium_repens,3,
-2024-07-24,AD,bates_57b,3,p2,full-plot,net-floral,bates_57b_3_p2_full-plot_net-floral,trpr,trifolium_pratense,3,
-2024-07-24,AD,bates_57b,3,p2,full-plot,net-floral,bates_57b_3_p2_full-plot_net-floral,plla,plantago_lanceolata,2,
-2024-07-26,NC,lbf_ladnertrunk,3,p1,full-plot,net-floral,lbf_ladnertrunk_3_p1_full-plot_net-floral,pema,persicaria_maculosa,1,
-2024-07-26,NC,lbf_ladnertrunk,3,p1,full-plot,net-floral,lbf_ladnertrunk_3_p1_full-plot_net-floral,trhy,trifolium_hybridum,2,
-2024-07-26,NC,lbf_ladnertrunk,3,p1,full-plot,net-floral,lbf_ladnertrunk_3_p1_full-plot_net-floral,poav,polygonum_aviculare,3,
-2024-07-26,NC,lbf_ladnertrunk,3,p1,full-plot,net-floral,lbf_ladnertrunk_3_p1_full-plot_net-floral,trre,trifolium_repens,3,
-2024-07-26,NC,lbf_ladnertrunk,3,p1,full-plot,net-floral,lbf_ladnertrunk_3_p1_full-plot_net-floral,rare,ranunculus_repens,2,
-2024-07-26,"RG, DM",lbf_ladnertrunk,3,p2,full-plot,net-floral,lbf_ladnertrunk_3_p2_full-plot_net-floral,trre,trifolium_repens,3,
-2024-07-29,"AD, RG",sandhu_ladnertrunk,3,p2,full-plot,net-floral,sandhu_ladnertrunk_3_p2_full-plot_net-floral,ropa,rorippa_palustris,4,
-2024-07-29,"AD, RG",sandhu_ladnertrunk,3,p2,full-plot,net-floral,sandhu_ladnertrunk_3_p2_full-plot_net-floral,epci,epilobium_ciliatum,2,
-2024-07-29,"AD, RG",sandhu_ladnertrunk,3,p2,full-plot,net-floral,sandhu_ladnertrunk_3_p2_full-plot_net-floral,sopa,solanum_parishii,1,
-2024-07-29,"AD, RG",sandhu_ladnertrunk,3,p1,full-plot,net-floral,sandhu_ladnertrunk_3_p1_full-plot_net-floral,ropa,rorippa_palustris,4,
-2024-07-29,"AD, RG",sandhu_ladnertrunk,3,p1,full-plot,net-floral,sandhu_ladnertrunk_3_p1_full-plot_net-floral,rara,raphanus_raphanistrum,3,
-2024-08-06,"AD, RG",avtar_168,3,p2,full-plot,net-floral,avtar_168_3_p2_full-plot_net-floral,pema,persicaria_maculosa,2,
-2024-08-06,"AD, RG",surjit_168,3,p1,full-plot,net-floral,surjit_168_3_p1_full-plot_net-floral,pool,portulaca_oleracea,1,
-2024-08-06,"AD, RG",surjit_168,3,p1,full-plot,net-floral,surjit_168_3_p1_full-plot_net-floral,trre,trifolium_repens,2,
-2024-08-06,"AD, RG",surjit_168,3,p1,full-plot,net-floral,surjit_168_3_p1_full-plot_net-floral,ropa,rorippa_palustris,2,
-2024-08-14,"AD, RG",bks_neaves,3,p1,full-plot,net-floral,bks_neaves_3_p1_full-plot_net-floral,epci,epilobium_ciliatum,3,
-2024-08-14,"AD, RG",bks_neaves,3,p1,full-plot,net-floral,bks_neaves_3_p1_full-plot_net-floral,lope,lotus_pedunculatus,3,
-2024-08-14,"AD, RG",bks_neaves,3,p2,full-plot,net-floral,bks_neaves_3_p2_full-plot_net-floral,epci,epilobium_ciliatum,1,
-2024-08-14,"AD, RG",bks_neaves,3,p2,full-plot,net-floral,bks_neaves_3_p2_full-plot_net-floral,lope,lotus_pedunculatus,3,
-2024-08-14,"AD, RG",gwb_neaves,3,p1,full-plot,net-floral,gwb_neaves_3_p1_full-plot_net-floral,trre,trifolium_repens,2,
-2024-08-14,"AD, RG",gwb_neaves,3,p2,full-plot,net-floral,gwb_neaves_3_p2_full-plot_net-floral,trre,trifolium_repens,3,
-2025-04-03,RG,sandhu_ladnertrunk,NS1,p2,full-plot,net-floral,sandhu_ladnertrunk_NS1_p2_full-plot_net-floral,cahi,cardamine_hirsuta,3,
-2025-04-03,RG,sandhu_ladnertrunk,NS1,p1,full-plot,net-floral,sandhu_ladnertrunk_NS1_p1_full-plot_net-floral,sevu,senecio_vulgaris,2,
-2025-04-03,RG,sandhu_ladnertrunk,NS1,p1,full-plot,net-floral,sandhu_ladnertrunk_NS1_p1_full-plot_net-floral,cahi,cardamine_hirsuta,3,
-2025-04-03,RG,sandhu_ladnertrunk,NS1,p1,full-plot,net-floral,sandhu_ladnertrunk_NS1_p1_full-plot_net-floral,drve,draba_verna,2,
-2025-04-03,RG,sandhu_ladnertrunk,NS1,d,full-plot,net-floral,sandhu_ladnertrunk_NS1_d_full-plot_net-floral,taof,taraxacum_officinale,2,
-2025-04-03,RG,sandhu_ladnertrunk,NS1,d,full-plot,net-floral,sandhu_ladnertrunk_NS1_d_full-plot_net-floral,cahi,cardamine_hirsuta,4,
-2025-04-03,RG,sandhu_ladnertrunk,NS1,d,full-plot,net-floral,sandhu_ladnertrunk_NS1_d_full-plot_net-floral,stme,stellaria_media,3,
-2025-04-03,RG,sandhu_ladnertrunk,NS1,d,full-plot,net-floral,sandhu_ladnertrunk_NS1_d_full-plot_net-floral,brra,brassica_rapa,1,
-2025-04-03,RG,lbf_ladnertrunk,NS1,p2,full-plot,net-floral,lbf_ladnertrunk_NS1_p2_full-plot_net-floral,taof,taraxacum_officinale,1,
-2025-04-03,RG,lbf_ladnertrunk,NS1,d,full-plot,net-floral,lbf_ladnertrunk_NS1_d_full-plot_net-floral,taof,taraxacum_officinale,2,
-2025-04-03,RG,lbf_ladnertrunk,NS1,d,full-plot,net-floral,lbf_ladnertrunk_NS1_d_full-plot_net-floral,cahi,cardamine_hirsuta,3,
-2025-04-16,RG,bks_96,NS1,p1,full-plot,net-floral,bks_96_NS1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,3,
-2025-04-16,RG,bks_96,NS1,p2,full-plot,net-floral,bks_96_NS1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,1,
-2025-04-16,RG,bks_96,NS1,p2,full-plot,net-floral,bks_96_NS1_p2_full-plot_net-floral,cahi,cardamine_hirsuta,2,
-2025-04-16,RG,bks_96,NS1,p2,full-plot,net-floral,bks_96_NS1_p2_full-plot_net-floral,sevu,senecio_vulgaris,2,
-2025-04-16,RG,bks_96,NS1,d,full-plot,net-floral,bks_96_NS1_d_full-plot_net-floral,mune,muscari_neglectum,3,
-2025-04-16,RG,bks_96,NS1,d,full-plot,net-floral,bks_96_NS1_d_full-plot_net-floral,cahi,cardamine_hirsuta,4,
-2025-04-16,RG,bks_96,NS1,d,full-plot,net-floral,bks_96_NS1_d_full-plot_net-floral,arth,arabidopsis _thaliana,4,
-2025-04-16,RG,bks_96,NS1,d,full-plot,net-floral,bks_96_NS1_d_full-plot_net-floral,lapu,lamium_purpureum,1,
-2025-04-16,RG,bks_96,NS1,d,full-plot,net-floral,bks_96_NS1_d_full-plot_net-floral,moli,montia_linearis,2,
-2025-04-16,RG,bks_96,NS1,d,full-plot,net-floral,bks_96_NS1_d_full-plot_net-floral,sevu,senecio_vulgaris,2,
-2025-04-16,RG,chong_96,NS1,p1,full-plot,net-floral,chong_96_NS1_p1_full-plot_net-floral,taof,taraxacum_officinale,2,
-2025-04-16,RG,chong_96,NS1,p2,full-plot,net-floral,chong_96_NS1_p2_full-plot_net-floral,cahi,cardamine_hirsuta,2,
-2025-04-16,RG,chong_96,NS1,p2,full-plot,net-floral,chong_96_NS1_p2_full-plot_net-floral,taof,taraxacum_officinale,1,
-2025-04-16,RG,chong_96,NS1,d,full-plot,net-floral,chong_96_NS1_d_full-plot_net-floral,cahi,cardamine_hirsuta,3,
-2025-04-16,RG,chong_96,NS1,d,full-plot,net-floral,chong_96_NS1_d_full-plot_net-floral,taof,taraxacum_officinale,2,
-2025-04-16,RG,chong_96,NS1,d,full-plot,net-floral,chong_96_NS1_d_full-plot_net-floral,stme,stellaria_media,2,
-2025-04-17,RG,bates_57b,NS,p1,full-plot,net-floral,bates_57b_NS_p1_full-plot_net-floral,taof,taraxacum_officinale,4,
-2025-04-17,RG,bates_57b,NS,p1,full-plot,net-floral,bates_57b_NS_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,3,
-2025-04-24,RG,gwb_neaves,NS1,p1,full-plot,net-floral,gwb_neaves_NS1_p1_full-plot_net-floral,taof,taraxacum_officinale,2,
-2025-04-24,RG,gwb_neaves,NS1,p1,full-plot,net-floral,gwb_neaves_NS1_p1_full-plot_net-floral,cegl,cerastium_glomeratum,2,
-2025-04-24,RG,gwb_neaves,NS1,p2,full-plot,net-floral,gwb_neaves_NS1_p2_full-plot_net-floral,taof,taraxacum_officinale,3,
-2025-04-24,RG,gwb_neaves,NS1,p2,full-plot,net-floral,gwb_neaves_NS1_p2_full-plot_net-floral,moli,montia_linearis,4,
-2025-04-24,RG,gwb_neaves,NS1,p2,full-plot,net-floral,gwb_neaves_NS1_p2_full-plot_net-floral,stme,stellaria_media,2,
-2025-04-24,RG,gwb_neaves,NS1,d,full-plot,net-floral,gwb_neaves_NS1_d_full-plot_net-floral,cegl,cerastium_glomeratum,3,
-2025-04-24,RG,gwb_neaves,NS1,d,full-plot,net-floral,gwb_neaves_NS1_d_full-plot_net-floral,taof,taraxacum_officinale,2,
-2025-04-24,RG,gwb_neaves,NS1,d,full-plot,net-floral,gwb_neaves_NS1_d_full-plot_net-floral,cahi,cardamine_hirsuta,4,
-2025-04-24,RG,gwb_neaves,NS1,d,full-plot,net-floral,gwb_neaves_NS1_d_full-plot_net-floral,sevu,senecio_vulgaris,2,
-2025-04-24,RG,gwb_neaves,NS1,d,full-plot,net-floral,gwb_neaves_NS1_d_full-plot_net-floral,plvi,planodes_virginicum,3,
-2025-04-24,RG,bks_neaves,NS1,p1,full-plot,net-floral,bks_neaves_NS1_p1_full-plot_net-floral,sevu,senecio_vulgaris,4,
-2025-04-24,RG,bks_neaves,NS1,p1,full-plot,net-floral,bks_neaves_NS1_p1_full-plot_net-floral,stme,stellaria_media,2,
-2025-04-24,RG,bks_neaves,NS1,p1,full-plot,net-floral,bks_neaves_NS1_p1_full-plot_net-floral,moli,montia_linearis,4,
-2025-04-24,RG,bks_neaves,NS1,p1,full-plot,net-floral,bks_neaves_NS1_p1_full-plot_net-floral,cegl,cerastium_glomeratum,3,
-2025-04-24,RG,bks_neaves,NS1,p2,full-plot,net-floral,bks_neaves_NS1_p2_full-plot_net-floral,plvi,planodes_virginicum,3,
-2025-04-24,RG,bks_neaves,NS1,p2,full-plot,net-floral,bks_neaves_NS1_p2_full-plot_net-floral,sevu,senecio_vulgaris,2,
-2025-04-24,RG,bks_neaves,NS1,d,full-plot,net-floral,bks_neaves_NS1_d_full-plot_net-floral,sevu,senecio_vulgaris,2,
-2025-04-24,RG,bks_neaves,NS1,d,full-plot,net-floral,bks_neaves_NS1_d_full-plot_net-floral,moli,montia_linearis,3,
-2025-04-24,RG,bks_neaves,NS1,d,full-plot,net-floral,bks_neaves_NS1_d_full-plot_net-floral,taof,taraxacum_officinale,2,
-2025-04-24,RG,bks_neaves,NS1,d,full-plot,net-floral,bks_neaves_NS1_d_full-plot_net-floral,cahi,cardamine_hirsuta,3,
-2025-04-24,RG,bks_neaves,NS1,d,full-plot,net-floral,bks_neaves_NS1_d_full-plot_net-floral,sara,sambucus_racemosa,5,
-2025-04-24,RG,bks_neaves,NS1,d,full-plot,net-floral,bks_neaves_NS1_d_full-plot_net-floral,plvi,planodes_virginicum,4,
-2025-04-27,RG,sandhu_ladnertrunk,NS2,p1,full-plot,net-floral,sandhu_ladnertrunk_NS2_p1_full-plot_net-floral,sevu,senecio_vulgaris,2,
-2025-04-27,RG,sandhu_ladnertrunk,NS2,p1,full-plot,net-floral,sandhu_ladnertrunk_NS2_p1_full-plot_net-floral,cahi,cardamine_hirsuta,1,
-2025-04-27,RG,sandhu_ladnertrunk,NS2,p1,full-plot,net-floral,sandhu_ladnertrunk_NS2_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2025-04-27,RG,sandhu_ladnertrunk,NS2,p2,full-plot,net-floral,sandhu_ladnertrunk_NS2_p2_full-plot_net-floral,sevu,senecio_vulgaris,2,
-2025-04-27,RG,sandhu_ladnertrunk,NS2,p2,full-plot,net-floral,sandhu_ladnertrunk_NS2_p2_full-plot_net-floral,cahi,cardamine_hirsuta,1,
-2025-04-27,RG,sandhu_ladnertrunk,NS2,p2,full-plot,net-floral,sandhu_ladnertrunk_NS2_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2025-04-27,RG,sandhu_ladnertrunk,NS2,d,full-plot,net-floral,sandhu_ladnertrunk_NS2_d_full-plot_net-floral,myst,myosotis stricta ,3,
-2025-04-27,RG,sandhu_ladnertrunk,NS2,d,full-plot,net-floral,sandhu_ladnertrunk_NS2_d_full-plot_net-floral,taof,taraxacum_officinale,2,
-2025-04-27,RG,sandhu_ladnertrunk,NS2,d,full-plot,net-floral,sandhu_ladnertrunk_NS2_d_full-plot_net-floral,cegl,cerastium_glomeratum,3,
-2025-04-27,RG,sandhu_ladnertrunk,NS2,d,full-plot,net-floral,sandhu_ladnertrunk_NS2_d_full-plot_net-floral,brra,brassica_rapa,2,
-2025-04-27,RG,sandhu_ladnertrunk,NS2,d,full-plot,net-floral,sandhu_ladnertrunk_NS2_d_full-plot_net-floral,rara,raphanus_raphanistrum,1,
-2025-04-27,RG,sandhu_ladnertrunk,NS2,d,full-plot,net-floral,sandhu_ladnertrunk_NS2_d_full-plot_net-floral,cahi,cardamine_hirsuta,3,
-2025-04-27,RG,sandhu_ladnertrunk,NS2,d,full-plot,net-floral,sandhu_ladnertrunk_NS2_d_full-plot_net-floral,sevu,senecio_vulgaris,2,
-2025-04-27,RG,sandhu_ladnertrunk,NS2,d,full-plot,net-floral,sandhu_ladnertrunk_NS2_d_full-plot_net-floral,rare,ranunculus_repens,1,
-2025-04-27,RG,lbf_ladnertrunk,NS2,p1,full-plot,net-floral,lbf_ladnertrunk_NS2_p1_full-plot_net-floral,rare,ranunculus_repens,3,
-2025-04-27,RG,lbf_ladnertrunk,NS2,p1,full-plot,net-floral,lbf_ladnertrunk_NS2_p1_full-plot_net-floral,taof,taraxacum_officinale,1,
-2025-04-27,RG,lbf_ladnertrunk,NS2,p1,full-plot,net-floral,lbf_ladnertrunk_NS2_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2025-04-27,RG,lbf_ladnertrunk,NS2,p2,full-plot,net-floral,lbf_ladnertrunk_NS2_p2_full-plot_net-floral,rare,ranunculus_repens,3,
-2025-04-27,RG,lbf_ladnertrunk,NS2,p2,full-plot,net-floral,lbf_ladnertrunk_NS2_p2_full-plot_net-floral,taof,taraxacum_officinale,2,
-2025-04-27,RG,lbf_ladnertrunk,NS2,p2,full-plot,net-floral,lbf_ladnertrunk_NS2_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2025-04-27,RG,lbf_ladnertrunk,NS2,d,full-plot,net-floral,lbf_ladnertrunk_NS2_d_full-plot_net-floral,taof,taraxacum_officinale,2,
-2025-04-27,RG,lbf_ladnertrunk,NS2,d,full-plot,net-floral,lbf_ladnertrunk_NS2_d_full-plot_net-floral,baor,barbarea orthoceras,3,
-2025-04-27,RG,lbf_ladnertrunk,NS2,d,full-plot,net-floral,lbf_ladnertrunk_NS2_d_full-plot_net-floral,cegl,cerastium_glomeratum,4,
-2025-04-27,RG,lbf_ladnertrunk,NS2,d,full-plot,net-floral,lbf_ladnertrunk_NS2_d_full-plot_net-floral,myst,myosotis stricta ,2,
-2025-04-29,RG,chong_68,NS2,p1,full-plot,net-floral,chong_68_NS2_p1_full-plot_net-floral,rare,ranunculus_repens,3,
-2025-04-29,RG,chong_68,NS2,p1,full-plot,net-floral,chong_68_NS2_p1_full-plot_net-floral,taof,taraxacum_officinale,2,
-2025-04-29,RG,chong_68,NS2,p1,full-plot,net-floral,chong_68_NS2_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2025-04-29,RG,chong_68,NS2,p2,full-plot,net-floral,chong_68_NS2_p2_full-plot_net-floral,rare,ranunculus_repens,3,
-2025-04-29,RG,chong_68,NS2,p2,full-plot,net-floral,chong_68_NS2_p2_full-plot_net-floral,taof,taraxacum_officinale,3,
-2025-04-29,RG,chong_68,NS2,p2,full-plot,net-floral,chong_68_NS2_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2025-04-29,RG,chong_68,NS2,d,full-plot,net-floral,chong_68_NS2_d_full-plot_net-floral,taof,taraxacum_officinale,3,
-2025-04-29,RG,chong_68,NS2,d,full-plot,net-floral,chong_68_NS2_d_full-plot_net-floral,capr,cardamine pratensis,2,
-2025-04-29,RG,chong_68,NS2,d,full-plot,net-floral,chong_68_NS2_d_full-plot_net-floral,sevu,senecio_vulgaris,2,
-2025-04-29,RG,chong_68,NS2,d,full-plot,net-floral,chong_68_NS2_d_full-plot_net-floral,brra,brassica_rapa,2,
-2025-04-29,RG,chong_68,NS2,d,full-plot,net-floral,chong_68_NS2_d_full-plot_net-floral,visa,vicia_sativa,1,
-2025-04-29,RG,bks_68,NS2,p1,full-plot,net-floral,bks_68_NS2_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2025-04-29,RG,bks_68,NS2,p2,full-plot,net-floral,bks_68_NS2_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2025-04-29,RG,bks_68,NS2,d,full-plot,net-floral,bks_68_NS2_d_full-plot_net-floral,cahi,cardamine_hirsuta,3,
-2025-04-29,RG,bks_68,NS2,d,full-plot,net-floral,bks_68_NS2_d_full-plot_net-floral,visa,vicia_sativa,2,
-2025-04-29,RG,bks_68,NS2,d,full-plot,net-floral,bks_68_NS2_d_full-plot_net-floral,moli,montia_linearis,2,
-2025-04-29,RG,bks_68,NS2,d,full-plot,net-floral,bks_68_NS2_d_full-plot_net-floral,myst,myosotis stricta ,3,
-2025-04-30,RG,bates_57b,NS2,p1,full-plot,net-floral,bates_57b_NS2_p1_full-plot_net-floral,taof,taraxacum_officinale,3,
-2025-04-30,RG,bates_57b,NS2,p1,full-plot,net-floral,bates_57b_NS2_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2025-04-30,RG,bates_57b,NS2,d,full-plot,net-floral,bates_57b_NS2_d_full-plot_net-floral,taof,taraxacum_officinale,4,
-2025-04-30,RG,bates_57b,NS2,d,full-plot,net-floral,bates_57b_NS2_d_full-plot_net-floral,stme,stellaria_media,2,
-2025-04-30,RG,bates_57b,NS2,d,full-plot,net-floral,bates_57b_NS2_d_full-plot_net-floral,raac,ranunculus_acris,1,
-2025-04-30,RG,bates_57b,NS2,d,full-plot,net-floral,bates_57b_NS2_d_full-plot_net-floral,lapu,lamium_purpureum,2,
-2025-04-30,RG,bates_57b,NS2,d,full-plot,net-floral,bates_57b_NS2_d_full-plot_net-floral,rare,ranunculus_repens,2,
-2025-04-30,RG,bates_57b,NS2,d,full-plot,net-floral,bates_57b_NS2_d_full-plot_net-floral,ruac,rumex_acetosa,3,
-2025-04-30,RG,bates_57b,NS2,d,full-plot,net-floral,bates_57b_NS2_d_full-plot_net-floral,cegl,cerastium_glomeratum,2,
-2025-04-30,RG,bates_57b,NS2,d,full-plot,net-floral,bates_57b_NS2_d_full-plot_net-floral,myst,myosotis stricta ,1,
-2025-04-30,RG,bates_57b,NS2,p2,full-plot,net-floral,bates_57b_NS2_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2025-04-30,RG,bates_57b,NS2,p2,full-plot,net-floral,bates_57b_NS2_p2_full-plot_net-floral,taof,taraxacum_officinale,3,
-2025-04-30,RG,bks_56,NS2,p1,full-plot,net-floral,bks_56_NS2_p1_full-plot_net-floral,madi,matricaria_discoidea,2,
-2025-04-30,RG,bks_56,NS2,p1,full-plot,net-floral,bks_56_NS2_p1_full-plot_net-floral,rasc,ranunculus_sceleratus,2,
-2025-04-30,RG,bks_56,NS2,p1,full-plot,net-floral,bks_56_NS2_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2025-04-30,RG,bks_56,NS2,p2,full-plot,net-floral,bks_56_NS2_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2025-04-30,RG,bks_56,NS2,d,full-plot,net-floral,bks_56_NS2_d_full-plot_net-floral,cahi,cardamine_hirsuta,4,
-2025-04-30,RG,bks_56,NS2,d,full-plot,net-floral,bks_56_NS2_d_full-plot_net-floral,myst,myosotis stricta ,5,
-2025-04-30,RG,bks_56,NS2,d,full-plot,net-floral,bks_56_NS2_d_full-plot_net-floral,visa,vicia_sativa,1,
-2025-04-30,RG,bks_56,NS2,d,full-plot,net-floral,bks_56_NS2_d_full-plot_net-floral,brra,brassica_rapa,3,
-2025-04-30,RG,bks_56,NS2,d,full-plot,net-floral,bks_56_NS2_d_full-plot_net-floral,lapu,lamium_purpureum,2,
-2025-04-30,RG,bks_56,NS2,d,full-plot,net-floral,bks_56_NS2_d_full-plot_net-floral,sevu,senecio_vulgaris,2,
-2025-04-30,RG,bks_56,NS2,d,full-plot,net-floral,bks_56_NS2_d_full-plot_net-floral,cegl,cerastium_glomeratum,4,
-2025-04-30,RG,bks_56,NS2,d,full-plot,net-floral,bks_56_NS2_d_full-plot_net-floral,cabu,capsella_bursa-pastoris,2,
-2025-04-30,RG,bks_56,NS2,d,full-plot,net-floral,bks_56_NS2_d_full-plot_net-floral,baor,barbarea orthoceras,2,
-2025-04-30,RG,bks_56,NS2,d,full-plot,net-floral,bks_56_NS2_d_full-plot_net-floral,mafu,malus_fusca,4,
-2025-04-30,RG,bks_56,NS2,d,full-plot,net-floral,bks_56_NS2_d_full-plot_net-floral,gedi,geranium_dissectum,1,
-2025-05-01,"AD, TK",bks_96,NS2,p1,full-plot,net-floral,bks_96_NS2_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2025-05-01,"AD, TK",bks_96,NS2,p2,full-plot,net-floral,bks_96_NS2_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2025-05-01,"AD, TK",bks_96,NS2,p2,full-plot,net-floral,bks_96_NS2_p2_full-plot_net-floral,rare,ranunculus_repens,1,
-2025-05-01,"AD, TK",bks_96,NS2,d,full-plot,net-floral,bks_96_NS2_d_full-plot_net-floral,arth,arabidopsis _thaliana,4,
-2025-05-01,"AD, TK",bks_96,NS2,d,full-plot,net-floral,bks_96_NS2_d_full-plot_net-floral,orum,ornithogalum_umbellatum,1,
-2025-05-01,"AD, TK",bks_96,NS2,d,full-plot,net-floral,bks_96_NS2_d_full-plot_net-floral,hyhi,hyacinthoides hispanica,2,
-2025-05-01,"AD, TK",bks_96,NS2,d,full-plot,net-floral,bks_96_NS2_d_full-plot_net-floral,sevu,senecio_vulgaris,3,
-2025-05-01,"AD, TK",bks_96,NS2,d,full-plot,net-floral,bks_96_NS2_d_full-plot_net-floral,moli,montia_linearis,4,
-2025-05-01,"AD, TK",chong_96,NS2,p1,full-plot,net-floral,chong_96_NS2_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2025-05-01,"AD, TK",chong_96,NS2,p2,full-plot,net-floral,chong_96_NS2_p2_full-plot_net-floral,taof,taraxacum_officinale,1,
-2025-05-01,"AD, TK",chong_96,NS2,p2,full-plot,net-floral,chong_96_NS2_p2_full-plot_net-floral,raac,ranunculus_acris,2,
-2025-05-01,"AD, TK",chong_96,NS2,p2,full-plot,net-floral,chong_96_NS2_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2025-05-01,"AD, TK",chong_96,NS2,d,full-plot,net-floral,chong_96_NS2_d_full-plot_net-floral,rara,raphanus_raphanistrum,2,
-2025-05-01,"AD, TK",chong_96,NS2,d,full-plot,net-floral,chong_96_NS2_d_full-plot_net-floral,taof,taraxacum_officinale,2,
-2025-05-01,"AD, TK",chong_96,NS2,d,full-plot,net-floral,chong_96_NS2_d_full-plot_net-floral,raac,ranunculus_acris,1,
-2025-05-01,"AD, TK",chong_96,NS2,d,full-plot,net-floral,chong_96_NS2_d_full-plot_net-floral,cegl,cerastium_glomeratum,1,
-2025-05-06,"AD, AH",gwb_neaves,NS2,p1,full-plot,net-floral,gwb_neaves_NS2_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2025-05-06,"AD, AH",gwb_neaves,NS2,p2,full-plot,net-floral,gwb_neaves_NS2_p2_full-plot_net-floral,rare,ranunculus_repens,3,
-2025-05-06,"AD, AH",gwb_neaves,NS2,p2,full-plot,net-floral,gwb_neaves_NS2_p2_full-plot_net-floral,taof,taraxacum_officinale,1,
-2025-05-06,"AD, AH",gwb_neaves,NS2,p2,full-plot,net-floral,gwb_neaves_NS2_p2_full-plot_net-floral,cegl,cerastium_glomeratum,2,
-2025-05-06,"AD, AH",gwb_neaves,NS2,p2,full-plot,net-floral,gwb_neaves_NS2_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2025-04-18,RG,avtar_168,NS1,p1,full-plot,net-floral,avtar_168_NS1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,3,
-2025-04-18,RG,avtar_168,NS1,p2,full-plot,net-floral,avtar_168_NS1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,3,
-2025-04-18,RG,avtar_168,NS1,d,full-plot,net-floral,avtar_168_NS1_d_full-plot_net-floral,cahi,cardamine_hirsuta,3,
-2025-04-18,RG,avtar_168,NS1,d,full-plot,net-floral,avtar_168_NS1_d_full-plot_net-floral,cegl,cerastium_glomeratum,1,
-2025-04-18,RG,avtar_168,NS1,d,full-plot,net-floral,avtar_168_NS1_d_full-plot_net-floral,taof,taraxacum_officinale,1,
-2025-04-18,RG,avtar_168,NS1,d,full-plot,net-floral,avtar_168_NS1_d_full-plot_net-floral,cahi,cardamine_hirsuta,2,
-2025-04-18,RG,surjit_168,NS1,p1,full-plot,net-floral,surjit_168_NS1_p1_full-plot_net-floral,cahi,cardamine_hirsuta,2,
-2025-04-18,RG,surjit_168,NS1,p1,full-plot,net-floral,surjit_168_NS1_p1_full-plot_net-floral,drve,draba_verna,1,
-2025-04-18,RG,surjit_168,NS1,p2,full-plot,net-floral,surjit_168_NS1_p2_full-plot_net-floral,cahi,cardamine_hirsuta,3,
-2025-04-18,RG,surjit_168,NS1,p2,full-plot,net-floral,surjit_168_NS1_p2_full-plot_net-floral,taof,taraxacum_officinale,1,
-2025-04-18,RG,surjit_168,NS1,d,full-plot,net-floral,surjit_168_NS1_d_full-plot_net-floral,stme,stellaria_media,3,
-2025-04-18,RG,surjit_168,NS1,d,full-plot,net-floral,surjit_168_NS1_d_full-plot_net-floral,lapu,lamium_purpureum,2,
-2025-04-18,RG,surjit_168,NS1,d,full-plot,net-floral,surjit_168_NS1_d_full-plot_net-floral,vear,veronica_arvensis,1,
-2025-04-18,RG,surjit_168,NS1,d,full-plot,net-floral,surjit_168_NS1_d_full-plot_net-floral,cahi,cardamine_hirsuta,5,
-2025-04-18,RG,surjit_168,NS1,d,full-plot,net-floral,surjit_168_NS1_d_full-plot_net-floral,erci,erodium_cicutarium,1,
-2025-04-18,RG,surjit_168,NS1,d,full-plot,net-floral,surjit_168_NS1_d_full-plot_net-floral,rara,raphanus_raphanistrum,2,
-2025-04-18,RG,surjit_168,NS1,d,full-plot,net-floral,surjit_168_NS1_d_full-plot_net-floral,taof,taraxacum_officinale,2,
-2025-04-18,RG,surjit_168,NS1,d,full-plot,net-floral,surjit_168_NS1_d_full-plot_net-floral,drve,draba_verna,4,
-2025-05-06,"AD, AH",bks_neaves,NS2,p1,full-plot,net-floral,bks_neaves_NS2_p1_full-plot_net-floral,rare,ranunculus_repens,3,
-2025-05-06,"AD, AH",bks_neaves,NS2,p1,full-plot,net-floral,bks_neaves_NS2_p1_full-plot_net-floral,moli,montia_linearis,3,
-2025-05-06,"AD, AH",bks_neaves,NS2,p1,full-plot,net-floral,bks_neaves_NS2_p1_full-plot_net-floral,myst,myosotis stricta ,3,
-2025-05-06,"AD, AH",bks_neaves,NS2,p1,full-plot,net-floral,bks_neaves_NS2_p1_full-plot_net-floral,sevu,senecio_vulgaris,2,
-2025-05-06,"AD, AH",bks_neaves,NS2,p2,full-plot,net-floral,bks_neaves_NS2_p2_full-plot_net-floral,rare,ranunculus_repens,3,
-2025-05-06,"AD, AH",bks_neaves,NS2,p2,full-plot,net-floral,bks_neaves_NS2_p2_full-plot_net-floral,rasc,ranunculus_sceleratus,3,
-2025-05-06,"AD, AH",bks_neaves,NS2,p2,full-plot,net-floral,bks_neaves_NS2_p2_full-plot_net-floral,myla,myosotis_laxa,2,
-2025-05-06,"AD, AH",bks_neaves,NS2,d,full-plot,net-floral,bks_neaves_NS2_d_full-plot_net-floral,crdo,crataegus_douglasii,4,
-2025-05-06,"AD, AH",bks_neaves,NS2,d,full-plot,net-floral,bks_neaves_NS2_d_full-plot_net-floral,cape,cardamine_pensylvanica,3,
-2025-05-06,"AD, AH",bks_neaves,NS2,d,full-plot,net-floral,bks_neaves_NS2_d_full-plot_net-floral,sara,sambucus_racemosa,2,
-2025-05-06,"AD, AH",bks_neaves,NS2,d,full-plot,net-floral,bks_neaves_NS2_d_full-plot_net-floral,mydi,myosotis_discolor,3,
-2025-05-06,"AD, AH",bks_neaves,NS2,d,full-plot,net-floral,bks_neaves_NS2_d_full-plot_net-floral,sevu,senecio_vulgaris,3,
-2025-05-13,AH,surjit_168,NS2,p1,full-plot,net-floral,surjit_168_NS2_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2025-05-13,AH,surjit_168,NS2,p2,full-plot,net-floral,surjit_168_NS2_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2025-05-13,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,trre,trifolium_repens,2,
-2025-05-13,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,arth,arabidopsis _thaliana,3,
-2025-05-13,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,mydi,myosotis_discolor,3,
-2025-05-13,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,rasc,ranunculus_sceleratus,3,
-2025-05-13,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,leca,lepidium_campestre,3,
-2025-05-13,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,plla,plantago_lanceolata,2,
-2025-05-13,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,ruac,rumex_acetosa,4,
-2025-05-13,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,trdu,trifolium_dubium,3,
-2025-05-13,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,vihi,vicia_hirsuta,4,
-2025-05-13,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,rara,raphanus_raphanistrum,4,
-2025-05-13,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,trpr,trifolium_pratense,1,
-2025-05-13,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,hyra,hypochaeris_radicata,1,
-2025-05-13,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,erci,erodium_cicutarium,2,
-2025-05-13,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,trin,tripleurospermum_inodorum,1,
-2025-05-13,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,soas,sonchus_asper,2,
-2025-05-13,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,raac,ranunculus_acris,2,
-2025-05-13,AH,avtar_168,NS2,p1,full-plot,net-floral,avtar_168_NS2_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2025-05-13,AH,avtar_168,NS2,p2,full-plot,net-floral,avtar_168_NS2_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
-2025-05-13,AD,avtar_168,NS2,d,full-plot,net-floral,avtar_168_NS2_d_full-plot_net-floral,arth,arabidopsis _thaliana,1,
-2025-05-13,AD,avtar_168,NS2,d,full-plot,net-floral,avtar_168_NS2_d_full-plot_net-floral,rasc,ranunculus_sceleratus,1,
-2025-05-13,AD,avtar_168,NS2,d,full-plot,net-floral,avtar_168_NS2_d_full-plot_net-floral,ruac,rumex_acetosa,3,
-2025-05-13,AD,avtar_168,NS2,d,full-plot,net-floral,avtar_168_NS2_d_full-plot_net-floral,drve,draba_verna,1,
-2025-05-13,AD,avtar_168,NS2,d,full-plot,net-floral,avtar_168_NS2_d_full-plot_net-floral,rare,ranunculus_repens,5,
-2025-05-13,AD,avtar_168,NS2,d,full-plot,net-floral,avtar_168_NS2_d_full-plot_net-floral,rara,raphanus_raphanistrum,2,
-2025-05-13,AD,avtar_168,NS2,d,full-plot,net-floral,avtar_168_NS2_d_full-plot_net-floral,gedi,geranium_dissectum,2,
-2025-05-13,AD,avtar_168,NS2,d,full-plot,net-floral,avtar_168_NS2_d_full-plot_net-floral,baor,barbarea orthoceras,3,
+4/13/2024,RG,chong_96,NS,p2,full-plot,net-floral,chong_96_NS_p2_full-plot_net-floral,taof,taraxacum_officinale,2,
+4/16/2024,RG,bates_57b,NS,p1,full-plot,net-floral,bates_57b_NS_p1_full-plot_net-floral,taof,taraxacum_officinale,4,
+4/16/2024,CN,bates_57b,NS,p2,full-plot,net-floral,bates_57b_NS_p2_full-plot_net-floral,taof,taraxacum_officinale,4,
+4/18/2024,RG,bks_96,NS,p1,full-plot,net-floral,bks_96_NS_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,4,
+4/18/2024,RG,bks_96,NS,p2,full-plot,net-floral,bks_96_NS_p2_full-plot_net-floral,taof,taraxacum_officinale,1,
+4/18/2024,RG,bks_96,NS,p2,full-plot,net-floral,bks_96_NS_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,4,
+4/18/2024,RG,bks_96,NS,d,full-plot,net-floral,bks_96_NS_d_full-plot_net-floral,arth,arabidopsis _thaliana,3,
+4/18/2024,RG,bks_96,NS,d,full-plot,net-floral,bks_96_NS_d_full-plot_net-floral,cahi,cardamine_hirsuta,4,
+4/18/2024,RG,bks_96,NS,d,full-plot,net-floral,bks_96_NS_d_full-plot_net-floral,cabu,capsella_bursa-pastoris,4,
+4/18/2024,RG,bks_96,NS,d,full-plot,net-floral,bks_96_NS_d_full-plot_net-floral,taof,taraxacum_officinale,2,
+4/18/2024,RG,bks_68,NS,p1,full-plot,net-floral,bks_68_NS_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,4,"no floral abundance recorded for this plot, assumed same blueberry as p2 and 1-10 MOLI since it was only observed in 0.5% of one quadrat"
+4/18/2024,RG,bks_68,NS,p1,full-plot,net-floral,bks_68_NS_p1_full-plot_net-floral,moli,montia_linearis,1,"no floral abundance recorded for this plot, assumed same blueberry as p2 and 1-10 MOLI since MOLI was only observed in 0.5% of one quadrat"
+4/18/2024,TK,bks_68,NS,p2,full-plot,net-floral,bks_68_NS_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,4,
+4/18/2024,TK,bks_68,NS,d,full-plot,net-floral,bks_68_NS_d_full-plot_net-floral,sevu,senecio_vulgaris,4,
+4/18/2024,TK,bks_68,NS,d,full-plot,net-floral,bks_68_NS_d_full-plot_net-floral,arth,arabidopsis _thaliana,5,
+4/18/2024,TK,bks_68,NS,d,full-plot,net-floral,bks_68_NS_d_full-plot_net-floral,cahi,cardamine_hirsuta,4,
+4/18/2024,TK,bks_68,NS,d,full-plot,net-floral,bks_68_NS_d_full-plot_net-floral,moli,montia_linearis,4,
+4/18/2024,TK,chong_96,NS,d,full-plot,net-floral,chong_96_NS_d_full-plot_net-floral,taof,taraxacum_officinale,2,
+4/18/2024,TK,chong_96,NS,d,full-plot,net-floral,chong_96_NS_d_full-plot_net-floral,mune,muscari_neglectum,1,
+4/19/2024,TK,bates_57b,NS,d,full-plot,net-floral,bates_57b_NS_d_full-plot_net-floral,taof,taraxacum_officinale,4,
+4/19/2024,TK,bates_57b,NS,d,full-plot,net-floral,bates_57b_NS_d_full-plot_net-floral,lapu,lamium_purpureum,3,
+4/19/2024,TK,bates_57b,NS,d,full-plot,net-floral,bates_57b_NS_d_full-plot_net-floral,cegl,cerastium_glomeratum,4,
+4/19/2024,TK,bks_56,NS,d,full-plot,net-floral,bks_56_NS_d_full-plot_net-floral,arth,arabidopsis _thaliana,5,
+4/19/2024,TK,bks_56,NS,d,full-plot,net-floral,bks_56_NS_d_full-plot_net-floral,cahi,cardamine_hirsuta,5,
+4/19/2024,TK,bks_56,NS,d,full-plot,net-floral,bks_56_NS_d_full-plot_net-floral,acer,ask tyler,4,
+4/19/2024,TK,bks_56,NS,d,full-plot,net-floral,bks_56_NS_d_full-plot_net-floral,brra,brassica_rapa,3,
+4/19/2024,TK,bks_56,NS,d,full-plot,net-floral,bks_56_NS_d_full-plot_net-floral,drve,draba_verna,5,
+4/19/2024,TK,bks_56,NS,d,full-plot,net-floral,bks_56_NS_d_full-plot_net-floral,cegl,cerastium_glomeratum,5,
+4/19/2024,TK,bks_56,NS,d,full-plot,net-floral,bks_56_NS_d_full-plot_net-floral,lapu,lamium_purpureum,3,
+4/19/2024,TK,bks_56,NS,d,full-plot,net-floral,bks_56_NS_d_full-plot_net-floral,crmo,crataegus_monogyna,5,
+4/19/2024,TK,bks_56,NS,d,full-plot,net-floral,bks_56_NS_d_full-plot_net-floral,sevu,senecio_vulgaris,4,
+4/19/2024,TK,bks_56,NS,d,full-plot,net-floral,bks_56_NS_d_full-plot_net-floral,cabu,capsella_bursa-pastoris,5,
+4/19/2024,"TK, RG",bks_56,NS,p1,full-plot,net-floral,bks_56_NS_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+4/19/2024,"TK, RG",bks_56,NS,p2,full-plot,net-floral,bks_56_NS_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+4/21/2024,CN,chong_68,NS,p1,full-plot,net-floral,chong_68_NS_p1_full-plot_net-floral,rare,ranunculus_repens,3,
+4/21/2024,CN,chong_68,NS,p1,full-plot,net-floral,chong_68_NS_p1_full-plot_net-floral,taof,taraxacum_officinale,3,
+4/21/2024,CN,chong_68,NS,p1,full-plot,net-floral,chong_68_NS_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,75% in bloom
+4/21/2024,CN,chong_68,NS,p2,full-plot,net-floral,chong_68_NS_p2_full-plot_net-floral,taof,taraxacum_officinale,4,
+4/21/2024,CN,chong_68,NS,p2,full-plot,net-floral,chong_68_NS_p2_full-plot_net-floral,rare,ranunculus_repens,2,
+4/21/2024,CN,chong_68,NS,p2,full-plot,net-floral,chong_68_NS_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,75% in bloom
+4/21/2024,CN,chong_68,NS,d,full-plot,net-floral,chong_68_NS_d_full-plot_net-floral,taof,taraxacum_officinale,3,
+4/21/2024,CN,chong_68,NS,d,full-plot,net-floral,chong_68_NS_d_full-plot_net-floral,cahi,cardamine_hirsuta,2,
+4/23/2024,CN,avtar_168,NS,p2,full-plot,net-floral,avtar_168_NS_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,75% in bloom
+4/23/2024,"RG, CN",avtar_168,NS,d,full-plot,net-floral,avtar_168_NS_d_full-plot_net-floral,clpa,claytonia_parviflora,1,
+4/23/2024,"RG, CN",avtar_168,NS,d,full-plot,net-floral,avtar_168_NS_d_full-plot_net-floral,cegl,cerastium_glomeratum,2,
+4/24/2024,RG,surjit_168,,p2,full-plot,net-floral,surjit_168__p2_full-plot_net-floral,vaco,vaccinium_corymbosum,4,75% in bloom but small bushes
+4/24/2024,RG,surjit_168,,p1,full-plot,net-floral,surjit_168__p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,"75% in bloom, taller bushes"
+4/24/2024,RG,surjit_168,,d,full-plot,net-floral,surjit_168__d_full-plot_net-floral,drve,draba_verna,3,common whitlow grass
+4/24/2024,RG,surjit_168,,d,full-plot,net-floral,surjit_168__d_full-plot_net-floral,cahi,cardamine_hirsuta,3,hairy bittercress
+4/24/2024,RG,surjit_168,,d,full-plot,net-floral,surjit_168__d_full-plot_net-floral,arth,arabidopsis _thaliana,4,mouse-ear cress
+4/30/2024,"TK, RG",bks_neaves,NS,p1,full-plot,net-floral,bks_neaves_NS_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,3,
+4/30/2024,"TK, RG",bks_neaves,NS,d,full-plot,net-floral,bks_neaves_NS_d_full-plot_net-floral,clpa,claytonia_parviflora,4,
+4/30/2024,"TK, RG",bks_neaves,NS,d,full-plot,net-floral,bks_neaves_NS_d_full-plot_net-floral,sara,sambucus_racemosa,5,
+4/30/2024,"TK, RG",bks_neaves,NS,d,full-plot,net-floral,bks_neaves_NS_d_full-plot_net-floral,mydi,myosotis_discolor,4,
+4/30/2024,"TK, RG",bks_neaves,NS,d,full-plot,net-floral,bks_neaves_NS_d_full-plot_net-floral,arth,arabidopsis _thaliana,3,
+4/30/2024,TK,bks_neaves,NS,p2,full-plot,net-floral,bks_neaves_NS_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,4,
+4/30/2024,TK,gwb_neaves,NS,p1,full-plot,net-floral,gwb_neaves_NS_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+4/30/2024,TK,gwb_neaves,NS,p1,full-plot,net-floral,gwb_neaves_NS_p1_full-plot_net-floral,lapu,lamium_purpureum,2,
+4/30/2024,TK,gwb_neaves,NS,p1,full-plot,net-floral,gwb_neaves_NS_p1_full-plot_net-floral,cegl,cerastium_glomeratum,3,
+4/30/2024,TK,gwb_neaves,NS,p1,full-plot,net-floral,gwb_neaves_NS_p1_full-plot_net-floral,taof,taraxacum_officinale,2,
+4/30/2024,TK,gwb_neaves,NS,p1,full-plot,net-floral,gwb_neaves_NS_p1_full-plot_net-floral,rare,ranunculus_repens,1,
+4/30/2024,TK,gwb_neaves,NS,p2,full-plot,net-floral,gwb_neaves_NS_p2_full-plot_net-floral,taof,taraxacum_officinale,3,
+4/30/2024,TK,gwb_neaves,NS,p2,full-plot,net-floral,gwb_neaves_NS_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+4/30/2024,TK,gwb_neaves,NS,p2,full-plot,net-floral,gwb_neaves_NS_p2_full-plot_net-floral,cegl,cerastium_glomeratum,5,
+4/30/2024,TK,gwb_neaves,NS,p2,full-plot,net-floral,gwb_neaves_NS_p2_full-plot_net-floral,arth,arabidopsis _thaliana,1,
+4/30/2024,TK,gwb_neaves,NS,p2,full-plot,net-floral,gwb_neaves_NS_p2_full-plot_net-floral,cahi,cardamine_hirsuta,3,
+4/30/2024,TK,gwb_neaves,NS,p2,full-plot,net-floral,gwb_neaves_NS_p2_full-plot_net-floral,mydi,myosotis_discolor,2,
+4/30/2024,TK,gwb_neaves,NS,d,full-plot,net-floral,gwb_neaves_NS_d_full-plot_net-floral,mydi,myosotis_discolor,2,
+4/30/2024,TK,gwb_neaves,NS,d,full-plot,net-floral,gwb_neaves_NS_d_full-plot_net-floral,lapu,lamium_purpureum,2,
+4/30/2024,TK,gwb_neaves,NS,d,full-plot,net-floral,gwb_neaves_NS_d_full-plot_net-floral,arth,arabidopsis _thaliana,3,
+4/30/2024,TK,gwb_neaves,NS,d,full-plot,net-floral,gwb_neaves_NS_d_full-plot_net-floral,taof,taraxacum_officinale,3,
+4/30/2024,TK,gwb_neaves,NS,d,full-plot,net-floral,gwb_neaves_NS_d_full-plot_net-floral,cegl,cerastium_glomeratum,2,
+4/30/2024,TK,gwb_neaves,NS,d,full-plot,net-floral,gwb_neaves_NS_d_full-plot_net-floral,rare,ranunculus_repens,1,
+4/30/2024,TK,gwb_neaves,NS,d,full-plot,net-floral,gwb_neaves_NS_d_full-plot_net-floral,sevu,senecio_vulgaris,3,
+4/30/2024,TK,gwb_neaves,NS,d,full-plot,net-floral,gwb_neaves_NS_d_full-plot_net-floral,drve,draba_verna,3,
+5/14/2024,AD,chong_68,1,p1,full-plot,net-floral,chong_68_1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,75% in bloom
+5/14/2024,AD,chong_68,1,p1,full-plot,net-floral,chong_68_1_p1_full-plot_net-floral,rare,ranunculus_repens,5,
+5/14/2024,AD,chong_68,1,p2,full-plot,net-floral,chong_68_1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,60% in bloom
+5/14/2024,AD,chong_68,1,p2,full-plot,net-floral,chong_68_1_p2_full-plot_net-floral,rare,ranunculus_repens,5,
+5/14/2024,AD,chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,visa,vicia_sativa,2,
+5/14/2024,AD,chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,trdu,trifolium_dubium,2,
+5/14/2024,AD,chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,rare,ranunculus_repens,3,
+5/14/2024,AD,chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,taof,taraxacum_officinale,2,
+5/14/2024,AD,chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,arth,arabidopsis _thaliana,2,
+5/14/2024,AD,bks_68,1,p1,full-plot,net-floral,bks_68_1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,"Bushes are more upright than chong farm, not as many flowers ocerhang into quadrat. 60% in bloom."
+5/14/2024,AD,bks_68,1,p2,full-plot,net-floral,bks_68_1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,60% in bloom
+5/14/2024,AD,bks_68,1,p2,full-plot,net-floral,bks_68_1_p2_full-plot_net-floral,rare,ranunculus_repens,1,~8
+5/14/2024,AD,bks_68,1,d,full-plot,net-floral,bks_68_1_d_full-plot_net-floral,gedi,geranium_dissectum,1,
+5/14/2024,AD,bks_68,1,d,full-plot,net-floral,bks_68_1_d_full-plot_net-floral,leca,lepidium_campestre,1,
+5/14/2024,AD,bks_68,1,d,full-plot,net-floral,bks_68_1_d_full-plot_net-floral,mydi,myosotis_discolor,3,
+5/15/2024,AD,chong_96,1,p1,full-plot,net-floral,chong_96_1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,VACO 65% in bloom
+5/15/2024,AD,chong_96,1,p1,full-plot,net-floral,chong_96_1_p1_full-plot_net-floral,rare,ranunculus_repens,3,
+5/15/2024,AD,chong_96,1,p2,full-plot,net-floral,chong_96_1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,VACO 65% in bloom
+5/15/2024,AD,chong_96,1,p2,full-plot,net-floral,chong_96_1_p2_full-plot_net-floral,rare,ranunculus_repens,3,
+5/15/2024,AD,chong_96,1,d,full-plot,net-floral,chong_96_1_d_full-plot_net-floral,rara,raphanus_raphanistrum,4,"~1300 flowers. Ditch very wide, middle, near, and far "
+5/15/2024,AD,chong_96,1,d,full-plot,net-floral,chong_96_1_d_full-plot_net-floral,crmo,crataegus_monogyna,5,"3 trees. Ditch very wide, middle, near, and far "
+5/15/2024,AD,chong_96,1,d,full-plot,net-floral,chong_96_1_d_full-plot_net-floral,rare,ranunculus_repens,2,"35 flowers. Ditch very wide, middle, near, and far "
+5/15/2024,AD,chong_96,1,d,full-plot,net-floral,chong_96_1_d_full-plot_net-floral,taof,taraxacum_officinale,1,"~5 flowers. Ditch very wide, middle, near, and far "
+5/15/2024,AD,chong_96,1,d,full-plot,net-floral,chong_96_1_d_full-plot_net-floral,rusp,rubus_spectabilis,2,"~15 flowers. Ditch very wide, middle, near, and far "
+5/15/2024,AD,chong_96,1,d,full-plot,net-floral,chong_96_1_d_full-plot_net-floral,sara,sambucus_racemosa,2,"~190 flowers. Ditch very wide, middle, near, and far "
+5/15/2024,AD,chong_96,1,d,full-plot,net-floral,chong_96_1_d_full-plot_net-floral,ronu,rosa_nutkana,1,"~2 flowers. Ditch very wide, middle, near, and far "
+5/15/2024,AD,bks_96,1,p1,full-plot,net-floral,bks_96_1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,"VACO 60% in bloom. Smaller plants, more dead (a couple per row)"
+5/15/2024,AD,bks_96,1,p1,full-plot,net-floral,bks_96_1_p1_full-plot_net-floral,clpa,claytonia_parviflora,2,"~32 flowers. Smaller plants, more dead (a couple per row)"
+5/15/2024,AD,bks_96,1,p2,full-plot,net-floral,bks_96_1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,"VACO 60% in bloom. Smaller plants, more dead (a couple per row)"
+5/15/2024,AD,bks_96,1,p2,full-plot,net-floral,bks_96_1_p2_full-plot_net-floral,clpa,claytonia_parviflora,2,"~17 flowers. Smaller plants, more dead (a couple per row)"
+5/15/2024,AD,bks_96,1,d,full-plot,net-floral,bks_96_1_d_full-plot_net-floral,rara,raphanus_raphanistrum,2,250; Jointed charlock
+5/15/2024,AD,bks_96,1,d,full-plot,net-floral,bks_96_1_d_full-plot_net-floral,clpa,claytonia_parviflora,3,220
+5/15/2024,AD,bks_96,1,d,full-plot,net-floral,bks_96_1_d_full-plot_net-floral,rare,ranunculus_repens,1,7
+5/15/2024,AD,bks_96,1,d,full-plot,net-floral,bks_96_1_d_full-plot_net-floral,trdu,trifolium_dubium,3,200; lesser hop trefoil
+5/15/2024,AD,bks_96,1,d,full-plot,net-floral,bks_96_1_d_full-plot_net-floral,sevu,senecio_vulgaris,3,700; Groundsel
+5/15/2024,AD,bks_96,1,d,full-plot,net-floral,bks_96_1_d_full-plot_net-floral,arth,arabidopsis _thaliana,3,400; cress
+5/15/2024,AD,bks_96,1,d,full-plot,net-floral,bks_96_1_d_full-plot_net-floral,orum,ornithogalum_umbellatum,2,15; Common star of Bethlehem
+5/15/2024,AD,bks_96,1,d,full-plot,net-floral,bks_96_1_d_full-plot_net-floral,visa,vicia_sativa,2,15
+5/15/2024,AD,bks_96,1,d,full-plot,net-floral,bks_96_1_d_full-plot_net-floral,gedi,geranium_dissectum,2,20
+5/22/2024,AD,gwb_neaves,1,p1,full-plot,net-floral,gwb_neaves_1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,55%; this plot was very flooded
+5/22/2024,AD,gwb_neaves,1,p1,full-plot,net-floral,gwb_neaves_1_p1_full-plot_net-floral,trre,trifolium_repens,3,110; this plot was very flooded
+5/22/2024,AD,gwb_neaves,1,p1,full-plot,net-floral,gwb_neaves_1_p1_full-plot_net-floral,ruac,rumex_acetosa,2,50; this plot was very flooded
+5/22/2024,AD,gwb_neaves,1,p1,full-plot,net-floral,gwb_neaves_1_p1_full-plot_net-floral,rare,ranunculus_repens,1,5; this plot was very flooded
+5/22/2024,AD,gwb_neaves,1,p2,full-plot,net-floral,gwb_neaves_1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,55%
+5/22/2024,AD,gwb_neaves,1,p2,full-plot,net-floral,gwb_neaves_1_p2_full-plot_net-floral,rare,ranunculus_repens,3,150
+5/22/2024,AD,gwb_neaves,1,p2,full-plot,net-floral,gwb_neaves_1_p2_full-plot_net-floral,trre,trifolium_repens,3,190
+5/22/2024,AD,gwb_neaves,1,p2,full-plot,net-floral,gwb_neaves_1_p2_full-plot_net-floral,stme,stellaria_media,3,120
+5/22/2024,AD,gwb_neaves,1,p2,full-plot,net-floral,gwb_neaves_1_p2_full-plot_net-floral,taof,taraxacum_officinale,1,3
+5/22/2024,AD,gwb_neaves,1,p2,full-plot,net-floral,gwb_neaves_1_p2_full-plot_net-floral,ruac,rumex_acetosa,3,250
+5/22/2024,AD,gwb_neaves,1,d,full-plot,net-floral,gwb_neaves_1_d_full-plot_net-floral,ruac,rumex_acetosa,4,9000
+5/22/2024,AD,gwb_neaves,1,d,full-plot,net-floral,gwb_neaves_1_d_full-plot_net-floral,cahi,cardamine_hirsuta,2,55
+5/22/2024,AD,gwb_neaves,1,d,full-plot,net-floral,gwb_neaves_1_d_full-plot_net-floral,rosy,rorippa_sylvestris,2,25; 5 flowers per plant
+5/22/2024,AD,gwb_neaves,1,d,full-plot,net-floral,gwb_neaves_1_d_full-plot_net-floral,mydi,myosotis_discolor,3,300
+5/22/2024,AD,gwb_neaves,1,d,full-plot,net-floral,gwb_neaves_1_d_full-plot_net-floral,trre,trifolium_repens,3,365
+5/22/2024,AD,gwb_neaves,1,d,full-plot,net-floral,gwb_neaves_1_d_full-plot_net-floral,stme,stellaria_media,4,1500
+5/22/2024,AD,gwb_neaves,1,d,full-plot,net-floral,gwb_neaves_1_d_full-plot_net-floral,trdu,trifolium_dubium,2,90
+5/22/2024,AD,gwb_neaves,1,d,full-plot,net-floral,gwb_neaves_1_d_full-plot_net-floral,gedi,geranium_dissectum,2,80
+5/22/2024,AD,gwb_neaves,1,d,full-plot,net-floral,gwb_neaves_1_d_full-plot_net-floral,rare,ranunculus_repens,3,550
+5/22/2024,AD,gwb_neaves,1,d,full-plot,net-floral,gwb_neaves_1_d_full-plot_net-floral,taof,taraxacum_officinale,2,40
+5/22/2024,AD,bks_neaves,1,p1,full-plot,net-floral,bks_neaves_1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+5/22/2024,AD,bks_neaves,1,p1,full-plot,net-floral,bks_neaves_1_p1_full-plot_net-floral,rare,ranunculus_repens,3,110
+5/22/2024,AD,bks_neaves,1,p1,full-plot,net-floral,bks_neaves_1_p1_full-plot_net-floral,sevu,senecio_vulgaris,3,250
+5/22/2024,AD,bks_neaves,1,p2,full-plot,net-floral,bks_neaves_1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,60%
+5/22/2024,AD,bks_neaves,1,p2,full-plot,net-floral,bks_neaves_1_p2_full-plot_net-floral,rasc,ranunculus_sceleratus,2,30
+5/22/2024,AD,bks_neaves,1,p2,full-plot,net-floral,bks_neaves_1_p2_full-plot_net-floral,rare,ranunculus_repens,3,210
+5/22/2024,AD,bks_neaves,1,p2,full-plot,net-floral,bks_neaves_1_p2_full-plot_net-floral,sevu,senecio_vulgaris,1,10
+5/22/2024,AD,bks_neaves,1,p2,full-plot,net-floral,bks_neaves_1_p2_full-plot_net-floral,myla,myosotis_laxa,2,20; bay forget-me-not
+5/22/2024,AD,bks_neaves,1,d,full-plot,net-floral,bks_neaves_1_d_full-plot_net-floral,rare,ranunculus_repens,2,30
+5/22/2024,AD,bks_neaves,1,d,full-plot,net-floral,bks_neaves_1_d_full-plot_net-floral,arth,arabidopsis _thaliana,3,110
+5/22/2024,AD,bks_neaves,1,d,full-plot,net-floral,bks_neaves_1_d_full-plot_net-floral,mydi,myosotis_discolor,3,280
+5/22/2024,AD,bks_neaves,1,d,full-plot,net-floral,bks_neaves_1_d_full-plot_net-floral,vese,veronica_serpyllifolia,1,5. thyme leafed speedwall
+5/22/2024,AD,bks_neaves,1,d,full-plot,net-floral,bks_neaves_1_d_full-plot_net-floral,sevu,senecio_vulgaris,4,1050
+5/22/2024,AD,bks_neaves,1,d,full-plot,net-floral,bks_neaves_1_d_full-plot_net-floral,ruac,rumex_acetosa,2,50
+5/22/2024,AD,bks_neaves,1,d,full-plot,net-floral,bks_neaves_1_d_full-plot_net-floral,stme,stellaria_media,1,10
+5/22/2024,AD,bks_neaves,1,d,full-plot,net-floral,bks_neaves_1_d_full-plot_net-floral,moli,montia_linearis,4,2110. narrow leaf montia
+5/22/2024,AD,bks_neaves,1,d,full-plot,net-floral,bks_neaves_1_d_full-plot_net-floral,cefo,cerastium_fontanum,1,5. mouse eared chickweed
+5/22/2024,AD,bks_neaves,1,d,full-plot,net-floral,bks_neaves_1_d_full-plot_net-floral,crdo,crataegus_douglasii,1,10. black hawthorn
+5/22/2024,AD,bks_neaves,1,d,full-plot,net-floral,bks_neaves_1_d_full-plot_net-floral,trdu,trifolium_dubium,2,25
+5/23/2024,AD,surjit_168,1,p1,full-plot,net-floral,surjit_168_1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,"~55% in bloom. Bushes starting to fruit (~30-40%), some berries full size but not ripe."
+5/23/2024,"AD, RG",surjit_168,1,d,full-plot,net-floral,surjit_168_1_d_full-plot_net-floral,ruac,rumex_acetosa,3,
+5/23/2024,"AD, RG",surjit_168,1,d,full-plot,net-floral,surjit_168_1_d_full-plot_net-floral,rara,raphanus_raphanistrum,2,
+5/23/2024,"AD, RG",surjit_168,1,d,full-plot,net-floral,surjit_168_1_d_full-plot_net-floral,visa,vicia_sativa,2,
+5/23/2024,"AD, RG",surjit_168,1,d,full-plot,net-floral,surjit_168_1_d_full-plot_net-floral,rasc,ranunculus_sceleratus,2,
+5/23/2024,"AD, RG",surjit_168,1,d,full-plot,net-floral,surjit_168_1_d_full-plot_net-floral,mydi,myosotis_discolor,1,
+5/23/2024,"AD, RG",surjit_168,1,d,full-plot,net-floral,surjit_168_1_d_full-plot_net-floral,arth,arabidopsis _thaliana,2,
+5/23/2024,"AD, RG",avtar_168,1,p1,full-plot,net-floral,avtar_168_1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,"~55% bloom. Bushes starting to fruit (40-45%), many fruits full sized (~10%) but none are ripe yet"
+5/23/2024,"AD, RG",avtar_168,1,p2,full-plot,net-floral,avtar_168_1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,"~55% bloom. Bushes starting to fruit (40-45%), many fruits full sized (~10%) but none are ripe yet"
+5/24/2024,"NC, AD",surjit_168,1,p2,full-plot,net-floral,surjit_168_1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,"~55% in bloom. Bushes starting to fruit (~30-40%), some berries full size."
+6/5/2024,"NC, RG",lbf_ladnertrunk,1,p1,full-plot,net-floral,lbf_ladnertrunk_1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,4,"around 2-5 flowers per bush, most fruiting"
+6/5/2024,"NC, RG",lbf_ladnertrunk,1,p1,full-plot,net-floral,lbf_ladnertrunk_1_p1_full-plot_net-floral,rare,ranunculus_repens,3,480
+6/5/2024,"NC, RG",lbf_ladnertrunk,1,p1,full-plot,net-floral,lbf_ladnertrunk_1_p1_full-plot_net-floral,trre,trifolium_repens,2,80
+6/5/2024,"NC, RG",lbf_ladnertrunk,1,p1,full-plot,net-floral,lbf_ladnertrunk_1_p1_full-plot_net-floral,gedi,geranium_dissectum,1,5
+6/5/2024,"NC, RG",lbf_ladnertrunk,1,p2,full-plot,net-floral,lbf_ladnertrunk_1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,4,"around 2-5 flowers per bush, most fruiting (5000)"
+6/5/2024,"NC, RG",lbf_ladnertrunk,1,p2,full-plot,net-floral,lbf_ladnertrunk_1_p2_full-plot_net-floral,rare,ranunculus_repens,3,250
+6/5/2024,"NC, RG",lbf_ladnertrunk,1,p2,full-plot,net-floral,lbf_ladnertrunk_1_p2_full-plot_net-floral,trre,trifolium_repens,2,40
+6/5/2024,"NC, RG",lbf_ladnertrunk,1,p2,full-plot,net-floral,lbf_ladnertrunk_1_p2_full-plot_net-floral,taof,taraxacum_officinale,2,17
+6/5/2024,"NC, RG",lbf_ladnertrunk,1,d,full-plot,net-floral,lbf_ladnertrunk_1_d_full-plot_net-floral,trre,trifolium_repens,3,200
+6/5/2024,"NC, RG",lbf_ladnertrunk,1,d,full-plot,net-floral,lbf_ladnertrunk_1_d_full-plot_net-floral,gedi,geranium_dissectum,3,150
+6/5/2024,"NC, RG",lbf_ladnertrunk,1,d,full-plot,net-floral,lbf_ladnertrunk_1_d_full-plot_net-floral,rare,ranunculus_repens,3,100
+6/5/2024,"NC, RG",lbf_ladnertrunk,1,d,full-plot,net-floral,lbf_ladnertrunk_1_d_full-plot_net-floral,ruar,rubus_armeniacus,2,20. Armenian blackberry
+6/5/2024,"NC, RG",lbf_ladnertrunk,1,d,full-plot,net-floral,lbf_ladnertrunk_1_d_full-plot_net-floral,trpr,trifolium_pratense,2,20. red clover
+6/5/2024,"NC, RG",lbf_ladnertrunk,1,d,full-plot,net-floral,lbf_ladnertrunk_1_d_full-plot_net-floral,trdu,trifolium_dubium,3,150
+6/5/2024,NC,sandhu_ladnertrunk,1,p1,full-plot,net-floral,sandhu_ladnertrunk_1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,4,"5000. 2-5% in bloom, mostly undeveloped berries"
+6/5/2024,NC,sandhu_ladnertrunk,1,p2,full-plot,net-floral,sandhu_ladnertrunk_1_p2_full-plot_net-floral,rare,ranunculus_repens,1,
+6/5/2024,NC,sandhu_ladnertrunk,1,p2,full-plot,net-floral,sandhu_ladnertrunk_1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,4,"5000. 2-5% in bloom, mostly undeveloped berries"
+6/5/2024,NC,sandhu_ladnertrunk,1,d,full-plot,net-floral,sandhu_ladnertrunk_1_d_full-plot_net-floral,gedi,geranium_dissectum,4,1500
+6/5/2024,NC,sandhu_ladnertrunk,1,d,full-plot,net-floral,sandhu_ladnertrunk_1_d_full-plot_net-floral,mydi,myosotis_discolor,4,1800
+6/5/2024,NC,sandhu_ladnertrunk,1,d,full-plot,net-floral,sandhu_ladnertrunk_1_d_full-plot_net-floral,raac,ranunculus_acris,3,105
+6/5/2024,NC,sandhu_ladnertrunk,1,d,full-plot,net-floral,sandhu_ladnertrunk_1_d_full-plot_net-floral,rare,ranunculus_repens,3,110
+6/5/2024,NC,sandhu_ladnertrunk,1,d,full-plot,net-floral,sandhu_ladnertrunk_1_d_full-plot_net-floral,cegl,cerastium_glomeratum,2,50
+6/5/2024,NC,sandhu_ladnertrunk,1,d,full-plot,net-floral,sandhu_ladnertrunk_1_d_full-plot_net-floral,trpr,trifolium_pratense,2,15
+6/5/2024,NC,sandhu_ladnertrunk,1,d,full-plot,net-floral,sandhu_ladnertrunk_1_d_full-plot_net-floral,ropa,rorippa_palustris,3,200
+6/5/2024,NC,sandhu_ladnertrunk,1,d,full-plot,net-floral,sandhu_ladnertrunk_1_d_full-plot_net-floral,trdu,trifolium_dubium,3,50
+6/5/2024,NC,sandhu_ladnertrunk,1,d,full-plot,net-floral,sandhu_ladnertrunk_1_d_full-plot_net-floral,vite,vicia_tetrasperma,3,105
+6/5/2024,NC,sandhu_ladnertrunk,1,d,full-plot,net-floral,sandhu_ladnertrunk_1_d_full-plot_net-floral,visa,vicia_sativa,3,110
+6/5/2024,NC,sandhu_ladnertrunk,1,d,full-plot,net-floral,sandhu_ladnertrunk_1_d_full-plot_net-floral,trre,trifolium_repens,2,20
+6/6/2024,RG,bates_57b,1,p1,full-plot,net-floral,bates_57b_1_p1_full-plot_net-floral,taof,taraxacum_officinale,1,
+6/6/2024,RG,bates_57b,1,p1,full-plot,net-floral,bates_57b_1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,3,2% bloom. Same note as plot 2
+6/6/2024,RG,bates_57b,1,p2,full-plot,net-floral,bates_57b_1_p2_full-plot_net-floral,taof,taraxacum_officinale,1,berries starting to ripen - blue/purple colour
+6/6/2024,RG,bates_57b,1,p2,full-plot,net-floral,bates_57b_1_p2_full-plot_net-floral,soar,sonchus_arvensis,1,10; berries starting to ripen - blue/purple colour
+6/6/2024,RG,bates_57b,1,p2,full-plot,net-floral,bates_57b_1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,3,2% bloom; berries starting to ripen - blue/purple colour
+6/6/2024,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,visa,vicia_sativa,3,200; velch
+6/6/2024,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,rara,raphanus_raphanistrum,2,100; charlock
+6/6/2024,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,mydi,myosotis_discolor,3,250; forget me not
+6/6/2024,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,ruac,rumex_acetosa,4,sorrel; 3000
+6/6/2024,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,scau,scorzoneroides_autumnalis,3,530; autumn hawkbit
+6/6/2024,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,rare,ranunculus_repens,4,1200; creeping butterfly
+6/6/2024,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,trre,trifolium_repens,3,700; clover
+6/6/2024,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,raac,ranunculus_acris,4,1500
+6/6/2024,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,trdu,trifolium_dubium,3,300
+6/6/2024,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,gedi,geranium_dissectum,3,150
+6/6/2024,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,trpr,trifolium_pratense,2,50
+6/6/2024,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,cefo,cerastium_fontanum,2,60
+6/6/2024,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,cegl,cerastium_glomeratum,3,500
+6/6/2024,RG,bates_57b,1,d,full-plot,net-floral,bates_57b_1_d_full-plot_net-floral,phta,phacelia_tanacetifolia,1,5; lacy phacelia
+6/6/2024,RG,bks_56,1,p1,full-plot,net-floral,bks_56_1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,3,"2% bloom, mostly undeveloped berries; 1000"
+6/6/2024,RG,bks_56,1,p2,full-plot,net-floral,bks_56_1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,3,"1000. 2% bloom, mostly undeveloped berries"
+6/6/2024,RG,bks_56,1,p2,full-plot,net-floral,bks_56_1_p2_full-plot_net-floral,rasc,ranunculus_sceleratus,3,800
+6/6/2024,AD,bks_56,1,d,full-plot,net-floral,bks_56_1_d_full-plot_net-floral,vite,vicia_tetrasperma,2,80. smooth tare
+6/6/2024,AD,bks_56,1,d,full-plot,net-floral,bks_56_1_d_full-plot_net-floral,mydi,myosotis_discolor,2,50. forget me not
+6/6/2024,AD,bks_56,1,d,full-plot,net-floral,bks_56_1_d_full-plot_net-floral,sool,sonchus_oleraceus,1,5. sow thistle
+6/6/2024,AD,bks_56,1,d,full-plot,net-floral,bks_56_1_d_full-plot_net-floral,siir,sisymbrium_irio,2,15. London rocket
+6/6/2024,AD,bks_56,1,d,full-plot,net-floral,bks_56_1_d_full-plot_net-floral,rara,raphanus_raphanistrum,2,70. jointed charlock
+6/6/2024,AD,bks_56,1,d,full-plot,net-floral,bks_56_1_d_full-plot_net-floral,gedi,geranium_dissectum,2,70
+6/6/2024,AD,bks_56,1,d,full-plot,net-floral,bks_56_1_d_full-plot_net-floral,rusp,rubus_spectabilis,2,15
+6/6/2024,AD,bks_56,1,d,full-plot,net-floral,bks_56_1_d_full-plot_net-floral,soas,sonchus_asper,2,20. Prickly sow thistle
+6/6/2024,AD,bks_56,1,d,full-plot,net-floral,bks_56_1_d_full-plot_net-floral,ronu,rosa_nutkana,3,200. nootka rose
+6/6/2024,AD,bks_56,1,d,full-plot,net-floral,bks_56_1_d_full-plot_net-floral,sopa,solanum_parishii,2,15. parish nightshade
+6/12/2024,"RG, NC",chong_68,1,p1,full-plot,net-floral,chong_68_1_p1_full-plot_net-floral,rare,ranunculus_repens,3,<500 total
+6/12/2024,"RG, NC",chong_68,1,p1,full-plot,net-floral,chong_68_1_p1_full-plot_net-floral,trre,trifolium_repens,2,
+6/12/2024,"RG, NC",chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,taof,taraxacum_officinale,2,dandelion
+6/12/2024,"RG, NC",chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,rare,ranunculus_repens,3,short buttercups
+6/12/2024,"RG, NC",chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,raac,ranunculus_acris,1,tall buttercups
+6/12/2024,"RG, NC",chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,vicr,vicia_cracca,4,
+6/12/2024,"RG, NC",chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,gedi,geranium_dissectum,3,
+6/12/2024,"RG, NC",chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,visa,vicia_sativa,3,
+6/12/2024,"RG, NC",chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,trre,trifolium_repens,3,
+6/12/2024,"RG, NC",chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,lope,lotus_pedunculatus,4,
+6/12/2024,"RG, NC",chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,vite,vicia_tetrasperma,3,
+6/12/2024,"RG, NC",chong_68,1,d,full-plot,net-floral,chong_68_1_d_full-plot_net-floral,lysa,lythrum_salicaria,1,
+6/18/2024,AD,chong_68,1,p2,full-plot,net-floral,chong_68_1_p2_full-plot_net-floral,rare,ranunculus_repens,3,
+6/18/2024,AD,chong_68,1,p2,full-plot,net-floral,chong_68_1_p2_full-plot_net-floral,trre,trifolium_repens,2,~500
+6/18/2024,AD,bks_68,2,d,full-plot,net-floral,bks_68_2_d_full-plot_net-floral,ropa,rorippa_palustris,4,"bog bittercress in the notes, yellow bittercress in Seek"
+6/19/2024,AD,bks_68,2,d,full-plot,net-floral,bks_68_2_d_full-plot_net-floral,rare,ranunculus_repens,1,
+6/19/2024,AD,chong_96,2,p1,full-plot,net-floral,chong_96_2_p1_full-plot_net-floral,rare,ranunculus_repens,4,
+6/19/2024,AD,chong_96,2,p1,full-plot,net-floral,chong_96_2_p1_full-plot_net-floral,trre,trifolium_repens,1,
+6/19/2024,AD,chong_96,2,p1,full-plot,net-floral,chong_96_2_p1_full-plot_net-floral,rara,raphanus_raphanistrum,3,
+6/19/2024,AD,chong_96,2,p1,full-plot,net-floral,chong_96_2_p1_full-plot_net-floral,taof,taraxacum_officinale,1,
+6/19/2024,AD,chong_96,2,p1,full-plot,net-floral,chong_96_2_p1_full-plot_net-floral,ruac,rumex_acetosa,3,
+6/19/2024,AD,chong_96,2,p1,full-plot,net-floral,chong_96_2_p1_full-plot_net-floral,gaap,galium_aparine,2,catchweed bedstraw. growing in ground under bushes
+6/19/2024,AD,chong_96,2,p2,full-plot,net-floral,chong_96_2_p2_full-plot_net-floral,rare,ranunculus_repens,4,
+6/19/2024,AD,chong_96,2,p2,full-plot,net-floral,chong_96_2_p2_full-plot_net-floral,trre,trifolium_repens,4,
+6/19/2024,AD,chong_96,2,p2,full-plot,net-floral,chong_96_2_p2_full-plot_net-floral,rara,raphanus_raphanistrum,4,
+6/19/2024,AD,chong_96,2,p2,full-plot,net-floral,chong_96_2_p2_full-plot_net-floral,trpr,trifolium_pratense,2,red clover
+6/19/2024,AD,chong_96,2,d,full-plot,net-floral,chong_96_2_d_full-plot_net-floral,rare,ranunculus_repens,4,
+6/19/2024,AD,chong_96,2,d,full-plot,net-floral,chong_96_2_d_full-plot_net-floral,rara,raphanus_raphanistrum,5,
+6/19/2024,AD,chong_96,2,d,full-plot,net-floral,chong_96_2_d_full-plot_net-floral,trre,trifolium_repens,3,
+6/19/2024,AD,chong_96,2,d,full-plot,net-floral,chong_96_2_d_full-plot_net-floral,trdu,trifolium_dubium,3,
+6/19/2024,AD,chong_96,2,d,full-plot,net-floral,chong_96_2_d_full-plot_net-floral,ruar,rubus_armeniacus,3,
+6/19/2024,AD,chong_96,2,d,full-plot,net-floral,chong_96_2_d_full-plot_net-floral,taof,taraxacum_officinale,1,
+6/19/2024,AD,chong_96,2,d,full-plot,net-floral,chong_96_2_d_full-plot_net-floral,sopa,solanum_parishii,2,parish's nightshade
+6/19/2024,AD,chong_96,2,d,full-plot,net-floral,chong_96_2_d_full-plot_net-floral,ruac,rumex_acetosa,4,
+6/19/2024,AD,chong_96,2,d,full-plot,net-floral,chong_96_2_d_full-plot_net-floral,spru,spergularia_rubra,2,red sand spurrey
+6/19/2024,AD,chong_96,2,d,full-plot,net-floral,chong_96_2_d_full-plot_net-floral,gaap,galium_aparine,2,catchweed bedstraw
+6/19/2024,AD,chong_96,2,d,full-plot,net-floral,chong_96_2_d_full-plot_net-floral,madi,matricaria_discoidea,2,pineapple weed
+6/19/2024,AD,chong_96,2,d,full-plot,net-floral,chong_96_2_d_full-plot_net-floral,plla,plantago_lanceolata,2,ribwart plantain
+6/19/2024,"RG, AD",bks_96,2,p1,full-plot,net-floral,bks_96_2_p1_full-plot_net-floral,rare,ranunculus_repens,3,Few ripe berries! no VACO flowers
+6/19/2024,"RG, AD",bks_96,2,p2,full-plot,net-floral,bks_96_2_p2_full-plot_net-floral,rara,raphanus_raphanistrum,3,Few ripe berries! no VACO flowers
+6/19/2024,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,rara,raphanus_raphanistrum,5,jointed charlock
+6/19/2024,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,ruar,rubus_armeniacus,2,
+6/19/2024,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,ronu,rosa_nutkana,1,
+6/19/2024,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,trre,trifolium_repens,2,
+6/19/2024,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,pema,persicaria_maculosa,4,spotted lady's thumb
+6/19/2024,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,ropa,rorippa_palustris,3,bog yellowcress
+6/19/2024,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,ruac,rumex_acetosa,4,
+6/19/2024,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,rare,ranunculus_repens,2,
+6/19/2024,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,trdu,trifolium_dubium,3,
+6/19/2024,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,spru,spergularia_rubra,3,
+6/19/2024,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,madi,matricaria_discoidea,3,
+6/19/2024,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,livu,linaria_vulgaris,2,common toadflax
+6/19/2024,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,visa,vicia_sativa,3,
+6/19/2024,"RG, AD",bks_96,2,d,full-plot,net-floral,bks_96_2_d_full-plot_net-floral,vite,vicia_tetrasperma,3,
+6/20/2024,AD,bks_68,2,d,full-plot,net-floral,bks_68_2_d_full-plot_net-floral,cabu,capsella_bursa-pastoris,2,
+6/20/2024,AD,gwb_neaves,2,p1,full-plot,net-floral,gwb_neaves_2_p1_full-plot_net-floral,sevu,senecio_vulgaris,2,
+6/20/2024,AD,gwb_neaves,2,p1,full-plot,net-floral,gwb_neaves_2_p1_full-plot_net-floral,trre,trifolium_repens,4,
+6/20/2024,AD,gwb_neaves,2,p1,full-plot,net-floral,gwb_neaves_2_p1_full-plot_net-floral,ruac,rumex_acetosa,2,
+6/20/2024,AD,gwb_neaves,2,p1,full-plot,net-floral,gwb_neaves_2_p1_full-plot_net-floral,ropa,rorippa_palustris,1,
+6/20/2024,AD,gwb_neaves,2,p1,full-plot,net-floral,gwb_neaves_2_p1_full-plot_net-floral,rare,ranunculus_repens,1,
+6/20/2024,AD,gwb_neaves,2,p1,full-plot,net-floral,gwb_neaves_2_p1_full-plot_net-floral,pema,persicaria_maculosa,1,
+6/20/2024,AD,gwb_neaves,2,p1,full-plot,net-floral,gwb_neaves_2_p1_full-plot_net-floral,clpa,claytonia_parviflora,1,
+6/20/2024,AD,gwb_neaves,2,p2,full-plot,net-floral,gwb_neaves_2_p2_full-plot_net-floral,trre,trifolium_repens,4,
+6/20/2024,AD,gwb_neaves,2,p2,full-plot,net-floral,gwb_neaves_2_p2_full-plot_net-floral,ruac,rumex_acetosa,3,sorrel
+6/20/2024,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,rula,rubus_laciniatus,3,cutleaf blackberry
+6/20/2024,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,sevu,senecio_vulgaris,3,
+6/20/2024,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,pono,potentilla_norvegica,2,royal cinquefoil
+6/20/2024,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,epci,epilobium_ciliatum,2,fringe willowherb
+6/20/2024,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,ropa,rorippa_palustris,2,bog yellowcress
+6/20/2024,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,pema,persicaria_maculosa,4,
+6/20/2024,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,crca,crepis_capillaris,3,
+6/20/2024,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,cefo,cerastium_fontanum,3,
+6/20/2024,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,gedi,geranium_dissectum,1,
+6/20/2024,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,trre,trifolium_repens,4,
+6/20/2024,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,trpr,trifolium_pratense,2,
+6/20/2024,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,ruac,rumex_acetosa,4,
+6/20/2024,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,ruul,rubus_ulmifolius,4,
+6/20/2024,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,visa,vicia_sativa,2,
+6/20/2024,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,rara,raphanus_raphanistrum,2,
+6/20/2024,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,raca,ranunculus_californicus,1,california buttercup
+6/20/2024,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,lope,lotus_pedunculatus,3,
+6/20/2024,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,depi,descurainia_pinnata,3,
+6/20/2024,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,spru,spergularia_rubra,3,
+6/20/2024,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,madi,matricaria_discoidea,2,
+6/20/2024,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,ronu,rosa_nutkana,3,
+6/20/2024,AD,gwb_neaves,2,d,full-plot,net-floral,gwb_neaves_2_d_full-plot_net-floral,mymu,mycelis_muralis,3,
+6/20/2024,AD,bks_neaves,2,p1,full-plot,net-floral,bks_neaves_2_p1_full-plot_net-floral,pema,persicaria_maculosa,2,
+6/20/2024,AD,bks_neaves,2,p1,full-plot,net-floral,bks_neaves_2_p1_full-plot_net-floral,rare,ranunculus_repens,1,
+6/20/2024,AD,bks_neaves,2,p1,full-plot,net-floral,bks_neaves_2_p1_full-plot_net-floral,epci,epilobium_ciliatum,3,Fringed willowherb
+6/20/2024,AD,bks_neaves,2,p1,full-plot,net-floral,bks_neaves_2_p1_full-plot_net-floral,ropa,rorippa_palustris,1,
+6/20/2024,AD,bks_neaves,2,p1,full-plot,net-floral,bks_neaves_2_p1_full-plot_net-floral,epci,epilobium_ciliatum,2,
+6/20/2024,AD,bks_neaves,2,p1,full-plot,net-floral,bks_neaves_2_p1_full-plot_net-floral,rare,ranunculus_repens,1,
+6/20/2024,AD,bks_neaves,2,p1,full-plot,net-floral,bks_neaves_2_p1_full-plot_net-floral,sevu,senecio_vulgaris,2,groundsel
+6/20/2024,AD,bks_neaves,2,p1,full-plot,net-floral,bks_neaves_2_p1_full-plot_net-floral,pema,persicaria_maculosa,1,spotted lady
+6/20/2024,AD,bks_neaves,2,p1,full-plot,net-floral,bks_neaves_2_p1_full-plot_net-floral,myla,myosotis_laxa,2,
+6/20/2024,AD,bks_neaves,2,d,full-plot,net-floral,bks_neaves_2_d_full-plot_net-floral,ruul,rubus_ulmifolius,4,elmleaf blackberry
+6/20/2024,AD,bks_neaves,2,d,full-plot,net-floral,bks_neaves_2_d_full-plot_net-floral,epci,epilobium_ciliatum,2,
+6/20/2024,AD,bks_neaves,2,d,full-plot,net-floral,bks_neaves_2_d_full-plot_net-floral,sapr,sagina_procumbens,2,procumbent pearlwort
+6/20/2024,AD,bks_neaves,2,d,full-plot,net-floral,bks_neaves_2_d_full-plot_net-floral,rasc,ranunculus_sceleratus,1,
+6/21/2024,AD,bks_68,2,d,full-plot,net-floral,bks_68_2_d_full-plot_net-floral,rasc,ranunculus_sceleratus,1,
+6/21/2024,AD,bates_57b,2,p1,full-plot,net-floral,bates_57b_2_p1_full-plot_net-floral,rare,ranunculus_repens,1,
+6/21/2024,AD,bates_57b,2,p1,full-plot,net-floral,bates_57b_2_p1_full-plot_net-floral,soar,sonchus_arvensis,2,
+6/21/2024,AD,bates_57b,2,p2,full-plot,net-floral,bates_57b_2_p2_full-plot_net-floral,taof,taraxacum_officinale,1,
+6/21/2024,AD,bates_57b,2,p2,full-plot,net-floral,bates_57b_2_p2_full-plot_net-floral,ruca,rubus_caesius,1,eurpean dewberry (maybe blackberry?)
+6/21/2024,AD,bates_57b,2,d,full-plot,net-floral,bates_57b_2_d_full-plot_net-floral,hygl,hypochaeris_glabra,4,smooth cat's ear
+6/21/2024,AD,bates_57b,2,d,full-plot,net-floral,bates_57b_2_d_full-plot_net-floral,trre,trifolium_repens,5,
+6/21/2024,AD,bates_57b,2,d,full-plot,net-floral,bates_57b_2_d_full-plot_net-floral,ruac,rumex_acetosa,5,
+6/21/2024,AD,bates_57b,2,d,full-plot,net-floral,bates_57b_2_d_full-plot_net-floral,cefo,cerastium_fontanum,2,
+6/21/2024,AD,bates_57b,2,d,full-plot,net-floral,bates_57b_2_d_full-plot_net-floral,rare,ranunculus_repens,3,
+6/21/2024,AD,bates_57b,2,d,full-plot,net-floral,bates_57b_2_d_full-plot_net-floral,trdu,trifolium_dubium,2,
+6/21/2024,AD,bates_57b,2,d,full-plot,net-floral,bates_57b_2_d_full-plot_net-floral,plla,plantago_lanceolata,2,
+6/21/2024,AD,bates_57b,2,d,full-plot,net-floral,bates_57b_2_d_full-plot_net-floral,rula,rubus_laciniatus,2,
+6/21/2024,AD,bates_57b,2,d,full-plot,net-floral,bates_57b_2_d_full-plot_net-floral,visa,vicia_sativa,3,
+6/21/2024,AD,bates_57b,2,d,full-plot,net-floral,bates_57b_2_d_full-plot_net-floral,gedi,geranium_dissectum,2,
+6/21/2024,AD,bates_57b,2,d,full-plot,net-floral,bates_57b_2_d_full-plot_net-floral,trpr,trifolium_pratense,1,
+6/21/2024,AD,bates_57b,2,d,full-plot,net-floral,bates_57b_2_d_full-plot_net-floral,raac,ranunculus_acris,2,
+6/21/2024,AD,bks_56,2,p1,full-plot,net-floral,bks_56_2_p1_full-plot_net-floral,epci,epilobium_ciliatum,2,
+6/21/2024,AD,bks_56,2,p1,full-plot,net-floral,bks_56_2_p1_full-plot_net-floral,ropa,rorippa_palustris,4,
+6/21/2024,AD,bks_56,2,p1,full-plot,net-floral,bks_56_2_p1_full-plot_net-floral,poav,polygonum_aviculare,2,
+6/21/2024,AD,bks_56,2,p1,full-plot,net-floral,bks_56_2_p1_full-plot_net-floral,rasc,ranunculus_sceleratus,1,
+6/21/2024,AD,bks_56,2,p1,full-plot,net-floral,bks_56_2_p1_full-plot_net-floral,madi,matricaria_discoidea,3,
+6/21/2024,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,ruar,rubus_armeniacus,1,
+6/21/2024,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,epci,epilobium_ciliatum,1,
+6/21/2024,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,trre,trifolium_repens,1,
+6/21/2024,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,vite,vicia_tetrasperma,4,
+6/21/2024,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,ropa,rorippa_palustris,2,
+6/21/2024,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,myla,myosotis_laxa,2,
+6/21/2024,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,brra,brassica_rapa,4,
+6/21/2024,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,cepu,centaurium_pulchellum,1,lesser centaury
+6/21/2024,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,rasc,ranunculus_sceleratus,2,
+6/21/2024,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,gedi,geranium_dissectum,2,
+6/21/2024,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,rara,raphanus_raphanistrum,1,
+6/21/2024,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,sevu,senecio_vulgaris,1,
+6/21/2024,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,ronu,rosa_nutkana,2,
+6/21/2024,AD,bks_56,2,p2,full-plot,net-floral,bks_56_2_p2_full-plot_net-floral,syal,symphoricarpos_albus,1,common snowberry
+6/21/2024,AD,bks_56,2,d,full-plot,net-floral,bks_56_2_d_full-plot_net-floral,ropa,rorippa_palustris,2,
+6/21/2024,AD,bks_56,2,d,full-plot,net-floral,bks_56_2_d_full-plot_net-floral,madi,matricaria_discoidea,4,
+6/21/2024,AD,bks_56,2,d,full-plot,net-floral,bks_56_2_d_full-plot_net-floral,rasc,ranunculus_sceleratus,4,
+6/22/2024,AD,bks_68,2,d,full-plot,net-floral,bks_68_2_d_full-plot_net-floral,lapu,lamium_purpureum,1,
+6/23/2024,AD,bks_68,2,d,full-plot,net-floral,bks_68_2_d_full-plot_net-floral,vite,vicia_tetrasperma,1,
+6/24/2024,AD,bks_68,2,d,full-plot,net-floral,bks_68_2_d_full-plot_net-floral,gedi,geranium_dissectum,2,
+6/25/2024,AD,bks_68,2,d,full-plot,net-floral,bks_68_2_d_full-plot_net-floral,epci,epilobium_ciliatum,1,
+6/26/2024,AD,bks_68,2,d,full-plot,net-floral,bks_68_2_d_full-plot_net-floral,ephi,epilobium_hirsutum,1,
+6/27/2024,AD,bks_68,2,d,full-plot,net-floral,bks_68_2_d_full-plot_net-floral,pela,persicaria_lapathifolia,1,
+7/2/2024,NC,lbf_ladnertrunk,2,p1,full-plot,net-floral,lbf_ladnertrunk_2_p1_full-plot_net-floral,trre,trifolium_repens,4,
+7/2/2024,NC,lbf_ladnertrunk,2,p1,full-plot,net-floral,lbf_ladnertrunk_2_p1_full-plot_net-floral,rare,ranunculus_repens,3,
+7/2/2024,NC,lbf_ladnertrunk,2,p1,full-plot,net-floral,lbf_ladnertrunk_2_p1_full-plot_net-floral,poav,polygonum_aviculare,1,prostrate knotweed
+7/2/2024,NC,lbf_ladnertrunk,2,p2,full-plot,net-floral,lbf_ladnertrunk_2_p2_full-plot_net-floral,rare,ranunculus_repens,3,
+7/2/2024,NC,lbf_ladnertrunk,2,p2,full-plot,net-floral,lbf_ladnertrunk_2_p2_full-plot_net-floral,trre,trifolium_repens,3,
+7/2/2024,NC,lbf_ladnertrunk,2,p2,full-plot,net-floral,lbf_ladnertrunk_2_p2_full-plot_net-floral,taof,taraxacum_officinale,1,
+7/2/2024,NC,lbf_ladnertrunk,2,p2,full-plot,net-floral,lbf_ladnertrunk_2_p2_full-plot_net-floral,ropa,rorippa_palustris,2,
+7/2/2024,NC,lbf_ladnertrunk,2,p2,full-plot,net-floral,lbf_ladnertrunk_2_p2_full-plot_net-floral,epci,epilobium_ciliatum,2,
+7/2/2024,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,rupu,rumex_pulcher,3,fiddle dock
+7/2/2024,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,trre,trifolium_repens,3,
+7/2/2024,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,rare,ranunculus_repens,1,
+7/2/2024,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,ruul,rubus_ulmifolius,1,
+7/2/2024,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,spdo,spiraea_douglasii,3,rose spirea
+7/2/2024,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,epci,epilobium_ciliatum,2,
+7/2/2024,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,trdu,trifolium_dubium,2,
+7/2/2024,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,gedi,geranium_dissectum,1,
+7/2/2024,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,hyra,hypochaeris_radicata,1,common cats ear
+7/2/2024,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,taof,taraxacum_officinale,1,
+7/2/2024,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,suma,suaeda_maritima,4,herbaceous sapweed
+7/2/2024,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,ropa,rorippa_palustris,3,
+7/2/2024,NC,lbf_ladnertrunk,2,d,full-plot,net-floral,lbf_ladnertrunk_2_d_full-plot_net-floral,plla,plantago_lanceolata,1,
+7/2/2024,"RG, AD",sandhu_ladnertrunk,2,p1,full-plot,net-floral,sandhu_ladnertrunk_2_p1_full-plot_net-floral,rara,raphanus_raphanistrum,1,bird deterrant noises. rodent bait stations
+7/2/2024,"RG, AD",sandhu_ladnertrunk,2,p1,full-plot,net-floral,sandhu_ladnertrunk_2_p1_full-plot_net-floral,ropa,rorippa_palustris,3,bird deterrant noises. rodent bait stations
+7/2/2024,"RG, AD",sandhu_ladnertrunk,2,p1,full-plot,net-floral,sandhu_ladnertrunk_2_p1_full-plot_net-floral,epci,epilobium_ciliatum,1,bird deterrant noises. rodent bait stations
+7/2/2024,AD,sandhu_ladnertrunk,2,p2,full-plot,net-floral,sandhu_ladnertrunk_2_p2_full-plot_net-floral,epci,epilobium_ciliatum,3,
+7/2/2024,AD,sandhu_ladnertrunk,2,p2,full-plot,net-floral,sandhu_ladnertrunk_2_p2_full-plot_net-floral,ropa,rorippa_palustris,4,
+7/2/2024,AD,sandhu_ladnertrunk,2,p2,full-plot,net-floral,sandhu_ladnertrunk_2_p2_full-plot_net-floral,anco,anthemis_cotula,1,stinking chamomile
+7/2/2024,AD,sandhu_ladnertrunk,2,p2,full-plot,net-floral,sandhu_ladnertrunk_2_p2_full-plot_net-floral,trre,trifolium_repens,3,
+7/2/2024,AD,sandhu_ladnertrunk,2,p2,full-plot,net-floral,sandhu_ladnertrunk_2_p2_full-plot_net-floral,pool,portulaca_oleracea,2,common purselane
+7/2/2024,AD,sandhu_ladnertrunk,2,p2,full-plot,net-floral,sandhu_ladnertrunk_2_p2_full-plot_net-floral,sevu,senecio_vulgaris,1,
+7/2/2024,NC,sandhu_ladnertrunk,2,d,full-plot,net-floral,sandhu_ladnertrunk_2_d_full-plot_net-floral,vite,vicia_tetrasperma,4,
+7/2/2024,NC,sandhu_ladnertrunk,2,d,full-plot,net-floral,sandhu_ladnertrunk_2_d_full-plot_net-floral,epci,epilobium_ciliatum,3,
+7/2/2024,NC,sandhu_ladnertrunk,2,d,full-plot,net-floral,sandhu_ladnertrunk_2_d_full-plot_net-floral,ropa,rorippa_palustris,5,
+7/2/2024,NC,sandhu_ladnertrunk,2,d,full-plot,net-floral,sandhu_ladnertrunk_2_d_full-plot_net-floral,gedi,geranium_dissectum,4,
+7/2/2024,NC,sandhu_ladnertrunk,2,d,full-plot,net-floral,sandhu_ladnertrunk_2_d_full-plot_net-floral,trdu,trifolium_dubium,1,
+7/2/2024,NC,sandhu_ladnertrunk,2,d,full-plot,net-floral,sandhu_ladnertrunk_2_d_full-plot_net-floral,trhy,trifolium_hybridum,2,
+7/2/2024,NC,sandhu_ladnertrunk,2,d,full-plot,net-floral,sandhu_ladnertrunk_2_d_full-plot_net-floral,anco,anthemis_cotula,2,
+7/2/2024,NC,sandhu_ladnertrunk,2,d,full-plot,net-floral,sandhu_ladnertrunk_2_d_full-plot_net-floral,raac,ranunculus_acris,1,meadow buttercup
+7/2/2024,NC,sandhu_ladnertrunk,2,d,full-plot,net-floral,sandhu_ladnertrunk_2_d_full-plot_net-floral,ruar,rubus_armeniacus,1,Himalayan blackberry
+7/3/2024,"RG, IWW",avtar_168,2,p2,full-plot,net-floral,avtar_168_2_p2_full-plot_net-floral,trre,trifolium_repens,1,
+7/3/2024,"AD, NC",avtar_168,2,d,full-plot,net-floral,avtar_168_2_d_full-plot_net-floral,rara,raphanus_raphanistrum,2,
+7/3/2024,"AD, NC",avtar_168,2,d,full-plot,net-floral,avtar_168_2_d_full-plot_net-floral,ropa,rorippa_palustris,2,
+7/3/2024,"AD, NC",avtar_168,2,d,full-plot,net-floral,avtar_168_2_d_full-plot_net-floral,epci,epilobium_ciliatum,2,
+7/3/2024,"AD, NC",avtar_168,2,d,full-plot,net-floral,avtar_168_2_d_full-plot_net-floral,vicr,vicia_cracca,3,
+7/3/2024,"AD, NC",avtar_168,2,d,full-plot,net-floral,avtar_168_2_d_full-plot_net-floral,cape,cardamine_pensylvanica,1,
+7/3/2024,"RG, IWW",surjit_168,2,p1,full-plot,net-floral,surjit_168_2_p1_full-plot_net-floral,ropa,rorippa_palustris,5,
+7/3/2024,"RG, IWW",surjit_168,2,p1,full-plot,net-floral,surjit_168_2_p1_full-plot_net-floral,epci,epilobium_ciliatum,3,
+7/3/2024,"RG, IWW",surjit_168,2,p1,full-plot,net-floral,surjit_168_2_p1_full-plot_net-floral,pela,persicaria_lapathifolia,3,
+7/3/2024,"RG, IWW",surjit_168,2,p1,full-plot,net-floral,surjit_168_2_p1_full-plot_net-floral,spru,spergularia_rubra,3,
+7/3/2024,"RG, IWW",surjit_168,2,p1,full-plot,net-floral,surjit_168_2_p1_full-plot_net-floral,trre,trifolium_repens,1,
+7/3/2024,"AD, NC",surjit_168,2,p2,full-plot,net-floral,surjit_168_2_p2_full-plot_net-floral,ropa,rorippa_palustris,5,
+7/3/2024,"AD, NC",surjit_168,2,p2,full-plot,net-floral,surjit_168_2_p2_full-plot_net-floral,pela,persicaria_lapathifolia,2,
+7/3/2024,"AD, NC",surjit_168,2,p2,full-plot,net-floral,surjit_168_2_p2_full-plot_net-floral,epci,epilobium_ciliatum,4,
+7/3/2024,"AD, NC",surjit_168,2,p2,full-plot,net-floral,surjit_168_2_p2_full-plot_net-floral,pool,portulaca_oleracea,2,
+7/3/2024,"AD, NC",surjit_168,2,p2,full-plot,net-floral,surjit_168_2_p2_full-plot_net-floral,spru,spergularia_rubra,3,
+7/3/2024,"AD, NC",surjit_168,2,p2,full-plot,net-floral,surjit_168_2_p2_full-plot_net-floral,cabu,capsella_bursa-pastoris,1,
+7/3/2024,"AD, NC",surjit_168,2,p2,full-plot,net-floral,surjit_168_2_p2_full-plot_net-floral,trin,tripleurospermum_inodorum,1,
+7/3/2024,"RG, IWW",surjit_168,2,d,full-plot,net-floral,surjit_168_2_d_full-plot_net-floral,rara,raphanus_raphanistrum,4,
+7/3/2024,"RG, IWW",surjit_168,2,d,full-plot,net-floral,surjit_168_2_d_full-plot_net-floral,ropa,rorippa_palustris,5,
+7/3/2024,"RG, IWW",surjit_168,2,d,full-plot,net-floral,surjit_168_2_d_full-plot_net-floral,rasc,ranunculus_sceleratus,2,
+7/3/2024,"RG, IWW",surjit_168,2,d,full-plot,net-floral,surjit_168_2_d_full-plot_net-floral,brra,brassica_rapa,4,
+7/3/2024,"RG, IWW",surjit_168,2,d,full-plot,net-floral,surjit_168_2_d_full-plot_net-floral,sool,sonchus_oleraceus,1,
+7/3/2024,"RG, IWW",surjit_168,2,d,full-plot,net-floral,surjit_168_2_d_full-plot_net-floral,epci,epilobium_ciliatum,2,
+7/3/2024,"RG, IWW",surjit_168,2,d,full-plot,net-floral,surjit_168_2_d_full-plot_net-floral,spru,spergularia_rubra,3,
+7/3/2024,"RG, IWW",surjit_168,2,d,full-plot,net-floral,surjit_168_2_d_full-plot_net-floral,livu,linaria_vulgaris,3,
+7/3/2024,"RG, IWW",surjit_168,2,d,full-plot,net-floral,surjit_168_2_d_full-plot_net-floral,plla,plantago_lanceolata,3,
+7/3/2024,"RG, IWW",surjit_168,2,d,full-plot,net-floral,surjit_168_2_d_full-plot_net-floral,trin,tripleurospermum_inodorum,1,
+7/3/2024,"RG, IWW",surjit_168,2,d,full-plot,net-floral,surjit_168_2_d_full-plot_net-floral,trre,trifolium_repens,2,
+7/3/2024,"RG, IWW",surjit_168,2,d,full-plot,net-floral,surjit_168_2_d_full-plot_net-floral,pema,persicaria_maculosa,2,
+7/10/2024,"RG, AD",chong_96,3,p1,full-plot,net-floral,chong_96_3_p1_full-plot_net-floral,rare,ranunculus_repens,4,
+7/10/2024,"RG, AD",chong_96,3,p1,full-plot,net-floral,chong_96_3_p1_full-plot_net-floral,trre,trifolium_repens,3,
+7/10/2024,"RG, AD",chong_96,3,p2,full-plot,net-floral,chong_96_3_p2_full-plot_net-floral,rara,raphanus_raphanistrum,3,
+7/10/2024,"RG, AD",chong_96,3,p2,full-plot,net-floral,chong_96_3_p2_full-plot_net-floral,trre,trifolium_repens,2,
+7/10/2024,"RG, AD",chong_96,3,p2,full-plot,net-floral,chong_96_3_p2_full-plot_net-floral,taof,taraxacum_officinale,1,
+7/10/2024,"RG, AD",chong_96,3,p2,full-plot,net-floral,chong_96_3_p2_full-plot_net-floral,rare,ranunculus_repens,2,
+7/10/2024,"AD, RG",chong_68,3,p1,full-plot,net-floral,chong_68_3_p1_full-plot_net-floral,vicr,vicia_cracca,2,
+7/10/2024,"AD, RG",chong_68,3,p1,full-plot,net-floral,chong_68_3_p1_full-plot_net-floral,rare,ranunculus_repens,4,
+7/10/2024,"AD, RG",chong_68,3,p1,full-plot,net-floral,chong_68_3_p1_full-plot_net-floral,trre,trifolium_repens,3,
+7/10/2024,"AD, RG",chong_68,3,p1,full-plot,net-floral,chong_68_3_p1_full-plot_net-floral,crca,crepis_capillaris,1,
+7/10/2024,RG,chong_68,3,p2,full-plot,net-floral,chong_68_3_p2_full-plot_net-floral,rare,ranunculus_repens,4,
+7/10/2024,RG,chong_68,3,p2,full-plot,net-floral,chong_68_3_p2_full-plot_net-floral,trre,trifolium_repens,4,
+7/10/2024,RG,chong_68,3,p2,full-plot,net-floral,chong_68_3_p2_full-plot_net-floral,vicr,vicia_cracca,3,
+7/10/2024,"AD, RG",bks_96,3,p1,full-plot,net-floral,bks_96_3_p1_full-plot_net-floral,rara,raphanus_raphanistrum,5,
+7/10/2024,"AD, RG",bks_96,3,p1,full-plot,net-floral,bks_96_3_p1_full-plot_net-floral,gedi,geranium_dissectum,3,
+7/10/2024,AD,bks_96,3,p2,full-plot,net-floral,bks_96_3_p2_full-plot_net-floral,gedi,geranium_dissectum,4,
+7/10/2024,AD,bks_96,3,p2,full-plot,net-floral,bks_96_3_p2_full-plot_net-floral,rara,raphanus_raphanistrum,5,
+7/10/2024,AD,bks_96,3,p2,full-plot,net-floral,bks_96_3_p2_full-plot_net-floral,sevu,senecio_vulgaris,3,
+7/24/2024,RG,bates_57b,3,p1,full-plot,net-floral,bates_57b_3_p1_full-plot_net-floral,poav,polygonum_aviculare,4,
+7/24/2024,RG,bates_57b,3,p1,full-plot,net-floral,bates_57b_3_p1_full-plot_net-floral,plla,plantago_lanceolata,2,
+7/24/2024,RG,bates_57b,3,p1,full-plot,net-floral,bates_57b_3_p1_full-plot_net-floral,scau,scorzoneroides_autumnalis,5,autumn hawkbit
+7/24/2024,RG,bates_57b,3,p1,full-plot,net-floral,bates_57b_3_p1_full-plot_net-floral,ruac,rumex_acetosa,2,
+7/24/2024,RG,bates_57b,3,p1,full-plot,net-floral,bates_57b_3_p1_full-plot_net-floral,trre,trifolium_repens,4,
+7/24/2024,RG,bks_56,3,p1,full-plot,net-floral,bks_56_3_p1_full-plot_net-floral,ropa,rorippa_palustris,4,
+7/24/2024,RG,bks_56,3,p1,full-plot,net-floral,bks_56_3_p1_full-plot_net-floral,pema,persicaria_maculosa,3,
+7/24/2024,RG,bks_56,3,p1,full-plot,net-floral,bks_56_3_p1_full-plot_net-floral,amre,amaranthus_retroflexus,2,red root amaranth
+7/24/2024,AD,bks_56,3,p2,full-plot,net-floral,bks_56_3_p2_full-plot_net-floral,ropa,rorippa_palustris,5,
+7/24/2024,AD,bks_56,3,p2,full-plot,net-floral,bks_56_3_p2_full-plot_net-floral,epci,epilobium_ciliatum,3,
+7/24/2024,AD,bates_57b,3,p2,full-plot,net-floral,bates_57b_3_p2_full-plot_net-floral,scau,scorzoneroides_autumnalis,4,
+7/24/2024,AD,bates_57b,3,p2,full-plot,net-floral,bates_57b_3_p2_full-plot_net-floral,poav,polygonum_aviculare,4,
+7/24/2024,AD,bates_57b,3,p2,full-plot,net-floral,bates_57b_3_p2_full-plot_net-floral,trre,trifolium_repens,3,
+7/24/2024,AD,bates_57b,3,p2,full-plot,net-floral,bates_57b_3_p2_full-plot_net-floral,trpr,trifolium_pratense,3,
+7/24/2024,AD,bates_57b,3,p2,full-plot,net-floral,bates_57b_3_p2_full-plot_net-floral,plla,plantago_lanceolata,2,
+7/26/2024,NC,lbf_ladnertrunk,3,p1,full-plot,net-floral,lbf_ladnertrunk_3_p1_full-plot_net-floral,pema,persicaria_maculosa,1,
+7/26/2024,NC,lbf_ladnertrunk,3,p1,full-plot,net-floral,lbf_ladnertrunk_3_p1_full-plot_net-floral,trhy,trifolium_hybridum,2,
+7/26/2024,NC,lbf_ladnertrunk,3,p1,full-plot,net-floral,lbf_ladnertrunk_3_p1_full-plot_net-floral,poav,polygonum_aviculare,3,
+7/26/2024,NC,lbf_ladnertrunk,3,p1,full-plot,net-floral,lbf_ladnertrunk_3_p1_full-plot_net-floral,trre,trifolium_repens,3,
+7/26/2024,NC,lbf_ladnertrunk,3,p1,full-plot,net-floral,lbf_ladnertrunk_3_p1_full-plot_net-floral,rare,ranunculus_repens,2,
+7/26/2024,"RG, DM",lbf_ladnertrunk,3,p2,full-plot,net-floral,lbf_ladnertrunk_3_p2_full-plot_net-floral,trre,trifolium_repens,3,
+7/29/2024,"AD, RG",sandhu_ladnertrunk,3,p2,full-plot,net-floral,sandhu_ladnertrunk_3_p2_full-plot_net-floral,ropa,rorippa_palustris,4,
+7/29/2024,"AD, RG",sandhu_ladnertrunk,3,p2,full-plot,net-floral,sandhu_ladnertrunk_3_p2_full-plot_net-floral,epci,epilobium_ciliatum,2,
+7/29/2024,"AD, RG",sandhu_ladnertrunk,3,p2,full-plot,net-floral,sandhu_ladnertrunk_3_p2_full-plot_net-floral,sopa,solanum_parishii,1,
+7/29/2024,"AD, RG",sandhu_ladnertrunk,3,p1,full-plot,net-floral,sandhu_ladnertrunk_3_p1_full-plot_net-floral,ropa,rorippa_palustris,4,
+7/29/2024,"AD, RG",sandhu_ladnertrunk,3,p1,full-plot,net-floral,sandhu_ladnertrunk_3_p1_full-plot_net-floral,rara,raphanus_raphanistrum,3,
+8/6/2024,"AD, RG",avtar_168,3,p2,full-plot,net-floral,avtar_168_3_p2_full-plot_net-floral,pema,persicaria_maculosa,2,
+8/6/2024,"AD, RG",surjit_168,3,p1,full-plot,net-floral,surjit_168_3_p1_full-plot_net-floral,pool,portulaca_oleracea,1,
+8/6/2024,"AD, RG",surjit_168,3,p1,full-plot,net-floral,surjit_168_3_p1_full-plot_net-floral,trre,trifolium_repens,2,
+8/6/2024,"AD, RG",surjit_168,3,p1,full-plot,net-floral,surjit_168_3_p1_full-plot_net-floral,ropa,rorippa_palustris,2,
+8/14/2024,"AD, RG",bks_neaves,3,p1,full-plot,net-floral,bks_neaves_3_p1_full-plot_net-floral,epci,epilobium_ciliatum,3,
+8/14/2024,"AD, RG",bks_neaves,3,p1,full-plot,net-floral,bks_neaves_3_p1_full-plot_net-floral,lope,lotus_pedunculatus,3,
+8/14/2024,"AD, RG",bks_neaves,3,p2,full-plot,net-floral,bks_neaves_3_p2_full-plot_net-floral,epci,epilobium_ciliatum,1,
+8/14/2024,"AD, RG",bks_neaves,3,p2,full-plot,net-floral,bks_neaves_3_p2_full-plot_net-floral,lope,lotus_pedunculatus,3,
+8/14/2024,"AD, RG",gwb_neaves,3,p1,full-plot,net-floral,gwb_neaves_3_p1_full-plot_net-floral,trre,trifolium_repens,2,
+8/14/2024,"AD, RG",gwb_neaves,3,p2,full-plot,net-floral,gwb_neaves_3_p2_full-plot_net-floral,trre,trifolium_repens,3,
+4/3/2025,RG,sandhu_ladnertrunk,NS1,p2,full-plot,net-floral,sandhu_ladnertrunk_NS1_p2_full-plot_net-floral,cahi,cardamine_hirsuta,3,
+4/3/2025,RG,sandhu_ladnertrunk,NS1,p1,full-plot,net-floral,sandhu_ladnertrunk_NS1_p1_full-plot_net-floral,sevu,senecio_vulgaris,2,
+4/3/2025,RG,sandhu_ladnertrunk,NS1,p1,full-plot,net-floral,sandhu_ladnertrunk_NS1_p1_full-plot_net-floral,cahi,cardamine_hirsuta,3,
+4/3/2025,RG,sandhu_ladnertrunk,NS1,p1,full-plot,net-floral,sandhu_ladnertrunk_NS1_p1_full-plot_net-floral,drve,draba_verna,2,
+4/3/2025,RG,sandhu_ladnertrunk,NS1,d,full-plot,net-floral,sandhu_ladnertrunk_NS1_d_full-plot_net-floral,taof,taraxacum_officinale,2,
+4/3/2025,RG,sandhu_ladnertrunk,NS1,d,full-plot,net-floral,sandhu_ladnertrunk_NS1_d_full-plot_net-floral,cahi,cardamine_hirsuta,4,
+4/3/2025,RG,sandhu_ladnertrunk,NS1,d,full-plot,net-floral,sandhu_ladnertrunk_NS1_d_full-plot_net-floral,stme,stellaria_media,3,
+4/3/2025,RG,sandhu_ladnertrunk,NS1,d,full-plot,net-floral,sandhu_ladnertrunk_NS1_d_full-plot_net-floral,brra,brassica_rapa,1,
+4/3/2025,RG,lbf_ladnertrunk,NS1,p2,full-plot,net-floral,lbf_ladnertrunk_NS1_p2_full-plot_net-floral,taof,taraxacum_officinale,1,
+4/3/2025,RG,lbf_ladnertrunk,NS1,d,full-plot,net-floral,lbf_ladnertrunk_NS1_d_full-plot_net-floral,taof,taraxacum_officinale,2,
+4/3/2025,RG,lbf_ladnertrunk,NS1,d,full-plot,net-floral,lbf_ladnertrunk_NS1_d_full-plot_net-floral,cahi,cardamine_hirsuta,3,
+4/16/2025,RG,bks_96,NS1,p1,full-plot,net-floral,bks_96_NS1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,3,
+4/16/2025,RG,bks_96,NS1,p2,full-plot,net-floral,bks_96_NS1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,1,
+4/16/2025,RG,bks_96,NS1,p2,full-plot,net-floral,bks_96_NS1_p2_full-plot_net-floral,cahi,cardamine_hirsuta,2,
+4/16/2025,RG,bks_96,NS1,p2,full-plot,net-floral,bks_96_NS1_p2_full-plot_net-floral,sevu,senecio_vulgaris,2,
+4/16/2025,RG,bks_96,NS1,d,full-plot,net-floral,bks_96_NS1_d_full-plot_net-floral,mune,muscari_neglectum,3,
+4/16/2025,RG,bks_96,NS1,d,full-plot,net-floral,bks_96_NS1_d_full-plot_net-floral,cahi,cardamine_hirsuta,4,
+4/16/2025,RG,bks_96,NS1,d,full-plot,net-floral,bks_96_NS1_d_full-plot_net-floral,arth,arabidopsis _thaliana,4,
+4/16/2025,RG,bks_96,NS1,d,full-plot,net-floral,bks_96_NS1_d_full-plot_net-floral,lapu,lamium_purpureum,1,
+4/16/2025,RG,bks_96,NS1,d,full-plot,net-floral,bks_96_NS1_d_full-plot_net-floral,moli,montia_linearis,2,
+4/16/2025,RG,bks_96,NS1,d,full-plot,net-floral,bks_96_NS1_d_full-plot_net-floral,sevu,senecio_vulgaris,2,
+4/16/2025,RG,chong_96,NS1,p1,full-plot,net-floral,chong_96_NS1_p1_full-plot_net-floral,taof,taraxacum_officinale,2,
+4/16/2025,RG,chong_96,NS1,p2,full-plot,net-floral,chong_96_NS1_p2_full-plot_net-floral,cahi,cardamine_hirsuta,2,
+4/16/2025,RG,chong_96,NS1,p2,full-plot,net-floral,chong_96_NS1_p2_full-plot_net-floral,taof,taraxacum_officinale,1,
+4/16/2025,RG,chong_96,NS1,d,full-plot,net-floral,chong_96_NS1_d_full-plot_net-floral,cahi,cardamine_hirsuta,3,
+4/16/2025,RG,chong_96,NS1,d,full-plot,net-floral,chong_96_NS1_d_full-plot_net-floral,taof,taraxacum_officinale,2,
+4/16/2025,RG,chong_96,NS1,d,full-plot,net-floral,chong_96_NS1_d_full-plot_net-floral,stme,stellaria_media,2,
+4/17/2025,RG,bates_57b,NS,p1,full-plot,net-floral,bates_57b_NS_p1_full-plot_net-floral,taof,taraxacum_officinale,4,
+4/17/2025,RG,bates_57b,NS,p1,full-plot,net-floral,bates_57b_NS_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,3,
+4/24/2025,RG,gwb_neaves,NS1,p1,full-plot,net-floral,gwb_neaves_NS1_p1_full-plot_net-floral,taof,taraxacum_officinale,2,
+4/24/2025,RG,gwb_neaves,NS1,p1,full-plot,net-floral,gwb_neaves_NS1_p1_full-plot_net-floral,cegl,cerastium_glomeratum,2,
+4/24/2025,RG,gwb_neaves,NS1,p2,full-plot,net-floral,gwb_neaves_NS1_p2_full-plot_net-floral,taof,taraxacum_officinale,3,
+4/24/2025,RG,gwb_neaves,NS1,p2,full-plot,net-floral,gwb_neaves_NS1_p2_full-plot_net-floral,moli,montia_linearis,4,
+4/24/2025,RG,gwb_neaves,NS1,p2,full-plot,net-floral,gwb_neaves_NS1_p2_full-plot_net-floral,stme,stellaria_media,2,
+4/24/2025,RG,gwb_neaves,NS1,d,full-plot,net-floral,gwb_neaves_NS1_d_full-plot_net-floral,cegl,cerastium_glomeratum,3,
+4/24/2025,RG,gwb_neaves,NS1,d,full-plot,net-floral,gwb_neaves_NS1_d_full-plot_net-floral,taof,taraxacum_officinale,2,
+4/24/2025,RG,gwb_neaves,NS1,d,full-plot,net-floral,gwb_neaves_NS1_d_full-plot_net-floral,cahi,cardamine_hirsuta,4,
+4/24/2025,RG,gwb_neaves,NS1,d,full-plot,net-floral,gwb_neaves_NS1_d_full-plot_net-floral,sevu,senecio_vulgaris,2,
+4/24/2025,RG,gwb_neaves,NS1,d,full-plot,net-floral,gwb_neaves_NS1_d_full-plot_net-floral,plvi,planodes_virginicum,3,
+4/24/2025,RG,bks_neaves,NS1,p1,full-plot,net-floral,bks_neaves_NS1_p1_full-plot_net-floral,sevu,senecio_vulgaris,4,
+4/24/2025,RG,bks_neaves,NS1,p1,full-plot,net-floral,bks_neaves_NS1_p1_full-plot_net-floral,stme,stellaria_media,2,
+4/24/2025,RG,bks_neaves,NS1,p1,full-plot,net-floral,bks_neaves_NS1_p1_full-plot_net-floral,moli,montia_linearis,4,
+4/24/2025,RG,bks_neaves,NS1,p1,full-plot,net-floral,bks_neaves_NS1_p1_full-plot_net-floral,cegl,cerastium_glomeratum,3,
+4/24/2025,RG,bks_neaves,NS1,p2,full-plot,net-floral,bks_neaves_NS1_p2_full-plot_net-floral,plvi,planodes_virginicum,3,
+4/24/2025,RG,bks_neaves,NS1,p2,full-plot,net-floral,bks_neaves_NS1_p2_full-plot_net-floral,sevu,senecio_vulgaris,2,
+4/24/2025,RG,bks_neaves,NS1,d,full-plot,net-floral,bks_neaves_NS1_d_full-plot_net-floral,sevu,senecio_vulgaris,2,
+4/24/2025,RG,bks_neaves,NS1,d,full-plot,net-floral,bks_neaves_NS1_d_full-plot_net-floral,moli,montia_linearis,3,
+4/24/2025,RG,bks_neaves,NS1,d,full-plot,net-floral,bks_neaves_NS1_d_full-plot_net-floral,taof,taraxacum_officinale,2,
+4/24/2025,RG,bks_neaves,NS1,d,full-plot,net-floral,bks_neaves_NS1_d_full-plot_net-floral,cahi,cardamine_hirsuta,3,
+4/24/2025,RG,bks_neaves,NS1,d,full-plot,net-floral,bks_neaves_NS1_d_full-plot_net-floral,sara,sambucus_racemosa,5,
+4/24/2025,RG,bks_neaves,NS1,d,full-plot,net-floral,bks_neaves_NS1_d_full-plot_net-floral,plvi,planodes_virginicum,4,
+4/27/2025,RG,sandhu_ladnertrunk,NS2,p1,full-plot,net-floral,sandhu_ladnertrunk_NS2_p1_full-plot_net-floral,sevu,senecio_vulgaris,2,
+4/27/2025,RG,sandhu_ladnertrunk,NS2,p1,full-plot,net-floral,sandhu_ladnertrunk_NS2_p1_full-plot_net-floral,cahi,cardamine_hirsuta,1,
+4/27/2025,RG,sandhu_ladnertrunk,NS2,p1,full-plot,net-floral,sandhu_ladnertrunk_NS2_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+4/27/2025,RG,sandhu_ladnertrunk,NS2,p2,full-plot,net-floral,sandhu_ladnertrunk_NS2_p2_full-plot_net-floral,sevu,senecio_vulgaris,2,
+4/27/2025,RG,sandhu_ladnertrunk,NS2,p2,full-plot,net-floral,sandhu_ladnertrunk_NS2_p2_full-plot_net-floral,cahi,cardamine_hirsuta,1,
+4/27/2025,RG,sandhu_ladnertrunk,NS2,p2,full-plot,net-floral,sandhu_ladnertrunk_NS2_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+4/27/2025,RG,sandhu_ladnertrunk,NS2,d,full-plot,net-floral,sandhu_ladnertrunk_NS2_d_full-plot_net-floral,myst,myosotis stricta ,3,
+4/27/2025,RG,sandhu_ladnertrunk,NS2,d,full-plot,net-floral,sandhu_ladnertrunk_NS2_d_full-plot_net-floral,taof,taraxacum_officinale,2,
+4/27/2025,RG,sandhu_ladnertrunk,NS2,d,full-plot,net-floral,sandhu_ladnertrunk_NS2_d_full-plot_net-floral,cegl,cerastium_glomeratum,3,
+4/27/2025,RG,sandhu_ladnertrunk,NS2,d,full-plot,net-floral,sandhu_ladnertrunk_NS2_d_full-plot_net-floral,brra,brassica_rapa,2,
+4/27/2025,RG,sandhu_ladnertrunk,NS2,d,full-plot,net-floral,sandhu_ladnertrunk_NS2_d_full-plot_net-floral,rara,raphanus_raphanistrum,1,
+4/27/2025,RG,sandhu_ladnertrunk,NS2,d,full-plot,net-floral,sandhu_ladnertrunk_NS2_d_full-plot_net-floral,cahi,cardamine_hirsuta,3,
+4/27/2025,RG,sandhu_ladnertrunk,NS2,d,full-plot,net-floral,sandhu_ladnertrunk_NS2_d_full-plot_net-floral,sevu,senecio_vulgaris,2,
+4/27/2025,RG,sandhu_ladnertrunk,NS2,d,full-plot,net-floral,sandhu_ladnertrunk_NS2_d_full-plot_net-floral,rare,ranunculus_repens,1,
+4/27/2025,RG,lbf_ladnertrunk,NS2,p1,full-plot,net-floral,lbf_ladnertrunk_NS2_p1_full-plot_net-floral,rare,ranunculus_repens,3,
+4/27/2025,RG,lbf_ladnertrunk,NS2,p1,full-plot,net-floral,lbf_ladnertrunk_NS2_p1_full-plot_net-floral,taof,taraxacum_officinale,1,
+4/27/2025,RG,lbf_ladnertrunk,NS2,p1,full-plot,net-floral,lbf_ladnertrunk_NS2_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+4/27/2025,RG,lbf_ladnertrunk,NS2,p2,full-plot,net-floral,lbf_ladnertrunk_NS2_p2_full-plot_net-floral,rare,ranunculus_repens,3,
+4/27/2025,RG,lbf_ladnertrunk,NS2,p2,full-plot,net-floral,lbf_ladnertrunk_NS2_p2_full-plot_net-floral,taof,taraxacum_officinale,2,
+4/27/2025,RG,lbf_ladnertrunk,NS2,p2,full-plot,net-floral,lbf_ladnertrunk_NS2_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+4/27/2025,RG,lbf_ladnertrunk,NS2,d,full-plot,net-floral,lbf_ladnertrunk_NS2_d_full-plot_net-floral,taof,taraxacum_officinale,2,
+4/27/2025,RG,lbf_ladnertrunk,NS2,d,full-plot,net-floral,lbf_ladnertrunk_NS2_d_full-plot_net-floral,baor,barbarea_orthoceras,3,
+4/27/2025,RG,lbf_ladnertrunk,NS2,d,full-plot,net-floral,lbf_ladnertrunk_NS2_d_full-plot_net-floral,cegl,cerastium_glomeratum,4,
+4/27/2025,RG,lbf_ladnertrunk,NS2,d,full-plot,net-floral,lbf_ladnertrunk_NS2_d_full-plot_net-floral,myst,myosotis stricta ,2,
+4/29/2025,RG,chong_68,NS2,p1,full-plot,net-floral,chong_68_NS2_p1_full-plot_net-floral,rare,ranunculus_repens,3,
+4/29/2025,RG,chong_68,NS2,p1,full-plot,net-floral,chong_68_NS2_p1_full-plot_net-floral,taof,taraxacum_officinale,2,
+4/29/2025,RG,chong_68,NS2,p1,full-plot,net-floral,chong_68_NS2_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+4/29/2025,RG,chong_68,NS2,p2,full-plot,net-floral,chong_68_NS2_p2_full-plot_net-floral,rare,ranunculus_repens,3,
+4/29/2025,RG,chong_68,NS2,p2,full-plot,net-floral,chong_68_NS2_p2_full-plot_net-floral,taof,taraxacum_officinale,3,
+4/29/2025,RG,chong_68,NS2,p2,full-plot,net-floral,chong_68_NS2_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+4/29/2025,RG,chong_68,NS2,d,full-plot,net-floral,chong_68_NS2_d_full-plot_net-floral,taof,taraxacum_officinale,3,
+4/29/2025,RG,chong_68,NS2,d,full-plot,net-floral,chong_68_NS2_d_full-plot_net-floral,capr,cardamine_pratensis,2,
+4/29/2025,RG,chong_68,NS2,d,full-plot,net-floral,chong_68_NS2_d_full-plot_net-floral,sevu,senecio_vulgaris,2,
+4/29/2025,RG,chong_68,NS2,d,full-plot,net-floral,chong_68_NS2_d_full-plot_net-floral,brra,brassica_rapa,2,
+4/29/2025,RG,chong_68,NS2,d,full-plot,net-floral,chong_68_NS2_d_full-plot_net-floral,visa,vicia_sativa,1,
+4/29/2025,RG,bks_68,NS2,p1,full-plot,net-floral,bks_68_NS2_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+4/29/2025,RG,bks_68,NS2,p2,full-plot,net-floral,bks_68_NS2_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+4/29/2025,RG,bks_68,NS2,d,full-plot,net-floral,bks_68_NS2_d_full-plot_net-floral,cahi,cardamine_hirsuta,3,
+4/29/2025,RG,bks_68,NS2,d,full-plot,net-floral,bks_68_NS2_d_full-plot_net-floral,visa,vicia_sativa,2,
+4/29/2025,RG,bks_68,NS2,d,full-plot,net-floral,bks_68_NS2_d_full-plot_net-floral,moli,montia_linearis,2,
+4/29/2025,RG,bks_68,NS2,d,full-plot,net-floral,bks_68_NS2_d_full-plot_net-floral,myst,myosotis stricta ,3,
+4/30/2025,RG,bates_57b,NS2,p1,full-plot,net-floral,bates_57b_NS2_p1_full-plot_net-floral,taof,taraxacum_officinale,3,
+4/30/2025,RG,bates_57b,NS2,p1,full-plot,net-floral,bates_57b_NS2_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+4/30/2025,RG,bates_57b,NS2,d,full-plot,net-floral,bates_57b_NS2_d_full-plot_net-floral,taof,taraxacum_officinale,4,
+4/30/2025,RG,bates_57b,NS2,d,full-plot,net-floral,bates_57b_NS2_d_full-plot_net-floral,stme,stellaria_media,2,
+4/30/2025,RG,bates_57b,NS2,d,full-plot,net-floral,bates_57b_NS2_d_full-plot_net-floral,raac,ranunculus_acris,1,
+4/30/2025,RG,bates_57b,NS2,d,full-plot,net-floral,bates_57b_NS2_d_full-plot_net-floral,lapu,lamium_purpureum,2,
+4/30/2025,RG,bates_57b,NS2,d,full-plot,net-floral,bates_57b_NS2_d_full-plot_net-floral,rare,ranunculus_repens,2,
+4/30/2025,RG,bates_57b,NS2,d,full-plot,net-floral,bates_57b_NS2_d_full-plot_net-floral,ruac,rumex_acetosa,3,
+4/30/2025,RG,bates_57b,NS2,d,full-plot,net-floral,bates_57b_NS2_d_full-plot_net-floral,cegl,cerastium_glomeratum,2,
+4/30/2025,RG,bates_57b,NS2,d,full-plot,net-floral,bates_57b_NS2_d_full-plot_net-floral,myst,myosotis stricta ,1,
+4/30/2025,RG,bates_57b,NS2,p2,full-plot,net-floral,bates_57b_NS2_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+4/30/2025,RG,bates_57b,NS2,p2,full-plot,net-floral,bates_57b_NS2_p2_full-plot_net-floral,taof,taraxacum_officinale,3,
+4/30/2025,RG,bks_56,NS2,p1,full-plot,net-floral,bks_56_NS2_p1_full-plot_net-floral,madi,matricaria_discoidea,2,
+4/30/2025,RG,bks_56,NS2,p1,full-plot,net-floral,bks_56_NS2_p1_full-plot_net-floral,rasc,ranunculus_sceleratus,2,
+4/30/2025,RG,bks_56,NS2,p1,full-plot,net-floral,bks_56_NS2_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+4/30/2025,RG,bks_56,NS2,p2,full-plot,net-floral,bks_56_NS2_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+4/30/2025,RG,bks_56,NS2,d,full-plot,net-floral,bks_56_NS2_d_full-plot_net-floral,cahi,cardamine_hirsuta,4,
+4/30/2025,RG,bks_56,NS2,d,full-plot,net-floral,bks_56_NS2_d_full-plot_net-floral,myst,myosotis stricta ,5,
+4/30/2025,RG,bks_56,NS2,d,full-plot,net-floral,bks_56_NS2_d_full-plot_net-floral,visa,vicia_sativa,1,
+4/30/2025,RG,bks_56,NS2,d,full-plot,net-floral,bks_56_NS2_d_full-plot_net-floral,brra,brassica_rapa,3,
+4/30/2025,RG,bks_56,NS2,d,full-plot,net-floral,bks_56_NS2_d_full-plot_net-floral,lapu,lamium_purpureum,2,
+4/30/2025,RG,bks_56,NS2,d,full-plot,net-floral,bks_56_NS2_d_full-plot_net-floral,sevu,senecio_vulgaris,2,
+4/30/2025,RG,bks_56,NS2,d,full-plot,net-floral,bks_56_NS2_d_full-plot_net-floral,cegl,cerastium_glomeratum,4,
+4/30/2025,RG,bks_56,NS2,d,full-plot,net-floral,bks_56_NS2_d_full-plot_net-floral,cabu,capsella_bursa-pastoris,2,
+4/30/2025,RG,bks_56,NS2,d,full-plot,net-floral,bks_56_NS2_d_full-plot_net-floral,baor,barbarea_orthoceras,2,
+4/30/2025,RG,bks_56,NS2,d,full-plot,net-floral,bks_56_NS2_d_full-plot_net-floral,mafu,malus_fusca,4,
+4/30/2025,RG,bks_56,NS2,d,full-plot,net-floral,bks_56_NS2_d_full-plot_net-floral,gedi,geranium_dissectum,1,
+5/1/2025,"AD, TK",bks_96,NS2,p1,full-plot,net-floral,bks_96_NS2_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+5/1/2025,"AD, TK",bks_96,NS2,p2,full-plot,net-floral,bks_96_NS2_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+5/1/2025,"AD, TK",bks_96,NS2,p2,full-plot,net-floral,bks_96_NS2_p2_full-plot_net-floral,rare,ranunculus_repens,1,
+5/1/2025,"AD, TK",bks_96,NS2,d,full-plot,net-floral,bks_96_NS2_d_full-plot_net-floral,arth,arabidopsis _thaliana,4,
+5/1/2025,"AD, TK",bks_96,NS2,d,full-plot,net-floral,bks_96_NS2_d_full-plot_net-floral,orum,ornithogalum_umbellatum,1,
+5/1/2025,"AD, TK",bks_96,NS2,d,full-plot,net-floral,bks_96_NS2_d_full-plot_net-floral,hyhi,hyacinthoides_hispanica,2,
+5/1/2025,"AD, TK",bks_96,NS2,d,full-plot,net-floral,bks_96_NS2_d_full-plot_net-floral,sevu,senecio_vulgaris,3,
+5/1/2025,"AD, TK",bks_96,NS2,d,full-plot,net-floral,bks_96_NS2_d_full-plot_net-floral,moli,montia_linearis,4,
+5/1/2025,"AD, TK",chong_96,NS2,p1,full-plot,net-floral,chong_96_NS2_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+5/1/2025,"AD, TK",chong_96,NS2,p2,full-plot,net-floral,chong_96_NS2_p2_full-plot_net-floral,taof,taraxacum_officinale,1,
+5/1/2025,"AD, TK",chong_96,NS2,p2,full-plot,net-floral,chong_96_NS2_p2_full-plot_net-floral,raac,ranunculus_acris,2,
+5/1/2025,"AD, TK",chong_96,NS2,p2,full-plot,net-floral,chong_96_NS2_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+5/1/2025,"AD, TK",chong_96,NS2,d,full-plot,net-floral,chong_96_NS2_d_full-plot_net-floral,rara,raphanus_raphanistrum,2,
+5/1/2025,"AD, TK",chong_96,NS2,d,full-plot,net-floral,chong_96_NS2_d_full-plot_net-floral,taof,taraxacum_officinale,2,
+5/1/2025,"AD, TK",chong_96,NS2,d,full-plot,net-floral,chong_96_NS2_d_full-plot_net-floral,raac,ranunculus_acris,1,
+5/1/2025,"AD, TK",chong_96,NS2,d,full-plot,net-floral,chong_96_NS2_d_full-plot_net-floral,cegl,cerastium_glomeratum,1,
+5/6/2025,"AD, AH",gwb_neaves,NS2,p1,full-plot,net-floral,gwb_neaves_NS2_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+5/6/2025,"AD, AH",gwb_neaves,NS2,p2,full-plot,net-floral,gwb_neaves_NS2_p2_full-plot_net-floral,rare,ranunculus_repens,3,
+5/6/2025,"AD, AH",gwb_neaves,NS2,p2,full-plot,net-floral,gwb_neaves_NS2_p2_full-plot_net-floral,taof,taraxacum_officinale,1,
+5/6/2025,"AD, AH",gwb_neaves,NS2,p2,full-plot,net-floral,gwb_neaves_NS2_p2_full-plot_net-floral,cegl,cerastium_glomeratum,2,
+5/6/2025,"AD, AH",gwb_neaves,NS2,p2,full-plot,net-floral,gwb_neaves_NS2_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+4/18/2025,RG,avtar_168,NS1,p1,full-plot,net-floral,avtar_168_NS1_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,3,
+4/18/2025,RG,avtar_168,NS1,p2,full-plot,net-floral,avtar_168_NS1_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,3,
+4/18/2025,RG,avtar_168,NS1,d,full-plot,net-floral,avtar_168_NS1_d_full-plot_net-floral,cahi,cardamine_hirsuta,3,
+4/18/2025,RG,avtar_168,NS1,d,full-plot,net-floral,avtar_168_NS1_d_full-plot_net-floral,cegl,cerastium_glomeratum,1,
+4/18/2025,RG,avtar_168,NS1,d,full-plot,net-floral,avtar_168_NS1_d_full-plot_net-floral,taof,taraxacum_officinale,1,
+4/18/2025,RG,avtar_168,NS1,d,full-plot,net-floral,avtar_168_NS1_d_full-plot_net-floral,cahi,cardamine_hirsuta,2,
+4/18/2025,RG,surjit_168,NS1,p1,full-plot,net-floral,surjit_168_NS1_p1_full-plot_net-floral,cahi,cardamine_hirsuta,2,
+4/18/2025,RG,surjit_168,NS1,p1,full-plot,net-floral,surjit_168_NS1_p1_full-plot_net-floral,drve,draba_verna,1,
+4/18/2025,RG,surjit_168,NS1,p2,full-plot,net-floral,surjit_168_NS1_p2_full-plot_net-floral,cahi,cardamine_hirsuta,3,
+4/18/2025,RG,surjit_168,NS1,p2,full-plot,net-floral,surjit_168_NS1_p2_full-plot_net-floral,taof,taraxacum_officinale,1,
+4/18/2025,RG,surjit_168,NS1,d,full-plot,net-floral,surjit_168_NS1_d_full-plot_net-floral,stme,stellaria_media,3,
+4/18/2025,RG,surjit_168,NS1,d,full-plot,net-floral,surjit_168_NS1_d_full-plot_net-floral,lapu,lamium_purpureum,2,
+4/18/2025,RG,surjit_168,NS1,d,full-plot,net-floral,surjit_168_NS1_d_full-plot_net-floral,vear,veronica_arvensis,1,
+4/18/2025,RG,surjit_168,NS1,d,full-plot,net-floral,surjit_168_NS1_d_full-plot_net-floral,cahi,cardamine_hirsuta,5,
+4/18/2025,RG,surjit_168,NS1,d,full-plot,net-floral,surjit_168_NS1_d_full-plot_net-floral,erci,erodium_cicutarium,1,
+4/18/2025,RG,surjit_168,NS1,d,full-plot,net-floral,surjit_168_NS1_d_full-plot_net-floral,rara,raphanus_raphanistrum,2,
+4/18/2025,RG,surjit_168,NS1,d,full-plot,net-floral,surjit_168_NS1_d_full-plot_net-floral,taof,taraxacum_officinale,2,
+4/18/2025,RG,surjit_168,NS1,d,full-plot,net-floral,surjit_168_NS1_d_full-plot_net-floral,drve,draba_verna,4,
+5/6/2025,"AD, AH",bks_neaves,NS2,p1,full-plot,net-floral,bks_neaves_NS2_p1_full-plot_net-floral,rare,ranunculus_repens,3,
+5/6/2025,"AD, AH",bks_neaves,NS2,p1,full-plot,net-floral,bks_neaves_NS2_p1_full-plot_net-floral,moli,montia_linearis,3,
+5/6/2025,"AD, AH",bks_neaves,NS2,p1,full-plot,net-floral,bks_neaves_NS2_p1_full-plot_net-floral,myst,myosotis stricta ,3,
+5/6/2025,"AD, AH",bks_neaves,NS2,p1,full-plot,net-floral,bks_neaves_NS2_p1_full-plot_net-floral,sevu,senecio_vulgaris,2,
+5/6/2025,"AD, AH",bks_neaves,NS2,p2,full-plot,net-floral,bks_neaves_NS2_p2_full-plot_net-floral,rare,ranunculus_repens,3,
+5/6/2025,"AD, AH",bks_neaves,NS2,p2,full-plot,net-floral,bks_neaves_NS2_p2_full-plot_net-floral,rasc,ranunculus_sceleratus,3,
+5/6/2025,"AD, AH",bks_neaves,NS2,p2,full-plot,net-floral,bks_neaves_NS2_p2_full-plot_net-floral,myla,myosotis_laxa,2,
+5/6/2025,"AD, AH",bks_neaves,NS2,d,full-plot,net-floral,bks_neaves_NS2_d_full-plot_net-floral,crdo,crataegus_douglasii,4,
+5/6/2025,"AD, AH",bks_neaves,NS2,d,full-plot,net-floral,bks_neaves_NS2_d_full-plot_net-floral,cape,cardamine_pensylvanica,3,
+5/6/2025,"AD, AH",bks_neaves,NS2,d,full-plot,net-floral,bks_neaves_NS2_d_full-plot_net-floral,sara,sambucus_racemosa,2,
+5/6/2025,"AD, AH",bks_neaves,NS2,d,full-plot,net-floral,bks_neaves_NS2_d_full-plot_net-floral,mydi,myosotis_discolor,3,
+5/6/2025,"AD, AH",bks_neaves,NS2,d,full-plot,net-floral,bks_neaves_NS2_d_full-plot_net-floral,sevu,senecio_vulgaris,3,
+5/13/2025,AH,surjit_168,NS2,p1,full-plot,net-floral,surjit_168_NS2_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+5/13/2025,AH,surjit_168,NS2,p2,full-plot,net-floral,surjit_168_NS2_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+5/13/2025,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,trre,trifolium_repens,2,
+5/13/2025,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,arth,arabidopsis _thaliana,3,
+5/13/2025,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,mydi,myosotis_discolor,3,
+5/13/2025,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,rasc,ranunculus_sceleratus,3,
+5/13/2025,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,leca,lepidium_campestre,3,
+5/13/2025,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,plla,plantago_lanceolata,2,
+5/13/2025,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,ruac,rumex_acetosa,4,
+5/13/2025,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,trdu,trifolium_dubium,3,
+5/13/2025,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,vihi,vicia_hirsuta,4,
+5/13/2025,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,rara,raphanus_raphanistrum,4,
+5/13/2025,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,trpr,trifolium_pratense,1,
+5/13/2025,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,hyra,hypochaeris_radicata,1,
+5/13/2025,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,erci,erodium_cicutarium,2,
+5/13/2025,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,trin,tripleurospermum_inodorum,1,
+5/13/2025,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,soas,sonchus_asper,2,
+5/13/2025,AD,surjit_168,NS2,d,full-plot,net-floral,surjit_168_NS2_d_full-plot_net-floral,raac,ranunculus_acris,2,
+5/13/2025,AH,avtar_168,NS2,p1,full-plot,net-floral,avtar_168_NS2_p1_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+5/13/2025,AH,avtar_168,NS2,p2,full-plot,net-floral,avtar_168_NS2_p2_full-plot_net-floral,vaco,vaccinium_corymbosum,5,
+5/13/2025,AD,avtar_168,NS2,d,full-plot,net-floral,avtar_168_NS2_d_full-plot_net-floral,arth,arabidopsis _thaliana,1,
+5/13/2025,AD,avtar_168,NS2,d,full-plot,net-floral,avtar_168_NS2_d_full-plot_net-floral,rasc,ranunculus_sceleratus,1,
+5/13/2025,AD,avtar_168,NS2,d,full-plot,net-floral,avtar_168_NS2_d_full-plot_net-floral,ruac,rumex_acetosa,3,
+5/13/2025,AD,avtar_168,NS2,d,full-plot,net-floral,avtar_168_NS2_d_full-plot_net-floral,drve,draba_verna,1,
+5/13/2025,AD,avtar_168,NS2,d,full-plot,net-floral,avtar_168_NS2_d_full-plot_net-floral,rare,ranunculus_repens,5,
+5/13/2025,AD,avtar_168,NS2,d,full-plot,net-floral,avtar_168_NS2_d_full-plot_net-floral,rara,raphanus_raphanistrum,2,
+5/13/2025,AD,avtar_168,NS2,d,full-plot,net-floral,avtar_168_NS2_d_full-plot_net-floral,gedi,geranium_dissectum,2,
+5/13/2025,AD,avtar_168,NS2,d,full-plot,net-floral,avtar_168_NS2_d_full-plot_net-floral,baor,barbarea_orthoceras,3,
+6/18/2025,AD,bks_56,,p1,full-plot,net-floral,bks_56__p1_full-plot_net-floral,rasc,ranunculus_sceleratus,2,
+6/18/2025,AD,bks_56,,p2,full-plot,net-floral,bks_56__p2_full-plot_net-floral,rasc,ranunculus_sceleratus,3,
+6/18/2025,AD,bks_56,,d,full-plot,net-floral,bks_56__d_full-plot_net-floral,rasc,ranunculus_sceleratus,2,
+6/18/2025,AD,bks_56,,d,full-plot,net-floral,bks_56__d_full-plot_net-floral,sodu,solanum_dulcamara,3,
+6/18/2025,AD,bks_56,,d,full-plot,net-floral,bks_56__d_full-plot_net-floral,ropa,rorippa_palustris,5,
+6/18/2025,AD,bks_56,,d,full-plot,net-floral,bks_56__d_full-plot_net-floral,vite,vicia_tetrasperma,2,
+6/18/2025,AD,bks_56,,d,full-plot,net-floral,bks_56__d_full-plot_net-floral,epci,epilobium_ciliatum,2,
+6/18/2025,AD,bks_56,,d,full-plot,net-floral,bks_56__d_full-plot_net-floral,madi,matricaria_discoidea,3,
+6/18/2025,AD,bks_56,,d,full-plot,net-floral,bks_56__d_full-plot_net-floral,brra,brassica_rapa,3,
+6/18/2025,AD,bks_56,,d,full-plot,net-floral,bks_56__d_full-plot_net-floral,gedi,geranium_dissectum,2,
+6/18/2025,AD,bates_57b,,d,full-plot,net-floral,bates_57b__d_full-plot_net-floral,trre,trifolium_repens,4,
+6/18/2025,AD,bates_57b,,d,full-plot,net-floral,bates_57b__d_full-plot_net-floral,taof,taraxacum_officinale,3,
+6/18/2025,AD,bates_57b,,d,full-plot,net-floral,bates_57b__d_full-plot_net-floral,madi,matricaria_discoidea,2,
+6/18/2025,AD,bates_57b,,d,full-plot,net-floral,bates_57b__d_full-plot_net-floral,trdu,trifolium_dubium,2,
+6/18/2025,AD,bates_57b,,d,full-plot,net-floral,bates_57b__d_full-plot_net-floral,cabu,capsella_bursa-pastoris,2,
+6/18/2025,AD,bates_57b,,d,full-plot,net-floral,bates_57b__d_full-plot_net-floral,visa,vicia_sativa,1,
+6/18/2025,AD,bates_57b,,d,full-plot,net-floral,bates_57b__d_full-plot_net-floral,raac,ranunculus_acris,3,
+6/18/2025,AD,bates_57b,,d,full-plot,net-floral,bates_57b__d_full-plot_net-floral,rula,rubus_laciniatus,3,
+6/18/2025,AD,bates_57b,,d,full-plot,net-floral,bates_57b__d_full-plot_net-floral,ruac,rumex_acetosa,4,
+6/23/2025,AD,lbf_ladnertrunk,,p1,full-plot,net-floral,lbf_ladnertrunk__p1_full-plot_net-floral,trre,trifolium_repens,4,
+6/23/2025,AD,lbf_ladnertrunk,,p1,full-plot,net-floral,lbf_ladnertrunk__p1_full-plot_net-floral,rare,ranunculus_repens,4,
+6/23/2025,AD,lbf_ladnertrunk,,p1,full-plot,net-floral,lbf_ladnertrunk__p1_full-plot_net-floral,gedi,geranium_dissectum,3,
+6/23/2025,AD,lbf_ladnertrunk,,p2,full-plot,net-floral,lbf_ladnertrunk__p2_full-plot_net-floral,trre,trifolium_repens,3,
+6/23/2025,AD,lbf_ladnertrunk,,p2,full-plot,net-floral,lbf_ladnertrunk__p2_full-plot_net-floral,rare,ranunculus_repens,3,
+6/23/2025,AD,lbf_ladnertrunk,,p2,full-plot,net-floral,lbf_ladnertrunk__p2_full-plot_net-floral,taof,taraxacum_officinale,1,
+6/23/2025,AD,lbf_ladnertrunk,,d,full-plot,net-floral,lbf_ladnertrunk__d_full-plot_net-floral,trre,trifolium_repens,3,
+6/23/2025,AD,lbf_ladnertrunk,,d,full-plot,net-floral,lbf_ladnertrunk__d_full-plot_net-floral,rare,ranunculus_repens,3,
+6/23/2025,AD,lbf_ladnertrunk,,d,full-plot,net-floral,lbf_ladnertrunk__d_full-plot_net-floral,hyra,hypochaeris_radicata,2,
+6/23/2025,AD,lbf_ladnertrunk,,d,full-plot,net-floral,lbf_ladnertrunk__d_full-plot_net-floral,ruar,rubus_armeniacus,4,
+6/23/2025,AD,lbf_ladnertrunk,,d,full-plot,net-floral,lbf_ladnertrunk__d_full-plot_net-floral,baor,barbarea_orthoceras,2,
+6/23/2025,AD,lbf_ladnertrunk,,d,full-plot,net-floral,lbf_ladnertrunk__d_full-plot_net-floral,trhy,trifolium_hybridum,2,
+6/23/2025,AD,sandhu_ladnertrunk,,p1,full-plot,net-floral,sandhu_ladnertrunk__p1_full-plot_net-floral,epci,epilobium_ciliatum,2,
+6/23/2025,AD,sandhu_ladnertrunk,,p2,full-plot,net-floral,sandhu_ladnertrunk__p2_full-plot_net-floral,epci,epilobium_ciliatum,2,
+6/23/2025,AD,sandhu_ladnertrunk,,d,full-plot,net-floral,sandhu_ladnertrunk__d_full-plot_net-floral,gedi,geranium_dissectum,3,
+6/23/2025,AD,sandhu_ladnertrunk,,d,full-plot,net-floral,sandhu_ladnertrunk__d_full-plot_net-floral,brra,brassica_rapa,2,
+6/23/2025,AD,sandhu_ladnertrunk,,d,full-plot,net-floral,sandhu_ladnertrunk__d_full-plot_net-floral,trre,trifolium_repens,2,
+6/23/2025,AD,sandhu_ladnertrunk,,d,full-plot,net-floral,sandhu_ladnertrunk__d_full-plot_net-floral,visa,vicia_sativa,1,
+6/23/2025,AD,sandhu_ladnertrunk,,d,full-plot,net-floral,sandhu_ladnertrunk__d_full-plot_net-floral,ropa,rorippa_palustris,3,
+6/24/2025,AD,gwb_neaves,,p1,full-plot,net-floral,gwb_neaves__p1_full-plot_net-floral,trre,trifolium_repens,2,
+6/24/2025,AD,gwb_neaves,,p2,full-plot,net-floral,gwb_neaves__p2_full-plot_net-floral,trre,trifolium_repens,2,
+6/24/2025,AD,gwb_neaves,,d,full-plot,net-floral,gwb_neaves__d_full-plot_net-floral,ruar,rubus_armeniacus,5,
+6/24/2025,AD,gwb_neaves,,d,full-plot,net-floral,gwb_neaves__d_full-plot_net-floral,crca,crepis_capillaris,4,
+6/24/2025,AD,gwb_neaves,,d,full-plot,net-floral,gwb_neaves__d_full-plot_net-floral,lysa,lythrum_salicaria,2,
+6/24/2025,AD,gwb_neaves,,d,full-plot,net-floral,gwb_neaves__d_full-plot_net-floral,pema,persicaria_maculosa,3,
+6/24/2025,AD,gwb_neaves,,d,full-plot,net-floral,gwb_neaves__d_full-plot_net-floral,rula,rubus_laciniatus,4,
+6/24/2025,AD,gwb_neaves,,d,full-plot,net-floral,gwb_neaves__d_full-plot_net-floral,lope,lotus_pedunculatus,5,
+6/24/2025,AD,gwb_neaves,,d,full-plot,net-floral,gwb_neaves__d_full-plot_net-floral,raac,ranunculus_acris,1,
+6/24/2025,AD,gwb_neaves,,d,full-plot,net-floral,gwb_neaves__d_full-plot_net-floral,spdo,spiraea_douglasii,3,
+6/24/2025,AD,gwb_neaves,,d,full-plot,net-floral,gwb_neaves__d_full-plot_net-floral,trre,trifolium_repens,3,
+6/24/2025,AD,gwb_neaves,,d,full-plot,net-floral,gwb_neaves__d_full-plot_net-floral,ropi,rosa_pisocarpa,3,
+6/24/2025,AD,bks_neaves,,p1,full-plot,net-floral,bks_neaves__p1_full-plot_net-floral,rare,ranunculus_repens,1,
+6/24/2025,AD,bks_neaves,,p2,full-plot,net-floral,bks_neaves__p2_full-plot_net-floral,rare,ranunculus_repens,1,
+6/24/2025,AD,bks_neaves,,d,full-plot,net-floral,bks_neaves__d_full-plot_net-floral,ruar,rubus_armeniacus,3,
+6/24/2025,AD,bks_neaves,,d,full-plot,net-floral,bks_neaves__d_full-plot_net-floral,spdo,spiraea_douglasii,3,
+6/25/2025,AD,avtar_168,,d,full-plot,net-floral,avtar_168__d_full-plot_net-floral,rara,raphanus_raphanistrum,4,
+6/25/2025,AD,avtar_168,,d,full-plot,net-floral,avtar_168__d_full-plot_net-floral,casi,calystegia_silvatica,3,
+6/25/2025,AD,avtar_168,,d,full-plot,net-floral,avtar_168__d_full-plot_net-floral,raac,ranunculus_acris,3,
+6/25/2025,AD,avtar_168,,d,full-plot,net-floral,avtar_168__d_full-plot_net-floral,vicr,vicia_cracca,2,
+6/25/2025,AD,avtar_168,,d,full-plot,net-floral,avtar_168__d_full-plot_net-floral,levu,leucanthemum_vulgare,3,
+6/25/2025,AD,avtar_168,,d,full-plot,net-floral,avtar_168__d_full-plot_net-floral,ropa,rorippa_palustris,2,
+6/25/2025,AD,surjit_168,,d,full-plot,net-floral,surjit_168__d_full-plot_net-floral,rara,raphanus_raphanistrum,3,
+6/25/2025,AD,surjit_168,,d,full-plot,net-floral,surjit_168__d_full-plot_net-floral,hyra,hypochaeris_radicata,3,
+6/25/2025,AD,surjit_168,,d,full-plot,net-floral,surjit_168__d_full-plot_net-floral,trin,tripleurospermum_inodorum,4,
+6/25/2025,AD,surjit_168,,d,full-plot,net-floral,surjit_168__d_full-plot_net-floral,trhy,trifolium_hybridum,1,
+6/27/2025,AD,chong_68,,p1,full-plot,net-floral,chong_68__p1_full-plot_net-floral,rare,ranunculus_repens,3,
+6/27/2025,AD,chong_68,,p1,full-plot,net-floral,chong_68__p1_full-plot_net-floral,trre,trifolium_repens,2,
+6/27/2025,AD,chong_68,,p1,full-plot,net-floral,chong_68__p1_full-plot_net-floral,vicr,vicia_cracca,2,
+6/27/2025,AD,chong_68,,p2,full-plot,net-floral,chong_68__p2_full-plot_net-floral,rare,ranunculus_repens,4,
+6/27/2025,AD,chong_68,,p2,full-plot,net-floral,chong_68__p2_full-plot_net-floral,trre,trifolium_repens,3,
+6/27/2025,AD,chong_68,,d,full-plot,net-floral,chong_68__d_full-plot_net-floral,lysa,lythrum_salicaria,3,
+6/27/2025,AD,chong_68,,d,full-plot,net-floral,chong_68__d_full-plot_net-floral,vicr,vicia_cracca,4,
+6/27/2025,AD,chong_68,,d,full-plot,net-floral,chong_68__d_full-plot_net-floral,trre,trifolium_repens,4,
+6/27/2025,AD,chong_68,,d,full-plot,net-floral,chong_68__d_full-plot_net-floral,taof,taraxacum_officinale,1,
+6/27/2025,AD,chong_68,,d,full-plot,net-floral,chong_68__d_full-plot_net-floral,ephi,epilobium_hirsutum,3,
+6/27/2025,AD,chong_68,,d,full-plot,net-floral,chong_68__d_full-plot_net-floral,lope,lotus_pedunculatus,3,
+6/27/2025,AD,chong_68,,d,full-plot,net-floral,chong_68__d_full-plot_net-floral,rocu,rorippa_curvisiliqua,2,
+6/27/2025,AD,bks_68,,p1,full-plot,net-floral,bks_68__p1_full-plot_net-floral,ropa,rorippa_palustris,4,
+6/27/2025,AD,bks_68,,p1,full-plot,net-floral,bks_68__p1_full-plot_net-floral,cabu,capsella_bursa-pastoris,3,
+6/27/2025,AD,bks_68,,p1,full-plot,net-floral,bks_68__p1_full-plot_net-floral,epci,epilobium_ciliatum,2,
+6/27/2025,AD,bks_68,,p2,full-plot,net-floral,bks_68__p2_full-plot_net-floral,cabu,capsella_bursa-pastoris,4,
+6/27/2025,AD,bks_68,,p2,full-plot,net-floral,bks_68__p2_full-plot_net-floral,pela,persicaria_lapathifolia,2,
+6/27/2025,AD,bks_68,,p2,full-plot,net-floral,bks_68__p2_full-plot_net-floral,ropa,rorippa_palustris,4,
+6/27/2025,AD,bks_68,,p2,full-plot,net-floral,bks_68__p2_full-plot_net-floral,epci,epilobium_ciliatum,1,
+6/27/2025,AD,bks_68,,d,full-plot,net-floral,bks_68__d_full-plot_net-floral,vicr,vicia_cracca,3,
+6/27/2025,AD,chong_96,,p1,full-plot,net-floral,chong_96__p1_full-plot_net-floral,rare,ranunculus_repens,4,
+6/27/2025,AD,chong_96,,p2,full-plot,net-floral,chong_96__p2_full-plot_net-floral,rare,ranunculus_repens,3,
+6/27/2025,AD,chong_96,,p2,full-plot,net-floral,chong_96__p2_full-plot_net-floral,trre,trifolium_repens,2,
+6/27/2025,AD,chong_96,,d,full-plot,net-floral,chong_96__d_full-plot_net-floral,rara,raphanus_raphanistrum,5,
+6/27/2025,AD,chong_96,,d,full-plot,net-floral,chong_96__d_full-plot_net-floral,chan,chamaenerion_angustifolium,3,
+6/27/2025,AD,chong_96,,d,full-plot,net-floral,chong_96__d_full-plot_net-floral,trre,trifolium_repens,4,
+6/27/2025,AD,chong_96,,d,full-plot,net-floral,chong_96__d_full-plot_net-floral,spar,spergula_arvensis,2,
+6/27/2025,AD,chong_96,,d,full-plot,net-floral,chong_96__d_full-plot_net-floral,soar,sonchus_arvensis,2,
+6/27/2025,AD,chong_96,,d,full-plot,net-floral,chong_96__d_full-plot_net-floral,rare,ranunculus_repens,2,
+6/27/2025,AD,chong_96,,d,full-plot,net-floral,chong_96__d_full-plot_net-floral,ruar,rubus_armeniacus,2,
+6/27/2025,AD,bks_96,,p1,full-plot,net-floral,bks_96__p1_full-plot_net-floral,rara,raphanus_raphanistrum,5,
+6/27/2025,AD,bks_96,,p1,full-plot,net-floral,bks_96__p1_full-plot_net-floral,ropa,rorippa_palustris,4,
+6/27/2025,AD,bks_96,,p2,full-plot,net-floral,bks_96__p2_full-plot_net-floral,rara,raphanus_raphanistrum,4,
+6/27/2025,AD,bks_96,,d,full-plot,net-floral,bks_96__d_full-plot_net-floral,rara,raphanus_raphanistrum,4,
