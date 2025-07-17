@@ -13,8 +13,12 @@ DC_flowers <-DC_flowers%>%
   mutate(flower_species = str_replace_all(tolower(V1), " ", "_"))
 
 #create list of flowers that bees visited in my study
-robin_floral <- read.csv("06_cleandata/flowers_CLEAN.csv")
+robin_floral <- read.csv("06_cleandata/bees_CLEAN.csv")
 robin_flower_species <- unique(robin_floral$flower_species)
+#trim whitespace
+robin_flower_species <- trimws(robin_flower_species)
+#remove blanks
+robin_flower_species <- robin_flower_species[robin_flower_species != ""]
 #Convert to data frame first
 robin_flowers <- data.frame(flower_species = robin_flower_species)
 
@@ -35,6 +39,10 @@ JDCR_flowers <- bind_rows(JDC_flowers, new_rows_rg)
 #replace spaces with _ if needed
 JDCR_flowers <- JDCR_flowers %>%
   mutate(flower_species = str_replace_all(flower_species, " ", "_"))
+
+#change brassicaceae to brassica_sp
+JDCR_flowers <- JDCR_flowers %>%
+  mutate(flower_species = if_else(flower_species == "brassicaceae", "brassica_sp", flower_species))
 
 #create new column for species code
 JDCR_flowers <- JDCR_flowers %>%
@@ -71,6 +79,7 @@ problematic_species <- JDCR_flowers %>%
   filter(str_detect(flower_code, "sp"))
 
 #floral genera that are generally used by bees (include all species under these genera in analyses)
+##brassica_sp
 ##rhododendron_sp
 ##rorippa_sp
 ##rubus_sp
@@ -78,4 +87,3 @@ problematic_species <- JDCR_flowers %>%
 ##calystegia_sp
 ##prunus_sp
 ##phacelia_sp
-##brassicaceae_sp
