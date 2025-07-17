@@ -166,6 +166,17 @@ surveys$julian.date <- yday(surveys$bee_date)
 
 ```
 
+# Add column to dataframe for nest-searching season vs workers season
+
+```{r}
+surveys <- surveys %>%
+  mutate(bee_season_type = case_when(
+    str_detect(round, "2024_r1|2025_r1|2025_r2") ~ "nestsearching",
+    str_detect(round, "2024_r2|2024_r3|2025_r3") ~ "worker",
+    TRUE ~ NA_character_
+  ))
+```
+
 # Add area to survey dataframe based on site_id
 
 ```{r}
@@ -314,17 +325,42 @@ surveys <- surveys %>%
   left_join(veg_summary_full7, by = c("site_id", "round", "plot_id"))
 ```
 
+\% cover of bombus-relevant flowers
+
+```{r}
+#load useful flowers list
+bombus_flowers <- read.csv("06_cleandata/useful_flowers.csv")
+
+# Build a regex pattern that matches any flower code at the start of the column name
+pattern <- str_c("^(", str_c(bombus_flowers$flower_code, collapse = "|"), ")")
+
+# Select only columns that match the pattern
+veg_bombus_flowers <- veg_r %>%
+  select(site_id, round, plot_id, matches(pattern))
+
+#create summary dataframe for floral data
+veg_summary11 <- veg_bombus_flowers %>%
+  rowwise() %>% #operate across rows
+  mutate(row_perc_sum11 = sum(c_across(contains("perc")), na.rm = TRUE)) %>% #sum across the row for each column that contains "perc" (ie. all floral perc)
+  ungroup() %>% # drop groups
+  group_by(site_id, round, plot_id) %>% 
+  summarise(bombus_floral_perc = sum(row_perc_sum11, na.rm = TRUE)/12, .groups = "drop") #average across all rows in the each group
+
+#left join counts onto full combos and replace NAs with 0
+veg_summary_full11 <- all_combinations_veg %>%
+  left_join(veg_summary11, by = c("site_id", "round", "plot_id")) %>%
+  mutate(bombus_floral_perc = replace_na(bombus_floral_perc, 0))
+
+#Add average % bare to surveys dataframe
+surveys <- surveys %>%
+  left_join(veg_summary_full11, by = c("site_id", "round", "plot_id"))
+```
+
 \% grass+forb+floral
 
 ```{r}
 surveys <- surveys %>%
-  mutate(surveys, grass_forb_floral_perc = grass_perc + forb_perc + floral_perc)
-```
-
-\% cover of bombus-relevant flowers
-
-```{r}
-
+  mutate(surveys, grass_forb_floral_perc = grass_perc + forb_perc + bombus_floral_perc)
 ```
 
 \% flood
@@ -387,6 +423,14 @@ surveys <- surveys %>%
   mutate(surveys, bare_flood_dry_bryo_perc = bare_perc + flood_perc + dry_root_perc + bryo_perc)
 ```
 
+\% bare+dry rooted+bryophtye
+
+```{r}
+#Add together % bare, dry root, and bryophyte
+surveys <- surveys %>%
+  mutate(surveys, bare_dry_bryo_perc = bare_perc + dry_root_perc + bryo_perc)
+```
+
 ### [Flower]{.underline}
 
 -   plot level – no conversion needed
@@ -420,9 +464,6 @@ surveys <- surveys %>%
 floral richness – only bombus-relevant flowers
 
 ```{r}
-#load useful flowers list
-bombus_flowers <- read.csv("06_cleandata/useful_flowers.csv")
-
 #filter floral dataset to only include those flowers plus any flower species in the following genera: 
 ##brassica_sp
 ##rhododendron_sp
@@ -730,34 +771,6 @@ surveys <- surveys %>%
   left_join(rodent_summary_full5, by = c("site_id", "plot_id"))
 
 View(surveys)
-```
-
-# Scale continuous predictors
-
-```{r}
-surveys$julian.date_scaled <- as.numeric(scale(surveys$julian.date))
-surveys$bare_perc_scaled <- as.numeric(scale(surveys$bare_perc))
-surveys$grass_perc_scaled <- as.numeric(scale(surveys$grass_perc))
-surveys$forb_perc_scaled <- as.numeric(scale(surveys$forb_perc))
-surveys$grass_forb_perc_scaled <- as.numeric(scale(surveys$grass_forb_perc))
-surveys$grass_h_scaled <- as.numeric(scale(surveys$grass_h))
-surveys$forb_h_scaled <- as.numeric(scale(surveys$forb_h))
-surveys$floral_perc_scaled <- as.numeric(scale(surveys$floral_perc))
-surveys$grass_forb_floral_perc_scaled <- as.numeric(scale(surveys$grass_forb_floral_perc))
-surveys$flood_perc_scaled <- as.numeric(scale(surveys$flood_perc))
-surveys$dry_root_perc_scaled <- as.numeric(scale(surveys$dry_root_perc))
-surveys$bryo_perc_scaled <- as.numeric(scale(surveys$bryo_perc))
-surveys$bare_flood_dry_bryo_perc_scaled <- as.numeric(scale(surveys$bare_flood_dry_bryo_perc))
-surveys$floral_richness_scaled <- as.numeric(scale(surveys$floral_richness))
-surveys$floral_abun_scaled <- as.numeric(scale(surveys$floral_abun))
-surveys$nest_searching_queens_scaled <- as.numeric(scale(surveys$nest_searching_queens))
-surveys$workers_scaled <- as.numeric(scale(surveys$workers))
-surveys$forage_vaco_scaled <- as.numeric(scale(surveys$forage_vaco))
-surveys$num_burrows_scaled <- as.numeric(scale(surveys$num_burrows))
-surveys$num_inactive_burrows_scaled <- as.numeric(scale(surveys$num_inactive_burrows))
-surveys$num_active_dm_scaled <- as.numeric(scale(surveys$num_active_dm))
-surveys$num_dm_size_scaled <- as.numeric(scale(surveys$num_dm_size))
-surveys$num_inactive_dm_scaled <- as.numeric(scale(surveys$num_inactive_dm))
 ```
 
 # Save final combined surveys dataframe as new CSV
