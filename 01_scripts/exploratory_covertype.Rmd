@@ -69,7 +69,7 @@ ggplot(data, aes(x = cover_type, y = bare_flood_dry_bryo_perc)) +
   geom_boxplot() +
   theme_classic(base_size = 15) +
   xlab("Cover") +
-  ylab("% Bare + Dry + Bryo") +
+  ylab("% Bare + Flood + Dry + Bryo") +
   stat_compare_means(
     method = "t.test",        # or "wilcox.test"
     label = "p.format",       # shows formatted p-value
@@ -194,10 +194,10 @@ ggplot(data, aes(x = cover_type, y = forb_h)) +
 \% flood: p = 0.063
 
 ```{r}
-ggplot(data, aes(x = cover_type, y = flood_perc)) + 
+ggplot(data, aes(x = round, fill = cover_type, y = flood_perc)) + 
   geom_boxplot() +
   theme_classic(base_size = 15) +
-  xlab("Cover") +
+  xlab("Round") +
   ylab("% Flood") +
   stat_compare_means(
     method = "t.test",        # or "wilcox.test"
@@ -319,6 +319,22 @@ ggplot(data, aes(x=cover_type, y = bombus_floral_abun))+
   theme_classic(base_size = 15)+
   xlab("Cover")+
   ylab("Bombus-relevant floran abundance") +
+  stat_compare_means(
+    aes(group = cover_type),  # group by field.type
+    method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
+    label = "p.format",  # Display p-value 
+    size = 3.7,  # Adjust this value to make the asterisks larger
+    vjust = -1)  # Adjust horizontal position of the p-value label
+```
+
+Num bees foraging on vaco
+
+```{r}
+ggplot(data, aes(x=cover_type, y = forage_vaco))+ 
+  geom_boxplot() +
+  theme_classic(base_size = 15)+
+  xlab("Cover")+
+  ylab("Num foraging on vaco") +
   stat_compare_means(
     aes(group = cover_type),  # group by field.type
     method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
