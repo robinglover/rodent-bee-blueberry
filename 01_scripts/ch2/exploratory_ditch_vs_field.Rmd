@@ -17,6 +17,7 @@ library(dplyr) #for working with dataframes
 library(tidyr) #for working with datasets
 library(lme4) #for mixed effects models
 library(ggpubr) #for adding significance asterisks to graph
+library(stringr)
 
 #read in data
 data <- read.csv("06_cleandata/combined_plot_data.csv")
@@ -42,7 +43,7 @@ data <- data %>%
   ))
 ```
 
-# Compare ditch vs field 
+# Compare ditch vs field
 
 ## Num NSQ
 
