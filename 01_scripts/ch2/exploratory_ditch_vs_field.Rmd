@@ -21,6 +21,7 @@ library(stringr)
 
 #read in data
 data <- read.csv("06_cleandata/combined_plot_data.csv")
+rodent <- read.csv("06_cleandata/rodent_clean.csv")
 
 #check that variables are in appropriate format
 str(data)
@@ -41,6 +42,22 @@ data <- data %>%
     str_detect(plot_id, "d") ~ "ditch",
     TRUE ~ NA_character_
   ))
+
+#add column for ditch vs field
+rodent <- rodent %>%
+  mutate(field_ditch = case_when(
+    str_detect(plot_id, "p1|p2") ~ "field",
+    str_detect(plot_id, "d") ~ "ditch",
+    TRUE ~ NA_character_
+  ))
+
+#add column for small holes (dm)
+rodent <- rodent %>%
+  mutate(burrow_size = case_when(
+    diameter_cm <= 1.5 ~ "small",
+    diameter_cm > 1.5 ~ "big",
+    TRUE ~ NA_character_
+  ))
 ```
 
 # Compare ditch vs field
@@ -48,80 +65,104 @@ data <- data %>%
 ## Num NSQ
 
 ```{r}
-ggplot(data, aes(x = field_ditch, y = nest_searching_queens)) + 
+#aggregate across site and round to account for 2 field plots at each site vs 1 ditch plot at each site
+data_site_avg <- data %>%
+  group_by(site_id, round, field_ditch) %>%
+  summarise(mean_nsq = mean(nest_searching_queens, na.rm = TRUE), .groups = "drop")
+
+#plot
+ggplot(data_site_avg, aes(x = field_ditch, y = mean_nsq)) +
   geom_boxplot() +
   theme_classic(base_size = 15) +
   xlab("Plot Type") +
-  ylab("NSQ") +
-  stat_compare_means(
-    method = "t.test",        # or "wilcox.test"
-    label = "p.format",       # shows formatted p-value
-    size = 3.7,
-    vjust = 0
-  )
-
+  ylab("Mean NSQ per Site") +
+  stat_compare_means(method = "t.test", label = "p.format", size = 3.7, vjust = 0)
 ```
 
 ## Num workers
 
 ```{r}
-ggplot(data, aes(x = field_ditch, y = workers)) + 
+data_site_avg2 <- data %>%
+  group_by(site_id, round, field_ditch) %>%
+  summarise(mean_workers = mean(workers, na.rm = TRUE), .groups = "drop")
+
+ggplot(data_site_avg2, aes(x = field_ditch, y = mean_workers)) +
   geom_boxplot() +
   theme_classic(base_size = 15) +
   xlab("Plot Type") +
-  ylab("Workers") +
-  stat_compare_means(
-    method = "t.test",        # or "wilcox.test"
-    label = "p.format",       # shows formatted p-value
-    size = 3.7,
-    vjust = 0
-  )
+  ylab("Mean Workers per Site") +
+  stat_compare_means(method = "t.test", label = "p.format", size = 3.7, vjust = 0)
 ```
 
 ## Num burrows
 
 ```{r}
-ggplot(data, aes(x = field_ditch, y = num_burrows)) + 
+data_site_avg3 <- data %>%
+  group_by(site_id, round, field_ditch) %>%
+  summarise(mean_burrows = mean(num_burrows, na.rm = TRUE), .groups = "drop")
+
+ggplot(data_site_avg3, aes(x = field_ditch, y = mean_burrows)) +
   geom_boxplot() +
   theme_classic(base_size = 15) +
   xlab("Plot Type") +
-  ylab("Burrow Abun") +
-  stat_compare_means(
-    method = "t.test",        # or "wilcox.test"
-    label = "p.format",       # shows formatted p-value
-    size = 3.7,
-    vjust = 0
-  )
+  ylab("Mean burrow number per Site") +
+  stat_compare_means(method = "t.test", label = "p.format", size = 3.7, vjust = 0)
 ```
 
-## Num inactive burrows
+## Burrow diameter
 
 ```{r}
-ggplot(data, aes(x = field_ditch, y = num_inactive_burrows)) + 
+data_site_avg4 <- rodent %>%
+  group_by(site_id, round, field_ditch) %>%
+  summarise(mean_burrow_dia = mean(diameter_cm, na.rm = TRUE), .groups = "drop")
+
+ggplot(data_site_avg4, aes(x = field_ditch, y = mean_burrow_dia)) +
   geom_boxplot() +
   theme_classic(base_size = 15) +
   xlab("Plot Type") +
-  ylab("Inactive burrows") +
-  stat_compare_means(
-    method = "t.test",        # or "wilcox.test"
-    label = "p.format",       # shows formatted p-value
-    size = 3.7,
-    vjust = 0
-  )
+  ylab("Mean burrow diameter per Site") +
+  stat_compare_means(method = "t.test", label = "p.format", size = 3.7, vjust = 0)
+```
+
+Burrow size (vole vs dm) vs plot type
+
+```{r}
+ggplot(rodent, aes(fill = burrow_size, x = field_ditch)) +
+  geom_bar(position = "dodge") +
+  labs(,
+    x = "Plot Type",
+    y = "Count",
+    fill = "Burrow size"
+  ) +
+  theme_minimal()
+```
+
+Num dm holes (\<1.5cm) across plot types
+
+```{r}
+data_site_avg5 <- data %>%
+  group_by(site_id, round, field_ditch) %>%
+  summarise(mean_dm = mean(num_dm_size, na.rm = TRUE), .groups = "drop")
+
+ggplot(data_site_avg5, aes(x = field_ditch, y = mean_dm)) +
+  geom_boxplot() +
+  theme_classic(base_size = 15) +
+  xlab("Plot Type") +
+  ylab("Mean dm burrows (1.5cm) per Site") +
+  stat_compare_means(method = "t.test", label = "p.format", size = 3.7, vjust = 0)
 ```
 
 ## Bombus-relevant floral abundance
 
 ```{r}
-ggplot(data, aes(x = field_ditch, y = bombus_floral_abun)) + 
+data_site_avg6 <- data %>%
+  group_by(site_id, round, field_ditch) %>%
+  summarise(mean_floral_abun = mean(bombus_floral_abun, na.rm = TRUE), .groups = "drop")
+
+ggplot(data_site_avg6, aes(x = field_ditch, y = mean_floral_abun)) +
   geom_boxplot() +
   theme_classic(base_size = 15) +
   xlab("Plot Type") +
-  ylab("Bombus-relevant floral abun") +
-  stat_compare_means(
-    method = "t.test",        # or "wilcox.test"
-    label = "p.format",       # shows formatted p-value
-    size = 3.7,
-    vjust = 0
-  )
+  ylab("Mean floral abundance per Site") +
+  stat_compare_means(method = "t.test", label = "p.format", size = 3.7, vjust = 0)
 ```
