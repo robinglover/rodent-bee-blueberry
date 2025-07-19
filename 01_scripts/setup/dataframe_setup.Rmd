@@ -22,110 +22,42 @@ library(lubridate) #package used to generate julian date from calendar date
 
 
 #read in data
-bee <- read.csv("06_cleandata/bees_CLEAN.csv")
-
-bee <- bee %>%
-  mutate(plot_id = str_replace(plot_id, "^d $", "d"))
-
-floral <- read.csv("06_cleandata/flowers_CLEAN.csv")
-floral <- floral %>%
-  mutate(abundance = as.numeric(abundance))
-floral <- floral %>%
-  mutate(across(where(is.character), str_trim))
-
-rodent <- read.csv("06_cleandata/rodents_CLEAN.csv")
-rodent <- rodent %>%
-  mutate(plot_id = str_replace(plot_id, "^d $", "d"))
-
-veg <- read.csv("06_cleandata/vegetation_CLEAN.csv")
-veg <- veg %>%
-  mutate(bare = str_replace(bare, "unknown", "")) %>%
-  mutate(bare = str_replace(forb_height, " ", "")) %>%
-  mutate(bare = as.numeric(bare))
-
-site_info <- read.csv("00_rawdata/exploratory/site-info.csv")
-site_info <- site_info %>%
-  rename(site_id = name)
-site_info <- site_info %>%
-  rename(cover_type = grass)
-
-veg <- veg %>%
-  mutate(bare = str_replace(bare, "unknown", "")) %>%
-  mutate(across(contains("perc"), ~as.numeric(.)))
-
+bee <- read.csv("06_cleandata/bee_clean.csv")
+floral <- read.csv("06_cleandata/floral_clean.csv")
+rodent <- read.csv("06_cleandata/rodent_clean.csv")
+veg <- read.csv("06_cleandata/veg_clean.csv")
+site_info <- read.csv("06_cleandata/site_info_clean.csv")
 surveys <- read.csv("06_cleandata/surveys.csv")
+```
+
+# Check structure of dataframes
+
+```{r}
+#bee
+str(bee)
+bee$date <- ymd(bee$date)
+
+#floral
+str(floral)
+floral$date <- ymd(floral$date)
+
+#rodent
+str(rodent)
+rodent$date_day <- ymd(rodent$date_day)
+
+#veg
+str(veg)
+veg$date <- ymd(veg$date) 
+
+#site_info
+str(site_info)
+
+#surveys
+str(surveys)
 surveys <- surveys %>%
   rename(site_id = site)
 surveys <- surveys %>%
   rename(plot_id = plots)
-```
-
-# Assign round numbers for each row in each dataset
-
-First, I need to convert dates to dmy format that lubridate can
-understand
-
-```{r}
-#Bee
-bee$date <- mdy(bee$date)
-
-#Floral
-floral <- floral %>%
-  mutate(date = mdy(date))
-
-#Rodent
-rodent$date_day <- dmy(rodent$date_day)
-
-#Veg
-veg$date <- dmy(veg$date) 
-```
-
-Then, I need to assign round numbers to each survey depending on the
-survey date.
-
-```{r}
-rodent_r <- rodent %>%
-  mutate(
-    round = case_when(
-      date_day < ymd("2024-06-08") ~ "2024_r1",
-      date_day >= ymd("2024-06-09") & date_day <= ymd("2024-10-01") ~ "2024_r4"))
-
-#Bee
-bee_r <- bee %>%
-  mutate(
-    round = case_when(
-      date <= ymd("2024-05-01") ~ "2024_r1",
-      date >= ymd("2024-05-14") & date <= ymd("2024-06-06") ~ "2024_r2",
-      date >= ymd("2024-06-18") & date <= ymd("2024-07-03") ~ "2024_r3",
-      date >= ymd("2025-04-03") & date <= ymd("2025-04-19") ~ "2025_r1",
-      date >= ymd("2025-04-27") & date <= ymd("2025-05-13") ~ "2025_r2",
-      date > ymd("2025-05-13") ~ "2025_r3"
-      ))
-#Veg
-veg_r <- veg %>%
-  mutate(
-    round = case_when(
-      date < ymd("2024-05-01") ~ "2024_r1",
-      date >= ymd("2024-05-14") & date <= ymd("2024-06-06") ~ "2024_r2",
-      date >= ymd("2024-06-12") & date <= ymd("2024-07-03") ~ "2024_r3",
-      date >= ymd("2024-07-10") & date <= ymd("2024-08-14") ~ "2024_r4",
-      date >= ymd("2025-04-03") & date <= ymd("2025-04-24") ~ "2025_r1",
-      date >= ymd("2025-04-27") & date <= ymd("2025-05-30") ~ "2025_r2",
-      date > ymd("2025-05-30") ~ "2025_r3"
-      ))
-
-#Flowers
-floral_r <- floral %>%
-  mutate(
-    round = case_when(
-      date < ymd("2024-05-01") ~ "2024_r1",
-      date >= ymd("2024-05-14") & date <= ymd("2024-06-06") ~ "2024_r2",
-      date >= ymd("2024-06-12") & date <= ymd("2024-07-03") ~ "2024_r3",
-      date >= ymd("2024-07-10") & date <= ymd("2024-08-14") ~ "2024_r4",
-      date >= ymd("2025-04-03") & date <= ymd("2025-04-24") ~ "2025_r1",
-      date >= ymd("2025-04-27") & date <= ymd("2025-05-30") ~ "2025_r2",
-      date > ymd("2025-05-30") ~ "2025_r3"
-      ))
 
 ```
 
@@ -133,7 +65,7 @@ floral_r <- floral %>%
 
 ```{r}
 # Extract relevant bee dates first
-bee_dates <- bee_r %>%
+bee_dates <- bee %>%
   select(site_id, plot_id, round, date) %>%
   rename(bee_date = date)
 
@@ -204,13 +136,13 @@ variables to be at plot level, not transect or quadrat.
 ```{r}
 #create all combinations of sites, round, and plots for veg data
 all_combinations_veg <- expand_grid(
-  site_id = unique(veg_r$site_id),
-  round = unique(veg_r$round),
-  plot_id = unique(floral_r$plot_id)
+  site_id = unique(veg$site_id),
+  round = unique(veg$round),
+  plot_id = unique(floral$plot_id)
 )
 
 #create summary dataframe for veg data
-veg_summary <- veg_r %>%
+veg_summary <- veg %>%
   group_by(site_id, round, plot_id) %>%
   summarise(bare_perc = sum(as.numeric(bare), na.rm = TRUE) / 12, .groups = "drop") ##drop the groupings
 
@@ -228,7 +160,7 @@ surveys <- surveys %>%
 
 ```{r}
 #create summary dataframe for veg data
-veg_summary2 <- veg_r %>%
+veg_summary2 <- veg %>%
   group_by(site_id, round, plot_id) %>%
   summarise(grass_perc = sum(as.numeric(grass), na.rm = TRUE) / 12, .groups = "drop") ##drop the groupings
 
@@ -246,7 +178,7 @@ surveys <- surveys %>%
 
 ```{r}
 #create summary dataframe for veg data
-veg_summary3 <- veg_r %>%
+veg_summary3 <- veg %>%
   group_by(site_id, round, plot_id) %>%
   summarise(forb_perc = sum(as.numeric(forb), na.rm = TRUE) / 12, .groups = "drop") ##drop the groupings
 
@@ -271,7 +203,7 @@ grass height
 
 ```{r}
 #create summary dataframe for floral data
-veg_summary5 <- veg_r %>%
+veg_summary5 <- veg %>%
   group_by(site_id, round, plot_id) %>%
   summarise(grass_h = sum(as.numeric(grass_height), na.rm = TRUE) / 12, .groups = "drop") ##drop the groupings
 
@@ -290,7 +222,7 @@ forb height
 
 ```{r}
 #create summary dataframe for floral data
-veg_summary6 <- veg_r %>%
+veg_summary6 <- veg %>%
   group_by(site_id, round, plot_id) %>%
   summarise(forb_h = sum(as.numeric(forb_height), na.rm = TRUE) / 12, .groups = "drop") ##drop the groupings
 
@@ -308,7 +240,7 @@ surveys <- surveys %>%
 
 ```{r}
 #create summary dataframe for floral data
-veg_summary7 <- veg_r %>%
+veg_summary7 <- veg %>%
   rowwise() %>% #operate across rows
   mutate(row_perc_sum = sum(c_across(contains("perc")), na.rm = TRUE)) %>% #sum across the row for each column that contains "perc" (ie. all floral perc)
   ungroup() %>% # drop groups
@@ -335,7 +267,7 @@ bombus_flowers <- read.csv("06_cleandata/useful_flowers.csv")
 pattern <- str_c("^(", str_c(bombus_flowers$flower_code, collapse = "|"), ")")
 
 # Select only columns that match the pattern
-veg_bombus_flowers <- veg_r %>%
+veg_bombus_flowers <- veg %>%
   select(site_id, round, plot_id, matches(pattern))
 
 #create summary dataframe for floral data
@@ -367,7 +299,7 @@ surveys <- surveys %>%
 
 ```{r}
 #create summary dataframe for floral data
-veg_summary8 <- veg_r %>%
+veg_summary8 <- veg %>%
   group_by(site_id, round, plot_id) %>%
   summarise(flood_perc = sum(as.numeric(flood), na.rm = TRUE) / 12, .groups = "drop") ##drop the groupings
 
@@ -385,7 +317,7 @@ surveys <- surveys %>%
 
 ```{r}
 #create summary dataframe for floral data
-veg_summary9 <- veg_r %>%
+veg_summary9 <- veg %>%
   group_by(site_id, round, plot_id) %>%
   summarise(dry_root_perc = sum(as.numeric(dry_root), na.rm = TRUE) / 12, .groups = "drop") ##drop the groupings
 
@@ -405,7 +337,7 @@ surveys <- surveys %>%
 #Calculate % bryophyte
 
 #create summary dataframe for floral data
-veg_summary10 <- veg_r %>%
+veg_summary10 <- veg %>%
   group_by(site_id, round, plot_id) %>%
   summarise(bryo_perc = sum(as.numeric(bryophyte), na.rm = TRUE) / 12, .groups = "drop") ##drop the groupings
 
@@ -440,13 +372,13 @@ floral richness
 ```{r}
 #create all combinations of sites, round, and plots for bee data
 all_combinations <- expand_grid(
-  site_id = unique(floral_r$site_id),
-  round = unique(floral_r$round),
-  plot_id = unique(floral_r$plot_id)
+  site_id = unique(floral$site_id),
+  round = unique(floral$round),
+  plot_id = unique(floral$plot_id)
 )
 
 #create summary dataframe for floral data
-floral_summary <- floral_r %>%
+floral_summary <- floral %>%
   group_by(site_id, round, plot_id) %>%
   summarise(floral_richness = n(), .groups = "drop") ##drop the groupings
 
@@ -474,7 +406,7 @@ floral richness – only bombus-relevant flowers
 ##prunus_sp
 ##phacelia_sp
 
-floral_r_bombus <- floral_r %>%
+floral_bombus <- floral %>%
   filter(
     flower_species %in% bombus_flowers$flower_species |
     str_detect(flower_species, "brassica_") |
@@ -488,7 +420,7 @@ floral_r_bombus <- floral_r %>%
   )
 
 #create summary dataframe for floral data
-floral_summary2 <- floral_r_bombus %>%
+floral_summary2 <- floral_bombus %>%
   group_by(site_id, round, plot_id) %>%
   summarise(bombus_floral_richness = n(), .groups = "drop") ##drop the groupings
 
@@ -507,10 +439,10 @@ Floral abundance
 
 ```{r}
 #convert floral abundance estimates so they are properly on log scale (subtract 1 from each)
-floral_r$abundance = 10^(floral_r$abundance - 1)
+floral$abundance = 10^(floral$abundance - 1)
 
 #exponentiate the remaining values (undo the log) and add the actual abundance estimates across all species together for each plot
-floral_summary3 <- floral_r %>%
+floral_summary3 <- floral %>%
   group_by(site_id, round, plot_id) %>%
   summarise(floral_abun = sum(abundance, na.rm = TRUE), .groups = "drop") ##drop the groupings
 
@@ -532,10 +464,10 @@ floral abundance – only bombus-relevant flowers
 
 ```{r}
 #convert floral abundance estimates so they are properly on log scale (subtract 1 from each)
-floral_r_bombus$abundance = 10^(floral_r_bombus$abundance - 1)
+floral_bombus$abundance = 10^(floral_bombus$abundance - 1)
 
 #exponentiate the remaining values (undo the log) and add the actual abundance estimates across all species together for each plot
-floral_summary4 <- floral_r_bombus %>%
+floral_summary4 <- floral_bombus %>%
   group_by(site_id, round, plot_id) %>%
   summarise(bombus_floral_abun = sum(abundance, na.rm = TRUE), .groups = "drop") ##drop the groupings
 
@@ -562,13 +494,13 @@ Num NS queens
 ```{r}
 #create all combinations of sites, round, and plots for bee data
 all_combinations_bee <- expand_grid(
-  site_id = unique(bee_r$site_id),
-  round = unique(bee_r$round),
-  plot_id = unique(bee_r$plot_id)
+  site_id = unique(bee$site_id),
+  round = unique(bee$round),
+  plot_id = unique(bee$plot_id)
 )
 
 #create summary dataframe for bee data
-bee_summary <- bee_r %>%
+bee_summary <- bee %>%
   filter(caste == "q" & behaviour == "nest_searching") %>%
   group_by(site_id, round, plot_id) %>%
   summarise(nest_searching_queens = n(), .groups = "drop") ##drop the groupings
@@ -588,7 +520,7 @@ surveys <- surveys %>%
 Num Workers
 
 ```{r}
-bee_summary2 <- bee_r %>%
+bee_summary2 <- bee %>%
   filter(caste == "w") %>%
   group_by(site_id, round, plot_id) %>%
   summarise(workers = n(), .groups = "drop") ##drop the groupings
@@ -607,7 +539,7 @@ surveys <- surveys %>%
 Num foraging on VACO
 
 ```{r}
-bee_summary3 <- bee_r %>%
+bee_summary3 <- bee %>%
   filter(flower_code == "vaco") %>%
   group_by(site_id, round, plot_id) %>%
   summarise(forage_vaco = n(), .groups = "drop")##drop the groupings
@@ -638,12 +570,12 @@ Num burrows
 ```{r}
 #create all combinations of sites, round, and plots for bee data
 all_combinations_rodent <- expand_grid(
-  site_id = unique(rodent_r$site_id),
-  plot_id = unique(rodent_r$plot_id)
+  site_id = unique(rodent$site_id),
+  plot_id = unique(rodent$plot_id)
 )
 
 #create summary dataframe for rodent data
-rodent_summary <- rodent_r %>%
+rodent_summary <- rodent %>%
   group_by(site_id, plot_id) %>%
   summarise(num_burrows = n(), .groups = "drop") ##drop the groupings
 
@@ -661,7 +593,7 @@ Num inactive burrows
 
 ```{r}
 #create summary dataframe for rodent data
-rodent_summary2 <- rodent_r %>%
+rodent_summary2 <- rodent %>%
   filter(powder_active_FINAL == "n") %>%
   group_by(site_id, plot_id) %>%
   summarise(num_inactive_burrows = n(), .groups = "drop") ##drop the groupings
@@ -681,7 +613,7 @@ Num active dm burrows
 
 ```{r}
 #create summary dataframe for rodent data
-rodent_summary3 <- rodent_r %>%
+rodent_summary3 <- rodent %>%
   filter(powder_species_guess_FINAL == "B") %>%
   group_by(site_id, plot_id) %>%
   summarise(num_active_dm = n(), .groups = "drop") ##drop the groupings
@@ -737,7 +669,7 @@ diameter)
 
 ```{r}
 #create summary dataframe for rodent data
-rodent_summary4 <- rodent_r %>%
+rodent_summary4 <- rodent %>%
   filter(diameter_cm == 1.5) %>%
   group_by(site_id, plot_id) %>%
   summarise(num_dm_size = n(), .groups = "drop") ##drop the groupings
@@ -756,7 +688,7 @@ Num inactive dm burrows (by size)
 
 ```{r}
 #create summary dataframe for rodent data
-rodent_summary5 <- rodent_r %>%
+rodent_summary5 <- rodent %>%
   filter(diameter_cm == 1.5 & powder_active_FINAL == "n") %>%
   group_by(site_id, plot_id) %>%
   summarise(num_inactive_dm = n(), .groups = "drop") ##drop the groupings
