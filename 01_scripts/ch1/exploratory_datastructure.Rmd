@@ -1,0 +1,507 @@
+---
+title: "GLMM Practice"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_analysis/rodent-bee-blueberry")
+```
+
+# Load data
+
+```{r}
+#load packages
+library(tidyverse)
+library(ggplot2)
+library(lme4)
+library(visreg)
+
+#read in data
+data <- read.csv("06_cleandata/combined_plot_data.csv")
+
+#check that variables are in appropriate format
+str(data)
+
+#change character columns to factors
+data <- data %>%
+   mutate(
+     site_id = as.factor(site_id),
+     round = as.factor(round),
+     plot_id = as.factor(plot_id),
+     bee_date = as.Date(bee_date),
+     area = as.factor(area))
+
+#filter data to only include within field data
+field_data <- data %>%
+  filter(plot_id != "d")
+
+#read in data
+site_info <- read.csv("00_rawdata/exploratory/site-info.csv")
+site_info <- site_info %>%
+  rename(site_id = name)
+
+bee <- read.csv("06_cleandata/bees_CLEAN.csv")
+bee <- bee %>%
+  mutate(plot_id = str_replace(plot_id, "^d $", "d"))
+bee <- bee %>%
+  left_join(site_info %>% select(site_id, area), by = c("site_id"))
+
+floral <- read.csv("06_cleandata/flowers_CLEAN.csv")
+floral <- floral %>%
+  left_join(site_info %>% select(site_id, area), by = c("site_id"))
+
+rodent <- read.csv("06_cleandata/rodents_CLEAN.csv")
+rodent <- rodent %>%
+  mutate(plot_id = str_replace(plot_id, "^d $", "d"))
+rodent <- rodent %>%
+  left_join(site_info %>% select(site_id, area), by = c("site_id"))
+
+veg <- read.csv("06_cleandata/vegetation_CLEAN.csv")
+veg <- veg %>%
+  mutate(bare = str_replace(bare, "unknown", "")) %>%
+  mutate(bare = str_replace(forb_height, " ", "")) %>%
+  mutate(bare = as.numeric(bare))
+veg <- veg %>%
+  left_join(site_info %>% select(site_id, area), by = c("site_id"))
+
+veg <- veg %>%
+  mutate(bare = str_replace(bare, "unknown", "")) %>%
+  mutate(across(contains("perc"), ~as.numeric(.)))
+```
+
+# Step 1: Check for missing data
+
+```{r}
+
+```
+
+# Step 2: Look at variance among area, site, plot, and transect for each response variable to determine random effect structure that is appropriate for each response variable.
+
+## Floral abundance
+
+```{r}
+#convert floral abundance estimates so they are properly on log scale (subtract 1 from each)
+floral$abundance = 10^(floral$abundance - 1)
+
+#exponentiate the remaining values (undo the log) and add the actual abundance estimates across all species together for each plot
+floral_summary <- floral %>%
+  group_by(area, site_id, plot_id) %>%
+  summarise(floral_abun = sum(abundance, na.rm = TRUE), .groups = "drop") ##drop the groupings
+
+#take log scale of the summed values
+floral_summary$floral_abun = log10(floral_summary$floral_abun + 1)
+
+
+# Null model with nested random effects
+null_model <- lmer(floral_abun ~ 1 + 
+                (1 | area) + 
+                (1 | site_id) + 
+                (1 | plot_id),
+              data = floral_summary)
+
+#check variance of each random effect
+summary(null_model)
+```
+
+Based on the output of this model, I should **only keep area and plot_id as the random effects** since they explain non-trivial variance. Drop site_id from model since there is zero variance among sites.
+
+## Burrow number
+
+```{r}
+#calculate metric from rodent dataset
+rodent_summary <- rodent %>%
+  group_by(area, site_id, plot_id, transect_id, transect_section) %>%
+  summarise(num_burrows = n(), .groups = "drop") ##drop the groupings
+
+# Null model with nested random effects
+null_model_rod1 <- lmer(num_burrows ~ 1 + 
+                (1 | area) + 
+                (1 | site_id) + 
+                (1 | plot_id) +
+                  (1 | transect_id),
+              data = rodent_summary)
+
+#check variance of each random effect
+summary(null_model_rod1)
+```
+
+This model shows that variation in the data is meaningfully described by site_id, area, and plot_id. Therefore, we should drop transect_id and summarize across plots.
+
+## Inactive burrow number
+
+```{r}
+rodent_summary2 <- rodent %>%
+  filter(powder_active_FINAL == "n") %>%
+  group_by(area, site_id, plot_id, transect_id) %>%
+  summarise(num_inactive_burrows = n(), .groups = "drop") ##drop the groupings
+
+# Null model with nested random effects
+null_model_rod2 <- lmer(num_inactive_burrows ~ 1 + 
+                (1 | area) + 
+                (1 | site_id) + 
+                (1 | plot_id) +
+                  (1 | transect_id),
+              data = rodent_summary2)
+
+#check variance of each random effect
+summary(null_model_rod2)
+```
+
+This model shows that variation in the data is only meaningfully described by site_id.
+
+## Num nest-searching queens
+
+```{r}
+bee_summary <- bee %>%
+  filter(caste == "q" & behaviour == "nest_searching") %>%
+  group_by(area, site_id, plot_id) %>%
+  summarise(nest_searching_queens = n(), .groups = "drop") ##drop the groupings
+
+null_model_bee <- lmer(nest_searching_queens ~ 1 + 
+                (1 | area) + 
+                (1 | site_id) + 
+                (1 | plot_id),
+              data = bee_summary)
+
+#check variance of each random effect
+summary(null_model_bee)
+```
+
+This model shows that variation in the data is only meaningfully described by area and plot_id.
+
+## Num workers
+
+```{r}
+bee_summary2 <- bee %>%
+  filter(caste == "w") %>%
+  group_by(area, site_id, plot_id) %>%
+  summarise(workers = n(), .groups = "drop") ##drop the groupings
+
+null_model_bee2 <- lmer(workers ~ 1 + 
+                (1 | area) + 
+                (1 | site_id) + 
+                (1 | plot_id),
+              data = bee_summary2)
+
+#check variance of each random effect
+summary(null_model_bee2)
+```
+
+This model shows that variation in the data is only meaningfully described by site_id and plot_id.
+
+## Workers foraging on vaco
+
+```{r}
+bee_summary3 <- bee %>%
+  filter(flower_code == "vaco") %>%
+  group_by(area, site_id, plot_id) %>%
+  summarise(forage_vaco = n(), .groups = "drop")##drop the groupings
+
+null_model_bee3 <- lmer(forage_vaco ~ 1 + 
+                (1 | area) + 
+                (1 | site_id) + 
+                (1 | plot_id),
+              data = bee_summary3)
+
+#check variance of each random effect
+summary(null_model_bee3)
+```
+
+This model shows that variation in the data is only meaningfully described by site_id and plot_id.
+
+## Overall finding:
+
+Variation among response variables was not explained by transect_id in any of the null models. Therefore, it is appropriate to summarize the data at the **plot level** for all survey types, rather than retaining the finer transect_id or transect_section level.
+
+# Step 3: Visualize response variables
+
+## Floral abun
+
+```{r}
+ggplot(field_data, aes(x = bombus_floral_abun)) + 
+  geom_histogram(fill = "firebrick", col = "black", closed = "left") + 
+  labs(x = "Bombus-relevant Floral Abundance", y = "Number observations") + 
+  theme_classic() +
+  theme(aspect.ratio = 0.80)
+```
+
+Left skew. Zero inflation. Continuous
+
+## Burrow number
+
+```{r}
+ggplot(field_data, aes(x = num_burrows)) + 
+  geom_histogram(fill = "firebrick", col = "black", closed = "left") + 
+  labs(x = "Number of burrows", y = "Number observations") + 
+  theme_classic() +
+  theme(aspect.ratio = 0.80)
+```
+
+Zero inflated. Count data.
+
+## Inactive burrows
+
+```{r}
+ggplot(field_data, aes(x = num_inactive_burrows)) + 
+  geom_histogram(fill = "firebrick", col = "black", closed = "left") + 
+  labs(x = "Number of inactive burrows", y = "Number observations") + 
+  theme_classic() +
+  theme(aspect.ratio = 0.80)
+```
+
+Zero-inflated. Count data.
+
+## Number of nest-searching queens
+
+```{r}
+ggplot(field_data, aes(x = nest_searching_queens)) + 
+  geom_histogram(fill = "firebrick", col = "black", closed = "left") + 
+  labs(x = "# NSQ", y = "Number observations") + 
+  theme_classic() +
+  theme(aspect.ratio = 0.80)
+```
+
+Zero-inflated. Count data.
+
+## Number of workers
+
+```{r}
+ggplot(field_data, aes(x = workers)) + 
+  geom_histogram(fill = "firebrick", col = "black", closed = "left") + 
+  labs(x = "# workers", y = "Number observations") + 
+  theme_classic() +
+  theme(aspect.ratio = 0.80)
+```
+
+Zero-inflated. Count data.
+
+## Bees foraging on vaco
+
+```{r}
+ggplot(field_data, aes(x = forage_vaco)) + 
+  geom_histogram(fill = "firebrick", col = "black", closed = "left") + 
+  labs(x = "# bees foraging on vaco", y = "Number observations") + 
+  theme_classic() +
+  theme(aspect.ratio = 0.80)
+```
+
+Zero-inflated. Count data.
+
+# Step 4: Visualize predictors
+
+## % cover: grass+forb
+
+```{r}
+ggplot(field_data, aes(x = site_id, y = grass_forb_perc)) +
+  geom_boxplot(fill = "goldenrod1", varwidth = FALSE) +
+  labs(x = "Site", y = "% cover") +
+  theme_classic() +
+  theme(text = element_text(size = 14))
+```
+
+## Bombus-relevant floral abun
+
+```{r}
+ggplot(field_data, aes(x = site_id, y = bombus_floral_abun)) + geom_boxplot(fill = "goldenrod1", varwidth = FALSE) + labs(x = "Site", y = "Bombus-relevant floral abundance") + theme_classic() + theme(text = element_text(size = 14))
+```
+
+## burrow number
+
+```{r}
+ggplot(field_data, aes(x = site_id, y = num_burrows)) + geom_boxplot(fill = "goldenrod1", varwidth = FALSE) + labs(x = "Site", y = "# burrows") + theme_classic() + theme(text = element_text(size = 14))
+```
+
+## NSQ Abun
+
+```{r}
+ggplot(field_data, aes(x = site_id, y = nest_searching_queens)) + geom_boxplot(fill = "goldenrod1", varwidth = FALSE) + labs(x = "Site", y = "# NSQ") + theme_classic() + theme(text = element_text(size = 14))
+```
+
+## Sampling date
+
+```{r}
+ggplot(field_data, aes(x = site_id, y = julian.date)) + geom_boxplot(fill = "goldenrod1", varwidth = FALSE) + labs(x = "Site", y = "Julian date") + theme_classic() + theme(text = element_text(size = 14))
+```
+
+# Step 5: Check for correlation among predictors
+
+```{r}
+library(corrplot)
+#select only columns that are numeric or integers, except scaled variables
+numeric_vars <- field_data %>% 
+  select(where(~ is.numeric(.x) || is.integer(.x))) %>%
+  select(-contains("_scaled"))
+
+#find correlation coefficients 
+cor_matrix <- cor(numeric_vars, use = "complete.obs")
+#plot
+corrplot(cor_matrix, method = "circle")
+```
+
+# Step 6: Plot bivariate relationships between each predictor and response variable
+
+Floral abun vs. % cover
+
+```{r}
+ggplot(field_data, aes(x = grass_forb_perc, y = bombus_floral_abun)) +
+  geom_point(size=2, col="red") +
+  labs(y = "Bombus-relevant floral abundance (log)", x = "% cover") +
+  theme_classic() +
+  theme(text = element_text(size = 14)) +
+  geom_smooth(method = "lm", se = TRUE)
+```
+
+Num burrows vs % cover
+
+```{r}
+ggplot(field_data, aes(x = grass_forb_perc, y = num_burrows)) +
+  geom_point(size=2, col="red") +
+  labs(y = "Burrow num", x = "% cover") +
+  theme_classic() +
+  theme(text = element_text(size = 14)) +
+  geom_smooth(method = "lm", se = TRUE)
+```
+
+Num inactive burrows vs % covers
+
+```{r}
+ggplot(field_data, aes(x = grass_forb_perc, y = num_inactive_burrows)) +
+  geom_point(size=2, col="red") +
+  labs(y = "Inactive burrow num", x = "% cover") +
+  theme_classic() +
+  theme(text = element_text(size = 14)) +
+  geom_smooth(method = "lm", se = TRUE)
+```
+
+Num NSQ vs % cover
+
+```{r}
+ggplot(field_data, aes(x = grass_forb_perc, y = nest_searching_queens)) +
+  geom_point(size=2, col="red") +
+  labs(y = "# NSQ", x = "% cover") +
+  theme_classic() +
+  theme(text = element_text(size = 14)) +
+  geom_smooth(method = "lm", se = TRUE)
+```
+
+Num NSQ vs floral abun
+
+```{r}
+ggplot(field_data, aes(x = bombus_floral_abun, y = nest_searching_queens)) +
+  geom_point(size=2, col="red") +
+  labs(y = "# NSQ", x = "bombus-relevant floral abun") +
+  theme_classic() +
+  theme(text = element_text(size = 14)) +
+  geom_smooth(method = "lm", se = TRUE)
+```
+
+Num workers vs floral abun
+
+```{r}
+ggplot(field_data, aes(x = bombus_floral_abun, y = workers)) +
+  geom_point(size=2, col="red") +
+  labs(y = "# workers", x = "bombus-relevant floral abun") +
+  theme_classic() +
+  theme(text = element_text(size = 14)) +
+  geom_smooth(method = "lm", se = TRUE)
+```
+
+Num foraging on vaco vs floral abun
+
+```{r}
+ggplot(field_data, aes(x = bombus_floral_abun, y = forage_vaco)) +
+  geom_point(size=2, col="red") +
+  labs(y = "# foraging on vaco", x = "bombus-relevant floral abun") +
+  theme_classic() +
+  theme(text = element_text(size = 14)) +
+  geom_smooth(method = "lm", se = TRUE)
+```
+
+Num NSQ vs num burrows
+
+```{r}
+ggplot(field_data, aes(x = num_burrows, y = nest_searching_queens)) +
+  geom_point(size=2, col="red") +
+  labs(y = "# NSQ", x = "Burrow number") +
+  theme_classic() +
+  theme(text = element_text(size = 14)) +
+  geom_smooth(method = "lm", se = TRUE)
+```
+
+Num workers vs num burrows
+
+```{r}
+ggplot(field_data, aes(x = num_burrows, y = workers)) +
+  geom_point(size=2, col="red") +
+  labs(y = "# workers", x = "Burrow number") +
+  theme_classic() +
+  theme(text = element_text(size = 14)) +
+  geom_smooth(method = "lm", se = TRUE)
+```
+
+Num forage on vaco vs num burrows
+
+```{r}
+ggplot(field_data, aes(x = num_burrows, y = forage_vaco)) +
+  geom_point(size=2, col="red") +
+  labs(y = "# forage on vaco", x = "Burrow number") +
+  theme_classic() +
+  theme(text = element_text(size = 14)) +
+  geom_smooth(method = "lm", se = TRUE)
+```
+
+Num NSQ vs num inactive burrows
+
+```{r}
+ggplot(field_data, aes(x = num_inactive_burrows, y = nest_searching_queens)) +
+  geom_point(size=2, col="red") +
+  labs(y = "# NSQ", x = "Inactive burrow number") +
+  theme_classic() +
+  theme(text = element_text(size = 14)) +
+  geom_smooth(method = "lm", se = TRUE)
+```
+
+Num workers vs num inactive burrows
+
+```{r}
+ggplot(field_data, aes(x = num_inactive_burrows, y = workers)) +
+  geom_point(size=2, col="red") +
+  labs(y = "# workers", x = "Inactive burrow number") +
+  theme_classic() +
+  theme(text = element_text(size = 14)) +
+  geom_smooth(method = "lm", se = TRUE)
+```
+
+Num bees foraging on vaco vs num inactive burrows
+
+```{r}
+ggplot(field_data, aes(x = num_inactive_burrows, y = forage_vaco)) +
+  geom_point(size=2, col="red") +
+  labs(y = "# foraging on vaco", x = "Inactive burrow number") +
+  theme_classic() +
+  theme(text = element_text(size = 14)) +
+  geom_smooth(method = "lm", se = TRUE)
+```
+
+Num workers vs num NSQ
+
+```{r}
+ggplot(field_data, aes(x = nest_searching_queens, y = workers)) +
+  geom_point(size=2, col="red") +
+  labs(y = "# workers", x = "# NSQ") +
+  theme_classic() +
+  theme(text = element_text(size = 14)) +
+  geom_smooth(method = "lm", se = TRUE)
+```
+
+Num forage on vaco vs num NSQ
+
+```{r}
+ggplot(field_data, aes(x = nest_searching_queens, y = forage_vaco)) +
+  geom_point(size=2, col="red") +
+  labs(y = "# foraging on vaco", x = "# NSQ") +
+  theme_classic() +
+  theme(text = element_text(size = 14)) +
+  geom_smooth(method = "lm", se = TRUE)
+```
