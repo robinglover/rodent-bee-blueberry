@@ -1,0 +1,14 @@
+site_id,area,grower,company,address,cover_type
+bates_57b,delta_1,George Bates,Bate's Farm,Deltaport Way and 53 St,grass
+bks_56,delta_1,Tejinder,BKS Farms,2601 56th St,bare
+chong_68,delta_2,Nancy Chong,Chong Farms,"6638 68th Street, Delta",grass
+bks_68,delta_2,Tejinder,BKS Farms,6570 68th st,bare
+chong_96,delta_3,Nancy Chong,Chong Farms,"5235 96th Street, Delta",grass
+bks_96,delta_3,Tejinder,BKS Farms,5489 96th st,bare
+gwb_neaves,pittmeadows_1,Surjit Grewal,Great West Berry,13550 Neaves rd,grass
+bks_neaves,pittmeadows_1,Tejinder,BKS Farms,"13807 Neaves rd 
+Pitt meadows",bare
+avtar_168,surrey_1,Avtar Gill,Avtar Gill,4636 168 St,grass
+surjit_168,surrey_1,Surjit Gill,Surjit Farms,4623 168th St,bare
+sandhu_ladnertrunk,delta_4,Ken Sandhu,Sandhu Farms,6721 Ladner Trunk Rd,bare
+lbf_ladnertrunk,delta_4,Ramji Sandhu,Lee Berry,6988 Ladner Trunk Rd,grass
