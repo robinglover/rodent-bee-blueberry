@@ -1,0 +1,344 @@
+---
+title: "exploratory_covertype"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_analysis/rodent-bee-blueberry")
+```
+
+# Load data
+
+```{r}
+#load packages
+library(ggplot2) #for plots
+library(dplyr) #for working with dataframes
+library(tidyr) #for working with datasets
+library(lme4) #for mixed effects models
+library(ggpubr) #for adding significance asterisks to graph
+
+#read in data
+data <- read.csv("06_cleandata/combined_plot_data.csv")
+
+#check that variables are in appropriate format
+str(data)
+
+#change character columns to factors
+data <- data %>%
+   mutate(
+     site_id = as.factor(site_id),
+     round = as.factor(round),
+     plot_id = as.factor(plot_id),
+     bee_date = as.Date(bee_date),
+     area = as.factor(area))
+
+#filter data to only include within field data
+data <- data %>%
+  filter(plot_id != "d")
+
+```
+
+# Compare vegetation variables between grassy and bare
+
+\% bare:
+
+p=0.00057 but in wrong direction (more bare_perc in grassy sites) –\> likely due to dry (sprayed) veg, flooding and moss subtracting from bare_perc in bare sites
+
+```{r}
+ggplot(data, aes(x = cover_type, y = bare_perc)) + 
+  geom_boxplot() +
+  theme_classic(base_size = 15) +
+  xlab("Cover") +
+  ylab("% Bare") +
+  stat_compare_means(
+    method = "t.test",        # or "wilcox.test"
+    label = "p.format",       # shows formatted p-value
+    size = 3.7,
+    vjust = 0
+  )
+
+```
+
+\% bare + flood+ bryo + dry
+
+no significant (p=0.077) difference between cover type when I include dry rooted, flooding and bryophyte with bare
+
+```{r}
+ggplot(data, aes(x = cover_type, y = bare_flood_dry_bryo_perc)) + 
+  geom_boxplot() +
+  theme_classic(base_size = 15) +
+  xlab("Cover") +
+  ylab("% Bare + Flood + Dry + Bryo") +
+  stat_compare_means(
+    method = "t.test",        # or "wilcox.test"
+    label = "p.format",       # shows formatted p-value
+    size = 3.7,
+    vjust = 0
+  )
+
+```
+
+\% grass: p=1e-11
+
+```{r}
+ggplot(data, aes(x=cover_type, y = grass_perc)) + 
+  geom_boxplot() +
+  theme_classic(base_size = 15) +
+  xlab("Cover") +
+  ylab("% Grass") +
+  stat_compare_means(
+    method = "t.test",        # or "wilcox.test"
+    label = "p.format",       # shows formatted p-value
+    size = 3.7,
+    vjust = 0
+  )
+```
+
+\% grass by area
+
+```{r}
+ggplot(data, aes(x = area, fill=cover_type, y = grass_perc)) + 
+  geom_boxplot() +
+  theme_classic(base_size = 15) +
+  xlab("Area") +
+  ylab("% Grass") +
+  stat_compare_means(
+    method = "t.test",        # or "wilcox.test"
+    label = "p.format",       # shows formatted p-value
+    size = 3.7,
+    vjust = 0
+  )
+```
+
+\% forb: p=3.7e-07
+
+```{r}
+ggplot(data, aes(x = cover_type, y = forb_perc)) + 
+  geom_boxplot() +
+  theme_classic(base_size = 15) +
+  xlab("Cover") +
+  ylab("% Forb") +
+  stat_compare_means(
+    method = "t.test",        # or "wilcox.test"
+    label = "p.format",       # shows formatted p-value
+    size = 3.7,
+    vjust = 0
+  )
+```
+
+\% grass + forb: p=\<2e-16
+
+```{r}
+ggplot(data, aes(x = cover_type, y = grass_forb_perc)) + 
+  geom_boxplot() +
+  theme_classic(base_size = 15) +
+  xlab("Cover") +
+  ylab("% grass + forb") +
+  stat_compare_means(
+    method = "t.test",        # or "wilcox.test"
+    label = "p.format",       # shows formatted p-value
+    size = 3.7,
+    vjust = 0
+  )
+```
+
+\% grass + forb by area
+
+```{r}
+ggplot(data, aes(x = area, fill = cover_type, y = grass_forb_perc)) + 
+  geom_boxplot() +
+  theme_classic(base_size = 15) +
+  xlab("Area") +
+  ylab("% grass + forb") +
+  stat_compare_means(
+    method = "t.test",        # or "wilcox.test"
+    label = "p.format",       # shows formatted p-value
+    size = 3.7,
+    vjust = 0
+  )
+```
+
+grass h: p=1.8e-09
+
+```{r}
+ggplot(data, aes(x = cover_type, y = grass_h)) + 
+  geom_boxplot() +
+  theme_classic(base_size = 15) +
+  xlab("Cover") +
+  ylab("Grass H") +
+  stat_compare_means(
+    method = "t.test",        # or "wilcox.test"
+    label = "p.format",       # shows formatted p-value
+    size = 3.7,
+    vjust = 0
+  )
+```
+
+forb h: p = 0.00057
+
+```{r}
+ggplot(data, aes(x = cover_type, y = forb_h)) + 
+  geom_boxplot() +
+  theme_classic(base_size = 15) +
+  xlab("Cover") +
+  ylab("Forb H") +
+  stat_compare_means(
+    method = "t.test",        # or "wilcox.test"
+    label = "p.format",       # shows formatted p-value
+    size = 3.7,
+    vjust = 0
+  )
+```
+
+\% flood: p = 0.063
+
+```{r}
+ggplot(data, aes(x = round, fill = cover_type, y = flood_perc)) + 
+  geom_boxplot() +
+  theme_classic(base_size = 15) +
+  xlab("Round") +
+  ylab("% Flood") +
+  stat_compare_means(
+    method = "t.test",        # or "wilcox.test"
+    label = "p.format",       # shows formatted p-value
+    size = 3.7,
+    vjust = 0
+  )
+```
+
+# Compare variables of interest between bare and grassy
+
+num nsq during ns seasons
+
+```{r}
+#filter to only nest-searching season
+ns_data <- data %>%
+  filter(round %in% c("2024_r1", "2025_r1", "2025_r2"))
+
+ggplot(ns_data, aes(x=cover_type, y = nest_searching_queens))+ 
+  geom_boxplot() +
+  theme_classic(base_size = 15)+
+  xlab("Cover")+
+  ylab("NSQ abundance") +
+  stat_compare_means(
+    aes(group = cover_type),  # group by field.type
+    method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
+    label = "p.format",  # Display p-value 
+    size = 3.7,  # Adjust this value to make the asterisks larger
+    vjust = -1)  # Adjust horizontal position of the p-value label
+
+```
+
+NSQ broken up by season type
+
+```{r}
+ggplot(data, aes(fill=cover_type,x=bee_season_type, y = nest_searching_queens))+ 
+  geom_boxplot() +
+  theme_classic(base_size = 15)+
+  xlab("Season")+
+  ylab("NSQ abundance") +
+  stat_compare_means(
+    aes(group = cover_type),  # group by field.type
+    method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
+    label = "p.format",  # Display p-value 
+    size = 3.7,  # Adjust this value to make the asterisks larger
+    vjust = -1)  # Adjust horizontal position of the p-value label
+```
+
+num workers
+
+```{r}
+ggplot(data, aes(x=cover_type, y = workers))+ 
+  geom_boxplot() +
+  theme_classic(base_size = 15)+
+  xlab("Cover")+
+  ylab("Worker abundance") +
+  stat_compare_means(
+    aes(group = cover_type),  # group by field.type
+    method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
+    label = "p.format",  # Display p-value 
+    size = 3.7,  # Adjust this value to make the asterisks larger
+    vjust = -1)  # Adjust horizontal position of the p-value label
+
+```
+
+Workers broken up by season type
+
+```{r}
+ggplot(data, aes(fill=cover_type,x=bee_season_type, y = workers))+ 
+  geom_boxplot() +
+  theme_classic(base_size = 15)+
+  xlab("Season")+
+  ylab("Worker abundance") +
+  stat_compare_means(
+    aes(group = cover_type),  # group by field.type
+    method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
+    label = "p.format",  # Display p-value 
+    size = 3.7,  # Adjust this value to make the asterisks larger
+    vjust = -1)  # Adjust horizontal position of the p-value label
+```
+
+num burrows
+
+```{r}
+ggplot(data, aes(x=cover_type, y = num_burrows))+ 
+  geom_boxplot() +
+  theme_classic(base_size = 15)+
+  xlab("Cover")+
+  ylab("Burrow abundance") +
+  stat_compare_means(
+    aes(group = cover_type),  # group by field.type
+    method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
+    label = "p.format",  # Display p-value 
+    size = 3.7,  # Adjust this value to make the asterisks larger
+    vjust = -1)  # Adjust horizontal position of the p-value label
+```
+
+inactive burrows
+
+```{r}
+ggplot(data, aes(x=cover_type, y = num_inactive_burrows))+ 
+  geom_boxplot() +
+  theme_classic(base_size = 15)+
+  xlab("Cover")+
+  ylab("Inactive burrow abundance") +
+  stat_compare_means(
+    aes(group = cover_type),  # group by field.type
+    method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
+    label = "p.format",  # Display p-value 
+    size = 3.7,  # Adjust this value to make the asterisks larger
+    vjust = -1)  # Adjust horizontal position of the p-value label
+```
+
+floral abundance (relevant to bees)
+
+```{r}
+ggplot(data, aes(x=cover_type, y = bombus_floral_abun))+ 
+  geom_boxplot() +
+  theme_classic(base_size = 15)+
+  xlab("Cover")+
+  ylab("Bombus-relevant floran abundance") +
+  stat_compare_means(
+    aes(group = cover_type),  # group by field.type
+    method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
+    label = "p.format",  # Display p-value 
+    size = 3.7,  # Adjust this value to make the asterisks larger
+    vjust = -1)  # Adjust horizontal position of the p-value label
+```
+
+Num bees foraging on vaco
+
+```{r}
+ggplot(data, aes(x=cover_type, y = forage_vaco))+ 
+  geom_boxplot() +
+  theme_classic(base_size = 15)+
+  xlab("Cover")+
+  ylab("Num foraging on vaco") +
+  stat_compare_means(
+    aes(group = cover_type),  # group by field.type
+    method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
+    label = "p.format",  # Display p-value 
+    size = 3.7,  # Adjust this value to make the asterisks larger
+    vjust = -1)  # Adjust horizontal position of the p-value label
+```
