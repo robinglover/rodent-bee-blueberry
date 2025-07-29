@@ -76,7 +76,7 @@ ggplot(data_site_avg, aes(x = field_ditch, y = mean_nsq)) +
   theme_classic(base_size = 15) +
   xlab("Plot Type") +
   ylab("Mean NSQ per Site") +
-  stat_compare_means(method = "t.test", label = "p.format", size = 3.7, vjust = 0)
+  stat_compare_means(method = "t.test", label = "p.format", size = 3.7)
 ```
 
 ## Num workers

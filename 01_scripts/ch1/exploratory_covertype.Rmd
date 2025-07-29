@@ -209,14 +209,10 @@ ggplot(data, aes(x = round, fill = cover_type, y = flood_perc)) +
 
 # Compare variables of interest between bare and grassy
 
-num nsq during ns seasons
+num nsq 
 
 ```{r}
-#filter to only nest-searching season
-ns_data <- data %>%
-  filter(round %in% c("2024_r1", "2025_r1", "2025_r2"))
-
-ggplot(ns_data, aes(x=cover_type, y = nest_searching_queens))+ 
+ggplot(data, aes(x=cover_type, y = nest_searching_queens))+ 
   geom_boxplot() +
   theme_classic(base_size = 15)+
   xlab("Cover")+
@@ -225,8 +221,8 @@ ggplot(ns_data, aes(x=cover_type, y = nest_searching_queens))+
     aes(group = cover_type),  # group by field.type
     method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
     label = "p.format",  # Display p-value 
-    size = 3.7,  # Adjust this value to make the asterisks larger
-    vjust = -1)  # Adjust horizontal position of the p-value label
+    size = 3.7  # Adjust this value to make the asterisks larger
+    ) 
 
 ```
 
@@ -242,8 +238,7 @@ ggplot(data, aes(fill=cover_type,x=bee_season_type, y = nest_searching_queens))+
     aes(group = cover_type),  # group by field.type
     method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
     label = "p.format",  # Display p-value 
-    size = 3.7,  # Adjust this value to make the asterisks larger
-    vjust = -1)  # Adjust horizontal position of the p-value label
+    size = 3.7)  # Adjust this value to make the asterisks larger
 ```
 
 num workers
@@ -258,8 +253,7 @@ ggplot(data, aes(x=cover_type, y = workers))+
     aes(group = cover_type),  # group by field.type
     method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
     label = "p.format",  # Display p-value 
-    size = 3.7,  # Adjust this value to make the asterisks larger
-    vjust = -1)  # Adjust horizontal position of the p-value label
+    size = 3.7)  # Adjust this value to make the asterisks larger
 
 ```
 
@@ -275,8 +269,7 @@ ggplot(data, aes(fill=cover_type,x=bee_season_type, y = workers))+
     aes(group = cover_type),  # group by field.type
     method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
     label = "p.format",  # Display p-value 
-    size = 3.7,  # Adjust this value to make the asterisks larger
-    vjust = -1)  # Adjust horizontal position of the p-value label
+    size = 3.7)  # Adjust this value to make the asterisks larger
 ```
 
 num burrows
@@ -291,8 +284,7 @@ ggplot(data, aes(x=cover_type, y = num_burrows))+
     aes(group = cover_type),  # group by field.type
     method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
     label = "p.format",  # Display p-value 
-    size = 3.7,  # Adjust this value to make the asterisks larger
-    vjust = -1)  # Adjust horizontal position of the p-value label
+    size = 3.7)  # Adjust this value to make the asterisks larger
 ```
 
 inactive burrows
@@ -307,8 +299,7 @@ ggplot(data, aes(x=cover_type, y = num_inactive_burrows))+
     aes(group = cover_type),  # group by field.type
     method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
     label = "p.format",  # Display p-value 
-    size = 3.7,  # Adjust this value to make the asterisks larger
-    vjust = -1)  # Adjust horizontal position of the p-value label
+    size = 3.7)  # Adjust this value to make the asterisks larger
 ```
 
 floral abundance (relevant to bees)
@@ -318,13 +309,12 @@ ggplot(data, aes(x=cover_type, y = bombus_floral_abun))+
   geom_boxplot() +
   theme_classic(base_size = 15)+
   xlab("Cover")+
-  ylab("Bombus-relevant floran abundance") +
+  ylab("Bombus-relevant floral abundance") +
   stat_compare_means(
     aes(group = cover_type),  # group by field.type
     method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
     label = "p.format",  # Display p-value 
-    size = 3.7,  # Adjust this value to make the asterisks larger
-    vjust = -1)  # Adjust horizontal position of the p-value label
+    size = 3.7)  # Adjust this value to make the asterisks larger
 ```
 
 Num bees foraging on vaco
@@ -339,6 +329,5 @@ ggplot(data, aes(x=cover_type, y = forage_vaco))+
     aes(group = cover_type),  # group by field.type
     method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
     label = "p.format",  # Display p-value 
-    size = 3.7,  # Adjust this value to make the asterisks larger
-    vjust = -1)  # Adjust horizontal position of the p-value label
+    size = 3.7) # Adjust this value to make the asterisks larger
 ```
