@@ -1,0 +1,75 @@
+---
+title: "glm"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_analysis/rodent-bee-blueberry")
+```
+
+# Load data
+
+```{r}
+#load packages
+library(tidyverse)
+library(ggplot2)
+library(DHARMa)
+library(glmmTMB)
+
+
+#read in data
+data <- read.csv("06_cleandata/combined_plot_data.csv")
+
+#check that variables are in appropriate format
+str(data)
+
+#change character columns to factors
+surveys <- data %>%
+   mutate(
+     site_id = as.factor(site_id),
+     round = as.factor(round),
+     plot_id = as.factor(plot_id),
+     bee_date = as.Date(bee_date),
+     bee_season_type = as.factor(bee_season_type),
+     area = as.factor(area))
+
+```
+
+Scale continuous predictors
+
+```{r}
+surveys$julian.date_scaled <- as.numeric(scale(surveys$julian.date))
+surveys$bare_perc_scaled <- as.numeric(scale(surveys$bare_perc))
+surveys$grass_perc_scaled <- as.numeric(scale(surveys$grass_perc))
+surveys$forb_perc_scaled <- as.numeric(scale(surveys$forb_perc))
+surveys$grass_forb_perc_scaled <- as.numeric(scale(surveys$grass_forb_perc))
+surveys$grass_h_scaled <- as.numeric(scale(surveys$grass_h))
+surveys$forb_h_scaled <- as.numeric(scale(surveys$forb_h))
+surveys$floral_perc_scaled <- as.numeric(scale(surveys$floral_perc))
+surveys$grass_forb_floral_perc_scaled <- as.numeric(scale(surveys$grass_forb_floral_perc))
+surveys$bombus_floral_perc_scaled <- as.numeric(scale(surveys$bombus_floral_perc))
+surveys$flood_perc_scaled <- as.numeric(scale(surveys$flood_perc))
+surveys$dry_root_perc_scaled <- as.numeric(scale(surveys$dry_root_perc))
+surveys$bryo_perc_scaled <- as.numeric(scale(surveys$bryo_perc))
+surveys$bare_flood_dry_bryo_perc_scaled <- as.numeric(scale(surveys$bare_flood_dry_bryo_perc))
+surveys$floral_richness_scaled <- as.numeric(scale(surveys$floral_richness))
+surveys$bombus_floral_richness_scaled <- as.numeric(scale(surveys$bombus_floral_richness))
+surveys$floral_abun_scaled <- as.numeric(scale(surveys$floral_abun))
+surveys$bombus_floral_abun_scaled <- as.numeric(scale(surveys$bombus_floral_abun))
+surveys$nest_searching_queens_scaled <- as.numeric(scale(surveys$nest_searching_queens))
+surveys$workers_scaled <- as.numeric(scale(surveys$workers))
+surveys$forage_vaco_scaled <- as.numeric(scale(surveys$forage_vaco))
+surveys$num_burrows_scaled <- as.numeric(scale(surveys$num_burrows))
+surveys$num_inactive_burrows_scaled <- as.numeric(scale(surveys$num_inactive_burrows))
+surveys$num_active_dm_scaled <- as.numeric(scale(surveys$num_active_dm))
+surveys$num_dm_size_scaled <- as.numeric(scale(surveys$num_dm_size))
+surveys$num_inactive_dm_scaled <- as.numeric(scale(surveys$num_inactive_dm))
+```
+
+Filter to only include field data
+
+```{r}
+field_data <- surveys %>%
+  filter(plot_id != "d")
+```
