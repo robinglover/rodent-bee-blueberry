@@ -28,21 +28,15 @@ data <- read.csv("06_cleandata/combined_plot_data.csv")
 str(data)
 
 #change character columns to factors
-data <- data %>%
+surveys <- data %>%
    mutate(
      site_id = as.factor(site_id),
      round = as.factor(round),
      plot_id = as.factor(plot_id),
      bee_date = as.Date(bee_date),
+     bee_season_type = as.factor(bee_season_type),
      area = as.factor(area))
 
-#filter data to only include within field data
-field_data <- data %>%
-  filter(plot_id != "d")
-
-#add column that combines site with plot
-field_data <- field_data %>%
-  mutate(site_plot = interaction(site_id, plot_id, sep = "_"))
 ```
 
 Scale continuous predictors
@@ -74,6 +68,16 @@ surveys$num_inactive_burrows_scaled <- as.numeric(scale(surveys$num_inactive_bur
 surveys$num_active_dm_scaled <- as.numeric(scale(surveys$num_active_dm))
 surveys$num_dm_size_scaled <- as.numeric(scale(surveys$num_dm_size))
 surveys$num_inactive_dm_scaled <- as.numeric(scale(surveys$num_inactive_dm))
+```
+
+```{r}
+#filter data to only include within field data
+field_data <- surveys %>%
+  filter(plot_id != "d")
+
+#add column that combines site with plot
+field_data <- field_data %>%
+  mutate(site_plot = interaction(site_id, plot_id, sep = "_"))
 ```
 
 # Model 1: floral abun vs % cover
