@@ -41,23 +41,23 @@ site_info <- read.csv("00_rawdata/exploratory/site-info.csv")
 site_info <- site_info %>%
   rename(site_id = name)
 
-bee <- read.csv("06_cleandata/bees_CLEAN.csv")
+bee <- read.csv("06_cleandata/bee_CLEAN.csv")
 bee <- bee %>%
   mutate(plot_id = str_replace(plot_id, "^d $", "d"))
 bee <- bee %>%
   left_join(site_info %>% select(site_id, area), by = c("site_id"))
 
-floral <- read.csv("06_cleandata/flowers_CLEAN.csv")
+floral <- read.csv("06_cleandata/floral_CLEAN.csv")
 floral <- floral %>%
   left_join(site_info %>% select(site_id, area), by = c("site_id"))
 
-rodent <- read.csv("06_cleandata/rodents_CLEAN.csv")
+rodent <- read.csv("06_cleandata/rodent_CLEAN.csv")
 rodent <- rodent %>%
   mutate(plot_id = str_replace(plot_id, "^d $", "d"))
 rodent <- rodent %>%
   left_join(site_info %>% select(site_id, area), by = c("site_id"))
 
-veg <- read.csv("06_cleandata/vegetation_CLEAN.csv")
+veg <- read.csv("06_cleandata/veg_CLEAN.csv")
 veg <- veg %>%
   mutate(bare = str_replace(bare, "unknown", "")) %>%
   mutate(bare = str_replace(forb_height, " ", "")) %>%
