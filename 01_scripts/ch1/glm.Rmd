@@ -95,7 +95,17 @@ nsq_lm_zeroPois <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled +
 summary(nsq_lm_zeroPois)
 ```
 
-Plotting a binary model to see if #NSQ \> 0
+Diagnostics
+
+```{r}
+#simulate residuals
+
+residuals_nsq_zeroPois <- simulateResiduals(fittedModel = nsq_lm_zeroPois, plot = TRUE)
+
+##no evidence of overdispersion or significant outliers
+```
+
+Plotting a binary model to predict if #NSQ \> 0
 
 ```{r}
 
@@ -264,7 +274,80 @@ Results for the final model
 summary(burrows_lm_negbin)
 ```
 
-# GLM #4: Floral abundance \*\*\*still need to work on this one
+# GLM #4: Number of inactive rodent burrows
+
+First, plot poisson
+
+```{r}
+inactiveburrows_lm_pois <- glmmTMB(num_inactive_burrows ~ grass_forb_perc_scaled + 
+                    julian.date_scaled, 
+                  family = poisson, #poisson
+                  data = field_data)
+```
+
+Diagnostics
+
+```{r}
+#simulate residuals
+
+residuals_inactiveburrows_pois <- simulateResiduals(fittedModel = inactiveburrows_lm_pois, plot = TRUE)
+
+##residual plots show that there is overdispersion and  excessive outliers. Plot negative binomial
+```
+
+Plot negative binomial to see if that fixes the overdispersion.
+
+```{r}
+inactiveburrows_lm_negbin <- glmmTMB(num_inactive_burrows ~ grass_forb_perc_scaled + 
+                    julian.date_scaled, 
+                  family = nbinom1, 
+                  data = field_data)
+```
+
+Diagnostics
+
+```{r}
+#simulate residuals
+
+residuals_inactiveburrows_negbin <- simulateResiduals(fittedModel = inactiveburrows_lm_negbin, plot = TRUE)
+
+##residual plots show that there is no overdispersion or excessive outliers. Now check zero-inflation.
+```
+
+Test zero-inflation
+
+```{r}
+testZeroInflation(residuals_inactiveburrows_negbin)
+
+##p-value = 0.664. No strong evidence of zero-inflation. I'll try the zero-inflated model to see if it helps. 
+```
+
+Plot zero-inflated negative binomial and recheck diagnostics.
+
+```{r}
+inactiveburrows_lm_zero_negbin <- glmmTMB(num_inactive_burrows ~ grass_forb_perc_scaled + 
+                    julian.date_scaled, 
+                    ziformula = ~1,  # zero-inflation model
+                  family = nbinom1, 
+                  data = field_data)
+```
+
+Compare AIC values between the 2 models
+
+```{r}
+summary(inactiveburrows_lm_negbin)
+summary(inactiveburrows_lm_zero_negbin)
+
+##AIC and BIC values are slightly lover for negative binomial and there was no strong evidence for zero-inflation. Therefore, I think the negative binomal model is the best. 
+```
+
+Results for the final model
+
+```{r}
+summary(inactiveburrows_lm_negbin)
+```
+
+# GLM #5: Floral abundance \*\*\*still need to work on this one
 
 Plot gamma regression since distribution of floral abundance across sites is positive and right-skewed.
 
@@ -288,17 +371,150 @@ residuals_floral_tweedie <- simulateResiduals(fittedModel = floral_lm_tweedie, p
 Try plotting the log(floral abundance) as a linear regression
 
 ```{r}
-
 field_data$log_bombus_floral_abun <- log(field_data$bombus_floral_abun + 1e-4)
 
 floral_lm_log <- lm(log_bombus_floral_abun ~ grass_forb_perc_scaled + julian.date_scaled, data = field_data)
-
-
 ```
 
 Diagnostics
 
 ```{r}
 residuals_floral_log <- simulateResiduals(fittedModel = floral_lm_log, plot = TRUE)
+##fixed overdispersion and outliers. KS test suggests non-normality but I will check this in the Q-Q plot
 
+library(car)
+qqPlot(floral_lm_log, main = "Q-Q Plot")
+
+##Q-Q plot shows that residuals are still not normal. Need to try a different model.
+```
+
+Try running Tweedie model again but adjusting for overdispersion by adding a random effect for data structure
+
+```{r}
+floral_glmm_tweedie <- glmmTMB(bombus_floral_abun ~ grass_forb_perc_scaled + 
+                    julian.date_scaled + (1|area/site_id/plot_id), 
+                  family = tweedie(link = "log"), 
+                  data = field_data)
+```
+
+Diagnostics
+
+```{r}
+#simulate residuals
+
+residuals_floral_tweedie_mixed <- simulateResiduals(fittedModel = floral_glmm_tweedie, plot = TRUE)
+
+##residual plots show that there is still overdispersion. try different random effect.
+```
+
+Try simpler random effect structure (ignore site)
+
+```{r}
+floral_glmm_tweedie2 <- glmmTMB(bombus_floral_abun ~ grass_forb_perc_scaled + 
+                    julian.date_scaled + (1|area/plot_id), 
+                  family = tweedie(link = "log"), 
+                  data = field_data)
+```
+
+Diagnostics –check for overdispersion
+
+```{r}
+sim_res <- simulateResiduals(floral_glmm_tweedie2)
+plot(sim_res)
+testDispersion(sim_res)
+
+##still overdispersion. Keep original random effect structure for now but try modelling zero-inflation in model
+```
+
+Zero-inflated model
+
+```{r}
+floral_glmm_tweediezero <- glmmTMB(bombus_floral_abun ~ grass_forb_perc_scaled + 
+                    julian.date_scaled + (1|area/site_id/plot_id), 
+                    ziformula = ~1, #zero-inflated model
+                  family = tweedie(link = "log"), 
+                  data = field_data)
+```
+
+Diagnostics –check for overdispersion
+
+```{r}
+sim_res <- simulateResiduals(floral_glmm_tweediezero)
+plot(sim_res)
+testDispersion(sim_res)
+
+##no more overdispersion!
+```
+
+Check other random effect structures to determine which is best
+
+```{r}
+#plot nested in area (drop site)
+
+floral_glmm_tweediezero_plot <- glmmTMB(bombus_floral_abun ~ grass_forb_perc_scaled + 
+                    julian.date_scaled + (1|area/plot_id), 
+                    ziformula = ~1, #zero-inflated model
+                  family = tweedie(link = "log"), 
+                  data = field_data)
+
+#site nested in area (drop plot)
+
+floral_glmm_tweediezero_site <- glmmTMB(bombus_floral_abun ~ grass_forb_perc_scaled + 
+                    julian.date_scaled + (1|area/site_id), 
+                    ziformula = ~1, #zero-inflated model
+                  family = tweedie(link = "log"), 
+                  data = field_data)
+
+#plot only
+
+floral_glmm_tweediezero_plotonly <- glmmTMB(bombus_floral_abun ~ grass_forb_perc_scaled + 
+                    julian.date_scaled + (1|plot_id), 
+                    ziformula = ~1, #zero-inflated model
+                  family = tweedie(link = "log"), 
+                  data = field_data)
+
+#site only
+
+floral_glmm_tweediezero_siteonly <- glmmTMB(bombus_floral_abun ~ grass_forb_perc_scaled + 
+                    julian.date_scaled + (1|site_id), 
+                    ziformula = ~1, #zero-inflated model
+                  family = tweedie(link = "log"), 
+                  data = field_data)
+
+#area only
+
+floral_glmm_tweediezero_areaonly <- glmmTMB(bombus_floral_abun ~ grass_forb_perc_scaled + 
+                    julian.date_scaled + (1|area), 
+                    ziformula = ~1, #zero-inflated model
+                  family = tweedie(link = "log"), 
+                  data = field_data)
+
+#check AIC
+AIC(
+  floral_glmm_tweediezero, 
+  floral_glmm_tweediezero_plot,
+  floral_glmm_tweediezero_site,
+  floral_glmm_tweediezero_plotonly, 
+  floral_glmm_tweediezero_siteonly, 
+  floral_glmm_tweediezero_areaonly
+)
+
+
+##plot only model has lowest AIC--> go with that one!
+```
+
+Check overdispersion in plot only model
+
+```{r}
+sim_res <- simulateResiduals(floral_glmm_tweediezero_plotonly)
+plot(sim_res)
+testDispersion(sim_res)
+
+##still no overdispersion
+```
+
+Look at summary for final model
+
+```{r}
+summary(floral_glmm_tweediezero_plotonly)
 ```
