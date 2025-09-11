@@ -446,8 +446,8 @@ floral_summary3 <- floral %>%
   group_by(site_id, round, plot_id) %>%
   summarise(floral_abun = sum(abundance, na.rm = TRUE), .groups = "drop") ##drop the groupings
 
-#take log scale of the summed values
-floral_summary3$floral_abun = log10(floral_summary3$floral_abun + 1)
+#take log scale of the summed values and round to whole numbers
+floral_summary3$floral_abun = round(log10(floral_summary3$floral_abun + 1))
 
 #left join counts onto full combos and replace NAs with 0
 floral_summary_full3 <- all_combinations %>%
@@ -471,8 +471,8 @@ floral_summary4 <- floral_bombus %>%
   group_by(site_id, round, plot_id) %>%
   summarise(bombus_floral_abun = sum(abundance, na.rm = TRUE), .groups = "drop") ##drop the groupings
 
-#take log scale of the summed values
-floral_summary4$bombus_floral_abun = log10(floral_summary4$bombus_floral_abun + 1)
+#take log scale of the summed values and round to whole numbers to keep them as discrete values
+floral_summary4$bombus_floral_abun = round(log10(floral_summary4$bombus_floral_abun + 1))
 
 #left join counts onto full combos and replace NAs with 0
 floral_summary_full4 <- all_combinations %>%
