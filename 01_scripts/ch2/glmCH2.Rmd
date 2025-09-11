@@ -1,6 +1,8 @@
 ---
 title: "glmCH2"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -66,7 +68,6 @@ surveys$bryo_perc_scaled <- as.numeric(scale(surveys$bryo_perc))
 surveys$bare_flood_dry_bryo_perc_scaled <- as.numeric(scale(surveys$bare_flood_dry_bryo_perc))
 surveys$floral_richness_scaled <- as.numeric(scale(surveys$floral_richness))
 surveys$bombus_floral_richness_scaled <- as.numeric(scale(surveys$bombus_floral_richness))
-surveys$floral_abun_scaled <- as.numeric(scale(surveys$floral_abun))
 surveys$bombus_floral_abun_scaled <- as.numeric(scale(surveys$bombus_floral_abun))
 surveys$nest_searching_queens_scaled <- as.numeric(scale(surveys$nest_searching_queens))
 surveys$workers_scaled <- as.numeric(scale(surveys$workers))
@@ -78,93 +79,7 @@ surveys$num_dm_size_scaled <- as.numeric(scale(surveys$num_dm_size))
 surveys$num_inactive_dm_scaled <- as.numeric(scale(surveys$num_inactive_dm))
 ```
 
-# GLMs #1: Number of nest-searching queens vs plot type
-
-Plotting a zero-inflated poisson model
-
-```{r}
-nsq_glm_zeroPois <- glmmTMB(nest_searching_queens ~ plot_type +
-                              bee_season_type + 
-                              (1|area/site_id/plot_id),
-                            ziformula = ~1,  # zero-inflation model
-                            family = poisson, #poisson
-                            data = surveys)
-
-summary(nsq_glm_zeroPois)
-
-##area random effect has zero variance. remove area from model and check summary
-
-nsq_glm_zeroPois_noArea <- glmmTMB(nest_searching_queens ~ plot_type +
-                              bee_season_type + 
-                              (1|site_id/plot_id),
-                            ziformula = ~1,  # zero-inflation model
-                            family = poisson, #poisson
-                            data = surveys)
-
-summary(nsq_glm_zeroPois_noArea)
-##AIC improved slightly with this model.
-
-#compare 2 models using likelihood ratio test
-anova(nsq_glm_zeroPois, nsq_glm_zeroPois_noArea)
-##p=1. This tells us that adding area model does not improve model. I should go with model that drops area.
-
-#try model without area and site
-nsq_glm_zeroPois_noAreaSite <- glmmTMB(nest_searching_queens ~ plot_type +
-                              bee_season_type + 
-                              (1|plot_id),
-                            ziformula = ~1,  # zero-inflation model
-                            family = poisson, #poisson
-                            data = surveys)
-
-#compare 2 models using likelihood ratio test
-anova(nsq_glm_zeroPois_noAreaSite, nsq_glm_zeroPois_noArea)
-##p=0.1283. This tells us that adding site does not significantly improve model. I should go with model that drops area and site since it is the simplest.
-
-nsq_glm_zeroPois_noRE <- glmmTMB(nest_searching_queens ~ plot_type +
-                              bee_season_type,
-                            ziformula = ~1,  # zero-inflation model
-                            family = poisson, #poisson
-                            data = surveys)
-
-#compare 2 models using likelihood ratio test
-anova(nsq_glm_zeroPois_noArea, nsq_glm_zeroPois_noRE)
-##p=0.e146. This tells us that adding random effects does not improve model. I should go with model without random effects since it is the simplest.
-
-```
-
-Diagnostics
-
-```{r}
-#simulate residuals
-
-residuals_nsq_glm_zeroPois_noRE <- simulateResiduals(fittedModel = nsq_glm_zeroPois_noRE, plot = TRUE)
-
-##no evidence of overdispersion or significant outliers
-```
-
-Plot results of model
-
-```{r}
-summary(nsq_glm_zeroPois_noRE)
-
-##number of nest searching queens vs plot type
-# Get predicted values
-pred1 <- ggpredict(nsq_glm_zeroPois_noRE, terms = "plot_type")
-
-# Plot
-plot(pred1) + ggtitle("Predicted NSQ by plot type")
-
-##number of nest searching queens vs season
-# Get predicted values
-pred2 <- ggpredict(nsq_glm_zeroPois_noRE, terms = "bee_season_type")
-
-# Plot
-plot(pred2) + ggtitle("Predicted NSQ by bee_season_type")
-```
-
-# GLM #2: NSQ vs veg variables
-
-Choosing which vegetation variables to include as predictors by checking correlation among the variables
+# Choosing which vegetation variables to include as predictors by checking correlation among the variables
 
 ```{r}
 vif(lm(nest_searching_queens ~ bare_perc_scaled + 
@@ -222,226 +137,81 @@ cor(surveys[, c("grass_forb_perc_scaled", "flood_perc_scaled", "bombus_floral_ab
 ##correlation among all the pairs are all near zero --> predictors are all sufficiently independent!
 ```
 
-## DITCH
+# GLM #1: Number of nest-searching queens vs plot type (ditch vs field)
 
-Filter to only include ditch data
-
-```{r}
-ditch_data <- surveys %>%
-  filter(plot_id == "d")
-```
-
-Add random effects and check which is best
+Plotting a zero-inflated poisson model
 
 ```{r}
-nsq_ditch_zeroPois <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled +
-                                bombus_floral_abun_scaled +
-                                flood_perc_scaled +
-                                bee_season_type +
-                                (1|area/site_id/plot_id),
-                            ziformula = ~1,  # zero-inflation model
-                            family = poisson, #poisson
-                            data = ditch_data)
-#model convergence problem
-
-diagnose(nsq_ditch_zeroPois)
-##tells us that zero-inflation term may not be necessary.
-
-nsq_ditch_Pois <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled +
-                                bombus_floral_abun_scaled +
-                                flood_perc_scaled +
-                                bee_season_type +
-                                (1|area/site_id/plot_id),
-                            family = poisson, #poisson
-                            data = ditch_data)
-
-diagnose(nsq_ditch_Pois)
-##try dropping flood perc
-
-nsq_ditch_Pois <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled +
-                                bombus_floral_abun_scaled +
-                                bee_season_type +
-                                (1|area/site_id/plot_id),
-                            family = poisson, #poisson
-                            data = ditch_data)
-
-#test different random effect structures
-
-nsq_ditch_Pois_noArea <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled +
-                                bombus_floral_abun_scaled +
-                                bee_season_type +
-                                (1|site_id/plot_id),
-                            family = poisson, #poisson
-                            data = ditch_data)
-
-anova(nsq_ditch_Pois, nsq_ditch_Pois_noArea)
-##more complex model doesn't have better fit
-
-
-nsq_ditch_Pois_noAreaSite <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled +
-                                bombus_floral_abun_scaled +
-                                bee_season_type +
-                                (1|plot_id),
-                            family = poisson, #poisson
-                            data = ditch_data)
-anova(nsq_ditch_Pois_noArea, nsq_ditch_Pois_noAreaSite)
-##more complex model has better fit. go with plot nested in site
-```
-
-Diagnostics
-
-```{r}
-#simulate residuals
-
-residuals_nsq_ditch_Pois_noArea <- simulateResiduals(fittedModel = nsq_ditch_Pois_noArea, plot = TRUE)
-
-##there is no evidence of overdispersion or significant outliers
-```
-
-Plot results of model
-
-```{r}
-summary(nsq_ditch_Pois_noArea)
-
-##only effect of season is significant. marginal negative effect of floral abundance on nsq
-```
-
-P0-lotting a binary model to predict if #NSQ \> 0
-
-```{r}
-
-#create binary variable for nsq presence
-ditch_data$nsq_binary <- ifelse(ditch_data$nest_searching_queens > 0, 1, 0)
-
-nsq_ditch_binary_allRE <- glmmTMB(nsq_binary ~ grass_forb_perc_scaled +
-                                bombus_floral_abun_scaled +
-                                bee_season_type + 
+nsq_glm_plotType <- glmmTMB(nest_searching_queens ~ plot_type +
+                              bee_season_type +
                               (1|area/site_id/plot_id),
-                              family = binomial, 
-                              data = ditch_data)
-
-nsq_ditch_binary_noArea <- glmmTMB(nsq_binary ~ grass_forb_perc_scaled +
-                                bombus_floral_abun_scaled +
-                                bee_season_type + 
-                              (1|site_id/plot_id),
-                              family = binomial, 
-                              data = ditch_data)
-#no convergence
-
-nsq_ditch_binary_noAreaSite <- glmmTMB(nsq_binary ~ grass_forb_perc_scaled +
-                                bombus_floral_abun_scaled +
-                                bee_season_type + 
-                              (1|plot_id),
-                              family = binomial, 
-                              data = ditch_data)
-
-nsq_ditch_binary_noRE <- glmmTMB(nsq_binary ~ grass_forb_perc_scaled +
-                                bombus_floral_abun_scaled +
-                                bee_season_type,
-                                family = binomial, 
-                                data = ditch_data)
-
-AIC(nsq_ditch_binary_allRE,
-    nsq_ditch_binary_noAreaSite,
-    nsq_ditch_binary_noRE
-    )
-##model with no random effects is best
-
-summary(nsq_ditch_binary_noRE)
-##no significant predictors other than season
-```
-
-## Field veg variables
-
-Filter to only include ditch data
-
-```{r}
-field_data <- surveys %>%
-  filter(plot_id != "d")
-```
-
-Plotting a zero-inflated poisson model **(Q:** **should I check random effects for this model too?)**
-
-```{r}
-nsq_field_zeroPois <- glmmTMB(nest_searching_queens ~  grass_forb_perc_scaled +
-                                bombus_floral_abun_scaled +
-                                flood_perc_scaled +
-                                bee_season_type +
-                                (1|area/site_id/plot_id),
-                            ziformula = ~1,  # zero-inflation model
+                            ziformula = ~plot_type +
+                              bee_season_type +
+                              (1|area/site_id/plot_id),  # zero-inflation model
                             family = poisson, #poisson
-                            data = field_data)
+                            data = surveys)
 
-#test different random effect structures
-nsq_field_zeroPois_noArea <- glmmTMB(nest_searching_queens ~  grass_forb_perc_scaled +
-                                bombus_floral_abun_scaled +
-                                flood_perc_scaled +
-                                bee_season_type +
-                                (1|site_id/plot_id),
-                            ziformula = ~1,  # zero-inflation model
-                            family = poisson, #poisson
-                            data = field_data)
-anova(nsq_field_zeroPois, nsq_field_zeroPois_noArea)
-##more complex model doesn't have better fit
-
-nsq_field_zeroPois_noAreaSite <- glmmTMB(nest_searching_queens ~  grass_forb_perc_scaled +
-                                bombus_floral_abun_scaled +
-                                flood_perc_scaled +
-                                bee_season_type +
-                                (1|plot_id),
-                            ziformula = ~1,  # zero-inflation model
-                            family = poisson, #poisson
-                            data = field_data)
-anova(nsq_field_zeroPois_noArea, nsq_field_zeroPois_noAreaSite)
-##more complex model doesn't have better fit
-
-nsq_field_zeroPois_noRE <- glmmTMB(nest_searching_queens ~  grass_forb_perc_scaled +
-                                bombus_floral_abun_scaled +
-                                flood_perc_scaled +
-                                bee_season_type ,
-                            ziformula = ~1,  # zero-inflation model
-                            family = poisson, #poisson
-                            data = field_data)
-anova(nsq_field_zeroPois_noAreaSite, nsq_field_zeroPois_noRE)
-##more complex model doesn't have better fit.
-
-
-```
-
-Diagnostics
-
-```{r}
 #simulate residuals
 
-residuals_nsq_field_zeroPois_noRE <- simulateResiduals(fittedModel = nsq_field_zeroPois_noRE, plot = TRUE)
+residuals_nsq_glm_plotType <- simulateResiduals(fittedModel = nsq_glm_plotType, plot = TRUE)
 
-##no evidence of overdispersion or significant outliers
+#check results
+summary(nsq_glm_plotType)
+
 ```
 
-Plot results of model
+# GLM #2: Number of nest-searching queens vs vegetation predictors * plot type (ditch vs field)
 
 ```{r}
-summary(nsq_field_zeroPois_noRE)
-
-##marginal positive effect of grass+forb
-```
-
-Plotting a binary model to predict if #NSQ \> 0
-
-```{r}
-
-#create binary variable for nsq presence
-field_data$nsq_binary <- ifelse(field_data$nest_searching_queens > 0, 1, 0)
-
-nsq_field_binary <- glmmTMB(nsq_binary ~ grass_forb_perc_scaled +
-                                bombus_floral_abun_scaled +
+nsq_glm_veg <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
                                 flood_perc_scaled +
-                                bee_season_type, 
-                  family = binomial, 
-                  data = field_data)
+                              (1|area/site_id/plot_id),
+                            ziformula = ~grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                                flood_perc_scaled+
+                              (1|area/site_id/plot_id),  # zero-inflation model
+                            family = poisson, 
+                            data = surveys)
 
-summary(nsq_field_binary)
-##significant positive effect of grass+forb cover on nesting abundance
+#model doesn't converge. try removing area
+
+nsq_glm_veg_noArea <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                                flood_perc_scaled +
+                              (1|site_id/plot_id),
+                            ziformula = ~grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                                flood_perc_scaled+
+                              (1|site_id/plot_id),  # zero-inflation model
+                            family = poisson, 
+                            data = surveys)
+
+#Fixes convergence problem. check diagnostic plot
+
+#simulate residuals
+
+residuals_nsq_glm_veg_noArea <- simulateResiduals(fittedModel = nsq_glm_veg_noArea, plot = TRUE)
+
+#try with just plot_id
+
+nsq_glm_veg_justPlot <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                                flood_perc_scaled +
+                              (1|plot_id),
+                            ziformula = ~grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                                flood_perc_scaled+
+                              (1|plot_id),  # zero-inflation model
+                            family = poisson,
+                            data = surveys)
+
+#simulate residuals
+
+residuals_nsq_glm_veg_justPlot <- simulateResiduals(fittedModel = nsq_glm_veg_justPlot, plot = TRUE)
+#fixes problem
+
+#check summary
+summary(nsq_glm_veg_justPlot)
 ```
 
-# 
