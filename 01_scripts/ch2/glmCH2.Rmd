@@ -160,7 +160,7 @@ summary(nsq_glm_plotType)
 
 ```
 
-# GLM #2: Number of nest-searching queens vs vegetation predictors * plot type (ditch vs field)
+# GLM #2: Number of nest-searching queens vs vegetation predictors \* plot type (ditch vs field)
 
 ```{r}
 nsq_glm_veg <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled*plot_type +
@@ -214,4 +214,3 @@ residuals_nsq_glm_veg_justPlot <- simulateResiduals(fittedModel = nsq_glm_veg_ju
 #check summary
 summary(nsq_glm_veg_justPlot)
 ```
-
