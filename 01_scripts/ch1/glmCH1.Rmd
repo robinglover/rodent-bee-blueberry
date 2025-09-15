@@ -99,7 +99,7 @@ Diagnostics
 
 residuals_nsq_zeroPois <- simulateResiduals(fittedModel = nsq_lm_zeroPois, plot = TRUE)
 
-##no evidence of overdispersion or significant outliers
+##No significant problems with residual distribution (QQ plot). No signs of overdispersion or outliers. Some minor visual deviations in residuals vs. predicted, but statistically non-significant. Model fits well according to DHARMa goodness-of-fit.
 ```
 
 # GLM #2: Number of workers
@@ -149,15 +149,7 @@ Diagnostics
 
 residuals_workers_negbin <- simulateResiduals(fittedModel = worker_lm_negbin, plot = TRUE)
 
-##residual plots show that there is no overdispersion and no excessive outliers. this shows that the negative binomial is a much better fit
-```
-
-Test zero-inflation
-
-```{r}
-testZeroInflation(residuals_workers_negbin)
-
-##p-value = 1. No evidence of zero-inflation. Do not fit zero-inflated model, leave as negative binomial.
+##residual plots show that there is no overdispersion and no excessive outliers. this shows that the negative binomial is a much better fit.
 ```
 
 Look at results of final model
@@ -168,7 +160,278 @@ summary(worker_lm_negbin)
 
 # GLM #3: Number of burrows
 
-# GLM #4: Number of inactive rodent burrows
+First plot poisson with different random effect structures
 
-# GLM #5: Floral abundance
+```{r}
+burrows_full <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|area/site_id/plot_id),
+                           family = poisson, 
+                           data = field_data)
 
+
+burrows_noArea <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|site_id/plot_id),
+                           family = poisson, 
+                           data = field_data)
+
+burrows_plotOnly <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|plot_id),
+                           family = poisson, 
+                           data = field_data)
+
+burrows_siteOnly <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|site_id),
+                           family = poisson, 
+                           data = field_data)
+
+burrows_AreaPlot <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|area/plot_id),
+                           family = poisson, 
+                           data = field_data)
+
+
+#compare models using maximum likelihood test
+anova(burrows_full, burrows_noArea, burrows_plotOnly, burrows_siteOnly, burrows_AreaPlot)
+
+##results tells us the burrows_noArea is best model (lowest AIC)
+```
+
+Check summary
+
+```{r}
+summary(burrows_noArea)
+```
+
+Diagnostics
+
+```{r}
+#simulate residuals
+residuals_burrows_noArea <- simulateResiduals(fittedModel = burrows_noArea, plot = TRUE)
+```
+
+Try negative binomial
+
+```{r}
+burrows_noArea_negBin <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|site_id/plot_id),
+                           family = nbinom1, 
+                           data = field_data)
+```
+
+Diagnostics
+
+```{r}
+#simulate residuals
+residuals_burrows_noArea_negBin <- simulateResiduals(fittedModel = burrows_noArea_negBin, plot = TRUE)
+##looks the same as poisson, stick with poisson model
+```
+
+Try zero-inflated poisson
+
+```{r}
+burrows_zi_pois <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|site_id/plot_id),
+                           ziformula = ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|site_id/plot_id), # zero-inflation model
+                           family = poisson, 
+                           data = field_data)
+
+```
+
+Check diagnostics
+
+```{r}
+#simulate residuals
+residuals_burrows_zi <- simulateResiduals(fittedModel = burrows_zi_pois, plot = TRUE)
+
+#worse. stick with non-zero-inflated poisson
+```
+
+Try removing julian date.
+
+```{r}
+burrows_noArea_noDate <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
+                             (1|site_id/plot_id),
+                           family = poisson, 
+                           data = field_data)
+
+#simulate residuals
+residuals_noArea_noDate <- simulateResiduals(fittedModel = burrows_noArea_noDate, plot = TRUE)
+
+summary(burrows_noArea_noDate)
+```
+
+Add polynomial term
+
+```{r}
+burrows_noArea_poly <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
+                                   I(grass_forb_perc_scaled^2) +
+                                   julian.date_scaled +
+                             (1|site_id/plot_id),
+                           family = poisson, 
+                           data = field_data)
+
+#simulate residuals
+residuals_burrows_noArea_poly <- simulateResiduals(fittedModel = burrows_noArea_poly, plot = TRUE)
+
+summary(burrows_noArea_poly)
+##shows that polynomial term is insignficant
+```
+
+Compare burrow_noArea, burrows_noArea_poly, and burrows_noArea_noDate
+
+```{r}
+anova(burrows_noArea, burrows_noArea_noDate, burrows_noArea_poly)
+##shows that burrows_noArea_noDate is best. drop julian date and 
+```
+
+Add additional variable for cover type (grassy vs bare) to address quantile test issue.
+
+```{r}
+burrows_noArea_noDate_cover <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + cover_type + 
+                             (1|site_id/plot_id),
+                           family = poisson, 
+                           data = field_data)
+
+#simulate residuals
+residuals_burrows_noArea_noDate_cover <- simulateResiduals(fittedModel = burrows_noArea_noDate_cover, plot = TRUE)
+##looks better! 
+
+#compare AIC
+anova(burrows_noArea_noDate_cover, burrows_noArea_noDate)
+##AIC for cover model is slightly lower than the model without cover (619.05 vs 621.05)
+
+summary(burrows_noArea_noDate_cover)
+##cover type improved model diagnostics but was not statistically significant (p = 0.149), suggesting habitat differences may exist but were not detectable with the current sample size.
+```
+
+# GLM #4: Floral abundance
+
+Try gamma model with full random effect structure
+
+```{r}
+floral_full <- glmmTMB(bombus_floral_abun ~ grass_forb_perc_scaled + 
+                         cover_type +
+                         julian.date_scaled + 
+                         (1|area/site_id/plot_id),
+                       family = poisson, 
+                       data = field_data)
+
+floral_noArea <- glmmTMB(bombus_floral_abun ~ grass_forb_perc_scaled + 
+                         cover_type +
+                         julian.date_scaled + 
+                         (1|site_id/plot_id),
+                       family = poisson, 
+                       data = field_data)
+
+floral_plotOnly <- glmmTMB(bombus_floral_abun ~ grass_forb_perc_scaled + 
+                         cover_type +
+                         julian.date_scaled + 
+                         (1|plot_id),
+                       family = poisson, 
+                       data = field_data)
+
+floral_siteOnly <- glmmTMB(bombus_floral_abun ~ grass_forb_perc_scaled + 
+                         cover_type +
+                         julian.date_scaled + 
+                         (1|site_id),
+                       family = poisson, 
+                       data = field_data)
+
+floral_AreaPlot <- glmmTMB(bombus_floral_abun ~ grass_forb_perc_scaled + 
+                         cover_type +
+                         julian.date_scaled + 
+                         (1|area/plot_id),
+                       family = poisson, 
+                       data = field_data)
+
+#compare models using maximum likelihood test
+anova(floral_full, floral_noArea, floral_plotOnly, floral_siteOnly, floral_AreaPlot)
+
+##shows that plotonly or siteonly is best random effect structure. Use site-only since sites (farms) differ substantially in management, where as plots within a farm are relatively homogeneous due to same farm management. The major source of clustering is at the farm/site level, not plot level.
+
+```
+
+Check diagnostics
+
+```{r}
+#simulate residuals
+residuals_floral_siteOnly <- simulateResiduals(fittedModel = floral_siteOnly, plot = TRUE)
+##significant KS test result. Signficant quantile deviations.
+
+```
+
+Try negative binomial
+
+```{r}
+floral_negBin <- glmmTMB(bombus_floral_abun ~ grass_forb_perc_scaled + 
+                         cover_type +
+                         julian.date_scaled + 
+                         (1|site_id),
+                       family = nbinom2, 
+                       data = field_data)
+```
+
+Check diagnostics
+
+```{r}
+#simulate residuals
+residuals_floral_negBin <- simulateResiduals(fittedModel = floral_negBin, plot = TRUE)
+##significant KS test result. Signficant quantile deviations.
+
+```
+
+Try zero inflated poisson
+
+```{r}
+floral_zi_pois <- glmmTMB(bombus_floral_abun ~ grass_forb_perc_scaled + 
+                         cover_type +
+                         julian.date_scaled + 
+                         (1|site_id),
+                         ziformula = ~ grass_forb_perc_scaled + 
+                         cover_type +
+                         julian.date_scaled + 
+                         (1|site_id),
+                       family = poisson, 
+                       data = field_data)
+```
+
+Check diagnostics
+
+```{r}
+#simulate residuals
+residuals_floral_zi_pois <- simulateResiduals(fittedModel = floral_zi_pois, plot = TRUE)
+##significant KS test result. Signficant quantile deviations.
+
+```
+
+Try zero-inflated negative binomial
+
+```{r}
+floral_zi_nbin <- glmmTMB(bombus_floral_abun ~ grass_forb_perc_scaled + 
+                         cover_type +
+                         julian.date_scaled + 
+                         (1|site_id),
+                         ziformula = ~ grass_forb_perc_scaled + 
+                         cover_type +
+                         julian.date_scaled + 
+                         (1|site_id),
+                       family = nbinom2, 
+                       data = field_data)
+```
+
+Check diagnostics
+
+```{r}
+#simulate residuals
+residuals_floral_zi_nbin <- simulateResiduals(fittedModel = floral_zi_nbin, plot = TRUE)
+##significant KS test result. Signficant quantile deviations.
+```
