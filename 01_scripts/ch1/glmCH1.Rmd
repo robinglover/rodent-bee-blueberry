@@ -315,123 +315,76 @@ summary(burrows_noArea_noDate_cover)
 
 # GLM #4: Floral abundance
 
-Try gamma model with full random effect structure
+Use cumulative link model aka ordinal logistic regression because bombus floral abundance has:
+
+-   discrete levels (0-5 scale) representing binned counts of blooms
+
+-   ordered categories (higher numbers represent more blooms)
+
+-   unequal intervals between categories
+
+Try model with different random effect structures.
 
 ```{r}
-floral_full <- glmmTMB(bombus_floral_abun ~ grass_forb_perc_scaled + 
-                         cover_type +
+library(ordinal)
+library(MASS)
+
+floral_full <- clmm(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled +
                          julian.date_scaled + 
                          (1|area/site_id/plot_id),
-                       family = poisson, 
+                       link = "logit", 
                        data = field_data)
 
-floral_noArea <- glmmTMB(bombus_floral_abun ~ grass_forb_perc_scaled + 
-                         cover_type +
+floral_noArea <- clmm(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled +
                          julian.date_scaled + 
                          (1|site_id/plot_id),
-                       family = poisson, 
+                       link = "logit", 
                        data = field_data)
 
-floral_plotOnly <- glmmTMB(bombus_floral_abun ~ grass_forb_perc_scaled + 
-                         cover_type +
+floral_plotOnly <- clmm(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled +
                          julian.date_scaled + 
                          (1|plot_id),
-                       family = poisson, 
+                       link = "logit", 
                        data = field_data)
+##can't use since there are only 2 levels
 
-floral_siteOnly <- glmmTMB(bombus_floral_abun ~ grass_forb_perc_scaled + 
-                         cover_type +
+floral_siteOnly <- clmm(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled +
                          julian.date_scaled + 
                          (1|site_id),
-                       family = poisson, 
+                       link = "logit", 
                        data = field_data)
 
-floral_AreaPlot <- glmmTMB(bombus_floral_abun ~ grass_forb_perc_scaled + 
-                         cover_type +
+floral_AreaPlot <- clmm(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled +
                          julian.date_scaled + 
                          (1|area/plot_id),
-                       family = poisson, 
+                       link = "logit", 
+                       data = field_data)
+floral_noRE <- polr(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled +
+                         julian.date_scaled,
+                       method = "logistic", 
                        data = field_data)
 
-#compare models using maximum likelihood test
-anova(floral_full, floral_noArea, floral_plotOnly, floral_siteOnly, floral_AreaPlot)
-
-##shows that plotonly or siteonly is best random effect structure. Use site-only since sites (farms) differ substantially in management, where as plots within a farm are relatively homogeneous due to same farm management. The major source of clustering is at the farm/site level, not plot level.
-
-```
-
-Check diagnostics
-
-```{r}
-#simulate residuals
-residuals_floral_siteOnly <- simulateResiduals(fittedModel = floral_siteOnly, plot = TRUE)
-##significant KS test result. Signficant quantile deviations.
+#compare models AIC
+AIC(floral_full, floral_noArea, floral_siteOnly, floral_AreaPlot, floral_noRE)
+##shows that model without random effect has best fit
 
 ```
 
-Try negative binomial
+Try adding coverType as covariate and compare AIC score
 
 ```{r}
-floral_negBin <- glmmTMB(bombus_floral_abun ~ grass_forb_perc_scaled + 
-                         cover_type +
-                         julian.date_scaled + 
-                         (1|site_id),
-                       family = nbinom2, 
+floral_noRE_cover <- polr(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled +
+                            cover_type +
+                         julian.date_scaled,
+                       method = "logistic", 
                        data = field_data)
+
+AIC(floral_noRE_cover, floral_noRE)
+##not including cover is better
 ```
 
-Check diagnostics
+Check summary for final model
 
 ```{r}
-#simulate residuals
-residuals_floral_negBin <- simulateResiduals(fittedModel = floral_negBin, plot = TRUE)
-##significant KS test result. Signficant quantile deviations.
-
-```
-
-Try zero inflated poisson
-
-```{r}
-floral_zi_pois <- glmmTMB(bombus_floral_abun ~ grass_forb_perc_scaled + 
-                         cover_type +
-                         julian.date_scaled + 
-                         (1|site_id),
-                         ziformula = ~ grass_forb_perc_scaled + 
-                         cover_type +
-                         julian.date_scaled + 
-                         (1|site_id),
-                       family = poisson, 
-                       data = field_data)
-```
-
-Check diagnostics
-
-```{r}
-#simulate residuals
-residuals_floral_zi_pois <- simulateResiduals(fittedModel = floral_zi_pois, plot = TRUE)
-##significant KS test result. Signficant quantile deviations.
-
-```
-
-Try zero-inflated negative binomial
-
-```{r}
-floral_zi_nbin <- glmmTMB(bombus_floral_abun ~ grass_forb_perc_scaled + 
-                         cover_type +
-                         julian.date_scaled + 
-                         (1|site_id),
-                         ziformula = ~ grass_forb_perc_scaled + 
-                         cover_type +
-                         julian.date_scaled + 
-                         (1|site_id),
-                       family = nbinom2, 
-                       data = field_data)
-```
-
-Check diagnostics
-
-```{r}
-#simulate residuals
-residuals_floral_zi_nbin <- simulateResiduals(fittedModel = floral_zi_nbin, plot = TRUE)
-##significant KS test result. Signficant quantile deviations.
+summary(floral_noRE)
 ```
