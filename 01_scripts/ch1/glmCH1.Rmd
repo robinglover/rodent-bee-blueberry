@@ -55,14 +55,17 @@ surveys$bare_flood_dry_bryo_perc_scaled <- as.numeric(scale(surveys$bare_flood_d
 surveys$floral_richness_scaled <- as.numeric(scale(surveys$floral_richness))
 surveys$bombus_floral_richness_scaled <- as.numeric(scale(surveys$bombus_floral_richness))
 surveys$bombus_floral_abun_scaled <- as.numeric(scale(surveys$bombus_floral_abun))
+surveys$bombus_floral_abun_nv_scaled <- as.numeric(scale(surveys$bombus_floral_abun_nv))
 surveys$nest_searching_queens_scaled <- as.numeric(scale(surveys$nest_searching_queens))
 surveys$workers_scaled <- as.numeric(scale(surveys$workers))
 surveys$forage_vaco_scaled <- as.numeric(scale(surveys$forage_vaco))
 surveys$num_burrows_scaled <- as.numeric(scale(surveys$num_burrows))
+surveys$num_active_burrows_scaled <- as.numeric(scale(surveys$num_active_burrows))
 surveys$num_inactive_burrows_scaled <- as.numeric(scale(surveys$num_inactive_burrows))
 surveys$num_active_dm_scaled <- as.numeric(scale(surveys$num_active_dm))
 surveys$num_dm_size_scaled <- as.numeric(scale(surveys$num_dm_size))
 surveys$num_inactive_dm_scaled <- as.numeric(scale(surveys$num_inactive_dm))
+surveys$prop_inactive_burrows_scaled <- as.numeric(scale(surveys$prop_inactive_burrows))
 ```
 
 Filter to only include field data
@@ -102,6 +105,80 @@ residuals_nsq_zeroPois <- simulateResiduals(fittedModel = nsq_lm_zeroPois, plot 
 ##No significant problems with residual distribution (QQ plot). No signs of overdispersion or outliers. Some minor visual deviations in residuals vs. predicted, but statistically non-significant. Model fits well according to DHARMa goodness-of-fit.
 ```
 
+Interestingly, the number of rodent burrows is associated with more bombus nest-searching in the conditional model, but the number of rodent burrows is associated with more structural zeros in the zero-inflation model. This means that if a site is suitable for nesting, more rodent burrows is associated with more bombus nest-searching. However, in some cases, rodent burrows may signal inhospitable habitat conditions for bumble bees.
+
+## Theory: habitat suitability may be related to number of inactive burrows.
+
+First, check correlation between the number of burrows and proportion of inactive burrows.
+
+```{r}
+cor.test(surveys$num_burrows, surveys$prop_inactive_burrows, use = "complete.obs")
+#significant negative correlation --> plots with more burrows tend to have a lower proportion of inactive burrows
+```
+
+Run model with proportion of inactive burrows.
+
+```{r}
+nsq_zeroPois_propInactive <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled +
+                                          bombus_floral_abun_scaled +
+                                       prop_inactive_burrows_scaled +
+                    bee_season_type, 
+                  ziformula = ~ grass_forb_perc_scaled + 
+                    bombus_floral_abun_scaled + prop_inactive_burrows_scaled +
+                    bee_season_type,  # zero-inflation model
+                  family = poisson, #poisson
+                  data = field_data)
+
+#simulate residuals
+residuals_nsq_zeroPois_propInactive <- simulateResiduals(fittedModel = nsq_zeroPois_propInactive, plot = TRUE)
+##diagnostic plots show that this model fits the data well
+
+summary(nsq_zeroPois_propInactive)
+##no significant effect of proportion inactive burrows on # NSQ
+```
+
+Look at num_inactive_burrows in the model instead of overall number of burrows.
+
+```{r}
+nsq_zeroPois_numInactive <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled + 
+                    bombus_floral_abun_scaled + 
+                    num_inactive_burrows_scaled +
+                    bee_season_type, 
+                  ziformula = ~ grass_forb_perc_scaled + 
+                    bombus_floral_abun_scaled + 
+                    num_inactive_burrows_scaled +
+                    bee_season_type,  # zero-inflation model
+                  family = poisson, #poisson
+                  data = field_data)
+
+#simulate residuals
+residuals_nsq_zeroPois_numInactive <- simulateResiduals(fittedModel = nsq_zeroPois_numInactive, plot = TRUE)
+##diagnostic plots show that this model fits the data well
+
+summary(nsq_zeroPois_numInactive)
+```
+
+Check model with number of active burrows
+
+```{r}
+nsq_zeroPois_numActive <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled + 
+                    bombus_floral_abun_scaled + 
+                    num_active_burrows_scaled +
+                    bee_season_type, 
+                  ziformula = ~ grass_forb_perc_scaled + 
+                    bombus_floral_abun_scaled + 
+                    num_active_burrows_scaled +
+                    bee_season_type,  # zero-inflation model
+                  family = poisson, #poisson
+                  data = field_data)
+
+#simulate residuals
+residuals_nsq_zeroPois_numActive <- simulateResiduals(fittedModel = nsq_zeroPois_numActive, plot = TRUE)
+##diagnostic plots show that this model fits the data well
+
+summary(nsq_zeroPois_numActive)
+```
+
 # GLM #2: Number of workers
 
 Model selection between poisson, negative binomial and zero-inflated models.
@@ -137,7 +214,7 @@ worker_lm_negbin <- glmmTMB(workers ~ nest_searching_queens_scaled +
                        bombus_floral_abun_scaled + 
                        num_burrows_scaled + 
                        bee_season_type, 
-                     family = nbinom1,
+                     family = nbinom2,
                      data = field_data
                        )
 ```
@@ -220,7 +297,7 @@ Try negative binomial
 burrows_noArea_negBin <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
                              julian.date_scaled + 
                              (1|site_id/plot_id),
-                           family = nbinom1, 
+                           family = nbinom1, #use nbinom1 since nbinom2 doesn't converge
                            data = field_data)
 ```
 
@@ -387,4 +464,64 @@ Check summary for final model
 
 ```{r}
 summary(floral_noRE)
+```
+
+# GLM #5: Number of bees foraging on vaco vs vegetation variables 
+
+```{r}
+forageVaco_pois <- glmmTMB(forage_vaco ~ nest_searching_queens_scaled +
+                       bombus_floral_abun_scaled + 
+                       num_burrows_scaled + 
+                       bee_season_type, 
+                     family = poisson,
+                     data = field_data
+                       )
+
+#simulate residuals
+
+residuals_forageVaco_pois <- simulateResiduals(fittedModel = forageVaco_pois, plot = TRUE)
+
+##residual plots show that there is significant overdispersion --> i should plot the negative binomial to account for this
+```
+
+Negative binomial
+
+```{r}
+forageVaco_nbin <- glmmTMB(forage_vaco ~ nest_searching_queens_scaled +
+                       bombus_floral_abun_scaled + 
+                       num_burrows_scaled + 
+                       bee_season_type, 
+                     family = nbinom2,
+                     data = field_data
+                       )
+
+#simulate residuals
+
+residuals_forageVaco_nbin <- simulateResiduals(fittedModel = forageVaco_nbin, plot = TRUE)
+#quantile test significant --> try zero-inflated poisson instead
+
+```
+
+Zero-inflated poisson
+
+```{r}
+forageVaco_zipois <- glmmTMB(forage_vaco ~ nest_searching_queens_scaled +
+                       bombus_floral_abun_scaled + 
+                       num_burrows_scaled + 
+                       bee_season_type, 
+                       ziformula = ~ nest_searching_queens_scaled +
+                       bombus_floral_abun_scaled + 
+                       num_burrows_scaled + 
+                       bee_season_type,
+                     family = nbinom2,
+                     data = field_data
+                       )
+
+#simulate residuals
+
+residuals_forageVaco_zipois <- simulateResiduals(fittedModel = forageVaco_zipois, plot = TRUE)
+#looks good!
+
+#check summary
+summary(forageVaco_zipois)
 ```
