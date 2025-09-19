@@ -485,6 +485,28 @@ surveys <- surveys %>%
 
 ```
 
+floral abundance – only bombus-relevant flowers NOT INCLUDING VACO
+
+```{r}
+floral_bombus_noVaco <- floral_bombus %>% filter(flower_code != "vaco") 
+
+#exponentiate the remaining values (undo the log) and add the actual abundance estimates across all species together for each plot 
+floral_summary5 <- floral_bombus_noVaco %>% 
+  group_by(site_id, round, plot_id) %>% 
+  summarise(bombus_floral_abun_nv = sum(abundance, na.rm = TRUE), .groups = "drop") ##drop the groupings 
+
+#take log scale of the summed values and round to whole numbers to keep them as discrete values
+floral_summary5$bombus_floral_abun_nv = round(log10(floral_summary5$bombus_floral_abun_nv + 1)) 
+#left join counts onto full combos and replace NAs with 0 
+floral_summary_full5 <- all_combinations %>% 
+  left_join(floral_summary5, by = c("site_id", "round", "plot_id")) %>% 
+  mutate(bombus_floral_abun_nv = replace_na(bombus_floral_abun_nv, 0)) 
+
+#Add number of bees to surveys dataframe 
+surveys <- surveys %>% 
+  left_join(floral_summary_full5, by = c("site_id", "round", "plot_id"))
+```
+
 ### [Bee]{.underline}
 
 -   plot level – no conversion needed
@@ -589,6 +611,26 @@ surveys <- surveys %>%
   left_join(rodent_summary_full, by = c("site_id", "plot_id"))
 ```
 
+Num active burrows
+
+```{r}
+#create summary dataframe for rodent data
+rodent_summary_active <- rodent %>%
+  filter(powder_active_FINAL == "y") %>%
+  group_by(site_id, plot_id) %>%
+  summarise(num_active_burrows = n(), .groups = "drop") ##drop the groupings
+
+#left join counts onto full combos and replace NAs with 0
+rodent_summary_active_full <- all_combinations_rodent %>%
+  left_join(rodent_summary_active, by = c("site_id", "plot_id")) %>%
+  mutate(num_active_burrows = replace_na(num_active_burrows, 0))
+
+#Add number of bees to surveys dataframe
+surveys <- surveys %>%
+  left_join(rodent_summary_active_full, by = c("site_id", "plot_id"))
+
+```
+
 Num inactive burrows
 
 ```{r}
@@ -607,6 +649,15 @@ rodent_summary2_full <- all_combinations_rodent %>%
 surveys <- surveys %>%
   left_join(rodent_summary2_full, by = c("site_id", "plot_id"))
 
+```
+
+Calculate proportion of inactive burrows
+
+```{r}
+surveys <- surveys %>%
+  mutate(prop_inactive_burrows = ifelse(num_burrows > 0,
+                                        num_inactive_burrows / num_burrows,
+                                        NA))  # or 0 instead of NA if you prefer
 ```
 
 Num active dm burrows
@@ -682,6 +733,30 @@ rodent_summary_full4 <- all_combinations_rodent %>%
 #Add number of bees to surveys dataframe
 surveys <- surveys %>%
   left_join(rodent_summary_full4, by = c("site_id", "plot_id"))
+```
+
+Proportion of burrows that are dm size
+
+```{r}
+# Summarize total burrows per site_id and plot_id
+rodent_summary_total <- rodent %>%
+  group_by(site_id, plot_id) %>%
+  summarise(total_burrows = n(), .groups = "drop")
+
+# Join total burrow counts to DM-sized summary
+rodent_summary_combined <- rodent_summary_full4 %>%
+  left_join(rodent_summary_total, by = c("site_id", "plot_id")) %>%
+  mutate(total_burrows = replace_na(total_burrows, 0))
+
+rodent_summary_combined <- rodent_summary_combined %>%
+  mutate(prop_dm_size = ifelse(total_burrows > 0,
+                                num_dm_size / total_burrows,
+                                NA))  # Or 0 if you prefer
+
+surveys <- surveys %>%
+  left_join(rodent_summary_combined %>% select(site_id, plot_id, prop_dm_size),
+            by = c("site_id", "plot_id"))
+
 ```
 
 Num inactive dm burrows (by size)
