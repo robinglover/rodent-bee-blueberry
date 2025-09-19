@@ -139,7 +139,7 @@ cor(surveys[, c("grass_forb_perc_scaled", "flood_perc_scaled", "bombus_floral_ab
 
 # GLM #1: Number of nest-searching queens vs plot type (ditch vs field)
 
-Plotting a zero-inflated poisson model
+Plotting a zero-inflated poisson model with multiple different random effect structures to see which is best
 
 ```{r}
 nsq_glm_plotType <- glmmTMB(nest_searching_queens ~ plot_type +
@@ -151,19 +151,64 @@ nsq_glm_plotType <- glmmTMB(nest_searching_queens ~ plot_type +
                             family = poisson, #poisson
                             data = surveys)
 
+nsq_glm_plotType_noArea <- glmmTMB(nest_searching_queens ~ plot_type +
+                              bee_season_type +
+                              (1|site_id/plot_id),
+                            ziformula = ~plot_type +
+                              bee_season_type +
+                              (1|site_id/plot_id),  # zero-inflation model
+                            family = poisson, #poisson
+                            data = surveys)
+
+nsq_glm_plotType_plotOnly <- glmmTMB(nest_searching_queens ~ plot_type +
+                              bee_season_type +
+                              (1|plot_id),
+                            ziformula = ~plot_type +
+                              bee_season_type +
+                              (1|plot_id),  # zero-inflation model
+                            family = poisson, #poisson
+                            data = surveys)
+
+nsq_glm_plotType_siteOnly <- glmmTMB(nest_searching_queens ~ plot_type +
+                              bee_season_type +
+                              (1|site_id),
+                            ziformula = ~plot_type +
+                              bee_season_type +
+                              (1|site_id),  # zero-inflation model
+                            family = poisson, #poisson
+                            data = surveys)
+
+nsq_glm_plotType_areaSite <- glmmTMB(nest_searching_queens ~ plot_type +
+                              bee_season_type +
+                              (1|area/site_id),
+                            ziformula = ~plot_type +
+                              bee_season_type +
+                              (1|area/site_id),  # zero-inflation model
+                            family = poisson, #poisson
+                            data = surveys)
+
+#Compare models
+anova(nsq_glm_plotType,nsq_glm_plotType_noArea,nsq_glm_plotType_plotOnly, nsq_glm_plotType_siteOnly,nsq_glm_plotType_areaSite)
+##siteOnly is best
+
 #simulate residuals
 
-residuals_nsq_glm_plotType <- simulateResiduals(fittedModel = nsq_glm_plotType, plot = TRUE)
+residuals_nsq_glm_plotType_siteOnly <- simulateResiduals(fittedModel = nsq_glm_plotType_siteOnly, plot = TRUE)
+##looks good
 
 #check results
-summary(nsq_glm_plotType)
+summary(nsq_glm_plotType_siteOnly)
 
 ```
 
-# GLM #2: Number of nest-searching queens vs vegetation predictors \* plot type (ditch vs field)
+# GLM #2: Number of nest-searching queens vs vegetation predictors
+
+Plot model with interaction between vegetation variables and plot type to investigate whether the effects of vegetation cover and floral abundance on queen abundance/presence change depending on plot type (ditch vs field).
+
+FIrst, try multiple random effect structures
 
 ```{r}
-nsq_glm_veg <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled*plot_type +
+nsq_glm_veg_full <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled*plot_type +
                                 bombus_floral_abun_scaled*plot_type +
                                 flood_perc_scaled +
                               (1|area/site_id/plot_id),
@@ -173,8 +218,6 @@ nsq_glm_veg <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled*plot_type 
                               (1|area/site_id/plot_id),  # zero-inflation model
                             family = poisson, 
                             data = surveys)
-
-#model doesn't converge. try removing area
 
 nsq_glm_veg_noArea <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled*plot_type +
                                 bombus_floral_abun_scaled*plot_type +
@@ -187,30 +230,156 @@ nsq_glm_veg_noArea <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled*plo
                             family = poisson, 
                             data = surveys)
 
-#Fixes convergence problem. check diagnostic plot
-
-#simulate residuals
-
-residuals_nsq_glm_veg_noArea <- simulateResiduals(fittedModel = nsq_glm_veg_noArea, plot = TRUE)
-
-#try with just plot_id
-
-nsq_glm_veg_justPlot <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled*plot_type +
+nsq_glm_veg_justSite <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled*plot_type +
                                 bombus_floral_abun_scaled*plot_type +
                                 flood_perc_scaled +
-                              (1|plot_id),
+                              (1|site_id),
                             ziformula = ~grass_forb_perc_scaled*plot_type +
                                 bombus_floral_abun_scaled*plot_type +
                                 flood_perc_scaled+
-                              (1|plot_id),  # zero-inflation model
+                              (1|site_id),  # zero-inflation model
                             family = poisson,
                             data = surveys)
 
-#simulate residuals
+nsq_glm_veg_noRE <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                                flood_perc_scaled,
+                            ziformula = ~grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                                flood_perc_scaled,  # zero-inflation model
+                            family = poisson,
+                            data = surveys)
 
-residuals_nsq_glm_veg_justPlot <- simulateResiduals(fittedModel = nsq_glm_veg_justPlot, plot = TRUE)
-#fixes problem
+#compare models
+anova(nsq_glm_veg_noRE, nsq_glm_veg_justSite, nsq_glm_veg_noArea, nsq_glm_veg_full)
+##no random effect model is best, followed by just site model
+
+#simulate residuals
+residuals_nsq_glm_veg_noRE <- simulateResiduals(fittedModel = nsq_glm_veg_noRE, plot = TRUE)
+##no problems detected
 
 #check summary
-summary(nsq_glm_veg_justPlot)
+summary(nsq_glm_veg_noRE)
+```
+
+# GLM#3: Number of workers vs plot type
+
+Start with poisson and check all random effect structures.
+
+```{r}
+workers_plotType_full <- glmmTMB(workers ~ plot_type +
+                              bee_season_type +
+                              (1|area/site_id/plot_id), 
+                            family = poisson, #poisson
+                            data = surveys)
+workers_plotType_noArea <- glmmTMB(workers ~ plot_type +
+                              bee_season_type +
+                              (1|site_id/plot_id), 
+                            family = poisson, #poisson
+                            data = surveys)
+
+workers_plotType_siteOnly <- glmmTMB(workers ~ plot_type +
+                              bee_season_type +
+                              (1|site_id), 
+                            family = poisson, #poisson
+                            data = surveys)
+
+workers_plotType_areaSite <- glmmTMB(workers ~ plot_type +
+                              bee_season_type +
+                              (1|area/site_id), 
+                            family = poisson, #poisson
+                            data = surveys)
+
+#compare models
+anova(workers_plotType_full, workers_plotType_noArea, workers_plotType_siteOnly, workers_plotType_areaSite)
+##no area is best
+
+#check diagnostics
+#simulate residuals
+residuals_workers_plotType_noArea <- simulateResiduals(fittedModel = workers_plotType_noArea, plot = TRUE)
+##no problems detected
+
+#check summary
+summary(workers_plotType_noArea)
+```
+
+# GLM #4: Number of workers vs vegetation variables
+
+Try random effect structures with poisson.
+
+```{r}
+workers_veg_full <- glmmTMB(workers ~ grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                                flood_perc_scaled +
+                              (1|area/site_id/plot_id),
+                            family = poisson, 
+                            data = surveys)
+
+workers_veg_noArea <- glmmTMB(workers ~ grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                                flood_perc_scaled +
+                              (1|site_id/plot_id),
+                            family = poisson, 
+                            data = surveys)
+
+workers_veg_siteOnly <- glmmTMB(workers ~ grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                                flood_perc_scaled +
+                              (1|site_id),
+                            family = poisson, 
+                            data = surveys)
+workers_veg_noPlot <- glmmTMB(workers ~ grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                                flood_perc_scaled +
+                              (1|area/site_id),
+                            family = poisson, 
+                            data = surveys)
+
+#compare models
+anova(workers_veg_full, workers_veg_noArea, workers_veg_siteOnly, workers_veg_noPlot)
+##no area is best
+
+#check diagnostics
+#simulate residuals
+residuals_workers_veg_noArea <- simulateResiduals(fittedModel = workers_veg_noArea, plot = TRUE)
+##quantile test and KS test show significant deviations.
+```
+
+Try negative binomial
+
+```{r}
+workers_veg_noArea_nbin <- glmmTMB(workers ~ grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                                flood_perc_scaled +
+                              (1|site_id/plot_id),
+                            family = nbinom2, 
+                            data = surveys)
+
+#check diagnostics
+#simulate residuals
+residuals_workers_veg_noArea_nbin <- simulateResiduals(fittedModel = workers_veg_noArea_nbin, plot = TRUE)
+#fixes QQ plot but still signficant quantile test
+```
+
+Try zero-inflated poisson
+
+```{r}
+workers_veg_noArea_zipois <- glmmTMB(workers ~ grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                                flood_perc_scaled +
+                              (1|site_id/plot_id),
+                              ziformula = ~ grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                                flood_perc_scaled +
+                              (1|site_id/plot_id),
+                            family = poisson, 
+                            data = surveys)
+
+#check diagnostics
+#simulate residuals
+residuals_workers_veg_noArea_zipois <- simulateResiduals(fittedModel = workers_veg_noArea_zipois, plot = TRUE)
+##fixes it
+
+#check results
+summary(workers_veg_noArea_zipois)
 ```
