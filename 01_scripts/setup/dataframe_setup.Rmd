@@ -776,6 +776,28 @@ rodent_summary_full5 <- all_combinations_rodent %>%
 #Add number of bees to surveys dataframe
 surveys <- surveys %>%
   left_join(rodent_summary_full5, by = c("site_id", "plot_id"))
+```
+
+Number of burrows with runways
+
+```{r}
+#check that this code will extract runway columns correctly
+unique(str_extract(rodent$notes_hole, regex("\\brun ?ways?\\b", ignore_case = TRUE)))
+
+#create summary dataframe for rodent data
+rodent_summary6 <- rodent %>%
+  filter(str_detect(notes_hole, regex("\\brun ?ways?\\b", ignore_case = TRUE))) %>%
+  group_by(site_id, plot_id) %>%
+  summarise(num_runway_burrows = n(), .groups = "drop") ##drop the groupings
+
+#left join counts onto full combos and replace NAs with 0
+rodent_summary6_full <- all_combinations_rodent %>%
+  left_join(rodent_summary6, by = c("site_id", "plot_id")) %>%
+  mutate(num_runway_burrows = replace_na(num_runway_burrows, 0))
+
+#Add number of bees to surveys dataframe
+surveys <- surveys %>%
+  left_join(rodent_summary6_full, by = c("site_id", "plot_id"))
 
 View(surveys)
 ```

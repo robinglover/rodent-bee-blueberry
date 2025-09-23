@@ -301,6 +301,20 @@ ggplot(data, aes(x=cover_type, y = num_inactive_burrows))+
     label = "p.format",  # Display p-value 
     size = 3.7)  # Adjust this value to make the asterisks larger
 ```
+Num burrows with runways (voles)
+```{r}
+ggplot(data, aes(x=cover_type, y = num_runway_burrows))+ 
+  geom_boxplot() +
+  theme_classic(base_size = 15)+
+  xlab("Cover")+
+  ylab("Runway burrow abundance") +
+  stat_compare_means(
+    aes(group = cover_type),  # group by field.type
+    method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
+    label = "p.format",  # Display p-value 
+    size = 3.7)  # Adjust this value to make the asterisks larger
+```
+
 
 floral abundance (relevant to bees)
 
