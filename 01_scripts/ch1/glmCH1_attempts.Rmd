@@ -1,0 +1,656 @@
+---
+title: "glmCH1"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_analysis/rodent-bee-blueberry")
+```
+
+# Load and clean data
+
+```{r}
+#load packages
+library(tidyverse)
+library(ggplot2)
+library(DHARMa)
+library(glmmTMB)
+
+#read in data
+data <- read.csv("06_cleandata/combined_plot_data.csv")
+
+#check that variables are in appropriate format
+str(data)
+
+#change character columns to factors
+surveys <- data %>%
+   mutate(
+     site_id = as.factor(site_id),
+     round = as.factor(round),
+     plot_id = as.factor(plot_id),
+     bee_date = as.Date(bee_date),
+     bee_season_type = as.factor(bee_season_type),
+     area = as.factor(area))
+
+```
+
+Scale continuous predictors
+
+```{r}
+surveys$julian.date_scaled <- as.numeric(scale(surveys$julian.date))
+surveys$bare_perc_scaled <- as.numeric(scale(surveys$bare_perc))
+surveys$grass_perc_scaled <- as.numeric(scale(surveys$grass_perc))
+surveys$forb_perc_scaled <- as.numeric(scale(surveys$forb_perc))
+surveys$grass_forb_perc_scaled <- as.numeric(scale(surveys$grass_forb_perc))
+surveys$grass_h_scaled <- as.numeric(scale(surveys$grass_h))
+surveys$forb_h_scaled <- as.numeric(scale(surveys$forb_h))
+surveys$floral_perc_scaled <- as.numeric(scale(surveys$floral_perc))
+surveys$grass_forb_floral_perc_scaled <- as.numeric(scale(surveys$grass_forb_floral_perc))
+surveys$bombus_floral_perc_scaled <- as.numeric(scale(surveys$bombus_floral_perc))
+surveys$flood_perc_scaled <- as.numeric(scale(surveys$flood_perc))
+surveys$dry_root_perc_scaled <- as.numeric(scale(surveys$dry_root_perc))
+surveys$bryo_perc_scaled <- as.numeric(scale(surveys$bryo_perc))
+surveys$bare_flood_dry_bryo_perc_scaled <- as.numeric(scale(surveys$bare_flood_dry_bryo_perc))
+surveys$floral_richness_scaled <- as.numeric(scale(surveys$floral_richness))
+surveys$bombus_floral_richness_scaled <- as.numeric(scale(surveys$bombus_floral_richness))
+surveys$bombus_floral_abun_scaled <- as.numeric(scale(surveys$bombus_floral_abun))
+surveys$bombus_floral_abun_nv_scaled <- as.numeric(scale(surveys$bombus_floral_abun_nv))
+surveys$nest_searching_queens_scaled <- as.numeric(scale(surveys$nest_searching_queens))
+surveys$workers_scaled <- as.numeric(scale(surveys$workers))
+surveys$forage_vaco_scaled <- as.numeric(scale(surveys$forage_vaco))
+surveys$num_burrows_scaled <- as.numeric(scale(surveys$num_burrows))
+surveys$num_active_burrows_scaled <- as.numeric(scale(surveys$num_active_burrows))
+surveys$num_inactive_burrows_scaled <- as.numeric(scale(surveys$num_inactive_burrows))
+surveys$num_active_dm_scaled <- as.numeric(scale(surveys$num_active_dm))
+surveys$num_dm_size_scaled <- as.numeric(scale(surveys$num_dm_size))
+surveys$num_inactive_dm_scaled <- as.numeric(scale(surveys$num_inactive_dm))
+surveys$prop_inactive_burrows_scaled <- as.numeric(scale(surveys$prop_inactive_burrows))
+surveys$num_runway_burrows_scaled <- as.numeric(scale(surveys$num_runway_burrows))
+```
+
+Filter to only include field data
+
+```{r}
+field_data <- surveys %>%
+  filter(plot_id != "d")
+
+```
+
+# GLM #1: Number of nest-searching queens
+
+Plotting a zero-inflated poisson model
+
+```{r}
+nsq_zeroPois <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled + 
+                    bombus_floral_abun_scaled + 
+                    num_burrows_scaled + 
+                    bee_season_type, 
+                  ziformula = ~ grass_forb_perc_scaled + 
+                    bombus_floral_abun_scaled + 
+                    num_burrows_scaled + 
+                    bee_season_type,  # zero-inflation model
+                  family = poisson, #poisson
+                  data = field_data)
+```
+
+Diagnostics
+
+```{r}
+#simulate residuals
+
+residuals_nsq_zeroPois <- simulateResiduals(fittedModel = nsq_zeroPois, plot = TRUE)
+
+##No significant problems with residual distribution (QQ plot). No signs of overdispersion or outliers. Model fits well according to DHARMa goodness-of-fit.
+```
+
+Plot model
+
+```{r}
+summary(nsq_zeroPois)
+```
+
+Interestingly, the number of rodent burrows is associated with more bombus nest-searching in the conditional model, but the number of rodent burrows is associated with more structural zeros in the zero-inflation model. This means that if a site is suitable for nesting, more rodent burrows is associated with more bombus nest-searching. However, in some cases, rodent burrows may signal inhospitable habitat conditions for bumble bees.
+
+## Theory: habitat suitability may be related to number of inactive burrows.
+
+First, check correlation between the number of burrows and proportion of inactive burrows.
+
+```{r}
+cor.test(surveys$num_burrows, surveys$prop_inactive_burrows, use = "complete.obs")
+#significant negative correlation --> plots with more burrows tend to have a lower proportion of inactive burrows
+```
+
+Run model with proportion of inactive burrows.
+
+```{r}
+nsq_zeroPois_propInactive <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled +
+                                          bombus_floral_abun_scaled +
+                                       prop_inactive_burrows_scaled +
+                    bee_season_type, 
+                  ziformula = ~ grass_forb_perc_scaled + 
+                    bombus_floral_abun_scaled + prop_inactive_burrows_scaled +
+                    bee_season_type,  # zero-inflation model
+                  family = poisson, #poisson
+                  data = field_data)
+
+#simulate residuals
+residuals_nsq_zeroPois_propInactive <- simulateResiduals(fittedModel = nsq_zeroPois_propInactive, plot = TRUE)
+##diagnostic plots show that this model fits the data well
+
+summary(nsq_zeroPois_propInactive)
+##no significant effect of proportion inactive burrows on # NSQ
+```
+
+Look at num_inactive_burrows in the model instead of overall number of burrows.
+
+```{r}
+nsq_zeroPois_numInactive <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled + 
+                    bombus_floral_abun_scaled + 
+                    num_inactive_burrows_scaled +
+                    bee_season_type, 
+                  ziformula = ~ grass_forb_perc_scaled + 
+                    bombus_floral_abun_scaled + 
+                    num_inactive_burrows_scaled +
+                    bee_season_type,  # zero-inflation model
+                  family = poisson, #poisson
+                  data = field_data)
+
+#simulate residuals
+residuals_nsq_zeroPois_numInactive <- simulateResiduals(fittedModel = nsq_zeroPois_numInactive, plot = TRUE)
+##diagnostic plots show that this model fits the data well
+
+summary(nsq_zeroPois_numInactive)
+```
+
+Check model with number of active burrows
+
+```{r}
+nsq_zeroPois_numActive <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled + 
+                    bombus_floral_abun_scaled + 
+                    num_active_burrows_scaled +
+                    bee_season_type, 
+                  ziformula = ~ grass_forb_perc_scaled + 
+                    bombus_floral_abun_scaled + 
+                    num_active_burrows_scaled +
+                    bee_season_type,  # zero-inflation model
+                  family = poisson, #poisson
+                  data = field_data)
+
+#simulate residuals
+residuals_nsq_zeroPois_numActive <- simulateResiduals(fittedModel = nsq_zeroPois_numActive, plot = TRUE)
+##diagnostic plots show that this model fits the data well
+
+summary(nsq_zeroPois_numActive)
+```
+
+Add runway abundance instead of num burrows to model
+
+```{r}
+nsq_runways_zeroPois <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled + 
+                    bombus_floral_abun_scaled + 
+                    num_runway_burrows_scaled + 
+                    bee_season_type, 
+                  ziformula = ~ grass_forb_perc_scaled + 
+                    bombus_floral_abun_scaled + 
+                    num_runway_burrows_scaled + 
+                    bee_season_type,  # zero-inflation model
+                  family = poisson, #poisson
+                  data = field_data)
+
+#simulate residuals
+residuals_nsq_runways_zeroPois <- simulateResiduals(fittedModel = nsq_runways_zeroPois, plot = TRUE)
+##looks good
+
+#check results
+summary(nsq_runways_zeroPois)
+```
+
+# GLM #2: Number of workers
+
+Model selection between poisson, negative binomial and zero-inflated models.
+
+First, plot it as a poisson model.
+
+```{r}
+worker_lm_pois <- glmmTMB(workers ~ nest_searching_queens_scaled +
+                       bombus_floral_abun_scaled + 
+                       num_burrows_scaled + 
+                       bee_season_type, 
+                     family = poisson,
+                     data = field_data
+                       )
+
+summary(worker_lm_pois)
+```
+
+Run diagnostic tests
+
+```{r}
+#simulate residuals
+
+residuals_workers_pois <- simulateResiduals(fittedModel = worker_lm_pois, plot = TRUE)
+
+##residual plots show that there is significant overdispersion --> i should plot the negative binomial to account for this
+```
+
+Plot negative binomial
+
+```{r}
+worker_lm_negbin <- glmmTMB(workers ~ nest_searching_queens_scaled +
+                       bombus_floral_abun_scaled + 
+                       num_burrows_scaled + 
+                       bee_season_type, 
+                     family = nbinom2,
+                     data = field_data
+                       )
+```
+
+Diagnostics
+
+```{r}
+#simulate residuals
+
+residuals_workers_negbin <- simulateResiduals(fittedModel = worker_lm_negbin, plot = TRUE)
+
+##residual plots show that there is no overdispersion and no excessive outliers. this shows that the negative binomial is a much better fit.
+```
+
+Look at results of final model
+
+```{r}
+summary(worker_lm_negbin)
+```
+
+# GLM #3: Number of burrows
+
+First plot poisson with different random effect structures
+
+```{r}
+burrows_full <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|area/site_id/plot_id),
+                           family = poisson, 
+                           data = field_data)
+
+
+burrows_noArea <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|site_id/plot_id),
+                           family = poisson, 
+                           data = field_data)
+
+burrows_plotOnly <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|plot_id),
+                           family = poisson, 
+                           data = field_data)
+
+burrows_siteOnly <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|site_id),
+                           family = poisson, 
+                           data = field_data)
+
+burrows_AreaPlot <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|area/plot_id),
+                           family = poisson, 
+                           data = field_data)
+
+
+#compare models using maximum likelihood test
+anova(burrows_full, burrows_noArea, burrows_plotOnly, burrows_siteOnly, burrows_AreaPlot)
+
+##results tells us the burrows_noArea is best model (lowest AIC)
+```
+
+Check summary
+
+```{r}
+summary(burrows_noArea)
+```
+
+Diagnostics
+
+```{r}
+#simulate residuals
+residuals_burrows_noArea <- simulateResiduals(fittedModel = burrows_noArea, plot = TRUE)
+```
+
+Try negative binomial
+
+```{r}
+burrows_noArea_negBin <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|site_id/plot_id),
+                           family = nbinom1, #use nbinom1 since nbinom2 doesn't converge
+                           data = field_data)
+```
+
+Diagnostics
+
+```{r}
+#simulate residuals
+residuals_burrows_noArea_negBin <- simulateResiduals(fittedModel = burrows_noArea_negBin, plot = TRUE)
+##looks the same as poisson, stick with poisson model
+```
+
+Try zero-inflated poisson
+
+```{r}
+burrows_zi_pois <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|site_id/plot_id),
+                           ziformula = ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|site_id/plot_id), # zero-inflation model
+                           family = poisson, 
+                           data = field_data)
+
+```
+
+Check diagnostics
+
+```{r}
+#simulate residuals
+residuals_burrows_zi <- simulateResiduals(fittedModel = burrows_zi_pois, plot = TRUE)
+
+#worse. stick with non-zero-inflated poisson
+```
+
+Try zero-inflated negbinom
+
+```{r}
+burrows_zi_nbin <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|site_id/plot_id),
+                           ziformula = ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|site_id/plot_id), # zero-inflation model
+                           family = nbinom2, 
+                           data = field_data)
+
+#simulate residuals
+residuals_burrows_zi_nbin <- simulateResiduals(fittedModel = burrows_zi_nbin, plot = TRUE)
+#signficant KS test and combined adjusted quantile test
+```
+
+Add additional variable for cover type (grassy vs bare) to address quantile test issue.
+
+```{r}
+burrows_pois_cover <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
+                                         julian.date_scaled +
+                                         cover_type + 
+                             (1|site_id/plot_id),
+                           family = poisson, 
+                           data = field_data)
+
+#simulate residuals
+residuals_burrows_pois_cover <- simulateResiduals(fittedModel = burrows_pois_cover, plot = TRUE)
+##looks better! 
+
+summary(burrows_pois_cover)
+##cover type improved model diagnostics but was not statistically significant (p = 0.149), suggesting habitat differences may exist but were not detectable with the current sample size.
+```
+
+Try number of burrows with runways instead.
+
+```{r}
+runwayburrows_full <- glmmTMB(num_runway_burrows ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|area/site_id/plot_id),
+                             ziformula = ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|area/site_id/plot_id),
+                           family = poisson, 
+                           data = field_data)
+
+
+runwayburrows_noArea <- glmmTMB(num_runway_burrows ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|site_id/plot_id),
+                             ziformula = ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|site_id/plot_id),
+                           family = poisson, 
+                           data = field_data)
+
+runwayburrows_plotOnly <- glmmTMB(num_runway_burrows ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|plot_id),
+                             ziformula = ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|plot_id),
+                           family = poisson, 
+                           data = field_data)
+
+runwayburrows_siteOnly <- glmmTMB(num_runway_burrows ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|site_id),
+                             ziformula = ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|site_id),
+                           family = poisson, 
+                           data = field_data)
+
+runwayburrows_AreaPlot <- glmmTMB(num_runway_burrows ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|area/plot_id),
+                             ziformula = ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|area/plot_id),
+                           family = poisson, 
+                           data = field_data)
+##doesnt converge
+
+#compare models using maximum likelihood test
+anova(runwayburrows_full, runwayburrows_noArea, runwayburrows_plotOnly, runwayburrows_siteOnly)
+##results tells us the rodentburrows_noArea is best model (lowest AIC)
+
+#check residuals
+residuals_runwayburrows_noArea <- simulateResiduals(fittedModel = runwayburrows_noArea, plot = TRUE)
+##quantile test is signficant, try adding cover covariate
+
+runwayburrows_noArea_cover <- glmmTMB(num_runway_burrows ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                               cover_type +
+                             (1|site_id/plot_id),
+                             ziformula = ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                               cover_type +
+                             (1|site_id/plot_id),
+                           family = poisson, 
+                           data = field_data)
+##didn't converge
+
+#try negative binomial
+runwayburrows_noArea_nbinzi <- glmmTMB(num_runway_burrows ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|site_id/plot_id),
+                             ziformula = ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|site_id/plot_id),
+                           family = nbinom2, 
+                           data = field_data)
+##doesn't converge, try without zi 
+runwayburrows_noArea_nbin <- glmmTMB(num_runway_burrows ~ grass_forb_perc_scaled + 
+                             julian.date_scaled + 
+                             (1|site_id/plot_id),
+                           family = nbinom2, 
+                           data = field_data)
+
+#check residuals
+residuals_runwayburrows_noArea_nbin <- simulateResiduals(fittedModel = runwayburrows_noArea_nbin, plot = TRUE)
+##still signficant
+
+#add cover type as covariate and remove julian date
+runwayburrows_noArea_nbin_cover <- glmmTMB(num_runway_burrows ~ grass_forb_perc_scaled + 
+                               cover_type +
+                             (1|site_id/plot_id),
+                           family = nbinom2, 
+                           data = field_data)
+
+#check residuals
+residuals_runwayburrows_noArea_nbin_cover <- simulateResiduals(fittedModel = runwayburrows_noArea_nbin_cover, plot = TRUE)
+##still signficant
+
+#add zi
+runwayburrows_noArea_nbinzi_cover <- glmmTMB(num_runway_burrows ~ grass_forb_perc_scaled + 
+                               cover_type +
+                             (1|site_id/plot_id),
+                             ziformula = ~ grass_forb_perc_scaled + 
+                               cover_type +
+                             (1|site_id/plot_id),
+                           family = nbinom2, 
+                           data = field_data)
+##doesn't converge
+
+#try zi poisson without random effect
+runwayburrows_noArea_poiszi_cover <- glmmTMB(num_runway_burrows ~ grass_forb_perc_scaled +
+                                               cover_type,
+                             ziformula = ~ grass_forb_perc_scaled +
+                               cover_type,
+                           family = poisson, 
+                           data = field_data)
+
+#check residuals
+residuals_runwayburrows_noArea_poiszi_cover <- simulateResiduals(fittedModel = runwayburrows_noArea_poiszi_cover, plot = TRUE)
+##fixed
+```
+
+# GLM #4: Floral abundance
+
+Use cumulative link model aka ordinal logistic regression because bombus floral abundance has:
+
+-   discrete levels (0-5 scale) representing binned counts of blooms
+
+-   ordered categories (higher numbers represent more blooms)
+
+-   unequal intervals between categories
+
+Try model with different random effect structures.
+
+```{r}
+library(ordinal)
+library(MASS)
+
+floral_full <- clmm(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled +
+                         julian.date_scaled + 
+                         (1|area/site_id/plot_id),
+                       link = "logit", 
+                       data = field_data)
+
+floral_noArea <- clmm(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled +
+                         julian.date_scaled + 
+                         (1|site_id/plot_id),
+                       link = "logit", 
+                       data = field_data)
+
+floral_plotOnly <- clmm(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled +
+                         julian.date_scaled + 
+                         (1|plot_id),
+                       link = "logit", 
+                       data = field_data)
+##can't use since there are only 2 levels
+
+floral_siteOnly <- clmm(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled +
+                         julian.date_scaled + 
+                         (1|site_id),
+                       link = "logit", 
+                       data = field_data)
+
+floral_AreaPlot <- clmm(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled +
+                         julian.date_scaled + 
+                         (1|area/plot_id),
+                       link = "logit", 
+                       data = field_data)
+floral_noRE <- polr(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled +
+                         julian.date_scaled,
+                       method = "logistic", 
+                       data = field_data)
+
+#compare models AIC
+AIC(floral_full, floral_noArea, floral_siteOnly, floral_AreaPlot, floral_noRE)
+##shows that model without random effect has best fit
+
+```
+
+Try adding coverType as covariate and compare AIC score
+
+```{r}
+floral_noRE_cover <- polr(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled +
+                            cover_type +
+                         julian.date_scaled,
+                       method = "logistic", 
+                       data = field_data)
+
+AIC(floral_noRE_cover, floral_noRE)
+##not including cover is better
+```
+
+Check summary for final model
+
+```{r}
+summary(floral_noRE)
+```
+
+# GLM #5: Number of bees foraging on vaco vs vegetation variables
+
+```{r}
+forageVaco_pois <- glmmTMB(forage_vaco ~ nest_searching_queens_scaled +
+                       bombus_floral_abun_scaled + 
+                       num_burrows_scaled + 
+                       bee_season_type, 
+                     family = poisson,
+                     data = field_data
+                       )
+
+#simulate residuals
+
+residuals_forageVaco_pois <- simulateResiduals(fittedModel = forageVaco_pois, plot = TRUE)
+
+##residual plots show that there is significant overdispersion --> i should plot the negative binomial to account for this
+```
+
+Negative binomial
+
+```{r}
+forageVaco_nbin <- glmmTMB(forage_vaco ~ nest_searching_queens_scaled +
+                       bombus_floral_abun_scaled + 
+                       num_burrows_scaled + 
+                       bee_season_type, 
+                     family = nbinom2,
+                     data = field_data
+                       )
+
+#simulate residuals
+
+residuals_forageVaco_nbin <- simulateResiduals(fittedModel = forageVaco_nbin, plot = TRUE)
+#quantile test significant --> try zero-inflated poisson instead
+
+```
+
+Zero-inflated poisson
+
+```{r}
+forageVaco_zipois <- glmmTMB(forage_vaco ~ nest_searching_queens_scaled +
+                       bombus_floral_abun_scaled + 
+                       num_burrows_scaled + 
+                       bee_season_type, 
+                       ziformula = ~ nest_searching_queens_scaled +
+                       bombus_floral_abun_scaled + 
+                       num_burrows_scaled + 
+                       bee_season_type,
+                     family = nbinom2,
+                     data = field_data
+                       )
+
+#simulate residuals
+
+residuals_forageVaco_zipois <- simulateResiduals(fittedModel = forageVaco_zipois, plot = TRUE)
+#looks good!
+
+#check summary
+summary(forageVaco_zipois)
+```
