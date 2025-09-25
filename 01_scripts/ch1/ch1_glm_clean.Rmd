@@ -8,9 +8,9 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_analysis/rodent-bee-blueberry")
 ```
 
-# Original Path Diagram
+# Predicted path diagram 
 
-![](images/pathDiagramSetupSept232025.jpg)
+![](images/pathDiagramSetupSept252025.png)
 
 # Load and clean data
 
@@ -83,7 +83,7 @@ Use cumulative link model aka ordinal logistic regression because bombus-relevan
 
 ## Steps
 
-1) Tried running CLM with different random effect structures (full = 1\|area/site/plot) then compared AIC values to determine best model.
+1)  Tried running CLM with different random effect structures (full = 1\|area/site/plot) then compared AIC values to determine best model.
 
 -   determined that model without random effect had best fit
 
@@ -128,7 +128,7 @@ AIC(floral_full, floral_noArea, floral_siteOnly, floral_AreaPlot, floral_noRE)
 ##shows that model without random effect has best fit
 ```
 
-2) Compare AIC between model with and without cover_type as a covariate.
+2)  Compare AIC between model with and without cover_type as a covariate.
 
 -   determined that model without cover type as covariate was better
 
@@ -143,7 +143,7 @@ AIC(floral_noRE_cover, floral_noRE)
 ##not including cover is better
 ```
 
-3) Run final model and look at output
+3)  Run final model and look at output
 
 ```{r}
 floral_noRE <- polr(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled +
@@ -164,7 +164,7 @@ Since the number of rodent burrows was count data, I knew I had to use either a 
 
 ## Steps
 
-1) Try different random effect structures in the poisson. Compare models using likelihood ratio tests to determine best random effect structure.
+1)  Try different random effect structures in the poisson. Compare models using likelihood ratio tests to determine best random effect structure.
 
 -   best fit = 1\|site_id/plot_id –\> **area not included**
 
@@ -207,7 +207,7 @@ anova(burrows_full, burrows_noArea, burrows_plotOnly, burrows_siteOnly, burrows_
 ##results tells us the burrows_noArea is best model (lowest AIC)
 ```
 
-2) Check diagnostics of the model using DHARMa package.
+2)  Check diagnostics of the model using DHARMa package.
 
 -   Combined adjusted quantile test significant
 
@@ -216,7 +216,7 @@ anova(burrows_full, burrows_noArea, burrows_plotOnly, burrows_siteOnly, burrows_
 residuals_burrows_noArea <- simulateResiduals(fittedModel = burrows_noArea, plot = TRUE)
 ```
 
-3) Try negative binomial instead and check diagnostics.
+3)  Try negative binomial instead and check diagnostics.
 
 -   Combined adjusted quantile test still significant.
 
@@ -231,7 +231,7 @@ burrows_noArea_negBin <- glmmTMB(num_burrows ~ grass_forb_perc_scaled +
 residuals_burrows_noArea_negBin <- simulateResiduals(fittedModel = burrows_noArea_negBin, plot = TRUE)
 ```
 
-4) Try zero-inflated poisson and check diagnostics.
+4)  Try zero-inflated poisson and check diagnostics.
 
 -   KS test and combined adjusted quantile test still significant.
 
@@ -249,7 +249,7 @@ burrows_zi_pois <- glmmTMB(num_burrows ~ grass_forb_perc_scaled +
 residuals_burrows_zi <- simulateResiduals(fittedModel = burrows_zi_pois, plot = TRUE)
 ```
 
-5) Try zero-inflated negative binomial and check diagnostics.
+5)  Try zero-inflated negative binomial and check diagnostics.
 
 -   KS test and combined adjusted quantile test still significant.
 
@@ -268,7 +268,7 @@ residuals_burrows_zi_nbin <- simulateResiduals(fittedModel = burrows_zi_nbin, pl
 #signficant KS test and combined adjusted quantile test
 ```
 
-6) Stick with poisson but try adding cover_type as an additional covariate and check diagnostics.
+6)  Stick with poisson but try adding cover_type as an additional covariate and check diagnostics.
 
 -   none of the tests were significant! –\> good to keep this one
 
@@ -296,12 +296,78 @@ Start by plotting a zero-inflated poisson, since \# of nest-searching queens is 
 
 ## Steps
 
-1) Plot zero-inflated poisson and check diagnostics.
+1.  Try multiple random effects structures
 
--   No significant problems detected.
+-   best fit = no random effect
 
 ```{r}
-nsq_zeroPois <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled + 
+NSQ_full <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled + 
+                      bombus_floral_abun_scaled + 
+                      num_burrows_scaled + 
+                      bee_season_type + 
+                      (1|area/site_id/plot_id),
+                    ziformula = ~ grass_forb_perc_scaled + 
+                      bombus_floral_abun_scaled + 
+                      num_burrows_scaled + 
+                      bee_season_type +
+                      (1|area/site_id/plot_id),
+                    family = poisson, 
+                    data = field_data)
+
+
+NSQ_noArea <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled + 
+                        bombus_floral_abun_scaled + 
+                        num_burrows_scaled + 
+                        bee_season_type + 
+                        (1|site_id/plot_id),
+                      ziformula = ~ grass_forb_perc_scaled + 
+                        bombus_floral_abun_scaled + 
+                        num_burrows_scaled + 
+                        bee_season_type +
+                        (1|site_id/plot_id),
+                      family = poisson, 
+                      data = field_data)
+
+NSQ_plotOnly <-  glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled + 
+                        bombus_floral_abun_scaled + 
+                        num_burrows_scaled + 
+                        bee_season_type + 
+                        (1|plot_id),
+                      ziformula = ~ grass_forb_perc_scaled + 
+                        bombus_floral_abun_scaled + 
+                        num_burrows_scaled + 
+                        bee_season_type +
+                        (1|plot_id),
+                      family = poisson, 
+                      data = field_data)
+
+NSQ_siteOnly <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled + 
+                        bombus_floral_abun_scaled + 
+                        num_burrows_scaled + 
+                        bee_season_type + 
+                        (1|site_id),
+                      ziformula = ~ grass_forb_perc_scaled + 
+                        bombus_floral_abun_scaled + 
+                        num_burrows_scaled + 
+                        bee_season_type +
+                        (1|site_id),
+                      family = poisson, 
+                      data = field_data)
+
+NSQ_AreaPlot <-  glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled + 
+                        bombus_floral_abun_scaled + 
+                        num_burrows_scaled + 
+                        bee_season_type + 
+                        (1|area/plot_id),
+                      ziformula = ~ grass_forb_perc_scaled + 
+                        bombus_floral_abun_scaled + 
+                        num_burrows_scaled + 
+                        bee_season_type +
+                        (1|area/plot_id),
+                      family = poisson, 
+                      data = field_data)
+
+NSQ_noRE <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled + 
                     bombus_floral_abun_scaled + 
                     num_burrows_scaled + 
                     bee_season_type, 
@@ -312,9 +378,25 @@ nsq_zeroPois <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled +
                   family = poisson, #poisson
                   data = field_data)
 
-residuals_nsq_zeroPois <- simulateResiduals(fittedModel = nsq_zeroPois, plot = TRUE)
+#compare models using maximum likelihood test
+anova(NSQ_full, NSQ_noArea, NSQ_plotOnly, NSQ_siteOnly, NSQ_AreaPlot, NSQ_noRE)
 
-summary(nsq_zeroPois)
+##results tells us the model without random effects is best (lowest AIC). 
+```
+
+2.  Check diagnostics of best model.
+
+-   No significant problems detected.
+
+```{r}
+residuals_nsq_noRE <- simulateResiduals(fittedModel =NSQ_noRE, plot = TRUE)
+##looks good
+```
+
+3.  Look at results
+
+```{r}
+summary(NSQ_noRE)
 ```
 
 ## Findings
@@ -339,12 +421,58 @@ Go through similar model selection steps as for the rodent burrow model.
 
 ## Steps
 
-1) Plot poisson model and check diagnostics.
+1)  Check different random effects structures
 
--   Residual plots show that there is significant overdispersion
+-   best fit = 1\|site_id/plot_id –\> **area not included**
 
 ```{r}
-worker_lm_pois <- glmmTMB(workers ~ nest_searching_queens_scaled +
+workers_full <- glmmTMB(workers ~ nest_searching_queens_scaled +
+                       bombus_floral_abun_scaled + 
+                       num_burrows_scaled + 
+                       bee_season_type +
+                         (1|area/site_id/plot_id), 
+                     family = poisson,
+                     data = field_data
+                       )
+
+
+workers_noArea <- glmmTMB(workers ~ nest_searching_queens_scaled +
+                       bombus_floral_abun_scaled + 
+                       num_burrows_scaled + 
+                       bee_season_type+
+                         (1|site_id/plot_id), 
+                     family = poisson,
+                     data = field_data
+                       )
+
+workers_plotOnly <-  glmmTMB(workers ~ nest_searching_queens_scaled +
+                       bombus_floral_abun_scaled + 
+                       num_burrows_scaled + 
+                       bee_season_type+
+                         (1|plot_id), 
+                     family = poisson,
+                     data = field_data
+                       )
+
+workers_siteOnly <- glmmTMB(workers ~ nest_searching_queens_scaled +
+                       bombus_floral_abun_scaled + 
+                       num_burrows_scaled + 
+                       bee_season_type+
+                         (1|site_id), 
+                     family = poisson,
+                     data = field_data
+                       )
+
+workers_AreaPlot <-  glmmTMB(workers ~ nest_searching_queens_scaled +
+                       bombus_floral_abun_scaled + 
+                       num_burrows_scaled + 
+                       bee_season_type+
+                         (1|area/plot_id), 
+                     family = poisson,
+                     data = field_data
+                       )
+
+workers_noRE <- glmmTMB(workers ~ nest_searching_queens_scaled +
                        bombus_floral_abun_scaled + 
                        num_burrows_scaled + 
                        bee_season_type, 
@@ -352,26 +480,45 @@ worker_lm_pois <- glmmTMB(workers ~ nest_searching_queens_scaled +
                      data = field_data
                        )
 
-#simulate residuals
-residuals_workers_pois <- simulateResiduals(fittedModel = worker_lm_pois, plot = TRUE)
+#compare models using maximum likelihood test
+anova(workers_full, workers_noArea, workers_plotOnly, workers_siteOnly, workers_AreaPlot, workers_noRE)
+
+##results tells us the model with no area is best (lowest AIC). 
 ```
 
-2) Plot negative binomial and check diagnostics.
+2.  Check diagnostics of best model.
 
--   Residual plots show that there is no overdispersion and no excessive outliers. This shows that the negative binomial is a much better fit.
+-   Residual plots show that there are no significant issues with model fit. Check to see if negative binomial straightens lines in residual plot.
 
 ```{r}
-worker_lm_negbin <- glmmTMB(workers ~ nest_searching_queens_scaled +
+#simulate residuals
+residuals_workers_noArea <- simulateResiduals(fittedModel = workers_noArea, plot = TRUE)
+```
+
+3.  Plot negative binomial and check diagnostics.
+
+-   Residual plot shows better fit (straighter horizontal lines). AIC is also lower for negative binomial. This shows that the negative binomial is a better fit.
+
+```{r}
+worker_negbin <- glmmTMB(workers ~ nest_searching_queens_scaled +
                        bombus_floral_abun_scaled + 
                        num_burrows_scaled + 
-                       bee_season_type, 
+                       bee_season_type +
+                         (1|site_id/plot_id), 
                      family = nbinom2,
                      data = field_data
                        )
 
-residuals_workers_negbin <- simulateResiduals(fittedModel = worker_lm_negbin, plot = TRUE)
+residuals_workers_negbin <- simulateResiduals(fittedModel = worker_negbin, plot = TRUE)
 
-summary(worker_lm_negbin)
+anova(workers_noArea, worker_negbin)
+##negative binomial is better (lower AIC)
+```
+
+4.  Check results of final model
+
+```{r}
+summary(worker_negbin)
 ```
 
 ## Findings
@@ -380,4 +527,4 @@ Number of nest-searching queens and number of rodent burrows is does not signifi
 
 # Final Path Diagram
 
-![](images/pathDiagramSept232025.jpg)
+![](images/pathDiagramSept252025.png)
