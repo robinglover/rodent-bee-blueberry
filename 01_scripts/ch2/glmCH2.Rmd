@@ -385,9 +385,43 @@ summary(workers_veg_noArea_zipois)
 ##Finding: no signficant effect of any variables
 ```
 
-# GLM #5: Number of rodent burrows vs plot type \*\*\*\*need to work on
+# GLM #5: Number of rodent burrows vs plot type 
 
-# GLM#6: Number of rodent burrows vs veg predictors \*\*\*need to work on
+```{r}
+rodent_plotType_full <- glmmTMB(num_burrows ~ plot_type +
+                              (1|area/site_id/plot_id), 
+                            family = poisson, #poisson
+                            data = surveys)
+rodent_plotType_noArea <- glmmTMB(num_burrows ~ plot_type +
+                              (1|site_id/plot_id), 
+                            family = poisson, #poisson
+                            data = surveys)
+
+rodent_plotType_siteOnly <- glmmTMB(num_burrows ~ plot_type +
+                              (1|site_id), 
+                            family = poisson, #poisson
+                            data = surveys)
+
+rodent_plotType_areaSite <- glmmTMB(num_burrows ~ plot_type +
+                              (1|area/site_id), 
+                            family = poisson, #poisson
+                            data = surveys)
+
+#compare models
+anova(rodent_plotType_full, rodent_plotType_noArea, rodent_plotType_siteOnly, rodent_plotType_areaSite)
+##no area is best
+
+#check diagnostics
+#simulate residuals
+residuals_rodent_plotType_noArea <- simulateResiduals(fittedModel = rodent_plotType_noArea, plot = TRUE)
+##no problems detected
+
+#check summary
+summary(rodent_plotType_noArea)
+##signficantly more rodents in ditch than in field
+```
+
+# GLM#6: Number of rodent burrows vs veg predictors \*\*\*need to work on!!
 
 Try different random effect structures
 
@@ -429,104 +463,59 @@ residuals_rodent_veg_noArea <- simulateResiduals(fittedModel = rodent_veg_noArea
 ##quantile test shows significant deviations.
 ```
 
-Try negative binomial
+Try simplified models
 
 ```{r}
-rodent_veg_noArea_nbin <- glmmTMB(num_burrows ~ grass_forb_perc_scaled*plot_type +
-                                bombus_floral_abun_scaled*plot_type +
-                                flood_perc_scaled +
-                              (1|site_id/plot_id),
-                            family = nbinom2, 
-                            data = surveys)
-
-#simulate residuals
-residuals_rodent_veg_noArea_nbin <- simulateResiduals(fittedModel = rodent_veg_noArea_nbin, plot = TRUE)
-##worse
-```
-
-Try zero-inflated poisson
-
-```{r}
-rodent_veg_noArea_zipois <- glmmTMB(num_burrows ~ grass_forb_perc_scaled*plot_type +
-                                bombus_floral_abun_scaled*plot_type +
-                                flood_perc_scaled +
-                              (1|site_id/plot_id),
-                              ziformula = ~ grass_forb_perc_scaled*plot_type +
-                                bombus_floral_abun_scaled*plot_type +
+rodent_veg_simp1 <- glmmTMB(num_burrows ~ grass_forb_perc_scaled*plot_type +
                                 flood_perc_scaled +
                               (1|site_id/plot_id),
                             family = poisson, 
                             data = surveys)
 
 #simulate residuals
-residuals_rodent_veg_noArea_zipois <- simulateResiduals(fittedModel = rodent_veg_noArea_zipois, plot = TRUE)
-##still significant quantile test
-```
-
-Try zero-inflated negative binomial
-
-```{r}
-rodent_veg_noArea_zinb <- glmmTMB(num_burrows ~ grass_forb_perc_scaled*plot_type +
-                                bombus_floral_abun_scaled*plot_type +
-                                flood_perc_scaled +
-                              (1|site_id/plot_id),
-                              ziformula = ~ grass_forb_perc_scaled*plot_type +
-                                bombus_floral_abun_scaled*plot_type +
-                                flood_perc_scaled +
-                              (1|site_id/plot_id),
-                            family = nbinom2, 
-                            data = surveys)
-##doesn't converge
-```
-
-Try adding cover as covariate to original poisson model
-
-```{r}
-rodent_veg_noArea_cover <- glmmTMB(num_burrows ~ grass_forb_perc_scaled*plot_type +
-                                bombus_floral_abun_scaled*plot_type +
-                                flood_perc_scaled +
-                               cover_type +
-                              (1|site_id/plot_id),
-                            family = poisson, 
-                            data = surveys)
-
-#simulate residuals
-residuals_rodent_veg_noArea_cover <- simulateResiduals(fittedModel = rodent_veg_noArea_cover, plot = TRUE)
-##just KS test significant, try negative binomial
-
-```
-
-Negative binomial
-
-```{r}
-rodent_veg_noArea_cover_nb <- glmmTMB(num_burrows ~ grass_forb_perc_scaled*plot_type +
-                                bombus_floral_abun_scaled*plot_type +
-                                flood_perc_scaled +
-                               cover_type +
-                              (1|site_id/plot_id),
-                            family = nbinom2, 
-                            data = surveys)
-
-#simulate residuals
-residuals_rodent_veg_noArea_cover_nb <- simulateResiduals(fittedModel = rodent_veg_noArea_cover_nb, plot = TRUE)
+residuals_rodent_veg_simp1 <- simulateResiduals(fittedModel = rodent_veg_simp1, plot = TRUE)
 ##didn't fix it
-```
 
-Try zero-inflated poisson
-
-```{r}
-rodent_veg_noArea_cover_zipois <- glmmTMB(num_burrows ~ grass_forb_perc_scaled*plot_type +
-                                bombus_floral_abun_scaled*plot_type +
+#Try negative binomial
+rodent_veg_simpnb <- glmmTMB(num_burrows ~ grass_forb_perc_scaled*plot_type +
                                 flood_perc_scaled +
-                               cover_type +
                               (1|site_id/plot_id),
-                              ziformula = ~ grass_forb_perc_scaled*plot_type +
-                                bombus_floral_abun_scaled*plot_type +
-                                flood_perc_scaled +
-                               cover_type +
+                            family = nbinom2, 
+                            data = surveys)
+
+#simulate residuals
+residuals_rodent_veg_simpnb <- simulateResiduals(fittedModel = rodent_veg_simpnb, plot = TRUE)
+##didn't fix it
+
+#simplify further
+rodent_veg_simp2 <- glmmTMB(num_burrows ~ grass_forb_perc_scaled*plot_type +
                               (1|site_id/plot_id),
                             family = poisson, 
                             data = surveys)
 
-#doesnt converge
+#simulate residuals
+residuals_rodent_veg_simp2 <- simulateResiduals(fittedModel = rodent_veg_simp2, plot = TRUE)
+#still significant quantile test
+
+#try adding covertype as covariate
+rodent_veg_cover <- glmmTMB(num_burrows ~ grass_forb_perc_scaled*plot_type +
+                              cover_type +
+                              (1|site_id/plot_id),
+                            family = poisson, 
+                            data = surveys)
+
+#simulate residuals
+residuals_rodent_veg_cover <- simulateResiduals(fittedModel = rodent_veg_cover, plot = TRUE)
+##getting closer
+
+#try simplifying random effect
+rodent_veg_simpRE <- glmmTMB(num_burrows ~ grass_forb_perc_scaled*plot_type +
+                              cover_type +
+                              (1|site_id),
+                            family = poisson, 
+                            data = surveys)
+
+#simulate residuals
+residuals_rodent_veg_simpRE <- simulateResiduals(fittedModel = rodent_veg_simpRE, plot = TRUE)
+##didn't fix it
 ```
