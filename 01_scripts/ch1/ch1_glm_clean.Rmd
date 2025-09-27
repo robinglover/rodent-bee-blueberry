@@ -8,7 +8,7 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_analysis/rodent-bee-blueberry")
 ```
 
-# Predicted path diagram 
+# Predicted path diagram
 
 ![](images/pathDiagramSetupSept252025.png)
 
@@ -21,6 +21,10 @@ library(DHARMa)
 library(ordinal)
 library(MASS)
 library(glmmTMB)
+library(ggplot2)
+library(ggeffects)
+library(car)
+library(emmeans)
 
 #read in data
 data <- read.csv("06_cleandata/combined_plot_data.csv")
@@ -33,7 +37,8 @@ surveys <- data %>%
      plot_id = as.factor(plot_id),
      bee_date = as.Date(bee_date),
      bee_season_type = as.factor(bee_season_type),
-     area = as.factor(area))
+     area = as.factor(area),
+     cover_type = as.factor(cover_type))
 
 #scale continuous predictors
 surveys$julian.date_scaled <- as.numeric(scale(surveys$julian.date))
@@ -152,6 +157,66 @@ floral_noRE <- polr(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled +
                        data = field_data)
 
 summary(floral_noRE)
+```
+
+## Plots
+
+Vegetation
+
+```{r}
+# Define a sequence of values for grass_forb_perc_scaled across its observed range
+grass_seq <- seq(
+  from = min(surveys$grass_forb_perc_scaled, na.rm = TRUE),
+  to = max(surveys$grass_forb_perc_scaled, na.rm = TRUE),
+  length.out = 50
+)
+
+# Get predicted response for grass_forb_perc_scaled, holding other variables at their means
+pred_floral_veg <- emmeans(floral_noRE,
+               ~ grass_forb_perc_scaled,
+               at = list(grass_forb_perc_scaled = grass_seq,
+                         julian.date_scaled = mean(surveys$julian.date_scaled, na.rm=TRUE)),
+               type = "response")
+
+# Convert to dataframe for plotting
+pred_floral_veg_df <- as.data.frame(pred_floral_veg)
+
+ggplot(pred_floral_veg_df, aes(x = grass_forb_perc_scaled, y = response)) +
+  geom_line(size = 1) +
+  geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL), alpha = 0.2, color = NA) +
+  labs(title = "Predicted Floral Abundance vs Grass/Forb %",
+       x = "Grass and Forb Percentage (scaled)",
+       y = "Predicted Floral Abundance") +
+  theme_classic()
+```
+
+Julian date
+
+```{r}
+# Define a sequence of values for grass_forb_perc_scaled across its observed range
+date_seq <- seq(
+  from = min(surveys$julian.date_scaled, na.rm = TRUE),
+  to = max(surveys$julian.date_scaled, na.rm = TRUE),
+  length.out = 50
+)
+
+# Get predicted response for grass_forb_perc_scaled, holding other variables at their means
+pred_floral_date <- emmeans(floral_noRE,
+               ~ julian.date_scaled,
+               at = list(julian.date_scaled = date_seq,
+                         grass_forb_perc_scaled = mean(surveys$grass_forb_perc_scaled, na.rm=TRUE)),
+               type = "response")
+
+# Convert to dataframe for plotting
+pred_floral_date_df <- as.data.frame(pred_floral_date)
+
+ggplot(pred_floral_date_df, aes(x = julian.date_scaled, y = response)) +
+  geom_line(size = 1) +
+  geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL), alpha = 0.2, color = NA) +
+  labs(title = "Predicted Floral Abundance vs Julian Date",
+       x = "Julian Date (scaled)",
+       y = "Predicted Floral Abundance") +
+  theme_classic()
 ```
 
 ## Findings
@@ -282,8 +347,50 @@ burrows_pois_cover <- glmmTMB(num_burrows ~ grass_forb_perc_scaled +
 
 #simulate residuals
 residuals_burrows_pois_cover <- simulateResiduals(fittedModel = burrows_pois_cover, plot = TRUE)
+```
 
+7.  Plot results
+
+```{r}
 summary(burrows_pois_cover)
+```
+
+## Plots
+
+Predicted num_burrows vs Grass/Forb %, by Cover Type
+
+```{r}
+pred_rodent_veg <- ggpredict(burrows_pois_cover, terms = c("grass_forb_perc_scaled", "cover_type"), )
+
+ggplot(pred_rodent_veg, aes(x = x, y = predicted, color = group)) +
+  geom_line(size = 1.2) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high, fill = group), alpha = 0.2, color = NA) +
+  labs(
+    title = "Predicted Number of Burrows vs Grass/Forb %",
+    x = "Grass/Forb % (scaled)",
+    y = "Predicted Number of Burrows",
+    color = "Cover Type",
+    fill = "Cover Type"
+  ) +
+  theme_classic()
+```
+
+Predicted number of burrows vs julian date, by cover type
+
+```{r}
+pred_rodent_date <- ggpredict(burrows_pois_cover, terms = c("julian.date_scaled", "cover_type"))
+
+ggplot(pred_rodent_date, aes(x = x, y = predicted, color = group)) +
+  geom_line(size = 1.2) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high, fill = group), alpha = 0.2, color = NA) +
+  labs(
+    title = "Predicted Number of Burrows vs Julian Date",
+    x = "Julian Date (scaled)",
+    y = "Predicted Number of Burrows",
+    color = "Cover Type",
+    fill = "Cover Type"
+  ) +
+  theme_classic()
 ```
 
 ## Findings
@@ -397,6 +504,59 @@ residuals_nsq_noRE <- simulateResiduals(fittedModel =NSQ_noRE, plot = TRUE)
 
 ```{r}
 summary(NSQ_noRE)
+```
+
+## Plots
+
+Number of nest-searching queens vs grass/forb, by season
+
+```{r}
+pred_nsq_veg <- ggpredict(NSQ_noRE, terms = c("grass_forb_perc_scaled", "bee_season_type"))
+
+ggplot(pred_nsq_veg, aes(x = x, y = predicted)) +
+  geom_line(size = 1.2) +
+  facet_wrap(~ group) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, color = NA) +
+  labs(
+    title = "Predicted Number of NSQ vs Grass/Forb %",
+    x = "Grass/Forb % (scaled)",
+    y = "Predicted Number of NSQ"
+  ) +
+  theme_classic()
+```
+
+Number of nest-searching queens vs floral abundance, by season
+
+```{r}
+pred_nsq_floral <- ggpredict(NSQ_noRE, terms = c("bombus_floral_abun_scaled", "bee_season_type"))
+
+ggplot(pred_nsq_floral, aes(x = x, y = predicted)) +
+  geom_line(size = 1.2) +
+  facet_wrap(~ group) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, color = NA) +
+  labs(
+    title = "Predicted Number of NSQ vs bombus floral abundance",
+    x = "Bombus floral abundance (scaled)",
+    y = "Predicted Number of NSQ"
+  ) +
+  theme_classic()
+```
+
+Number of nest-searching queens vs number of rodent burrows, by season
+
+```{r}
+pred_nsq_rodent <- ggpredict(NSQ_noRE, terms = c("num_burrows_scaled", "bee_season_type"))
+
+ggplot(pred_nsq_rodent, aes(x = x, y = predicted)) +
+  geom_line(size = 1.2) +
+  facet_wrap(~ group) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, color = NA) +
+  labs(
+    title = "Predicted Number of NSQ vs rodent burrow abundance",
+    x = "Number rodent burrows (scaled)",
+    y = "Predicted Number of NSQ"
+  ) +
+  theme_classic()
 ```
 
 ## Findings
@@ -519,6 +679,59 @@ anova(workers_noArea, worker_negbin)
 
 ```{r}
 summary(worker_negbin)
+```
+
+## Plots
+
+Number of workers vs number of nest-searching queens, by season
+
+```{r}
+pred_worker_nsq <- ggpredict(worker_negbin, terms = c("nest_searching_queens_scaled", "bee_season_type"))
+
+ggplot(pred_worker_nsq, aes(x = x, y = predicted)) +
+  geom_line(size = 1.2) +
+  facet_wrap(~ group) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, color = NA) +
+  labs(
+    title = "Predicted Number of Workers vs Number of NSQ",
+    x = "# NSQ",
+    y = "Predicted Number of Workers"
+  ) +
+  theme_classic()
+```
+
+Number of workers vs floral abundance, by season
+
+```{r}
+pred_worker_floral <- ggpredict(worker_negbin, terms = c("bombus_floral_abun_scaled", "bee_season_type"))
+
+ggplot(pred_worker_floral, aes(x = x, y = predicted)) +
+  geom_line(size = 1.2) +
+  facet_wrap(~ group) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, color = NA) +
+  labs(
+    title = "Predicted Number of Workers vs Floral Abundance",
+    x = "Floral Abundance",
+    y = "Predicted Number of Workers"
+  ) +
+  theme_classic()
+```
+
+Number of workers vs number of rodent burrows, by season
+
+```{r}
+pred_worker_rodent <- ggpredict(worker_negbin, terms = c("num_burrows_scaled", "bee_season_type"))
+
+ggplot(pred_worker_rodent, aes(x = x, y = predicted)) +
+  geom_line(size = 1.2) +
+  facet_wrap(~ group) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, color = NA) +
+  labs(
+    title = "Predicted Number of Workers vs Rodent Burrow Abundance",
+    x = "Burrow Abundance",
+    y = "Predicted Number of Workers"
+  ) +
+  theme_classic()
 ```
 
 ## Findings

@@ -1,0 +1,152 @@
+---
+title: "ch1_extra"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_analysis/rodent-bee-blueberry")
+```
+
+# Load data
+
+```{r}
+#load packages
+library(ggplot2) #for plots
+library(dplyr) #for working with dataframes
+library(tidyr) #for working with datasets
+library(lme4) #for mixed effects models
+library(ggpubr) #for adding significance asterisks to graph
+
+#read in data
+data <- read.csv("06_cleandata/combined_plot_data.csv")
+
+#check that variables are in appropriate format
+str(data)
+
+#change character columns to factors
+data <- data %>%
+   mutate(
+     site_id = as.factor(site_id),
+     round = as.factor(round),
+     plot_id = as.factor(plot_id),
+     bee_date = as.Date(bee_date),
+     area = as.factor(area))
+
+#filter data to only include within field data
+data <- data %>%
+  filter(plot_id != "d")
+```
+
+# Comparing predictors across cover types (grassy vs bare).
+
+##  % grass+forb 
+
+Overall:
+
+```{r}
+ggplot(data, aes(x = cover_type, y = grass_forb_perc)) + 
+  geom_boxplot() +
+  theme_classic(base_size = 15) +
+  xlab("Cover") +
+  ylab("% grass + forb") +
+  stat_compare_means(
+    method = "t.test",        # or "wilcox.test"
+    label = "p.format",       # shows formatted p-value
+    size = 3.7,
+    vjust = 0
+  )
+```
+
+By area:
+
+```{r}
+ggplot(data, aes(x = area, fill = cover_type, y = grass_forb_perc)) + 
+  geom_boxplot() +
+  theme_classic(base_size = 15) +
+  xlab("Area") +
+  ylab("% grass + forb") +
+  stat_compare_means(
+    method = "t.test",        # or "wilcox.test"
+    label = "p.format",       # shows formatted p-value
+    size = 3.7,
+    vjust = 0
+  ) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```
+
+## NSQ
+
+```{r}
+ggplot(data, aes(fill=cover_type,x=bee_season_type, y = nest_searching_queens))+ 
+  geom_boxplot() +
+  theme_classic(base_size = 15)+
+  xlab("Season")+
+  ylab("NSQ abundance") +
+  stat_compare_means(
+    aes(group = cover_type),  # group by field.type
+    method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
+    label = "p.format",  # Display p-value 
+    size = 3.7)  # Adjust this value to make the asterisks larger
+```
+
+## Workers 
+
+```{r}
+ggplot(data, aes(fill=cover_type,x=bee_season_type, y = nest_searching_queens))+ 
+  geom_boxplot() +
+  theme_classic(base_size = 15)+
+  xlab("Season")+
+  ylab("NSQ abundance") +
+  stat_compare_means(
+    aes(group = cover_type),  # group by field.type
+    method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
+    label = "p.format",  # Display p-value 
+    size = 3.7)  # Adjust this value to make the asterisks larger
+```
+
+## Rodent burrows
+
+```{r}
+ggplot(data, aes(x=cover_type, y = num_burrows))+ 
+  geom_boxplot() +
+  theme_classic(base_size = 15)+
+  xlab("Cover")+
+  ylab("Burrow abundance") +
+  stat_compare_means(
+    aes(group = cover_type),  # group by field.type
+    method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
+    label = "p.format",  # Display p-value 
+    size = 3.7)  # Adjust this value to make the asterisks larger
+```
+
+## Floral abundance (relevant to bees) 
+
+```{r}
+ggplot(data, aes(x=cover_type, y = bombus_floral_abun))+ 
+  geom_boxplot() + 
+  theme_classic(base_size = 15)+ 
+  xlab("Cover")+ 
+  ylab("Bombus-relevant floral abundance") + 
+  stat_compare_means( aes(group = cover_type), # group by field.type
+                      method = "t.test", # or "wilcox.test" if you're doing a non-parametric test 
+                      label = "p.format", # Display p-value 
+                      size = 3.7) # Adjust this value to make the asterisks larger
+```
+
+## Bees foraging on vaco
+
+```{r}
+ggplot(data, aes(x=cover_type, y = forage_vaco))+ 
+  geom_boxplot() +
+  theme_classic(base_size = 15)+
+  xlab("Cover")+
+  ylab("Num foraging on vaco") +
+  stat_compare_means(
+    aes(group = cover_type),  # group by field.type
+    method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
+    label = "p.format",  # Display p-value 
+    size = 3.7) # Adjust this value to make the asterisks larger
+```
+
+# 

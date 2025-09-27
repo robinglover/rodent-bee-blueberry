@@ -18,6 +18,7 @@ library(DHARMa)
 library(glmmTMB)
 library(ggeffects)
 library(car)
+library(emmeans)   # for estimated marginal means (predictions)
 
 #read in data
 data <- read.csv("06_cleandata/combined_plot_data.csv")
@@ -69,7 +70,7 @@ surveys$num_inactive_dm_scaled <- as.numeric(scale(surveys$num_inactive_dm))
 
 # Choosing which vegetation variables to include as predictors
 
-1) Check for multicollinearity among vegetation variables.
+1)  Check for multicollinearity among vegetation variables.
 
 -   All variables have VIF \<5 (no multicollinearity), so i can include all these predictors in my model
 
@@ -86,7 +87,7 @@ vif(lm(nest_searching_queens ~ bare_perc_scaled +
         data = surveys))
 ```
 
-2) Use PCA to determine which vegetation variables to include in my models. I don't want to include all of the predictors, since some will be correlated with each other and therefore dilute their effects of the response variables. I am using PCA so I can pick one variable that drives each of the main 3 components, and use these as the predictors in my model.
+2)  Use PCA to determine which vegetation variables to include in my models. I don't want to include all of the predictors, since some will be correlated with each other and therefore dilute their effects of the response variables. I am using PCA so I can pick one variable that drives each of the main 3 components, and use these as the predictors in my model.
 
 ```{r}
 pca_res <- prcomp(surveys[, c("bare_perc_scaled",
@@ -120,7 +121,7 @@ print(pca_res$rotation)
 
     -   flood_perc_scaled (loads strongly on PCA3)
 
-3) Check pairwise correlations between this reduced set of variables
+3)  Check pairwise correlations between this reduced set of variables
 
 -   correlation among all the pairs are all near zero --\> predictors are all sufficiently independent!
 
@@ -128,13 +129,13 @@ print(pca_res$rotation)
 cor(surveys[, c("grass_forb_perc_scaled", "flood_perc_scaled", "bombus_floral_abun_scaled")])
 ```
 
-# Nest-searching queens 
+# Nest-searching queens
 
 ## [vs plot type (ditch vs field)]{.underline}
 
 ### Steps
 
-1) Plotting a zero-inflated poisson model with multiple different random effect structures to see which is best. I used a zero-inflated poisson model since #NSQ is count data with a lot of zeros.
+1)  Plotting a zero-inflated poisson model with multiple different random effect structures to see which is best. I used a zero-inflated poisson model since #NSQ is count data with a lot of zeros.
 
 -   site-only was best according to maximum likelihood tests
 
@@ -189,7 +190,7 @@ anova(nsq_glm_plotType,nsq_glm_plotType_noArea,nsq_glm_plotType_plotOnly, nsq_gl
 ##siteOnly is best
 ```
 
-2) Check diagnostics of site-only model
+2)  Check diagnostics of site-only model
 
 -   look good
 
@@ -198,10 +199,33 @@ anova(nsq_glm_plotType,nsq_glm_plotType_noArea,nsq_glm_plotType_plotOnly, nsq_gl
 residuals_nsq_glm_plotType_siteOnly <- simulateResiduals(fittedModel = nsq_glm_plotType_siteOnly, plot = TRUE)
 ```
 
-3) Plot results
+3)  Plot results
 
 ```{r}
 summary(nsq_glm_plotType_siteOnly)
+```
+
+### Plots
+
+```{r}
+#Use emmeans to get predicted values on response scale
+pred_nsq_plot <- emmeans(nsq_glm_plotType_siteOnly, 
+               ~ plot_type * bee_season_type, 
+               type = "response")
+
+#Convert emmeans results to a dataframe for plotting
+pred_nsq_plot_df <- as.data.frame(pred_nsq_plot)
+
+#Plot predicted counts with confidence intervals
+ggplot(pred_nsq_plot_df, aes(x = bee_season_type, y = rate, fill = plot_type)) +
+  geom_col(position = position_dodge(width = 0.7), width = 0.6) +
+  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL),
+                position = position_dodge(width = 0.7), width = 0.2) +
+  labs(y = "Predicted Count of Nest Searching Queens",
+       x = "Bee Season Type",
+       fill = "Plot Type",
+       title = "Predicted Nest Searching Queens by Plot Type and Bee Season") +
+  theme_classic()
 ```
 
 ### Findings
@@ -220,7 +244,7 @@ Plot model with interaction between vegetation variables and plot type to invest
 
 ### Steps
 
-1) Try different random effect structures.
+1)  Try different random effect structures.
 
 -   Model without random effect fit data the best.
 
@@ -272,7 +296,7 @@ anova(nsq_glm_veg_noRE, nsq_glm_veg_justSite, nsq_glm_veg_noArea, nsq_glm_veg_fu
 ##no random effect model is best, followed by just site model
 ```
 
-2) Check diagnostics of model
+2)  Check diagnostics of model
 
 -   look good
 
@@ -281,10 +305,72 @@ anova(nsq_glm_veg_noRE, nsq_glm_veg_justSite, nsq_glm_veg_noArea, nsq_glm_veg_fu
 residuals_nsq_glm_veg_noRE <- simulateResiduals(fittedModel = nsq_glm_veg_noRE, plot = TRUE)
 ```
 
-3) Plot results
+3)  Plot results
 
 ```{r}
 summary(nsq_glm_veg_noRE)
+```
+
+### Plots
+
+Grass and forb % cover
+
+```{r}
+# Define a sequence of values for grass_forb_perc_scaled across its observed range
+grass_seq <- seq(
+  from = min(surveys$grass_forb_perc_scaled, na.rm = TRUE),
+  to = max(surveys$grass_forb_perc_scaled, na.rm = TRUE),
+  length.out = 50
+)
+
+# Get predicted response for grass_forb_perc_scaled * plot_type, holding other variables at their means
+pred_nsq_veg <- emmeans(nsq_glm_veg_noRE,
+               ~ grass_forb_perc_scaled * plot_type,
+               at = list(grass_forb_perc_scaled = grass_seq,
+                         bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled, na.rm=TRUE),
+                         flood_perc_scaled = mean(surveys$flood_perc_scaled, na.rm=TRUE)),
+               type = "response")
+
+# Convert to dataframe for plotting
+pred_nsq_veg_df <- as.data.frame(pred_nsq_veg)
+
+ggplot(pred_nsq_veg_df, aes(x = grass_forb_perc_scaled, y = rate, color = plot_type)) +
+  geom_line(size = 1) +
+  geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL, fill = plot_type), alpha = 0.2, color = NA) +
+  labs(title = "Predicted Nest Searching Queens vs Grass/Forb %",
+       x = "Grass and Forb Percentage (scaled)",
+       y = "Predicted Count") +
+  theme_classic()
+```
+
+Floral abundance
+
+```{r}
+# Define a sequence of values for grass_forb_perc_scaled across its observed range
+floral_seq <- seq(
+  from = min(surveys$bombus_floral_abun_scaled, na.rm = TRUE),
+  to = max(surveys$bombus_floral_abun_scaled, na.rm = TRUE),
+  length.out = 50
+)
+
+# Get predicted response for grass_forb_perc_scaled * plot_type, holding other variables at their means
+pred_nsq_floral <- emmeans(nsq_glm_veg_noRE,
+               ~ bombus_floral_abun_scaled * plot_type,
+               at = list(bombus_floral_abun_scaled = floral_seq,
+                         grass_forb_perc_scaled = mean(surveys$grass_forb_perc_scaled, na.rm=TRUE),
+                         flood_perc_scaled = mean(surveys$flood_perc_scaled, na.rm=TRUE)),
+               type = "response")
+
+# Convert to dataframe for plotting
+pred_nsq_floral_df <- as.data.frame(pred_nsq_floral)
+
+ggplot(pred_nsq_floral_df, aes(x = bombus_floral_abun_scaled, y = rate, color = plot_type)) +
+  geom_line(size = 1) +
+  geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL, fill = plot_type), alpha = 0.2, color = NA) +
+  labs(title = "Predicted Nest Searching Queens vs Bombus Floral Abundance",
+       x = "Bombus floral abundance (scaled)",
+       y = "Predicted Count") +
+  theme_classic()
 ```
 
 ### Findings
@@ -307,7 +393,7 @@ Zero-inflation model (predicts presence/absence of nest-searching queens).
 
 ### Steps
 
-1) Start with poisson and check all random effect structures.
+1)  Start with poisson and check all random effect structures.
 
 -   model with plot nested in site (no area) is best
 
@@ -340,7 +426,7 @@ anova(workers_plotType_full, workers_plotType_noArea, workers_plotType_siteOnly,
 ##no area is best
 ```
 
-2) Check diagnostics of model.
+2)  Check diagnostics of model.
 
 -   no problems detected
 
@@ -349,10 +435,33 @@ anova(workers_plotType_full, workers_plotType_noArea, workers_plotType_siteOnly,
 residuals_workers_plotType_noArea <- simulateResiduals(fittedModel = workers_plotType_noArea, plot = TRUE)
 ```
 
-3) Plot results
+3)  Plot results
 
 ```{r}
 summary(workers_plotType_noArea)
+```
+
+### Plots
+
+```{r}
+# Use emmeans to get predicted values on response scale
+pred_worker_plot <- emmeans(workers_plotType_noArea, 
+               ~ plot_type * bee_season_type, 
+               type = "response")
+
+# Convert emmeans results to a dataframe for plotting
+pred_worker_plot_df <- as.data.frame(pred_worker_plot)
+
+# Plot predicted counts with confidence intervals
+ggplot(pred_worker_plot_df, aes(x = bee_season_type, y = rate, fill = plot_type)) +
+  geom_col(position = position_dodge(width = 0.7), width = 0.6) +
+  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL),
+                position = position_dodge(width = 0.7), width = 0.2) +
+  labs(y = "Predicted Count of Workers",
+       x = "Bee Season Type",
+       fill = "Plot Type",
+       title = "Predicted Worker Number by Plot Type and Bee Season") +
+  theme_classic()
 ```
 
 ### Findings
@@ -365,7 +474,7 @@ summary(workers_plotType_noArea)
 
 ### Steps
 
-1) Try random effect structures with poisson.
+1)  Try random effect structures with poisson.
 
 -   model with plot nested in site (no area) is best
 
@@ -402,15 +511,15 @@ anova(workers_veg_full, workers_veg_noArea, workers_veg_siteOnly, workers_veg_no
 ##no area is best
 ```
 
-2) Check diagnostics
+2)  Check diagnostics
 
--    quantile test and KS test show significant deviations
+-   quantile test and KS test show significant deviations
 
 ```{r}
 residuals_workers_veg_noArea <- simulateResiduals(fittedModel = workers_veg_noArea, plot = TRUE)
 ```
 
-3) Try negative binomial and check diagnostics.
+3)  Try negative binomial and check diagnostics.
 
 -   fixes QQ plot but still significant quantile test
 
@@ -427,7 +536,7 @@ workers_veg_noArea_nbin <- glmmTMB(workers ~ grass_forb_perc_scaled*plot_type +
 residuals_workers_veg_noArea_nbin <- simulateResiduals(fittedModel = workers_veg_noArea_nbin, plot = TRUE)
 ```
 
-4) Try zero-inflated poisson and check diagnostics.
+4)  Try zero-inflated poisson and check diagnostics.
 
 -   diagnostic plots look good!
 
@@ -448,10 +557,56 @@ workers_veg_noArea_zipois <- glmmTMB(workers ~ grass_forb_perc_scaled*plot_type 
 residuals_workers_veg_noArea_zipois <- simulateResiduals(fittedModel = workers_veg_noArea_zipois, plot = TRUE)
 ```
 
-5) Plot results.
+5)  Plot results.
 
 ```{r}
 summary(workers_veg_noArea_zipois)
+```
+
+### Plots
+
+```{r}
+# Get predicted response for grass_forb_perc_scaled * plot_type, holding other variables at their means
+pred_worker_veg <- emmeans(workers_veg_noArea_zipois,
+               ~ grass_forb_perc_scaled * plot_type,
+               at = list(grass_forb_perc_scaled = grass_seq,
+                         bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled, na.rm=TRUE),
+                         flood_perc_scaled = mean(surveys$flood_perc_scaled, na.rm=TRUE)),
+               type = "response")
+
+# Convert to dataframe for plotting
+pred_worker_veg_df <- as.data.frame(pred_worker_veg)
+
+ggplot(pred_worker_veg_df, aes(x = grass_forb_perc_scaled, y = rate, color = plot_type)) +
+  geom_line(size = 1) +
+  geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL, fill = plot_type), alpha = 0.2, color = NA) +
+  labs(title = "Predicted Workers vs Grass/Forb %",
+       x = "Grass/Forb Percentage (scaled)",
+       y = "Predicted Count") +
+  theme_classic()
+```
+
+Floral abundance
+
+```{r}
+# Get predicted response for grass_forb_perc_scaled * plot_type, holding other variables at their means
+pred_worker_floral <- emmeans(workers_veg_noArea_zipois,
+               ~ bombus_floral_abun_scaled * plot_type,
+               at = list(bombus_floral_abun_scaled = floral_seq,
+                         grass_forb_perc_scaled = mean(surveys$grass_forb_perc_scaled, na.rm=TRUE),
+                         flood_perc_scaled = mean(surveys$flood_perc_scaled, na.rm=TRUE)),
+               type = "response")
+
+# Convert to dataframe for plotting
+pred_worker_floral_df <- as.data.frame(pred_worker_floral)
+
+ggplot(pred_worker_floral_df, aes(x = bombus_floral_abun_scaled, y = rate, color = plot_type)) +
+  geom_line(size = 1) +
+  geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL, fill = plot_type), alpha = 0.2, color = NA) +
+  labs(title = "Predicted Workers vs Bombus Floral Abundance",
+       x = "Bombus floral abundance (scaled)",
+       y = "Predicted Count") +
+  theme_minimal()
 ```
 
 ### Findings
@@ -471,3 +626,160 @@ No significant effect of any variables on worker abundance/presence.
 ### Steps
 
 ### Findings
+
+# Floral
+
+## vs. plot type
+
+### Steps
+
+1.  Try random effect structures
+
+```{r}
+#Load packages needed for CLM
+library(ordinal)
+library(MASS)
+
+floral_full <- clmm(as.factor(bombus_floral_abun) ~ plot_type +
+                         julian.date_scaled + 
+                         (1|area/site_id/plot_id),
+                       link = "logit", 
+                       data = surveys)
+
+floral_noArea <- clmm(as.factor(bombus_floral_abun) ~ plot_type +
+                         julian.date_scaled + 
+                         (1|site_id/plot_id),
+                       link = "logit", 
+                       data = surveys)
+
+#floral_plotOnly <- clmm(as.factor(bombus_floral_abun) ~ plot_type +
+ #                        julian.date_scaled + 
+  #                       (1|plot_id),
+   #                    link = "logit", 
+    #                   data = surveys)
+##can't use since there are only 2 levels
+
+floral_siteOnly <- clmm(as.factor(bombus_floral_abun) ~ plot_type +
+                         julian.date_scaled + 
+                         (1|site_id),
+                       link = "logit", 
+                       data = surveys)
+
+floral_AreaPlot <- clmm(as.factor(bombus_floral_abun) ~ plot_type +
+                         julian.date_scaled + 
+                         (1|area/plot_id),
+                       link = "logit", 
+                       data = surveys)
+floral_noRE <- polr(as.factor(bombus_floral_abun) ~ plot_type +
+                         julian.date_scaled,
+                       method = "logistic", 
+                       data = surveys)
+
+#compare models AIC
+AIC(floral_full, floral_noArea, floral_siteOnly, floral_AreaPlot, floral_noRE)
+##shows that model without random effect has best fit
+```
+
+2.  Compare AIC between model with and without cover_type as a covariate.
+
+-   determined that model without cover type as covariate was better
+
+```{r}
+floral_noRE_cover <- polr(as.factor(bombus_floral_abun) ~ plot_type +
+                            cover_type +
+                         julian.date_scaled,
+                       method = "logistic", 
+                       data = surveys)
+
+AIC(floral_noRE_cover, floral_noRE)
+##not including cover is better
+```
+
+3.  Try including julianDate \* plot_type
+
+-   determined that model with interaction term was better
+
+```{r}
+floral_noRE_interaction <- polr(as.factor(bombus_floral_abun) ~ plot_type*julian.date_scaled,
+                       method = "logistic", 
+                       data = surveys)
+AIC(floral_noRE_interaction, floral_noRE)
+##interaction is better
+```
+
+4.  Look at output
+
+```{r}
+summary(floral_noRE_interaction)
+```
+
+### Plots
+
+```{r}
+# Create prediction grid
+floraldata <- expand.grid(
+  julian.date_scaled = seq(min(surveys$julian.date_scaled), max(surveys$julian.date_scaled), length.out = 100),
+  plot_type = unique(surveys$plot_type)
+)
+
+# Calculate predicted values 
+pred_floral_plot <- predict(floral_noRE_interaction, floraldata, type = "probs")
+
+# Convert matrix to dataframe
+pred_floral_plot_df <- as.data.frame(pred_floral_plot)
+
+# Bind predictions to floral data
+floraldata_pred <- cbind(floraldata, pred_floral_plot_df)
+
+# Reshape to long format
+floraldata_pred_long <- floraldata_pred %>%
+  pivot_longer(cols = -c(julian.date_scaled, plot_type),
+               names_to = "category",
+               values_to = "probability")
+
+# Plot
+ggplot(floraldata_pred_long, aes(x = julian.date_scaled, y = probability, color = plot_type)) +
+  geom_line(size = 1) +
+  facet_wrap(~ category) +
+  labs(
+    title = "Predicted Probabilities of Bombus Floral Abundance Categories",
+    x = "Julian Date (scaled)",
+    y = "Probability",
+    color = "Bombus Floral Abundance"
+  ) +
+  theme_classic()
+```
+
+Only floral abundance category 4 (1000-10000 blooms)
+
+```{r}
+# Filter to only category "4"
+floraldata_pred_cat4 <- floraldata_pred %>%
+  dplyr::select(julian.date_scaled, plot_type, `4` = `4`) %>%
+  dplyr::rename(probability = `4`)
+
+# Plot
+ggplot(floraldata_pred_cat4, aes(x = julian.date_scaled, y = probability, color = plot_type)) +
+  geom_line(size = 1.2) +
+  labs(
+    title = "Predicted Probability of Bombus Floral Abundance Category 4(1000-10000 blooms)",
+    x = "Julian Date (scaled)",
+    y = "Probability",
+    color = "Plot Type"
+  ) +
+  theme_classic()
+```
+
+### Findings
+
+-   Julian date is a significant predictor: floral abundance tends to increase as season progresses.
+
+<!-- -->
+
+-   The effect of Julian date changes depending on plot type (significant interaction).
+
+    -   In the ditch, floral abundance increases throughout the season.
+
+    -   In the field, floral abundance decreases throughout the season.
+
+-   Plot type alone has no strong main effect but modifies the Julian date effect.

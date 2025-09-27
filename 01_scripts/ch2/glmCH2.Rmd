@@ -385,7 +385,7 @@ summary(workers_veg_noArea_zipois)
 ##Finding: no signficant effect of any variables
 ```
 
-# GLM #5: Number of rodent burrows vs plot type 
+# GLM #5: Number of rodent burrows vs plot type
 
 ```{r}
 rodent_plotType_full <- glmmTMB(num_burrows ~ plot_type +
@@ -519,3 +519,81 @@ rodent_veg_simpRE <- glmmTMB(num_burrows ~ grass_forb_perc_scaled*plot_type +
 residuals_rodent_veg_simpRE <- simulateResiduals(fittedModel = rodent_veg_simpRE, plot = TRUE)
 ##didn't fix it
 ```
+
+# GLM #7: Floral abundance vs plot type
+
+```{r}
+#Load packages needed for CLM
+library(ordinal)
+library(MASS)
+
+floral_full <- clmm(as.factor(bombus_floral_abun) ~ plot_type +
+                         julian.date_scaled + 
+                         (1|area/site_id/plot_id),
+                       link = "logit", 
+                       data = surveys)
+
+floral_noArea <- clmm(as.factor(bombus_floral_abun) ~ plot_type +
+                         julian.date_scaled + 
+                         (1|site_id/plot_id),
+                       link = "logit", 
+                       data = surveys)
+
+#floral_plotOnly <- clmm(as.factor(bombus_floral_abun) ~ plot_type +
+ #                        julian.date_scaled + 
+  #                       (1|plot_id),
+   #                    link = "logit", 
+    #                   data = surveys)
+##can't use since there are only 2 levels
+
+floral_siteOnly <- clmm(as.factor(bombus_floral_abun) ~ plot_type +
+                         julian.date_scaled + 
+                         (1|site_id),
+                       link = "logit", 
+                       data = surveys)
+
+floral_AreaPlot <- clmm(as.factor(bombus_floral_abun) ~ plot_type +
+                         julian.date_scaled + 
+                         (1|area/plot_id),
+                       link = "logit", 
+                       data = surveys)
+floral_noRE <- polr(as.factor(bombus_floral_abun) ~ plot_type +
+                         julian.date_scaled,
+                       method = "logistic", 
+                       data = surveys)
+
+#compare models AIC
+AIC(floral_full, floral_noArea, floral_siteOnly, floral_AreaPlot, floral_noRE)
+##shows that model without random effect has best fit
+```
+
+2)  Compare AIC between model with and without cover_type as a covariate.
+
+-   determined that model without cover type as covariate was better
+
+```{r}
+floral_noRE_cover <- polr(as.factor(bombus_floral_abun) ~ plot_type +
+                            cover_type +
+                         julian.date_scaled,
+                       method = "logistic", 
+                       data = surveys)
+
+AIC(floral_noRE_cover, floral_noRE)
+##not including cover is better
+```
+
+3)  Try including julianDate \* plot_type
+
+    ```{r}
+    floral_noRE_interaction <- polr(as.factor(bombus_floral_abun) ~ plot_type*julian.date_scaled,
+                           method = "logistic", 
+                           data = surveys)
+    AIC(floral_noRE_interaction, floral_noRE)
+    ##interaction is better
+    ```
+
+4)  Look at output
+
+    ```{r}
+    summary(floral_noRE_interaction)
+    ```
