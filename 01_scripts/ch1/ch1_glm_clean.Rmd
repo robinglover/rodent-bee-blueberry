@@ -151,11 +151,6 @@ AIC(floral_noRE_cover, floral_noRE)
 3)  Run final model and look at output
 
 ```{r}
-floral_noRE <- polr(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled +
-                         julian.date_scaled,
-                       method = "logistic", 
-                       data = field_data)
-
 summary(floral_noRE)
 ```
 
@@ -360,17 +355,15 @@ summary(burrows_pois_cover)
 Predicted num_burrows vs Grass/Forb %, by Cover Type
 
 ```{r}
-pred_rodent_veg <- ggpredict(burrows_pois_cover, terms = c("grass_forb_perc_scaled", "cover_type"), )
+pred_rodent_veg <- ggpredict(burrows_pois_cover, terms = c("grass_forb_perc_scaled"))
 
-ggplot(pred_rodent_veg, aes(x = x, y = predicted, color = group)) +
+ggplot(pred_rodent_veg, aes(x = x, y = predicted)) +
   geom_line(size = 1.2) +
-  geom_ribbon(aes(ymin = conf.low, ymax = conf.high, fill = group), alpha = 0.2, color = NA) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, color = NA) +
   labs(
-    title = "Predicted Number of Burrows vs Grass/Forb %",
+    title = "Predicted Number of Burrows by Grass/Forb percentage (log-scale)",
     x = "Grass/Forb % (scaled)",
-    y = "Predicted Number of Burrows",
-    color = "Cover Type",
-    fill = "Cover Type"
+    y = "Predicted Number of Burrows (log-scale)"
   ) +
   theme_classic()
 ```
@@ -378,17 +371,32 @@ ggplot(pred_rodent_veg, aes(x = x, y = predicted, color = group)) +
 Predicted number of burrows vs julian date, by cover type
 
 ```{r}
-pred_rodent_date <- ggpredict(burrows_pois_cover, terms = c("julian.date_scaled", "cover_type"))
+pred_rodent_date <- ggpredict(burrows_pois_cover, terms = c("julian.date_scaled"))
 
-ggplot(pred_rodent_date, aes(x = x, y = predicted, color = group)) +
+ggplot(pred_rodent_date, aes(x = x, y = predicted)) +
   geom_line(size = 1.2) +
-  geom_ribbon(aes(ymin = conf.low, ymax = conf.high, fill = group), alpha = 0.2, color = NA) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, color = NA) +
   labs(
-    title = "Predicted Number of Burrows vs Julian Date",
+    title = "Predicted Number of Burrows by Julian Date (log-scale)",
     x = "Julian Date (scaled)",
-    y = "Predicted Number of Burrows",
-    color = "Cover Type",
-    fill = "Cover Type"
+    y = "Predicted Number of Burrows (log-scale)"
+  ) +
+  theme_classic()
+```
+
+Number of rodent burrows vs cover type
+
+```{r}
+pred_rodent_cover <- ggpredict(burrows_pois_cover, terms = c("cover_type"))
+
+ggplot(pred_rodent_cover, aes(x = x, y = predicted)) +
+  geom_point(size=3) +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), 
+                width = 0.2, position = position_dodge(0.6)) +
+  labs(
+    title = "Predicted Number of rodent burrows by cover type (log-scale)",
+    x = "Cover Type",
+    y = "Predicted Number of Burrows (log-scale)"
   ) +
   theme_classic()
 ```
@@ -508,54 +516,187 @@ summary(NSQ_noRE)
 
 ## Plots
 
-Number of nest-searching queens vs grass/forb, by season
+Number of nest-searching queens vs grass/forb
+
+Conditional model:
 
 ```{r}
-pred_nsq_veg <- ggpredict(NSQ_noRE, terms = c("grass_forb_perc_scaled", "bee_season_type"))
+#cannot use ggpredict for zi models. So I will use predict function from glmmTMB package instead.
 
-ggplot(pred_nsq_veg, aes(x = x, y = predicted)) +
-  geom_line(size = 1.2) +
-  facet_wrap(~ group) +
-  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, color = NA) +
-  labs(
-    title = "Predicted Number of NSQ vs Grass/Forb %",
-    x = "Grass/Forb % (scaled)",
-    y = "Predicted Number of NSQ"
-  ) +
+# Create data grid over grass_forb_perc_scaled
+nsq_data_veg <- data.frame(
+  grass_forb_perc_scaled = seq(min(field_data$grass_forb_perc_scaled), max(field_data$grass_forb_perc_scaled), length.out = 100),
+  bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled),
+  num_burrows_scaled = mean(field_data$num_burrows_scaled),
+  bee_season_type = "nestsearching"  
+)
+
+# Predictions for conditional model (count)
+pred_nsq_veg_cond <- predict(NSQ_noRE, newdata = nsq_data_veg, type = "conditional", se.fit = TRUE)
+
+# Predictions for zero-inflation model
+pred_nsq_veg_zi <- predict(NSQ_noRE, newdata = nsq_data_veg, type = "zprob", se.fit = TRUE)
+
+# Combine predictions with newdata
+pred_nsq_veg_df <- cbind(nsq_data_veg,
+                 cond_fit = pred_nsq_veg_cond$fit,
+                 cond_se = pred_nsq_veg_cond$se.fit,
+                 zi_fit = pred_nsq_veg_zi$fit,
+                 zi_se = pred_nsq_veg_zi$se.fit)
+
+# Plot conditional predictions
+ggplot(pred_nsq_veg_df, aes(x = grass_forb_perc_scaled, y = cond_fit)) +
+  geom_line(color = "blue") +
+  geom_ribbon(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), alpha = 0.2) +
+  labs(title = "Conditional Model Predictions (log-scale)", y = "Predicted NSQ count (log-scale)") +
+  theme_classic()
+
+```
+
+Zero-inflated model:
+
+```{r}
+# Plot zi predictions
+ggplot(pred_nsq_veg_df, aes(x = grass_forb_perc_scaled, y = zi_fit)) +
+  geom_line(color = "blue") +
+  geom_ribbon(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), alpha = 0.2) +
+  labs(title = "Zero-inflation Model Predictions (NSQ Presence/absence)", y = "Predicted Probability of Structural Zero") +
+  theme_classic()
+
+```
+
+Number of nest-searching queens vs floral abundance
+
+Conditional model:
+
+```{r}
+# Create data grid over bombus_floral_abun_scaled
+nsq_data_floral <- data.frame(
+  bombus_floral_abun_scaled = seq(min(field_data$bombus_floral_abun_scaled), max(field_data$bombus_floral_abun_scaled), length.out = 100),
+  grass_forb_perc_scaled = mean(field_data$grass_forb_perc_scaled),
+  num_burrows_scaled = mean(field_data$num_burrows_scaled),
+  bee_season_type = "nestsearching"  
+)
+
+# Predictions for conditional model (count)
+pred_nsq_floral_cond <- predict(NSQ_noRE, newdata = nsq_data_floral, type = "conditional", se.fit = TRUE)
+
+# Predictions for zero-inflation model
+pred_nsq_floral_zi <- predict(NSQ_noRE, newdata = nsq_data_floral, type = "zprob", se.fit = TRUE)
+
+# Combine predictions with newdata
+pred_nsq_floral_df <- cbind(nsq_data_floral,
+                 cond_fit = pred_nsq_floral_cond$fit,
+                 cond_se = pred_nsq_floral_cond$se.fit,
+                 zi_fit = pred_nsq_floral_zi$fit,
+                 zi_se = pred_nsq_floral_zi$se.fit)
+
+# Plot conditional predictions
+ggplot(pred_nsq_floral_df, aes(x = bombus_floral_abun_scaled, y = cond_fit)) +
+  geom_line(color = "blue") +
+  geom_ribbon(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), alpha = 0.2) +
+  labs(title = "Conditional Model Predictions (log-scale)", y = "Predicted NSQ count (log-scale)") +
+  theme_classic()
+
+```
+
+Zero-inflated model:
+
+```{r}
+# Plot zi predictions
+ggplot(pred_nsq_floral_df, aes(x = bombus_floral_abun_scaled, y = zi_fit)) +
+  geom_line(color = "blue") +
+  geom_ribbon(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), alpha = 0.2) +
+  labs(title = "Zero-inflation Model Predictions (NSQ Presence/Absence)", y = "Predicted Probability of Structural Zero") +
+  theme_classic()
+
+```
+
+Number of nest-searching queens vs number of rodent burrows
+
+Conditional model:
+
+```{r}
+# Create data grid over rodent_burrows_scaled
+nsq_data_rodent <- data.frame(
+  num_burrows_scaled = seq(min(field_data$num_burrows_scaled), max(field_data$num_burrows_scaled), length.out = 100),
+  grass_forb_perc_scaled = mean(field_data$grass_forb_perc_scaled),
+  bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled),
+  bee_season_type = "nestsearching"  
+)
+
+# Predictions for conditional model (count)
+pred_nsq_rodent_cond <- predict(NSQ_noRE, newdata = nsq_data_rodent, type = "conditional", se.fit = TRUE)
+
+# Predictions for zero-inflation model
+pred_nsq_rodent_zi <- predict(NSQ_noRE, newdata = nsq_data_rodent, type = "zprob", se.fit = TRUE)
+
+# Combine predictions with newdata
+pred_nsq_rodent_df <- cbind(nsq_data_rodent,
+                 cond_fit = pred_nsq_rodent_cond$fit,
+                 cond_se = pred_nsq_rodent_cond$se.fit,
+                 zi_fit = pred_nsq_rodent_zi$fit,
+                 zi_se = pred_nsq_rodent_zi$se.fit)
+
+# Plot conditional predictions
+ggplot(pred_nsq_rodent_df, aes(x = num_burrows_scaled, y = cond_fit)) +
+  geom_line(color = "blue") +
+  geom_ribbon(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), alpha = 0.2) +
+  labs(title = "Conditional Model Predictions (Log-scale)", y = "Predicted NSQ count (log-scale)") +
   theme_classic()
 ```
 
-Number of nest-searching queens vs floral abundance, by season
+Zero-inflated model:
 
 ```{r}
-pred_nsq_floral <- ggpredict(NSQ_noRE, terms = c("bombus_floral_abun_scaled", "bee_season_type"))
-
-ggplot(pred_nsq_floral, aes(x = x, y = predicted)) +
-  geom_line(size = 1.2) +
-  facet_wrap(~ group) +
-  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, color = NA) +
-  labs(
-    title = "Predicted Number of NSQ vs bombus floral abundance",
-    x = "Bombus floral abundance (scaled)",
-    y = "Predicted Number of NSQ"
-  ) +
+ggplot(pred_nsq_rodent_df, aes(x = num_burrows_scaled, y = zi_fit)) +
+  geom_line(color = "blue") +
+  geom_ribbon(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), alpha = 0.2) +
+  labs(title = "Zero-inflation Model Predictions (NSQ Presence/Absence)", y = "Predicted Probability of Structural Zero") +
   theme_classic()
 ```
 
-Number of nest-searching queens vs number of rodent burrows, by season
+Number of nest-searching queens vs season type
+
+Conditional model:
 
 ```{r}
-pred_nsq_rodent <- ggpredict(NSQ_noRE, terms = c("num_burrows_scaled", "bee_season_type"))
+# Create newdata with discrete factor levels for bee_season_type
+nsq_data_season <- data.frame(
+  grass_forb_perc_scaled = mean(field_data$grass_forb_perc_scaled),
+  bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled),
+  num_burrows_scaled = mean(field_data$num_burrows_scaled),
+  bee_season_type = factor(c("nestsearching", "worker"), levels = levels(field_data$bee_season_type))
+)
 
-ggplot(pred_nsq_rodent, aes(x = x, y = predicted)) +
-  geom_line(size = 1.2) +
-  facet_wrap(~ group) +
-  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, color = NA) +
-  labs(
-    title = "Predicted Number of NSQ vs rodent burrow abundance",
-    x = "Number rodent burrows (scaled)",
-    y = "Predicted Number of NSQ"
-  ) +
+# Predictions for conditional model (count)
+pred_nsq_season_cond <- predict(NSQ_noRE, newdata = nsq_data_season, type = "conditional", se.fit = TRUE)
+
+# Predictions for zero-inflation model
+pred_nsq_season_zi <- predict(NSQ_noRE, newdata = nsq_data_season, type = "zprob", se.fit = TRUE)
+
+# Combine predictions with newdata
+pred_nsq_season_df <- cbind(nsq_data_season,
+                 cond_fit = pred_nsq_season_cond$fit,
+                 cond_se = pred_nsq_season_cond$se.fit,
+                 zi_fit = pred_nsq_season_zi$fit,
+                 zi_se = pred_nsq_season_zi$se.fit)
+
+# Plot conditional predictions
+ggplot(pred_nsq_season_df, aes(x = bee_season_type, y = cond_fit)) +
+  geom_point(size=3) +
+  geom_errorbar(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), width = 0.2, position = position_dodge(0.6))+
+  labs(title = "Conditional Model Predictions (Log-scale)", y = "Predicted NSQ count (log-scale)") +
+  theme_classic()
+```
+
+Zero-inflated model:
+
+```{r}
+ggplot(pred_nsq_season_df, aes(x = bee_season_type, y = zi_fit)) +
+  geom_point(size=3) +
+  geom_errorbar(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), width = 0.2, position = position_dodge(0.6))+
+  labs(title = "Zero-inflation Model Predictions (Presence/Absence)", y = "Predicted Probability of Structural Zero") +
   theme_classic()
 ```
 
@@ -681,21 +822,20 @@ anova(workers_noArea, worker_negbin)
 summary(worker_negbin)
 ```
 
-## Plots
+## ![](images/clipboard-1682655846.png)Plots
 
-Number of workers vs number of nest-searching queens, by season
+Number of workers vs number of nest-searching queens
 
 ```{r}
-pred_worker_nsq <- ggpredict(worker_negbin, terms = c("nest_searching_queens_scaled", "bee_season_type"))
+pred_worker_nsq <- ggpredict(worker_negbin, terms = c("nest_searching_queens_scaled"))
 
 ggplot(pred_worker_nsq, aes(x = x, y = predicted)) +
   geom_line(size = 1.2) +
-  facet_wrap(~ group) +
   geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, color = NA) +
   labs(
-    title = "Predicted Number of Workers vs Number of NSQ",
-    x = "# NSQ",
-    y = "Predicted Number of Workers"
+    title = "Predicted Number of Workers by Number of NSQ (log-scale)",
+    x = "Number nest-searching queens (scaled)",
+    y = "Predicted Number of Workers (log-scale)"
   ) +
   theme_classic()
 ```
@@ -703,16 +843,15 @@ ggplot(pred_worker_nsq, aes(x = x, y = predicted)) +
 Number of workers vs floral abundance, by season
 
 ```{r}
-pred_worker_floral <- ggpredict(worker_negbin, terms = c("bombus_floral_abun_scaled", "bee_season_type"))
+pred_worker_floral <- ggpredict(worker_negbin, terms = c("bombus_floral_abun_scaled"))
 
 ggplot(pred_worker_floral, aes(x = x, y = predicted)) +
   geom_line(size = 1.2) +
-  facet_wrap(~ group) +
   geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, color = NA) +
   labs(
-    title = "Predicted Number of Workers vs Floral Abundance",
-    x = "Floral Abundance",
-    y = "Predicted Number of Workers"
+    title = "Predicted Number of Workers by Floral Abundance (log-scale)",
+    x = "Floral Abundance (scaled)",
+    y = "Predicted Number of Workers (log-scale)"
   ) +
   theme_classic()
 ```
@@ -720,16 +859,32 @@ ggplot(pred_worker_floral, aes(x = x, y = predicted)) +
 Number of workers vs number of rodent burrows, by season
 
 ```{r}
-pred_worker_rodent <- ggpredict(worker_negbin, terms = c("num_burrows_scaled", "bee_season_type"))
+pred_worker_rodent <- ggpredict(worker_negbin, terms = c("num_burrows_scaled"))
 
 ggplot(pred_worker_rodent, aes(x = x, y = predicted)) +
   geom_line(size = 1.2) +
-  facet_wrap(~ group) +
   geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, color = NA) +
   labs(
-    title = "Predicted Number of Workers vs Rodent Burrow Abundance",
-    x = "Burrow Abundance",
-    y = "Predicted Number of Workers"
+    title = "Predicted Number of Workers by Rodent Burrow Abundance (log-scale)",
+    x = "Burrow Abundance (scaled)",
+    y = "Predicted Number of Workers (log-scale)"
+  ) +
+  theme_classic()
+```
+
+Number of workers vs season
+
+```{r}
+pred_worker_season <- ggpredict(worker_negbin, terms = c("bee_season_type"))
+
+ggplot(pred_worker_season, aes(x = x, y = predicted)) +
+  geom_point(size=3)+
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), 
+                width = 0.2, position = position_dodge(0.6)) +
+  labs(
+    title = "Predicted Number of workers by season (log-scale)",
+    x = "Bee season",
+    y = "Predicted Number of workers (log-scale)"
   ) +
   theme_classic()
 ```
