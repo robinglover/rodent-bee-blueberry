@@ -207,6 +207,8 @@ summary(nsq_glm_plotType_siteOnly)
 
 ### Plots
 
+Conditional model:
+
 ```{r}
 #Use emmeans to get predicted values on response scale
 pred_nsq_plot <- emmeans(nsq_glm_plotType_siteOnly, 
@@ -226,6 +228,12 @@ ggplot(pred_nsq_plot_df, aes(x = bee_season_type, y = rate, fill = plot_type)) +
        fill = "Plot Type",
        title = "Predicted Nest Searching Queens by Plot Type and Bee Season") +
   theme_classic()
+```
+
+Zero-inflation model:
+
+```{r}
+
 ```
 
 ### Findings
