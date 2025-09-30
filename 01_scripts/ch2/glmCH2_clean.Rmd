@@ -168,16 +168,15 @@ nsq_glm_plotType_plotOnly <- glmmTMB(nest_searching_queens ~ plot_type +
                             data = surveys)
 
 nsq_glm_plotType_siteOnly <- glmmTMB(nest_searching_queens ~ plot_type +
-                              bee_season_type +
-                              (1|site_id),
+                                       bee_season_type +
+                                       (1|site_id),
                             ziformula = ~plot_type +
                               bee_season_type +
                               (1|site_id),  # zero-inflation model
                             family = poisson, #poisson
                             data = surveys)
 
-nsq_glm_plotType_areaSite <- glmmTMB(nest_searching_queens ~ plot_type +
-                              bee_season_type +
+nsq_glm_plotType_areaSite <- glmmTMB(nest_searching_queens ~ plot_typebee_season_type +
                               (1|area/site_id),
                             ziformula = ~plot_type +
                               bee_season_type +
@@ -207,33 +206,103 @@ summary(nsq_glm_plotType_siteOnly)
 
 ### Plots
 
+Plot type
+
 Conditional model:
 
 ```{r}
-#Use emmeans to get predicted values on response scale
-pred_nsq_plot <- emmeans(nsq_glm_plotType_siteOnly, 
-               ~ plot_type * bee_season_type, 
-               type = "response")
+# Create newdata with discrete factor levels for plot_type
+nsq_data_plot <- data.frame(
+  bee_season_type = "nestsearching",
+  plot_type = factor(c("field", "ditch"), levels = levels(surveys$plot_type))
+)
 
-#Convert emmeans results to a dataframe for plotting
-pred_nsq_plot_df <- as.data.frame(pred_nsq_plot)
+# Predictions for conditional model (count)
+pred_nsq_plot_cond <- predict(nsq_glm_plotType_siteOnly, 
+                              newdata = nsq_data_plot, 
+                              type = "conditional", 
+                              se.fit = TRUE,
+                              re.form = NA)
 
-#Plot predicted counts with confidence intervals
-ggplot(pred_nsq_plot_df, aes(x = bee_season_type, y = rate, fill = plot_type)) +
-  geom_col(position = position_dodge(width = 0.7), width = 0.6) +
-  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL),
-                position = position_dodge(width = 0.7), width = 0.2) +
-  labs(y = "Predicted Count of Nest Searching Queens",
-       x = "Bee Season Type",
-       fill = "Plot Type",
-       title = "Predicted Nest Searching Queens by Plot Type and Bee Season") +
+# Predictions for zero-inflation model
+pred_nsq_plot_zi <- predict(nsq_glm_plotType_siteOnly, 
+                            newdata = nsq_data_plot, 
+                            type = "zprob", 
+                            se.fit = TRUE,
+                            re.form = NA)
+
+# Combine predictions with newdata
+pred_nsq_plot_df <- cbind(nsq_data_plot,
+                 cond_fit = pred_nsq_plot_cond$fit,
+                 cond_se = pred_nsq_plot_cond$se.fit,
+                 zi_fit = pred_nsq_plot_zi$fit,
+                 zi_se = pred_nsq_plot_zi$se.fit)
+
+# Plot conditional predictions
+ggplot(pred_nsq_plot_df, aes(x = plot_type, y = cond_fit)) +
+  geom_point(size=3) +
+  geom_errorbar(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), width = 0.2, position = position_dodge(0.6))+
+  labs(title = "Conditional Model Predictions (Log-scale)", y = "Predicted NSQ count (log-scale)") +
   theme_classic()
 ```
 
 Zero-inflation model:
 
 ```{r}
+ggplot(pred_nsq_plot_df, aes(x = plot_type, y = zi_fit)) +
+  geom_point(size=3) +
+  geom_errorbar(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), width = 0.2, position = position_dodge(0.6))+
+  labs(title = "Zero-inflation Model Predictions (Presence/Absence)", y = "Predicted Probability of Structural Zero") +
+  theme_classic()
+```
 
+Season
+
+Conditional:
+
+```{r}
+# Create newdata with discrete factor levels for plot_type
+nsq_data_season <- data.frame(
+  bee_season_type = factor(c("nestsearching", "worker"), levels = levels(surveys$bee_season_type)),
+  plot_type = "field")
+
+# Predictions for conditional model (count)
+pred_nsq_season_cond <- predict(nsq_glm_plotType_siteOnly, 
+                              newdata = nsq_data_season, 
+                              type = "conditional", 
+                              se.fit = TRUE,
+                              re.form = NA)
+
+# Predictions for zero-inflation model
+pred_nsq_season_zi <- predict(nsq_glm_plotType_siteOnly, 
+                            newdata = nsq_data_season, 
+                            type = "zprob", 
+                            se.fit = TRUE,
+                            re.form = NA)
+
+# Combine predictions with newdata
+pred_nsq_season_df <- cbind(nsq_data_season,
+                 cond_fit = pred_nsq_season_cond$fit,
+                 cond_se = pred_nsq_season_cond$se.fit,
+                 zi_fit = pred_nsq_season_zi$fit,
+                 zi_se = pred_nsq_season_zi$se.fit)
+
+# Plot conditional predictions
+ggplot(pred_nsq_season_df, aes(x = bee_season_type, y = cond_fit)) +
+  geom_point(size=3) +
+  geom_errorbar(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), width = 0.2, position = position_dodge(0.6))+
+  labs(title = "Conditional Model Predictions (Log-scale)", y = "Predicted NSQ count (log-scale)") +
+  theme_classic()
+```
+
+Zero-inflation:
+
+```{r}
+ggplot(pred_nsq_season_df, aes(x = bee_season_type, y = zi_fit)) +
+  geom_point(size=3) +
+  geom_errorbar(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), width = 0.2, position = position_dodge(0.6))+
+  labs(title = "Zero-inflation Model Predictions (Presence/Absence)", y = "Predicted Probability of Structural Zero") +
+  theme_classic()
 ```
 
 ### Findings
@@ -323,6 +392,8 @@ summary(nsq_glm_veg_noRE)
 
 Grass and forb % cover
 
+Conditional model:
+
 ```{r}
 # Define a sequence of values for grass_forb_perc_scaled across its observed range
 grass_seq <- seq(
@@ -331,27 +402,60 @@ grass_seq <- seq(
   length.out = 50
 )
 
-# Get predicted response for grass_forb_perc_scaled * plot_type, holding other variables at their means
-pred_nsq_veg <- emmeans(nsq_glm_veg_noRE,
-               ~ grass_forb_perc_scaled * plot_type,
-               at = list(grass_forb_perc_scaled = grass_seq,
-                         bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled, na.rm=TRUE),
-                         flood_perc_scaled = mean(surveys$flood_perc_scaled, na.rm=TRUE)),
-               type = "response")
+#create new data gri
+nsq_data_veg<- expand.grid(
+  grass_forb_perc_scaled = grass_seq,
+  plot_type = unique(surveys$plot_type),
+  bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled, na.rm = TRUE),
+  flood_perc_scaled = mean(surveys$flood_perc_scaled, na.rm = TRUE)
+)
 
-# Convert to dataframe for plotting
-pred_nsq_veg_df <- as.data.frame(pred_nsq_veg)
+# Get predicted conditional probabilities and standard errors
+pred_nsq_veg_cond <- predict(nsq_glm_veg_noRE,
+                            newdata = nsq_data_veg,
+                            type = "cond",
+                            se.fit = TRUE)
 
-ggplot(pred_nsq_veg_df, aes(x = grass_forb_perc_scaled, y = rate, color = plot_type)) +
+# Combine predictions with data frame
+pred_nsq_rodent_df <- cbind(nsq_data_veg,
+                 cond_fit = pred_nsq_veg_cond$fit,
+                 cond_se = pred_nsq_veg_cond$se.fit)
+
+ggplot(pred_nsq_rodent_df, aes(x = grass_forb_perc_scaled, y = cond_fit, color = plot_type)) +
   geom_line(size = 1) +
-  geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL, fill = plot_type), alpha = 0.2, color = NA) +
-  labs(title = "Predicted Nest Searching Queens vs Grass/Forb %",
-       x = "Grass and Forb Percentage (scaled)",
-       y = "Predicted Count") +
+  geom_ribbon(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), alpha = 0.2) +
+  labs(title = "Conditional Model Predictions (Log-scale)",
+       x = "Grass and Forb % (scaled)",
+       y = "Predicted NSQ count (log-scale)") +
+  theme_classic()
+```
+
+Zero-inflated model:
+
+```{r}
+# Get predicted zero probabilities and standard errors
+pred_nsq_veg_zi <- predict(nsq_glm_veg_noRE,
+                            newdata = nsq_data_veg,
+                            type = "zprob",
+                            se.fit = TRUE) 
+
+# Combine predictions with data frame
+pred_nsq_veg_df <- cbind(nsq_data_veg,
+                 zi_fit = pred_nsq_veg_zi$fit,
+                 zi_se = pred_nsq_veg_zi$se.fit)
+
+ggplot(pred_nsq_veg_df, aes(x = grass_forb_perc_scaled, y = zi_fit, color = plot_type)) +
+  geom_line(size = 1) +
+  geom_ribbon(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), alpha = 0.2) +
+  labs(title = "Zero-Inflation Model: Probability of Structural Zeros",
+       x = "Grass and Forb % (scaled)",
+       y = "Probability of Excess Zeros") +
   theme_classic()
 ```
 
 Floral abundance
+
+Conditional model:
 
 ```{r}
 # Define a sequence of values for grass_forb_perc_scaled across its observed range
@@ -361,23 +465,54 @@ floral_seq <- seq(
   length.out = 50
 )
 
-# Get predicted response for grass_forb_perc_scaled * plot_type, holding other variables at their means
-pred_nsq_floral <- emmeans(nsq_glm_veg_noRE,
-               ~ bombus_floral_abun_scaled * plot_type,
-               at = list(bombus_floral_abun_scaled = floral_seq,
-                         grass_forb_perc_scaled = mean(surveys$grass_forb_perc_scaled, na.rm=TRUE),
-                         flood_perc_scaled = mean(surveys$flood_perc_scaled, na.rm=TRUE)),
-               type = "response")
+#create new data gri
+nsq_data_floral<- expand.grid(
+  grass_forb_perc_scaled = mean(surveys$bombus_floral_abun_scaled, na.rm = TRUE),
+  plot_type = unique(surveys$plot_type),
+  bombus_floral_abun_scaled = floral_seq,
+  flood_perc_scaled = mean(surveys$flood_perc_scaled, na.rm = TRUE)
+)
 
-# Convert to dataframe for plotting
-pred_nsq_floral_df <- as.data.frame(pred_nsq_floral)
+# Get predicted conditional probabilities and standard errors
+pred_nsq_floral_cond <- predict(nsq_glm_veg_noRE,
+                            newdata = nsq_data_floral,
+                            type = "cond",
+                            se.fit = TRUE)
 
-ggplot(pred_nsq_floral_df, aes(x = bombus_floral_abun_scaled, y = rate, color = plot_type)) +
+# Combine predictions with data frame
+pred_nsq_floral_df <- cbind(nsq_data_floral,
+                 cond_fit = pred_nsq_floral_cond$fit,
+                 cond_se = pred_nsq_floral_cond$se.fit)
+
+ggplot(pred_nsq_floral_df, aes(x = bombus_floral_abun_scaled, y = cond_fit, color = plot_type)) +
   geom_line(size = 1) +
-  geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL, fill = plot_type), alpha = 0.2, color = NA) +
-  labs(title = "Predicted Nest Searching Queens vs Bombus Floral Abundance",
-       x = "Bombus floral abundance (scaled)",
-       y = "Predicted Count") +
+  geom_ribbon(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), alpha = 0.2) +
+  labs(title = "Conditional Model Predictions (Log-scale)",
+       x = "Floral abundance (scaled)",
+       y = "Predicted NSQ count (log-scale)") +
+  theme_classic()
+```
+
+Zero-inflated model:
+
+```{r}
+# Get predicted zero probabilities and standard errors
+pred_nsq_floral_zi <- predict(nsq_glm_veg_noRE,
+                            newdata = nsq_data_floral,
+                            type = "zprob",
+                            se.fit = TRUE) 
+
+# Combine predictions with data frame
+pred_nsq_floral_df <- cbind(nsq_data_floral,
+                 zi_fit = pred_nsq_floral_zi$fit,
+                 zi_se = pred_nsq_floral_zi$se.fit)
+
+ggplot(pred_nsq_floral_df, aes(x = bombus_floral_abun_scaled, y = zi_fit, color = plot_type)) +
+  geom_line(size = 1) +
+  geom_ribbon(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), alpha = 0.2) +
+  labs(title = "Zero-Inflation Model: Probability of Structural Zeros",
+       x = "Floral abundance (scaled)",
+       y = "Probability of Excess Zeros") +
   theme_classic()
 ```
 
@@ -451,24 +586,60 @@ summary(workers_plotType_noArea)
 
 ### Plots
 
+Plot type
+
 ```{r}
-# Use emmeans to get predicted values on response scale
-pred_worker_plot <- emmeans(workers_plotType_noArea, 
-               ~ plot_type * bee_season_type, 
-               type = "response")
+# Create newdata with discrete factor levels for plot_type
+worker_data_plot <- expand.grid(
+  bee_season_type = "worker",
+  plot_type = factor(c("field", "ditch"), levels = levels(surveys$plot_type))
+)
 
-# Convert emmeans results to a dataframe for plotting
-pred_worker_plot_df <- as.data.frame(pred_worker_plot)
 
-# Plot predicted counts with confidence intervals
-ggplot(pred_worker_plot_df, aes(x = bee_season_type, y = rate, fill = plot_type)) +
-  geom_col(position = position_dodge(width = 0.7), width = 0.6) +
-  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL),
-                position = position_dodge(width = 0.7), width = 0.2) +
-  labs(y = "Predicted Count of Workers",
-       x = "Bee Season Type",
-       fill = "Plot Type",
-       title = "Predicted Worker Number by Plot Type and Bee Season") +
+# Predictions for conditional model (count)
+pred_worker_plot <- predict(workers_plotType_noArea, 
+                              newdata = worker_data_plot, 
+                              se.fit = TRUE,
+                              re.form = NA)
+
+# Combine predictions with newdata
+pred_worker_plot_df <- cbind(worker_data_plot,
+                 fit = pred_worker_plot$fit,
+                 se = pred_worker_plot$se.fit)
+
+# Plot conditional predictions
+ggplot(pred_worker_plot_df, aes(x = plot_type, y = fit)) +
+  geom_point(size=3, position = position_dodge(0.6)) +
+  geom_errorbar(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), width = 0.2, position = position_dodge(0.6))+
+  labs(title = "Model Predictions (Log-scale)", y = "Predicted worker count (log-scale)") +
+  theme_classic()
+```
+
+Season
+
+```{r}
+# Create newdata with discrete factor levels for season
+worker_data_season <- expand.grid(
+  bee_season_type = factor(c("worker", "nestsearching"), levels = levels(surveys$bee_season_type)),
+  plot_type = "field")
+
+
+# Predictions for conditional model (count)
+pred_worker_season <- predict(workers_plotType_noArea, 
+                              newdata = worker_data_season, 
+                              se.fit = TRUE,
+                              re.form = NA)
+
+# Combine predictions with newdata
+pred_worker_season_df <- cbind(worker_data_season,
+                 fit = pred_worker_season$fit,
+                 se = pred_worker_season$se.fit)
+
+# Plot conditional predictions
+ggplot(pred_worker_season_df, aes(x = bee_season_type, y = fit)) +
+  geom_point(size=3, position = position_dodge(0.6)) +
+  geom_errorbar(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), width = 0.2, position = position_dodge(0.6))+
+  labs(title = "Model Predictions (Log-scale)", y = "Predicted worker count (log-scale)") +
   theme_classic()
 ```
 
@@ -573,48 +744,116 @@ summary(workers_veg_noArea_zipois)
 
 ### Plots
 
+Vegetation
+
+Conditional model:
+
 ```{r}
-# Get predicted response for grass_forb_perc_scaled * plot_type, holding other variables at their means
-pred_worker_veg <- emmeans(workers_veg_noArea_zipois,
-               ~ grass_forb_perc_scaled * plot_type,
-               at = list(grass_forb_perc_scaled = grass_seq,
-                         bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled, na.rm=TRUE),
-                         flood_perc_scaled = mean(surveys$flood_perc_scaled, na.rm=TRUE)),
-               type = "response")
+#create new data grid
+worker_data_veg<- expand.grid(
+  grass_forb_perc_scaled = grass_seq,
+  plot_type = unique(surveys$plot_type),
+  bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled, na.rm = TRUE),
+  flood_perc_scaled = mean(surveys$flood_perc_scaled, na.rm = TRUE)
+)
 
-# Convert to dataframe for plotting
-pred_worker_veg_df <- as.data.frame(pred_worker_veg)
+# Get predicted conditional probabilities and standard errors
+pred_worker_veg_cond <- predict(workers_veg_noArea_zipois,
+                            newdata = worker_data_veg,
+                            type = "cond",
+                            se.fit = TRUE,
+                            re.form = NA)
 
-ggplot(pred_worker_veg_df, aes(x = grass_forb_perc_scaled, y = rate, color = plot_type)) +
+# Combine predictions with data frame
+pred_worker_veg_df <- cbind(worker_data_veg,
+                 cond_fit = pred_worker_veg_cond$fit,
+                 cond_se = pred_worker_veg_cond$se.fit)
+
+ggplot(pred_worker_veg_df, aes(x = grass_forb_perc_scaled, y = cond_fit, color = plot_type)) +
   geom_line(size = 1) +
-  geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL, fill = plot_type), alpha = 0.2, color = NA) +
-  labs(title = "Predicted Workers vs Grass/Forb %",
-       x = "Grass/Forb Percentage (scaled)",
-       y = "Predicted Count") +
+  geom_ribbon(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), alpha = 0.2) +
+  labs(title = "Conditional Model Predictions (Log-scale)",
+       x = "Grass and Forb % (scaled)",
+       y = "Predicted worker count (log-scale)") +
+  theme_classic()
+```
+
+Zero-inflated model:
+
+```{r}
+# Get predicted conditional probabilities and standard errors
+pred_worker_veg_zi <- predict(workers_veg_noArea_zipois,
+                            newdata = worker_data_veg,
+                            type = "zprob",
+                            se.fit = TRUE,
+                            re.form = NA)
+
+# Combine predictions with data frame
+pred_worker_veg_df <- cbind(worker_data_veg,
+                 zi_fit = pred_worker_veg_zi$fit,
+                 zi_se = pred_worker_veg_zi$se.fit)
+
+ggplot(pred_worker_veg_df, aes(x = grass_forb_perc_scaled, y = zi_fit, color = plot_type)) +
+  geom_line(size = 1) +
+  geom_ribbon(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), alpha = 0.2) +
+  labs(title = "Zero-inflation Model Predictions (Presence/Absence)", y = "Predicted Probability of Structural Zero") +
   theme_classic()
 ```
 
 Floral abundance
 
+Conditional model:
+
 ```{r}
-# Get predicted response for grass_forb_perc_scaled * plot_type, holding other variables at their means
-pred_worker_floral <- emmeans(workers_veg_noArea_zipois,
-               ~ bombus_floral_abun_scaled * plot_type,
-               at = list(bombus_floral_abun_scaled = floral_seq,
-                         grass_forb_perc_scaled = mean(surveys$grass_forb_perc_scaled, na.rm=TRUE),
-                         flood_perc_scaled = mean(surveys$flood_perc_scaled, na.rm=TRUE)),
-               type = "response")
+#create new data grid
+worker_data_floral<- expand.grid(
+  grass_forb_perc_scaled = mean(surveys$grass_forb_perc_scaled, na.rm = TRUE),
+  plot_type = unique(surveys$plot_type),
+  bombus_floral_abun_scaled = floral_seq,
+  flood_perc_scaled = mean(surveys$flood_perc_scaled, na.rm = TRUE)
+)
 
-# Convert to dataframe for plotting
-pred_worker_floral_df <- as.data.frame(pred_worker_floral)
+# Get predicted conditional probabilities and standard errors
+pred_worker_floral_cond <- predict(workers_veg_noArea_zipois,
+                            newdata = worker_data_floral,
+                            type = "cond",
+                            se.fit = TRUE,
+                            re.form = NA)
 
-ggplot(pred_worker_floral_df, aes(x = bombus_floral_abun_scaled, y = rate, color = plot_type)) +
+# Combine predictions with data frame
+pred_worker_floral_df <- cbind(worker_data_floral,
+                 cond_fit = pred_worker_floral_cond$fit,
+                 cond_se = pred_worker_floral_cond$se.fit)
+
+ggplot(pred_worker_floral_df, aes(x = bombus_floral_abun_scaled, y = cond_fit, color = plot_type)) +
   geom_line(size = 1) +
-  geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL, fill = plot_type), alpha = 0.2, color = NA) +
-  labs(title = "Predicted Workers vs Bombus Floral Abundance",
-       x = "Bombus floral abundance (scaled)",
-       y = "Predicted Count") +
-  theme_minimal()
+  geom_ribbon(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), alpha = 0.2) +
+  labs(title = "Conditional Model Predictions (Log-scale)",
+       x = "Floral abundance (scaled)",
+       y = "Predicted worker count (log-scale)") +
+  theme_classic()
+```
+
+Zero-inflated model:
+
+```{r}
+# Get predicted conditional probabilities and standard errors
+pred_worker_floral_zi <- predict(workers_veg_noArea_zipois,
+                            newdata = worker_data_floral,
+                            type = "zprob",
+                            se.fit = TRUE,
+                            re.form = NA)
+
+# Combine predictions with data frame
+pred_worker_floral_df <- cbind(worker_data_floral,
+                 zi_fit = pred_worker_floral_zi$fit,
+                 zi_se = pred_worker_floral_zi$se.fit)
+
+ggplot(pred_worker_floral_df, aes(x = bombus_floral_abun_scaled, y = zi_fit, color = plot_type)) +
+  geom_line(size = 1) +
+  geom_ribbon(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), alpha = 0.2) +
+  labs(title = "Zero-inflation Model Predictions (Presence/Absence)", y = "Predicted Probability of Structural Zero") +
+  theme_classic()
 ```
 
 ### Findings
@@ -781,13 +1020,8 @@ ggplot(floraldata_pred_cat4, aes(x = julian.date_scaled, y = probability, color 
 ### Findings
 
 -   Julian date is a significant predictor: floral abundance tends to increase as season progresses.
-
-<!-- -->
-
 -   The effect of Julian date changes depending on plot type (significant interaction).
-
     -   In the ditch, floral abundance increases throughout the season.
 
     -   In the field, floral abundance decreases throughout the season.
-
 -   Plot type alone has no strong main effect but modifies the Julian date effect.

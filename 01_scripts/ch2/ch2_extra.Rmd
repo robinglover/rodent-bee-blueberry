@@ -171,7 +171,7 @@ foraging_summary <- bee %>%
 ggplot(foraging_summary, aes(x = julian.date, y = n_foraging, color = field_ditch)) +
   geom_line(size = 1.2) +
   labs(
-    title = "# Bombus Foraging vs. Time",
+    title = "# Bombus Foraging vs. Julian Date",
     x = "Julian Date",
     y = "# Foraging Bombus",
     color = "Plot Type"
