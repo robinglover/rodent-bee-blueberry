@@ -198,4 +198,59 @@ floral$julian.date <- yday(floral$date)
 # Step 1: Filter and summarize data
 vaco_summary <- floral %>%
   filter(flower_code == "vaco") %>%
-  group_by(j
+  group_by(julian.date) %>%
+  summarise(vaco_abun = sum(abundance), .groups = "drop") 
+
+# Step 2: Plot
+ggplot(vaco_summary, aes(x = julian.date, y = vaco_abun)) +
+  geom_line(size = 1.2) +
+  labs(
+    title = "VACO abundance vs Julian Date",
+    x = "Julian Date",
+    y =  "VACO abundance"
+  ) +
+  theme_classic()
+```
+
+Number of bees foraging on vaco over time, by caste
+
+```{r}
+# Step 1: Filter and summarize data
+vacoforaging_caste_summary <- bee %>%
+  filter(behaviour == "foraging") %>%
+  filter(flower_code == "vaco") %>%
+  filter(caste != "")%>%
+  count(julian.date, caste, name = "n_foraging_vaco")
+
+# Step 2: Plot
+ggplot(vacoforaging_caste_summary, aes(x = julian.date, y = n_foraging_vaco, color = caste)) +
+  geom_line(size = 1.2) +
+  labs(
+    title = "# Bombus Foraging on VACO vs. Julian Date",
+    x = "Julian Date",
+    y = "# Bombus foraging on vaco",
+    color = "Caste"
+  ) +
+  theme_classic()
+```
+
+Compare number of queens vs males vs workers foraging on vaco
+
+```{r}
+# Step 1: Filter and summarize data
+vacoforaging_caste_summary <- bee %>%
+  filter(behaviour == "foraging") %>%
+  filter(flower_code == "vaco") %>%
+  filter(caste != "")%>%
+  count(caste, name = "n_foraging_vaco")
+
+# Step 2: Plot
+ggplot(vacoforaging_caste_summary, aes(x = caste, y = n_foraging_vaco, fill = caste)) +
+  geom_bar(stat = "identity") +
+  labs(
+    title = "# Bombus Foraging on VACO vs. Caste",
+    x = "Caste",
+    y = "# Bombus foraging on vaco"
+  ) +
+  theme_classic()
+```

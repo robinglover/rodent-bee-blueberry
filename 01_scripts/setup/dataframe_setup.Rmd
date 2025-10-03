@@ -695,4 +695,117 @@ ggplot(rodent_active, aes(y=diameter_cm, x=powder_species_guess_FINAL))+
   xlab("Species Guess")+
   ylab("Diameter (cm)")
 
-#calculate range of burrow sizes that only apply to spec
+#calculate range of burrow sizes that only apply to species guess B and not A
+# Filter for only species A and B
+rodent_ab <- rodent_active %>%
+  filter(powder_species_guess_FINAL %in% c("A", "B"))
+
+# Get diameter values for each species
+diameter_A <- rodent_ab %>%
+  filter(powder_species_guess_FINAL == "A") %>%
+  pull(diameter_cm)
+
+diameter_B <- rodent_ab %>%
+  filter(powder_species_guess_FINAL == "B") %>%
+  pull(diameter_cm)
+
+# Get values unique to B (i.e., in B but not in A)
+diameter_B_only <- setdiff(diameter_B, diameter_A)
+
+###the only diameter value unique to rodent B (dm) is 1.5cm
+```
+
+Now, I will calculate the number of holes that must be dm (1.5cm
+diameter)
+
+```{r}
+#create summary dataframe for rodent data
+rodent_summary4 <- rodent %>%
+  filter(diameter_cm == 1.5) %>%
+  group_by(site_id, plot_id) %>%
+  summarise(num_dm_size = n(), .groups = "drop") ##drop the groupings
+
+#left join counts onto full combos and replace NAs with 0
+rodent_summary_full4 <- all_combinations_rodent %>%
+  left_join(rodent_summary4, by = c("site_id", "plot_id")) %>%
+  mutate(num_dm_size = replace_na(num_dm_size, 0))
+
+#Add number of bees to surveys dataframe
+surveys <- surveys %>%
+  left_join(rodent_summary_full4, by = c("site_id", "plot_id"))
+```
+
+Proportion of burrows that are dm size
+
+```{r}
+# Summarize total burrows per site_id and plot_id
+rodent_summary_total <- rodent %>%
+  group_by(site_id, plot_id) %>%
+  summarise(total_burrows = n(), .groups = "drop")
+
+# Join total burrow counts to DM-sized summary
+rodent_summary_combined <- rodent_summary_full4 %>%
+  left_join(rodent_summary_total, by = c("site_id", "plot_id")) %>%
+  mutate(total_burrows = replace_na(total_burrows, 0))
+
+rodent_summary_combined <- rodent_summary_combined %>%
+  mutate(prop_dm_size = ifelse(total_burrows > 0,
+                                num_dm_size / total_burrows,
+                                NA))  # Or 0 if you prefer
+
+surveys <- surveys %>%
+  left_join(rodent_summary_combined %>% select(site_id, plot_id, prop_dm_size),
+            by = c("site_id", "plot_id"))
+
+```
+
+Num inactive dm burrows (by size)
+
+```{r}
+#create summary dataframe for rodent data
+rodent_summary5 <- rodent %>%
+  filter(diameter_cm == 1.5 & powder_active_FINAL == "n") %>%
+  group_by(site_id, plot_id) %>%
+  summarise(num_inactive_dm = n(), .groups = "drop") ##drop the groupings
+
+#left join counts onto full combos and replace NAs with 0
+rodent_summary_full5 <- all_combinations_rodent %>%
+  left_join(rodent_summary5, by = c("site_id", "plot_id")) %>%
+  mutate(num_inactive_dm = replace_na(num_inactive_dm, 0))
+
+#Add number of bees to surveys dataframe
+surveys <- surveys %>%
+  left_join(rodent_summary_full5, by = c("site_id", "plot_id"))
+```
+
+Number of burrows with runways
+
+```{r}
+#check that this code will extract runway columns correctly
+unique(str_extract(rodent$notes_hole, regex("\\brun ?ways?\\b", ignore_case = TRUE)))
+
+#create summary dataframe for rodent data
+rodent_summary6 <- rodent %>%
+  filter(str_detect(notes_hole, regex("\\brun ?ways?\\b", ignore_case = TRUE))) %>%
+  group_by(site_id, plot_id) %>%
+  summarise(num_runway_burrows = n(), .groups = "drop") ##drop the groupings
+
+#left join counts onto full combos and replace NAs with 0
+rodent_summary6_full <- all_combinations_rodent %>%
+  left_join(rodent_summary6, by = c("site_id", "plot_id")) %>%
+  mutate(num_runway_burrows = replace_na(num_runway_burrows, 0))
+
+#Add number of bees to surveys dataframe
+surveys <- surveys %>%
+  left_join(rodent_summary6_full, by = c("site_id", "plot_id"))
+
+View(surveys)
+```
+
+# Save final combined surveys dataframe as new CSV
+
+```{r}
+write_csv(surveys, file = file.path("06_cleandata","combined_plot_data.csv"))
+```
+
+# 

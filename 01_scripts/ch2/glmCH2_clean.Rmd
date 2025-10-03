@@ -754,4 +754,310 @@ residuals_workers_veg_noArea <- simulateResiduals(fittedModel = workers_veg_noAr
 
 ```{r}
 workers_veg_noArea_nbin <- glmmTMB(workers ~ grass_forb_perc_scaled*plot_type +
-                                bombus_floral_abu
+                                bombus_floral_abun_scaled*plot_type +
+                                bee_season_type +
+                              (1|site_id/plot_id),
+                            family = nbinom2, 
+                            data = surveys)
+
+#check diagnostics
+#simulate residuals
+residuals_workers_veg_noArea_nbin <- simulateResiduals(fittedModel = workers_veg_noArea_nbin, plot = TRUE)
+```
+
+4.  Plot results.
+
+```{r}
+summary(workers_veg_noArea_nbin)
+```
+
+### Plots
+
+Vegetation
+
+```{r}
+#create new data grid
+worker_data_veg<- expand.grid(
+  grass_forb_perc_scaled = grass_seq,
+  plot_type = unique(surveys$plot_type),
+  bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled, na.rm = TRUE),
+  bee_season_type = "worker"
+)
+
+# Get predicted probabilities and standard errors
+pred_worker_veg <- predict(workers_veg_noArea_nbin,
+                            newdata = worker_data_veg,
+                            se.fit = TRUE,
+                            re.form = NA)
+
+# Combine predictions with data frame
+pred_worker_veg_df <- cbind(worker_data_veg,
+                 fit = pred_worker_veg$fit,
+                 se = pred_worker_veg$se.fit)
+
+ggplot(pred_worker_veg_df, aes(x = grass_forb_perc_scaled, y = fit, color = plot_type)) +
+  geom_line(size = 1) +
+  geom_ribbon(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), alpha = 0.2) +
+  labs(title = "Model Predictions (Log-scale)",
+       x = "Grass and Forb % (scaled)",
+       y = "Predicted worker count (log-scale)") +
+  theme_classic()
+```
+
+Floral abundance
+
+```{r}
+#create new data grid
+worker_data_floral<- expand.grid(
+  grass_forb_perc_scaled = mean(surveys$grass_forb_perc_scaled, na.rm = TRUE),
+  plot_type = unique(surveys$plot_type),
+  bombus_floral_abun_scaled = floral_seq,
+  bee_season_type = "worker"
+)
+
+# Get predicted probabilities and standard errors
+pred_worker_floral <- predict(workers_veg_noArea_nbin,
+                            newdata = worker_data_floral,
+                            se.fit = TRUE,
+                            re.form = NA)
+
+# Combine predictions with data frame
+pred_worker_floral_df <- cbind(worker_data_floral,
+                 fit = pred_worker_floral$fit,
+                 se = pred_worker_floral$se.fit)
+
+ggplot(pred_worker_floral_df, aes(x = bombus_floral_abun_scaled, y = fit, color = plot_type)) +
+  geom_line(size = 1) +
+  geom_ribbon(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), alpha = 0.2) +
+  labs(title = "Model Predictions (Log-scale)",
+       x = "Floral abundance (scaled)",
+       y = "Predicted worker count (log-scale)") +
+  theme_classic()
+```
+
+Season
+
+```{r}
+#create new data grid
+worker_data_season<- expand.grid(
+  grass_forb_perc_scaled = mean(surveys$grass_forb_perc_scaled, na.rm = TRUE),
+  plot_type = "ditch",
+  bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled, na.rm = TRUE),
+  bee_season_type = unique(surveys$bee_season_type)
+)
+
+# Get predicted probabilities and standard errors
+pred_worker_season <- predict(workers_veg_noArea_nbin,
+                            newdata = worker_data_season,
+                            se.fit = TRUE,
+                            re.form = NA)
+
+# Combine predictions with data frame
+pred_worker_season_df <- cbind(worker_data_season,
+                 fit = pred_worker_season$fit,
+                 se = pred_worker_season$se.fit)
+
+ggplot(pred_worker_season_df, aes(x = bee_season_type, y = fit)) +
+  geom_point(size = 3) +
+  geom_errorbar(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), width = 0.2, position = position_dodge(0.6)) +
+  labs(title = "Model Predictions (Log-scale)",
+       x = "Bee season",
+       y = "Predicted worker count (log-scale)") +
+  theme_classic()
+```
+
+### Findings
+
+No significant effect of any variables on worker abundance/presence.
+
+# Floral
+
+## vs. plot type
+
+### Steps
+
+1.  Try random effect structures
+
+```{r}
+#Load packages needed for CLM
+library(ordinal)
+library(MASS)
+
+surveys$bombus_floral_abun <- factor(surveys$bombus_floral_abun, ordered = TRUE)
+
+floral_full <- clmm(as.factor(bombus_floral_abun) ~ plot_type +
+                         julian.date_scaled + 
+                         (1|area/site_id/plot_id),
+                       link = "logit", 
+                       data = surveys)
+
+floral_noArea <- clmm(as.factor(bombus_floral_abun) ~ plot_type +
+                         julian.date_scaled + 
+                         (1|site_id/plot_id),
+                       link = "logit", 
+                       data = surveys)
+
+#floral_plotOnly <- clmm(as.factor(bombus_floral_abun) ~ plot_type +
+ #                        julian.date_scaled + 
+  #                       (1|plot_id),
+   #                    link = "logit", 
+    #                   data = surveys)
+##can't use since there are only 2 levels
+
+floral_siteOnly <- clmm(as.factor(bombus_floral_abun) ~ plot_type +
+                         julian.date_scaled + 
+                         (1|site_id),
+                       link = "logit", 
+                       data = surveys)
+
+floral_AreaPlot <- clmm(as.factor(bombus_floral_abun) ~ plot_type +
+                         julian.date_scaled + 
+                         (1|area/plot_id),
+                       link = "logit", 
+                       data = surveys)
+floral_noRE <- polr(as.factor(bombus_floral_abun) ~ plot_type +
+                         julian.date_scaled,
+                       method = "logistic", 
+                       data = surveys)
+
+#compare models AIC
+AIC(floral_full, floral_noArea, floral_siteOnly, floral_AreaPlot, floral_noRE)
+##shows that model without random effect has best fit
+```
+
+2.  Compare AIC between model with and without cover_type as a covariate.
+
+-   determined that model without cover type as covariate was better
+
+```{r}
+floral_noRE_cover <- polr(as.factor(bombus_floral_abun) ~ plot_type +
+                            cover_type +
+                         julian.date_scaled,
+                       method = "logistic", 
+                       data = surveys)
+
+AIC(floral_noRE_cover, floral_noRE)
+##not including cover is better
+```
+
+3.  Try including julianDate \* plot_type
+
+-   determined that model with interaction term was better
+
+```{r}
+floral_noRE_interaction <- polr(as.factor(bombus_floral_abun) ~ plot_type*julian.date_scaled,
+                       method = "logistic", 
+                       data = surveys)
+AIC(floral_noRE_interaction, floral_noRE)
+##interaction is better
+```
+
+4.  Look at output
+
+```{r}
+summary(floral_noRE_interaction)
+```
+
+### Plots
+
+```{r}
+# Sequence of Julian dates
+date_seq <- seq(
+  from = min(surveys$julian.date_scaled, na.rm = TRUE),
+  to = max(surveys$julian.date_scaled, na.rm = TRUE),
+  length.out = 50
+)
+
+# Get predicted probabilities per category with CIs
+pred_floral_veg <- emmeans(
+  floral_noRE_interaction,
+  ~ julian.date_scaled * plot_type,
+  at = list(julian.date_scaled = date_seq),
+  type = "response",  # To get probabilities
+)
+
+# Convert to dataframe
+pred_floral_veg_df <- as.data.frame(pred_floral_veg)
+
+#plot
+ggplot(pred_floral_veg_df, aes(x = julian.date_scaled, y = response, color = plot_type)) +
+  geom_line(size = 1) +
+  geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL, fill = plot_type), alpha = 0.2, color = NA) +
+  labs(
+    title = "Predicted Bombus Floral Abundance (scaled)",
+    x = "Julian Date (scaled)",
+    y = "Floral abundance (scaled)",
+    color = "Plot Type",
+    fill = "Plot Type"
+  ) +
+  theme_classic()
+
+
+
+```
+
+Extra code – using predict() (doesn't have CI)
+
+```{r}
+# Create prediction grid
+floraldata <- expand.grid(
+  julian.date_scaled = seq(min(surveys$julian.date_scaled), max(surveys$julian.date_scaled), length.out = 50),
+  plot_type = unique(surveys$plot_type)
+)
+
+# Calculate predicted values 
+pred_floral_plot <- predict(floral_noRE_interaction, floraldata, type = "probs")
+
+# Convert matrix to dataframe
+pred_floral_plot_df <- as.data.frame(pred_floral_plot)
+
+# Bind predictions to floral data
+floraldata_pred <- cbind(floraldata, pred_floral_plot_df)
+
+# Reshape to long format
+floraldata_pred_long <- floraldata_pred %>%
+  pivot_longer(cols = -c(julian.date_scaled, plot_type),
+               names_to = "category",
+               values_to = "probability")
+
+# Plot
+ggplot(floraldata_pred_long, aes(x = julian.date_scaled, y = probability, color = plot_type)) +
+  geom_line(size = 1) +
+  facet_wrap(~ category) +
+  labs(
+    title = "Predicted Probabilities of Bombus Floral Abundance Categories",
+    x = "Julian Date (scaled)",
+    y = "Probability",
+    color = "Bombus Floral Abundance"
+  ) +
+  theme_classic()
+```
+
+Only floral abundance category 4 (1000-10000 blooms)
+
+```{r}
+# Filter to only category "4"
+floraldata_pred_cat4 <- floraldata_pred %>%
+  dplyr::select(julian.date_scaled, plot_type, `4` = `4`) %>%
+  dplyr::rename(probability = `4`)
+
+# Plot
+ggplot(floraldata_pred_cat4, aes(x = julian.date_scaled, y = probability, color = plot_type)) +
+  geom_line(size = 1.2) +
+  labs(
+    title = "Predicted Probability of Bombus Floral Abundance Category 4(1000-10000 blooms)",
+    x = "Julian Date (scaled)",
+    y = "Probability",
+    color = "Plot Type"
+  ) +
+  theme_classic()
+```
+
+### Findings
+
+-   Julian date is a significant predictor: floral abundance tends to increase as season progresses.
+-   The effect of Julian date changes depending on plot type (significant interaction).
+    -   In the ditch, floral abundance increases throughout the season.
+
+    -   In the field, floral abundance decreases throughout the season.
+-   Plot type alone has no strong main effect but modifies the Julian date effect.
