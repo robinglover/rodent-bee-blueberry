@@ -40,7 +40,7 @@ data <- data %>%
 
 # Comparing predictors across cover types (grassy vs bare).
 
-##  % grass+forb 
+## % grass+forb
 
 Overall:
 
@@ -90,7 +90,7 @@ ggplot(data, aes(fill=cover_type,x=bee_season_type, y = nest_searching_queens))+
     size = 3.7)  # Adjust this value to make the asterisks larger
 ```
 
-## Workers 
+## Workers
 
 ```{r}
 ggplot(data, aes(fill=cover_type,x=bee_season_type, y = nest_searching_queens))+ 
@@ -120,7 +120,7 @@ ggplot(data, aes(x=cover_type, y = num_burrows))+
     size = 3.7)  # Adjust this value to make the asterisks larger
 ```
 
-## Floral abundance (relevant to bees) 
+## Floral abundance (relevant to bees)
 
 ```{r}
 ggplot(data, aes(x=cover_type, y = bombus_floral_abun))+ 
@@ -149,4 +149,49 @@ ggplot(data, aes(x=cover_type, y = forage_vaco))+
     size = 3.7) # Adjust this value to make the asterisks larger
 ```
 
-# 
+# Rodent burrows
+
+## Inactive vs active
+
+```{r}
+rodent <- read.csv("06_cleandata/rodent_clean.csv") 
+
+rodent_powder <- rodent %>%
+  filter(powder_active_FINAL != "")
+
+burrow_counts <- rodent_powder %>%
+  group_by(site_id, powder_active_FINAL) %>%
+  summarise(num_burrows = n(), .groups = "drop")
+
+ggplot(burrow_counts, aes(x=site_id, y = num_burrows, fill = powder_active_FINAL))+ 
+  geom_bar(stat = "identity",  position = "dodge") +
+  theme_classic(base_size = 15)+
+  xlab("Activity")+
+  ylab("Num burrows") 
+
+prop_inactive <- rodent_powder %>%
+  group_by(site_id) %>%
+  summarise(
+    total_burrows = n(),
+    inactive_burrows = sum(powder_active_FINAL == "n", na.rm = TRUE),
+    prop_inactive = inactive_burrows / total_burrows
+  )
+
+prop_inactive <- prop_inactive %>%
+  mutate(site_id = factor(site_id, levels = site_id[order(total_burrows, decreasing = TRUE)]))
+
+ggplot(prop_inactive, aes(x = site_id, y = prop_inactive)) + 
+  geom_bar(stat = "identity", position = "dodge") +
+  theme_classic(base_size = 15) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  xlab("Site Name (ordered by total burrow count)") +
+  ylab("Proportion inactive burrows") + 
+  geom_hline(yintercept = 0.5, linetype = "dashed", color = "red") + 
+  geom_text(aes(label = round(prop_inactive, 2)), 
+            vjust = -0.5, 
+            size = 4)
+
+weighted_avg_prop_inactive <- sum(prop_inactive$inactive_burrows) / sum(prop_inactive$total_burrows)
+weighted_avg_prop_inactive
+##0.4928571
+```

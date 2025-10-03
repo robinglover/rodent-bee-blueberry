@@ -142,20 +142,6 @@ workers %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ```
 
-Look at floral availability at sites
-
-```{r}
-#load data
-floral <- read.csv("06_cleandata/floral_clean.csv")
-##add ditch vs field column
-floral <- floral %>%
-  mutate(field_ditch = case_when(
-    str_detect(plot_id, "p1|p2") ~ "field",
-    str_detect(plot_id, "d") ~ "ditch",
-    TRUE ~ NA_character_
-  ))
-```
-
 Plot \# foraging bees in ditch vs field across time
 
 ```{r}
@@ -179,19 +165,37 @@ ggplot(foraging_summary, aes(x = julian.date, y = n_foraging, color = field_ditc
   theme_classic()
 ```
 
-Plot floral species
+Plot number foraging vs time, by caste
 
 ```{r}
-species_plot_counts <- floral %>%
-  count(flower_species, name = "num_plots") %>%
-  arrange(desc(num_plots))
+# Step 1: Filter and summarize data
+foraging_caste_summary <- bee %>%
+  filter(behaviour == "foraging") %>%
+  filter(caste != "")%>%
+  count(julian.date, caste, name = "n_foraging")
 
-# Step 3: Plot
-ggplot(species_plot_counts, aes(x = reorder(flower_species, -num_plots), y = num_plots)) +
-  geom_bar(stat = "identity", fill = "darkgreen") +
-  labs(title = "Number of Plots Observed per Floral Species",
-       x = "Floral Species",
-       y = "Number of Plots") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+# Step 2: Plot
+ggplot(foraging_caste_summary, aes(x = julian.date, y = n_foraging, color = caste)) +
+  geom_line(size = 1.2) +
+  labs(
+    title = "# Bombus Foraging vs. Julian Date",
+    x = "Julian Date",
+    y = "# Foraging Bombus",
+    color = "Caste"
+  ) +
+  theme_classic()
 ```
+
+Floral availability of VACO over time
+
+```{r}
+#load data
+floral <- read.csv("06_cleandata/floral_clean.csv")
+
+#add column for julian date
+floral$julian.date <- yday(floral$date)
+
+# Step 1: Filter and summarize data
+vaco_summary <- floral %>%
+  filter(flower_code == "vaco") %>%
+  group_by(j

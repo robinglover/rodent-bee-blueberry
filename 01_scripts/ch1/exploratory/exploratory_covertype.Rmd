@@ -328,20 +328,4 @@ ggplot(data, aes(x=cover_type, y = bombus_floral_abun))+
     aes(group = cover_type),  # group by field.type
     method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
     label = "p.format",  # Display p-value 
-    size = 3.7)  # Adjust this value to make the asterisks larger
-```
-
-Num bees foraging on vaco
-
-```{r}
-ggplot(data, aes(x=cover_type, y = forage_vaco))+ 
-  geom_boxplot() +
-  theme_classic(base_size = 15)+
-  xlab("Cover")+
-  ylab("Num foraging on vaco") +
-  stat_compare_means(
-    aes(group = cover_type),  # group by field.type
-    method = "t.test",  # or "wilcox.test" if you're doing a non-parametric test
-    label = "p.format",  # Display p-value 
-    size = 3.7) # Adjust this value to make the asterisks larger
-```
+    size = 3.7)  # Adjust this value to make the aste

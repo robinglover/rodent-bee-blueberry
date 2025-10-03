@@ -16,15 +16,13 @@ knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_anal
 
 ```{r}
 #load packages
-library(tidyverse)
-library(DHARMa)
-library(ordinal)
-library(MASS)
-library(glmmTMB)
-library(ggplot2)
-library(ggeffects)
-library(car)
-library(emmeans)
+library(tidyverse)   #data manipulation, visualization etc. (dplyr, ggplot2, tidyr)
+library(DHARMa)      #diagnostic tools for mixed regression models
+library(ordinal)     #models for ordinal outcomes (e.g., cumulative link models)
+library(MASS)        #polr
+library(glmmTMB)     #fits generalized linear mixed models, including zero-inflated and overdispersed models
+library(car)         #tools for regression diagnostics and hypothesis tests
+library(emmeans)     #calculates predicted results from models
 
 #read in data
 data <- read.csv("06_cleandata/combined_plot_data.csv")
@@ -161,12 +159,12 @@ Vegetation
 ```{r}
 # Define a sequence of values for grass_forb_perc_scaled across its observed range
 grass_seq <- seq(
-  from = min(surveys$grass_forb_perc_scaled, na.rm = TRUE),
-  to = max(surveys$grass_forb_perc_scaled, na.rm = TRUE),
+  from = min(field_data$grass_forb_perc_scaled, na.rm = TRUE),
+  to = max(field_data$grass_forb_perc_scaled, na.rm = TRUE),
   length.out = 50
 )
 
-# Get predicted response for grass_forb_perc_scaled, holding other variables at their means
+# Get predicted response for grass_forb_perc_scaled, holding other variables at their means 
 pred_floral_veg <- emmeans(floral_noRE,
                ~ grass_forb_perc_scaled,
                at = list(grass_forb_perc_scaled = grass_seq,
@@ -190,8 +188,8 @@ Julian date
 ```{r}
 # Define a sequence of values for grass_forb_perc_scaled across its observed range
 date_seq <- seq(
-  from = min(surveys$julian.date_scaled, na.rm = TRUE),
-  to = max(surveys$julian.date_scaled, na.rm = TRUE),
+  from = min(field_data$julian.date_scaled, na.rm = TRUE),
+  to = max(field_data$julian.date_scaled, na.rm = TRUE),
   length.out = 50
 )
 
@@ -352,52 +350,108 @@ summary(burrows_pois_cover)
 
 ## Plots
 
-Predicted num_burrows vs Grass/Forb %, by Cover Type
+Predicted num_burrows vs Grass/Forb %
 
 ```{r}
-pred_rodent_veg <- ggpredict(burrows_pois_cover, terms = c("grass_forb_perc_scaled"))
+# Define a sequence of values for grass_forb_perc_scaled across its observed range
+grass_seq <- seq(
+  from = min(field_data$grass_forb_perc_scaled, na.rm = TRUE),
+  to = max(field_data$grass_forb_perc_scaled, na.rm = TRUE),
+  length.out = 50
+)
 
-ggplot(pred_rodent_veg, aes(x = x, y = predicted)) +
-  geom_line(size = 1.2) +
-  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, color = NA) +
-  labs(
-    title = "Predicted Number of Burrows by Grass/Forb percentage (log-scale)",
-    x = "Grass/Forb % (scaled)",
-    y = "Predicted Number of Burrows (log-scale)"
-  ) +
+#create new data grid
+rodent_data_veg<- expand.grid(
+  grass_forb_perc_scaled = grass_seq,
+  cover_type = "bare",
+  julian.date_scaled = mean(field_data$julian.date_scaled, na.rm = TRUE)
+)
+
+# Get predicted probabilities and standard errors
+pred_rodent_veg <- predict(burrows_pois_cover,
+                            newdata = rodent_data_veg,
+                            se.fit = TRUE,
+                            re.form = NA)
+
+# Combine predictions with data frame
+pred_rodent_veg_df <- cbind(rodent_data_veg,
+                 fit = pred_rodent_veg$fit,
+                 se = pred_rodent_veg$se.fit)
+
+ggplot(pred_rodent_veg_df, aes(x = grass_forb_perc_scaled, y = fit)) +
+  geom_line(size = 1) +
+  geom_ribbon(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), alpha = 0.2) +
+  labs(title = "Model Predictions (Log-scale)",
+       x = "Grass and Forb % (scaled)",
+       y = "Predicted burrow count (log-scale)") +
   theme_classic()
 ```
 
-Predicted number of burrows vs julian date, by cover type
+Predicted number of burrows vs julian date
 
 ```{r}
-pred_rodent_date <- ggpredict(burrows_pois_cover, terms = c("julian.date_scaled"))
+# Define a sequence of values for julian.date_scaled across its observed range
+date_seq <- seq(
+  from = min(field_data$julian.date_scaled, na.rm = TRUE),
+  to = max(field_data$julian.date_scaled, na.rm = TRUE),
+  length.out = 50
+)
 
-ggplot(pred_rodent_date, aes(x = x, y = predicted)) +
-  geom_line(size = 1.2) +
-  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, color = NA) +
-  labs(
-    title = "Predicted Number of Burrows by Julian Date (log-scale)",
-    x = "Julian Date (scaled)",
-    y = "Predicted Number of Burrows (log-scale)"
-  ) +
+#create new data grid
+rodent_data_date<- expand.grid(
+  grass_forb_perc_scaled = mean(field_data$grass_forb_perc_scaled, na.rm = TRUE),
+  cover_type = "bare",
+  julian.date_scaled = date_seq
+)
+
+# Get predicted probabilities and standard errors
+pred_rodent_date <- predict(burrows_pois_cover,
+                            newdata = rodent_data_date,
+                            se.fit = TRUE,
+                            re.form = NA)
+
+# Combine predictions with data frame
+pred_rodent_date_df <- cbind(rodent_data_date,
+                 fit = pred_rodent_date$fit,
+                 se = pred_rodent_date$se.fit)
+
+ggplot(pred_rodent_date_df, aes(x = julian.date_scaled, y = fit)) +
+  geom_line(size = 1) +
+  geom_ribbon(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), alpha = 0.2) +
+  labs(title = "Model Predictions (Log-scale)",
+       x = "Julian Date (scaled)",
+       y = "Predicted burrow count (log-scale)") +
   theme_classic()
 ```
 
 Number of rodent burrows vs cover type
 
 ```{r}
-pred_rodent_cover <- ggpredict(burrows_pois_cover, terms = c("cover_type"))
 
-ggplot(pred_rodent_cover, aes(x = x, y = predicted)) +
-  geom_point(size=3) +
-  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), 
-                width = 0.2, position = position_dodge(0.6)) +
-  labs(
-    title = "Predicted Number of rodent burrows by cover type (log-scale)",
-    x = "Cover Type",
-    y = "Predicted Number of Burrows (log-scale)"
-  ) +
+#create new data grid
+rodent_data_cover<- expand.grid(
+  grass_forb_perc_scaled = mean(field_data$grass_forb_perc_scaled, na.rm = TRUE),
+  cover_type = unique(field_data$cover_type),
+  julian.date_scaled = mean(field_data$julian.date_scaled, na.rm = TRUE)
+)
+
+# Get predicted probabilities and standard errors
+pred_rodent_cover <- predict(burrows_pois_cover,
+                            newdata = rodent_data_cover,
+                            se.fit = TRUE,
+                            re.form = NA)
+
+# Combine predictions with data frame
+pred_rodent_cover_df <- cbind(rodent_data_cover,
+                 fit = pred_rodent_cover$fit,
+                 se = pred_rodent_cover$se.fit)
+
+ggplot(pred_rodent_cover_df, aes(x = cover_type, y = fit)) +
+  geom_point(size = 3) +
+  geom_errorbar(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), width = 0.2, position = position_dodge(0.6)) +
+  labs(title = "Model Predictions (Log-scale)",
+       x = "Cover Type",
+       y = "Predicted burrow count (log-scale)") +
   theme_classic()
 ```
 
@@ -521,11 +575,16 @@ Number of nest-searching queens vs grass/forb
 Conditional model:
 
 ```{r}
-#cannot use ggpredict for zi models. So I will use predict function from glmmTMB package instead.
+# Define a sequence of values for grass_forb_perc_scaled across its observed range
+grass_seq <- seq(
+  from = min(field_data$grass_forb_perc_scaled, na.rm = TRUE),
+  to = max(field_data$grass_forb_perc_scaled, na.rm = TRUE),
+  length.out = 50
+)
 
 # Create data grid over grass_forb_perc_scaled
 nsq_data_veg <- data.frame(
-  grass_forb_perc_scaled = seq(min(field_data$grass_forb_perc_scaled), max(field_data$grass_forb_perc_scaled), length.out = 100),
+  grass_forb_perc_scaled = grass_seq,
   bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled),
   num_burrows_scaled = mean(field_data$num_burrows_scaled),
   bee_season_type = "nestsearching"  
@@ -570,9 +629,16 @@ Number of nest-searching queens vs floral abundance
 Conditional model:
 
 ```{r}
+# Define a sequence of values for bombus_floral_abun_scaled across its observed range
+floral_seq <- seq(
+  from = min(field_data$bombus_floral_abun_scaled, na.rm = TRUE),
+  to = max(field_data$bombus_floral_abun_scaled, na.rm = TRUE),
+  length.out = 50
+)
+
 # Create data grid over bombus_floral_abun_scaled
 nsq_data_floral <- data.frame(
-  bombus_floral_abun_scaled = seq(min(field_data$bombus_floral_abun_scaled), max(field_data$bombus_floral_abun_scaled), length.out = 100),
+  bombus_floral_abun_scaled = floral_seq,
   grass_forb_perc_scaled = mean(field_data$grass_forb_perc_scaled),
   num_burrows_scaled = mean(field_data$num_burrows_scaled),
   bee_season_type = "nestsearching"  
@@ -619,7 +685,7 @@ Conditional model:
 ```{r}
 # Create data grid over rodent_burrows_scaled
 nsq_data_rodent <- data.frame(
-  num_burrows_scaled = seq(min(field_data$num_burrows_scaled), max(field_data$num_burrows_scaled), length.out = 100),
+  num_burrows_scaled = seq(min(field_data$num_burrows_scaled), max(field_data$num_burrows_scaled), length.out = 50),
   grass_forb_perc_scaled = mean(field_data$grass_forb_perc_scaled),
   bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled),
   bee_season_type = "nestsearching"  
@@ -827,65 +893,138 @@ summary(worker_negbin)
 Number of workers vs number of nest-searching queens
 
 ```{r}
-pred_worker_nsq <- ggpredict(worker_negbin, terms = c("nest_searching_queens_scaled"))
+# Define a sequence of values for nsq across its observed range
+queen_seq <- seq(
+  from = min(field_data$nest_searching_queens_scaled, na.rm = TRUE),
+  to = max(field_data$nest_searching_queens_scaled, na.rm = TRUE),
+  length.out = 50
+)
 
-ggplot(pred_worker_nsq, aes(x = x, y = predicted)) +
-  geom_line(size = 1.2) +
-  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, color = NA) +
-  labs(
-    title = "Predicted Number of Workers by Number of NSQ (log-scale)",
-    x = "Number nest-searching queens (scaled)",
-    y = "Predicted Number of Workers (log-scale)"
-  ) +
+#create new data grid
+worker_data_nsq<- expand.grid(
+  nest_searching_queens_scaled = queen_seq,
+  bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled, na.rm = TRUE),
+  num_burrows_scaled = mean(field_data$num_burrows_scaled, na.rm = TRUE),
+  bee_season_type = "worker"
+)
+
+# Get predicted probabilities and standard errors
+pred_worker_nsq <- predict(worker_negbin,
+                            newdata = worker_data_nsq,
+                            se.fit = TRUE,
+                            re.form = NA)
+
+# Combine predictions with data frame
+pred_worker_nsq_df <- cbind(worker_data_nsq,
+                 fit = pred_worker_nsq$fit,
+                 se = pred_worker_nsq$se.fit)
+
+ggplot(pred_worker_nsq_df, aes(x = nest_searching_queens_scaled, y = fit)) +
+  geom_line(size = 1) +
+  geom_ribbon(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), alpha = 0.2) +
+  labs(title = "Model Predictions (Log-scale)",
+       x = "Nest-searching queen abundance (scaled)",
+       y = "Predicted worker count (log-scale)") +
   theme_classic()
 ```
 
-Number of workers vs floral abundance, by season
+Number of workers vs floral abundance
 
 ```{r}
-pred_worker_floral <- ggpredict(worker_negbin, terms = c("bombus_floral_abun_scaled"))
+#create new data grid
+worker_data_floral<- expand.grid(
+  nest_searching_queens_scaled = mean(field_data$nest_searching_queens_scaled, na.rm = TRUE),
+  bombus_floral_abun_scaled = floral_seq,
+  num_burrows_scaled = mean(field_data$num_burrows_scaled, na.rm = TRUE),
+  bee_season_type = "worker"
+)
 
-ggplot(pred_worker_floral, aes(x = x, y = predicted)) +
-  geom_line(size = 1.2) +
-  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, color = NA) +
-  labs(
-    title = "Predicted Number of Workers by Floral Abundance (log-scale)",
-    x = "Floral Abundance (scaled)",
-    y = "Predicted Number of Workers (log-scale)"
-  ) +
+# Get predicted probabilities and standard errors
+pred_worker_floral <- predict(worker_negbin,
+                            newdata = worker_data_floral,
+                            se.fit = TRUE,
+                            re.form = NA)
+
+# Combine predictions with data frame
+pred_worker_floral_df <- cbind(worker_data_floral,
+                 fit = pred_worker_floral$fit,
+                 se = pred_worker_floral$se.fit)
+
+ggplot(pred_worker_floral_df, aes(x = bombus_floral_abun_scaled, y = fit)) +
+  geom_line(size = 1) +
+  geom_ribbon(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), alpha = 0.2) +
+  labs(title = "Model Predictions (Log-scale)",
+       x = "Floral abundance (scaled)",
+       y = "Predicted worker count (log-scale)") +
   theme_classic()
 ```
 
-Number of workers vs number of rodent burrows, by season
+Number of workers vs number of rodent burrows
 
 ```{r}
-pred_worker_rodent <- ggpredict(worker_negbin, terms = c("num_burrows_scaled"))
+# Define a sequence of values for rodent burrows across its observed range
+rodent_seq <- seq(
+  from = min(field_data$num_burrows_scaled, na.rm = TRUE),
+  to = max(field_data$num_burrows_scaled, na.rm = TRUE),
+  length.out = 50)
 
-ggplot(pred_worker_rodent, aes(x = x, y = predicted)) +
-  geom_line(size = 1.2) +
-  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, color = NA) +
-  labs(
-    title = "Predicted Number of Workers by Rodent Burrow Abundance (log-scale)",
-    x = "Burrow Abundance (scaled)",
-    y = "Predicted Number of Workers (log-scale)"
-  ) +
+#create new data grid
+worker_data_rodent<- expand.grid(
+  nest_searching_queens_scaled = mean(field_data$nest_searching_queens_scaled, na.rm = TRUE),
+  bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled, na.rm = TRUE),
+  num_burrows_scaled =rodent_seq,
+  bee_season_type = "worker"
+)
+
+# Get predicted probabilities and standard errors
+pred_worker_rodent <- predict(worker_negbin,
+                            newdata = worker_data_rodent,
+                            se.fit = TRUE,
+                            re.form = NA)
+
+# Combine predictions with data frame
+pred_worker_rodent_df <- cbind(worker_data_rodent,
+                 fit = pred_worker_rodent$fit,
+                 se = pred_worker_rodent$se.fit)
+
+ggplot(pred_worker_rodent_df, aes(x = num_burrows_scaled, y = fit)) +
+  geom_line(size = 1) +
+  geom_ribbon(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), alpha = 0.2) +
+  labs(title = "Model Predictions (Log-scale)",
+       x = "Rodent burrow abundance (scaled)",
+       y = "Predicted worker count (log-scale)") +
   theme_classic()
 ```
 
 Number of workers vs season
 
 ```{r}
-pred_worker_season <- ggpredict(worker_negbin, terms = c("bee_season_type"))
+#create new data grid
+worker_data_season<- expand.grid(
+  nest_searching_queens_scaled = mean(field_data$nest_searching_queens_scaled, na.rm = TRUE),
+  bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled, na.rm = TRUE),
+  num_burrows_scaled = mean(field_data$num_burrows_scaled, na.rm = TRUE),
+  bee_season_type = unique(field_data$bee_season_type)
+)
 
-ggplot(pred_worker_season, aes(x = x, y = predicted)) +
-  geom_point(size=3)+
-  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), 
+# Get predicted probabilities and standard errors
+pred_worker_season <- predict(worker_negbin,
+                            newdata = worker_data_season,
+                            se.fit = TRUE,
+                            re.form = NA)
+
+# Combine predictions with data frame
+pred_worker_season_df <- cbind(worker_data_season,
+                 fit = pred_worker_season$fit,
+                 se = pred_worker_season$se.fit)
+
+ggplot(pred_worker_season_df, aes(x = bee_season_type, y = fit)) +
+  geom_point(size = 3) +
+  geom_errorbar(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), 
                 width = 0.2, position = position_dodge(0.6)) +
-  labs(
-    title = "Predicted Number of workers by season (log-scale)",
-    x = "Bee season",
-    y = "Predicted Number of workers (log-scale)"
-  ) +
+  labs(title = "Model Predictions (Log-scale)",
+       x = "Bee season",
+       y = "Predicted worker count (log-scale)") +
   theme_classic()
 ```
 
