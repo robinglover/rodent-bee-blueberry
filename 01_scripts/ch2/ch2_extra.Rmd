@@ -64,6 +64,12 @@ bee <- bee %>%
     str_detect(plot_id, "d") ~ "ditch",
     TRUE ~ NA_character_
   ))
+
+
+#add column for julian date
+bee$julian.date <- yday(bee$date)
+
+#filter to queens and workers
 queens <- bee %>%
   filter(caste == "q", flower_species != "" & !is.na(flower_species))
 workers <- bee %>%
@@ -111,10 +117,14 @@ Queens
 ```{r}
 queens %>%
   count(flower_species, field_ditch, name = "count") %>%
-  mutate(flower_species = reorder(flower_species, -count)) %>%
-  ggplot(aes(flower_species, count, fill = field_ditch)) +
+  mutate(adjusted_count = case_when( ##adjust count for sampling effort (2x as many field plots as ditch plots)
+    field_ditch == "field" ~ count * 1,
+    field_ditch == "ditch" ~ count * 2
+  )) %>%
+  mutate(flower_species = reorder(flower_species, -adjusted_count)) %>%
+  ggplot(aes(flower_species, adjusted_count, fill = field_ditch)) +
   geom_bar(stat = "identity", position = "dodge") +
-  geom_text(aes(label = count), 
+  geom_text(aes(label = adjusted_count), 
             position = position_dodge(width = 0.9),
             vjust = -0.15, 
             size = 3) +
@@ -129,10 +139,14 @@ Workers
 ```{r}
 workers %>%
   count(flower_species, field_ditch, name = "count") %>%
-  mutate(flower_species = reorder(flower_species, -count)) %>%
-  ggplot(aes(flower_species, count, fill = field_ditch)) +
+  mutate(adjusted_count = case_when( ##adjust count for sampling effort (2x as many field plots as ditch plots)
+    field_ditch == "field" ~ count * 1,
+    field_ditch == "ditch" ~ count * 2
+  )) %>%
+  mutate(flower_species = reorder(flower_species, -adjusted_count)) %>%
+  ggplot(aes(flower_species, adjusted_count, fill = field_ditch)) +
   geom_bar(stat = "identity", position = "dodge") +
-  geom_text(aes(label = count), 
+  geom_text(aes(label = adjusted_count), 
             position = position_dodge(width = 0.9),
             vjust = -0.15, 
             size = 3) +
@@ -145,8 +159,6 @@ workers %>%
 Plot \# foraging bees in ditch vs field across time
 
 ```{r}
-#add column for julian date
-bee$julian.date <- yday(bee$date)
 
 # Step 1: Filter and summarize data
 foraging_summary <- bee %>%
@@ -160,6 +172,46 @@ ggplot(foraging_summary, aes(x = julian.date, y = n_foraging, color = field_ditc
     title = "# Bombus Foraging vs. Julian Date",
     x = "Julian Date",
     y = "# Foraging Bombus",
+    color = "Plot Type"
+  ) +
+  theme_classic()
+```
+
+Queens only
+
+```{r}
+# Step 1: Filter and summarize data
+foraging_queen_summary <- queens %>%
+  filter(behaviour == "foraging") %>%
+  count(julian.date, field_ditch, name = "n_foraging")
+
+# Step 2: Plot
+ggplot(foraging_queen_summary, aes(x = julian.date, y = n_foraging, color = field_ditch)) +
+  geom_line(size = 1.2) +
+  labs(
+    title = "# Bombus Foraging vs. Julian Date",
+    x = "Julian Date",
+    y = "# Foraging Queens",
+    color = "Plot Type"
+  ) +
+  theme_classic()
+```
+
+Workers only
+
+```{r}
+# Step 1: Filter and summarize data
+foraging_worker_summary <- workers %>%
+  filter(behaviour == "foraging") %>%
+  count(julian.date, field_ditch, name = "n_foraging")
+
+# Step 2: Plot
+ggplot(foraging_worker_summary, aes(x = julian.date, y = n_foraging, color = field_ditch)) +
+  geom_line(size = 1.2) +
+  labs(
+    title = "# Bombus Foraging vs. Julian Date",
+    x = "Julian Date",
+    y = "# Foraging workers",
     color = "Plot Type"
   ) +
   theme_classic()
