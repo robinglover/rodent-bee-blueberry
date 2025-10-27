@@ -10,7 +10,7 @@ knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_anal
 
 # Predicted path diagram
 
-![](images/pathDiagramSetupSept252025.png)
+![](images/pathDiagramOutlineOct272025.jpg)
 
 # Load and clean data
 
@@ -218,51 +218,35 @@ No significant effect of either grass+ forb% or julian date.
 
 # Rodent burrows vs field management (%grass+forb)
 
-Since the number of rodent burrows was count data, I knew I had to use either a poisson or negative binomial GLM family. I started with the simplest family (poisson) first.
+Since the number of rodent burrows was count data, I knew I had to use either a poisson or negative binomial GLM family. I started with the simplest family (poisson) first. I didn't include julian.date as a covariate in this model since I assumed that the number of rodent burrows remains relatively consistent over the course of a season (hence why I only sampled each farm once).
 
 ## Steps
 
-1)  Try different random effect structures in the poisson. Compare models using likelihood ratio tests to determine best random effect structure.
+1)  Try different random effect structures in the poisson. Compare models using likelihood ratio tests to determine best random effect structure. I did not include plot as a random effect structure since there was only one observation per plot for rodent burrow data.
 
--   best fit = 1\|site_id/plot_id –\> **area not included**
+-   best fit = 1\|site_id –\> **area not included**
 
 ```{r}
 burrows_full <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
-                             julian.date_scaled + 
-                             (1|area/site_id/plot_id),
-                           family = poisson, 
-                           data = field_data)
-
-
-burrows_noArea <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
-                             julian.date_scaled + 
-                             (1|site_id/plot_id),
-                           family = poisson, 
-                           data = field_data)
-
-burrows_plotOnly <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
-                             julian.date_scaled + 
-                             (1|plot_id),
+                             (1|area/site_id),
                            family = poisson, 
                            data = field_data)
 
 burrows_siteOnly <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
-                             julian.date_scaled + 
                              (1|site_id),
                            family = poisson, 
                            data = field_data)
 
-burrows_AreaPlot <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
-                             julian.date_scaled + 
-                             (1|area/plot_id),
+burrows_areaOnly <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
+                             (1|area),
                            family = poisson, 
                            data = field_data)
 
 
 #compare models using maximum likelihood test
-anova(burrows_full, burrows_noArea, burrows_plotOnly, burrows_siteOnly, burrows_AreaPlot)
+anova(burrows_full, burrows_siteOnly, burrows_areaOnly)
 
-##results tells us the burrows_noArea is best model (lowest AIC)
+##results tells us the burrows_siteOnly is best model (lowest AIC)
 ```
 
 2)  Check diagnostics of the model using DHARMa package.
@@ -271,7 +255,7 @@ anova(burrows_full, burrows_noArea, burrows_plotOnly, burrows_siteOnly, burrows_
 
 ```{r}
 #simulate residuals
-residuals_burrows_noArea <- simulateResiduals(fittedModel = burrows_noArea, plot = TRUE)
+residuals_burrows_siteOnly <- simulateResiduals(fittedModel = burrows_siteOnly, plot = TRUE)
 ```
 
 3)  Try negative binomial instead and check diagnostics.
@@ -279,27 +263,24 @@ residuals_burrows_noArea <- simulateResiduals(fittedModel = burrows_noArea, plot
 -   Combined adjusted quantile test still significant.
 
 ```{r}
-burrows_noArea_negBin <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
-                             julian.date_scaled + 
-                             (1|site_id/plot_id),
-                           family = nbinom1, #use nbinom1 since nbinom2 doesn't converge
+burrows_siteOnly_negBin <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
+                             (1|site_id),
+                           family = nbinom2, 
                            data = field_data)
 
 #simulate residuals
-residuals_burrows_noArea_negBin <- simulateResiduals(fittedModel = burrows_noArea_negBin, plot = TRUE)
+residuals_burrows_siteOnly_negBin <- simulateResiduals(fittedModel = burrows_siteOnly_negBin, plot = TRUE)
 ```
 
 4)  Try zero-inflated poisson and check diagnostics.
 
--   KS test and combined adjusted quantile test still significant.
+-   combined adjusted quantile test still significant.
 
 ```{r}
 burrows_zi_pois <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
-                             julian.date_scaled + 
-                             (1|site_id/plot_id),
+                             (1|site_id),
                            ziformula = ~ grass_forb_perc_scaled + 
-                             julian.date_scaled + 
-                             (1|site_id/plot_id), # zero-inflation model
+                             (1|site_id),
                            family = poisson, 
                            data = field_data)
 
@@ -309,15 +290,13 @@ residuals_burrows_zi <- simulateResiduals(fittedModel = burrows_zi_pois, plot = 
 
 5)  Try zero-inflated negative binomial and check diagnostics.
 
--   KS test and combined adjusted quantile test still significant.
+-   combined adjusted quantile test still significant.
 
 ```{r}
 burrows_zi_nbin <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
-                             julian.date_scaled + 
-                             (1|site_id/plot_id),
+                             (1|site_id),
                            ziformula = ~ grass_forb_perc_scaled + 
-                             julian.date_scaled + 
-                             (1|site_id/plot_id), # zero-inflation model
+                             (1|site_id),
                            family = nbinom2, 
                            data = field_data)
 
@@ -326,15 +305,13 @@ residuals_burrows_zi_nbin <- simulateResiduals(fittedModel = burrows_zi_nbin, pl
 #signficant KS test and combined adjusted quantile test
 ```
 
-6)  Stick with poisson but try adding cover_type as an additional covariate and check diagnostics.
+6)  Stick with poisson but try using categorical cover_type as predictor instead of % grass/forb cover and check diagnostics.
 
 -   none of the tests were significant! –\> good to keep this one
 
 ```{r}
-burrows_pois_cover <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
-                                         julian.date_scaled +
-                                         cover_type + 
-                             (1|site_id/plot_id),
+burrows_pois_cover <- glmmTMB(num_burrows ~ cover_type + 
+                             (1|site_id),
                            family = poisson, 
                            data = field_data)
 
@@ -349,80 +326,6 @@ summary(burrows_pois_cover)
 ```
 
 ## Plots
-
-Predicted num_burrows vs Grass/Forb %
-
-```{r}
-# Define a sequence of values for grass_forb_perc_scaled across its observed range
-grass_seq <- seq(
-  from = min(field_data$grass_forb_perc_scaled, na.rm = TRUE),
-  to = max(field_data$grass_forb_perc_scaled, na.rm = TRUE),
-  length.out = 50
-)
-
-#create new data grid
-rodent_data_veg<- expand.grid(
-  grass_forb_perc_scaled = grass_seq,
-  cover_type = "bare",
-  julian.date_scaled = mean(field_data$julian.date_scaled, na.rm = TRUE)
-)
-
-# Get predicted probabilities and standard errors
-pred_rodent_veg <- predict(burrows_pois_cover,
-                            newdata = rodent_data_veg,
-                            se.fit = TRUE,
-                            re.form = NA)
-
-# Combine predictions with data frame
-pred_rodent_veg_df <- cbind(rodent_data_veg,
-                 fit = pred_rodent_veg$fit,
-                 se = pred_rodent_veg$se.fit)
-
-ggplot(pred_rodent_veg_df, aes(x = grass_forb_perc_scaled, y = fit)) +
-  geom_line(size = 1) +
-  geom_ribbon(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), alpha = 0.2) +
-  labs(title = "Model Predictions (Log-scale)",
-       x = "Grass and Forb % (scaled)",
-       y = "Predicted burrow count (log-scale)") +
-  theme_classic()
-```
-
-Predicted number of burrows vs julian date
-
-```{r}
-# Define a sequence of values for julian.date_scaled across its observed range
-date_seq <- seq(
-  from = min(field_data$julian.date_scaled, na.rm = TRUE),
-  to = max(field_data$julian.date_scaled, na.rm = TRUE),
-  length.out = 50
-)
-
-#create new data grid
-rodent_data_date<- expand.grid(
-  grass_forb_perc_scaled = mean(field_data$grass_forb_perc_scaled, na.rm = TRUE),
-  cover_type = "bare",
-  julian.date_scaled = date_seq
-)
-
-# Get predicted probabilities and standard errors
-pred_rodent_date <- predict(burrows_pois_cover,
-                            newdata = rodent_data_date,
-                            se.fit = TRUE,
-                            re.form = NA)
-
-# Combine predictions with data frame
-pred_rodent_date_df <- cbind(rodent_data_date,
-                 fit = pred_rodent_date$fit,
-                 se = pred_rodent_date$se.fit)
-
-ggplot(pred_rodent_date_df, aes(x = julian.date_scaled, y = fit)) +
-  geom_line(size = 1) +
-  geom_ribbon(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), alpha = 0.2) +
-  labs(title = "Model Predictions (Log-scale)",
-       x = "Julian Date (scaled)",
-       y = "Predicted burrow count (log-scale)") +
-  theme_classic()
-```
 
 Number of rodent burrows vs cover type
 
@@ -457,7 +360,7 @@ ggplot(pred_rodent_cover_df, aes(x = cover_type, y = fit)) +
 
 ## Findings
 
-Neither grass + forb % nor julian date had significant effects on rodent burrow abundance. However, cover type showed a marginally insignificant trend (p=0.149), where grassy sites had a higher abundance of burrows.
+Neither grass + forb % nor julian date had significant effects on rodent burrow abundance. However, cover type showed a marginally insignificant trend (p=0.0839), where grassy sites had a higher abundance of burrows.
 
 # Number of nest-searching queens vs flowers, rodents, and field management technique
 
@@ -1034,4 +937,4 @@ Number of nest-searching queens and number of rodent burrows is does not signifi
 
 # Final Path Diagram
 
-![](images/pathDiagramSept252025.png)
+![](images/pathDiagramFinalOct272025.jpg)
