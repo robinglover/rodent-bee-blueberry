@@ -1,6 +1,8 @@
 ---
 title: "glmCH2_clean"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -29,7 +31,8 @@ surveys <- data %>%
      plot_id = as.factor(plot_id),
      bee_date = as.Date(bee_date),
      bee_season_type = as.factor(bee_season_type),
-     area = as.factor(area))
+     area = as.factor(area),
+     cover_type = as.factor(cover_type))
 
 #add plot type column and make it a factor
 surveys <- surveys %>% 
@@ -68,24 +71,7 @@ surveys$num_inactive_dm_scaled <- as.numeric(scale(surveys$num_inactive_dm))
 
 # Choosing which vegetation variables to include as predictors
 
-1)  Check for multicollinearity among vegetation variables.
-
--   All variables have VIF \<5 (no multicollinearity), so i can include all these predictors in my model
-
-```{r}
-vif(lm(nest_searching_queens ~ bare_perc_scaled + 
-         grass_forb_perc_scaled + 
-        grass_h_scaled + 
-         forb_h_scaled + 
-         bombus_floral_perc_scaled +
-         flood_perc_scaled +
-         dry_root_perc_scaled +
-         bombus_floral_richness_scaled +
-         bombus_floral_abun_scaled + bee_season_type, 
-        data = surveys))
-```
-
-2)  Use PCA to determine which vegetation variables to include in my models. I don't want to include all of the predictors, since some will be correlated with each other and therefore dilute their effects of the response variables. I am using PCA so I can pick one variable that drives each of the main 3 components, and use these as the predictors in my model.
+1.  Use PCA to determine which vegetation variables to include in my models. I don't want to include all of the predictors, since some will be correlated with each other and therefore dilute their effects of the response variables. I am using PCA so I can pick one variable that drives each of the main 3 components, and use these as the predictors in my model.
 
 ```{r}
 pca_res <- prcomp(surveys[, c("bare_perc_scaled",
@@ -105,17 +91,17 @@ print(pca_res$rotation)
 
 -   PCA Results:
 
-    PC1: grass_h_scaled (-0.50),forb_h_scaled (-0.48),grass_forb_perc_scaled (-0.42),bombus_floral_richness_scaled (-0.43),bombus_floral_abun_scaled (-0.22)
+    -   PC1: grass_h_scaled (-0.50),forb_h_scaled (-0.48),grass_forb_perc_scaled (-0.42),bombus_floral_richness_scaled (-0.43),bombus_floral_abun_scaled (-0.22)
 
-    PC2: bare_perc_scaled (0.51),bombus_floral_abun_scaled (0.52),bombus_floral_perc_scaled (0.40), dry_root_perc_scaled (-0.40)
+    -   PC2: bare_perc_scaled (0.51),bombus_floral_abun_scaled (0.52),bombus_floral_perc_scaled (0.40), dry_root_perc_scaled (-0.40)
 
-    Based on these PCA results and my research question, I am selecting to include the following predictors in my model:
+-   Based on these PCA results and my research question, I am selecting to include the following predictors in my model:
 
     -   grass_forb_perc_scaled (loads strongly on PCA1)
 
     -   bombus_floral_abun_scaled (loads strongly on PCA1 &2)
 
-3)  Check pairwise correlations between this reduced set of variables
+3.  Check pairwise correlations between this reduced set of variables
 
 -   correlation among all the pairs are all near zero --\> predictors are all sufficiently independent! (R\<\<0.7)
 
@@ -123,197 +109,11 @@ print(pca_res$rotation)
 cor(surveys[, c("grass_forb_perc_scaled", "bombus_floral_abun_scaled")])
 ```
 
-# Nest-searching queens
-
-## [vs plot type (ditch vs field)]{.underline}
-
-### Steps
-
-1)  Plotting a zero-inflated poisson model with multiple different random effect structures to see which is best. I used a zero-inflated poisson model since #NSQ is count data with a lot of zeros.
-
--   site-only was best according to maximum likelihood tests
-
-```{r}
-nsq_glm_plotType <- glmmTMB(nest_searching_queens ~ plot_type +
-                              bee_season_type +
-                              (1|area/site_id/plot_id),
-                            ziformula = ~plot_type +
-                              bee_season_type +
-                              (1|area/site_id/plot_id),  # zero-inflation model
-                            family = poisson, #poisson
-                            data = surveys)
-
-nsq_glm_plotType_noArea <- glmmTMB(nest_searching_queens ~ plot_type +
-                              bee_season_type +
-                              (1|site_id/plot_id),
-                            ziformula = ~plot_type +
-                              bee_season_type +
-                              (1|site_id/plot_id),  # zero-inflation model
-                            family = poisson, #poisson
-                            data = surveys)
-
-nsq_glm_plotType_plotOnly <- glmmTMB(nest_searching_queens ~ plot_type +
-                              bee_season_type +
-                              (1|plot_id),
-                            ziformula = ~plot_type +
-                              bee_season_type +
-                              (1|plot_id),  # zero-inflation model
-                            family = poisson, #poisson
-                            data = surveys)
-
-nsq_glm_plotType_siteOnly <- glmmTMB(nest_searching_queens ~ plot_type +
-                                       bee_season_type +
-                                       (1|site_id),
-                            ziformula = ~plot_type +
-                              bee_season_type +
-                              (1|site_id),  # zero-inflation model
-                            family = poisson, #poisson
-                            data = surveys)
-
-nsq_glm_plotType_areaSite <- glmmTMB(nest_searching_queens ~ plot_type + bee_season_type +
-                              (1|area/site_id),
-                            ziformula = ~plot_type +
-                              bee_season_type +
-                              (1|area/site_id),  # zero-inflation model
-                            family = poisson, #poisson
-                            data = surveys)
-
-#Compare models
-anova(nsq_glm_plotType,nsq_glm_plotType_noArea,nsq_glm_plotType_plotOnly, nsq_glm_plotType_siteOnly,nsq_glm_plotType_areaSite)
-##siteOnly is best
-```
-
-2)  Check diagnostics of site-only model
-
--   look good
-
-```{r}
-#simulate residuals
-residuals_nsq_glm_plotType_siteOnly <- simulateResiduals(fittedModel = nsq_glm_plotType_siteOnly, plot = TRUE)
-```
-
-3)  Plot results
-
-```{r}
-summary(nsq_glm_plotType_siteOnly)
-```
-
-### Plots
-
-Plot type
-
-Conditional model:
-
-```{r}
-# Create newdata with discrete factor levels for plot_type
-nsq_data_plot <- data.frame(
-  bee_season_type = "nestsearching",
-  plot_type = factor(c("field", "ditch"), levels = levels(surveys$plot_type))
-)
-
-# Predictions for conditional model (count)
-pred_nsq_plot_cond <- predict(nsq_glm_plotType_siteOnly, 
-                              newdata = nsq_data_plot, 
-                              type = "conditional", 
-                              se.fit = TRUE,
-                              re.form = NA)
-
-# Predictions for zero-inflation model
-pred_nsq_plot_zi <- predict(nsq_glm_plotType_siteOnly, 
-                            newdata = nsq_data_plot, 
-                            type = "zprob", 
-                            se.fit = TRUE,
-                            re.form = NA)
-
-# Combine predictions with newdata
-pred_nsq_plot_df <- cbind(nsq_data_plot,
-                 cond_fit = pred_nsq_plot_cond$fit,
-                 cond_se = pred_nsq_plot_cond$se.fit,
-                 zi_fit = pred_nsq_plot_zi$fit,
-                 zi_se = pred_nsq_plot_zi$se.fit)
-
-# Plot conditional predictions
-ggplot(pred_nsq_plot_df, aes(x = plot_type, y = cond_fit)) +
-  geom_point(size=3) +
-  geom_errorbar(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), width = 0.2, position = position_dodge(0.6))+
-  labs(title = "Conditional Model Predictions (Log-scale)", y = "Predicted NSQ count (log-scale)") +
-  theme_classic()
-```
-
-Zero-inflation model:
-
-```{r}
-ggplot(pred_nsq_plot_df, aes(x = plot_type, y = zi_fit)) +
-  geom_point(size=3) +
-  geom_errorbar(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), width = 0.2, position = position_dodge(0.6))+
-  labs(title = "Zero-inflation Model Predictions (Presence/Absence)", y = "Predicted Probability of Structural Zero") +
-  theme_classic()
-```
-
-Season
-
-Conditional:
-
-```{r}
-# Create newdata with discrete factor levels for plot_type
-nsq_data_season <- data.frame(
-  bee_season_type = factor(c("nestsearching", "worker"), levels = levels(surveys$bee_season_type)),
-  plot_type = "field")
-
-# Predictions for conditional model (count)
-pred_nsq_season_cond <- predict(nsq_glm_plotType_siteOnly, 
-                              newdata = nsq_data_season, 
-                              type = "conditional", 
-                              se.fit = TRUE,
-                              re.form = NA)
-
-# Predictions for zero-inflation model
-pred_nsq_season_zi <- predict(nsq_glm_plotType_siteOnly, 
-                            newdata = nsq_data_season, 
-                            type = "zprob", 
-                            se.fit = TRUE,
-                            re.form = NA)
-
-# Combine predictions with newdata
-pred_nsq_season_df <- cbind(nsq_data_season,
-                 cond_fit = pred_nsq_season_cond$fit,
-                 cond_se = pred_nsq_season_cond$se.fit,
-                 zi_fit = pred_nsq_season_zi$fit,
-                 zi_se = pred_nsq_season_zi$se.fit)
-
-# Plot conditional predictions
-ggplot(pred_nsq_season_df, aes(x = bee_season_type, y = cond_fit)) +
-  geom_point(size=3) +
-  geom_errorbar(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), width = 0.2, position = position_dodge(0.6))+
-  labs(title = "Conditional Model Predictions (Log-scale)", y = "Predicted NSQ count (log-scale)") +
-  theme_classic()
-```
-
-Zero-inflation:
-
-```{r}
-ggplot(pred_nsq_season_df, aes(x = bee_season_type, y = zi_fit)) +
-  geom_point(size=3) +
-  geom_errorbar(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), width = 0.2, position = position_dodge(0.6))+
-  labs(title = "Zero-inflation Model Predictions (Presence/Absence)", y = "Predicted Probability of Structural Zero") +
-  theme_classic()
-```
-
-### Findings
-
-Conditional model (plots NSQ abundance at sites where there at NSQ)
-
--   Significantly higher abundance of NSQ in ditch plots than in field plots.
-
-Zero-inflation model (predicts presence/absence of NSQ at sites)
-
--   Significantly more zeros in worker season than in nest-searching season.
-
-## [vs vegetation predictors]{.underline}
+# Nest-searching queens vs vegetation predictors
 
 Plot model with interaction between vegetation variables and plot type to investigate whether the effects of vegetation cover and floral abundance on queen abundance/presence change depending on plot type (ditch vs field).
 
-### Steps
+## Steps
 
 1)  Try different random effect structures.
 
@@ -382,7 +182,7 @@ residuals_nsq_glm_veg_noRE <- simulateResiduals(fittedModel = nsq_glm_veg_noRE, 
 summary(nsq_glm_veg_noRE)
 ```
 
-### Plots
+## Plots
 
 Grass and forb % cover
 
@@ -566,7 +366,7 @@ ggplot(pred_nsq_season_df, aes(x = bee_season_type, y = zi_fit)) +
   theme_classic()
 ```
 
-### Findings
+## Findings
 
 Conditional model (predicts abundance of nest-searching queens at sites where queens are present). Ditch is reference plot type.
 
@@ -580,128 +380,9 @@ Zero-inflation model (predicts presence/absence of nest-searching queens).
 
 -   Marginal negative effect of floral abundance in ditch plots on NSQ presence (more zeros when there are more flowers along the ditch)
 
-# Workers
+# Workers vs. vegetation predictors
 
-## vs. plot type
-
-### Steps
-
-1)  Start with poisson and check all random effect structures.
-
--   model with plot nested in site (no area) is best
-
-```{r}
-workers_plotType_full <- glmmTMB(workers ~ plot_type +
-                              bee_season_type +
-                              (1|area/site_id/plot_id), 
-                            family = poisson, #poisson
-                            data = surveys)
-workers_plotType_noArea <- glmmTMB(workers ~ plot_type +
-                              bee_season_type +
-                              (1|site_id/plot_id), 
-                            family = poisson, #poisson
-                            data = surveys)
-
-workers_plotType_siteOnly <- glmmTMB(workers ~ plot_type +
-                              bee_season_type +
-                              (1|site_id), 
-                            family = poisson, #poisson
-                            data = surveys)
-
-workers_plotType_areaSite <- glmmTMB(workers ~ plot_type +
-                              bee_season_type +
-                              (1|area/site_id), 
-                            family = poisson, #poisson
-                            data = surveys)
-
-#compare models
-anova(workers_plotType_full, workers_plotType_noArea, workers_plotType_siteOnly, workers_plotType_areaSite)
-##no area is best
-```
-
-2)  Check diagnostics of model.
-
--   no problems detected
-
-```{r}
-#simulate residuals
-residuals_workers_plotType_noArea <- simulateResiduals(fittedModel = workers_plotType_noArea, plot = TRUE)
-```
-
-3)  Plot results
-
-```{r}
-summary(workers_plotType_noArea)
-```
-
-### Plots
-
-Plot type
-
-```{r}
-# Create newdata with discrete factor levels for plot_type
-worker_data_plot <- expand.grid(
-  bee_season_type = "worker",
-  plot_type = factor(c("field", "ditch"), levels = levels(surveys$plot_type))
-)
-
-
-# Predictions for conditional model (count)
-pred_worker_plot <- predict(workers_plotType_noArea, 
-                              newdata = worker_data_plot, 
-                              se.fit = TRUE,
-                              re.form = NA)
-
-# Combine predictions with newdata
-pred_worker_plot_df <- cbind(worker_data_plot,
-                 fit = pred_worker_plot$fit,
-                 se = pred_worker_plot$se.fit)
-
-# Plot conditional predictions
-ggplot(pred_worker_plot_df, aes(x = plot_type, y = fit)) +
-  geom_point(size=3, position = position_dodge(0.6)) +
-  geom_errorbar(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), width = 0.2, position = position_dodge(0.6))+
-  labs(title = "Model Predictions (Log-scale)", y = "Predicted worker count (log-scale)") +
-  theme_classic()
-```
-
-Season
-
-```{r}
-# Create newdata with discrete factor levels for season
-worker_data_season <- expand.grid(
-  bee_season_type = factor(c("worker", "nestsearching"), levels = levels(surveys$bee_season_type)),
-  plot_type = "field")
-
-
-# Predictions for conditional model (count)
-pred_worker_season <- predict(workers_plotType_noArea, 
-                              newdata = worker_data_season, 
-                              se.fit = TRUE,
-                              re.form = NA)
-
-# Combine predictions with newdata
-pred_worker_season_df <- cbind(worker_data_season,
-                 fit = pred_worker_season$fit,
-                 se = pred_worker_season$se.fit)
-
-# Plot conditional predictions
-ggplot(pred_worker_season_df, aes(x = bee_season_type, y = fit)) +
-  geom_point(size=3, position = position_dodge(0.6)) +
-  geom_errorbar(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), width = 0.2, position = position_dodge(0.6))+
-  labs(title = "Model Predictions (Log-scale)", y = "Predicted worker count (log-scale)") +
-  theme_classic()
-```
-
-### Findings
-
--   significantly more workers in ditch than in field
-
--   significantly more workers during worker season than during NSQ season
-
-## vs. vegetation predictors
-
-### Steps
+## Steps
 
 1)  Try random effect structures with poisson.
 
@@ -771,7 +452,7 @@ residuals_workers_veg_noArea_nbin <- simulateResiduals(fittedModel = workers_veg
 summary(workers_veg_noArea_nbin)
 ```
 
-### Plots
+## Plots
 
 Vegetation
 
@@ -866,15 +547,13 @@ ggplot(pred_worker_season_df, aes(x = bee_season_type, y = fit)) +
   theme_classic()
 ```
 
-### Findings
+## Findings
 
 No significant effect of any variables on worker abundance/presence.
 
-# Floral
+# Floral vs. plot type
 
-## vs. plot type
-
-### Steps
+## Steps
 
 1.  Try random effect structures
 
@@ -958,7 +637,7 @@ AIC(floral_noRE_interaction, floral_noRE)
 summary(floral_noRE_interaction)
 ```
 
-### Plots
+## Plots
 
 ```{r}
 # Sequence of Julian dates
@@ -996,64 +675,7 @@ ggplot(pred_floral_veg_df, aes(x = julian.date_scaled, y = response, color = plo
 
 ```
 
-Extra code – using predict() (doesn't have CI)
-
-```{r}
-# Create prediction grid
-floraldata <- expand.grid(
-  julian.date_scaled = seq(min(surveys$julian.date_scaled), max(surveys$julian.date_scaled), length.out = 50),
-  plot_type = unique(surveys$plot_type)
-)
-
-# Calculate predicted values 
-pred_floral_plot <- predict(floral_noRE_interaction, floraldata, type = "probs")
-
-# Convert matrix to dataframe
-pred_floral_plot_df <- as.data.frame(pred_floral_plot)
-
-# Bind predictions to floral data
-floraldata_pred <- cbind(floraldata, pred_floral_plot_df)
-
-# Reshape to long format
-floraldata_pred_long <- floraldata_pred %>%
-  pivot_longer(cols = -c(julian.date_scaled, plot_type),
-               names_to = "category",
-               values_to = "probability")
-
-# Plot
-ggplot(floraldata_pred_long, aes(x = julian.date_scaled, y = probability, color = plot_type)) +
-  geom_line(size = 1) +
-  facet_wrap(~ category) +
-  labs(
-    title = "Predicted Probabilities of Bombus Floral Abundance Categories",
-    x = "Julian Date (scaled)",
-    y = "Probability",
-    color = "Bombus Floral Abundance"
-  ) +
-  theme_classic()
-```
-
-Only floral abundance category 4 (1000-10000 blooms)
-
-```{r}
-# Filter to only category "4"
-floraldata_pred_cat4 <- floraldata_pred %>%
-  dplyr::select(julian.date_scaled, plot_type, `4` = `4`) %>%
-  dplyr::rename(probability = `4`)
-
-# Plot
-ggplot(floraldata_pred_cat4, aes(x = julian.date_scaled, y = probability, color = plot_type)) +
-  geom_line(size = 1.2) +
-  labs(
-    title = "Predicted Probability of Bombus Floral Abundance Category 4(1000-10000 blooms)",
-    x = "Julian Date (scaled)",
-    y = "Probability",
-    color = "Plot Type"
-  ) +
-  theme_classic()
-```
-
-### Findings
+## Findings
 
 -   Julian date is a significant predictor: floral abundance tends to increase as season progresses.
 -   The effect of Julian date changes depending on plot type (significant interaction).
@@ -1061,3 +683,133 @@ ggplot(floraldata_pred_cat4, aes(x = julian.date_scaled, y = probability, color 
 
     -   In the field, floral abundance decreases throughout the season.
 -   Plot type alone has no strong main effect but modifies the Julian date effect.
+
+# Rodent burrows vs. vegetation predictors
+
+## Steps
+
+1)  Try random effect structures with poisson.
+
+-   model with site only is best
+
+```{r}
+
+rodent_veg_areaOnly <- glmmTMB(num_burrows ~ cover_type*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                              (1|area),
+                            family = poisson, 
+                            data = surveys)
+
+rodent_veg_siteOnly <- glmmTMB(num_burrows ~ cover_type*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                              (1|site_id),
+                            family = poisson, 
+                            data = surveys)
+rodent_veg_siteArea <- glmmTMB(num_burrows ~ cover_type*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                              (1|area/site_id),
+                            family = poisson, 
+                            data = surveys)
+
+#compare models
+anova(rodent_veg_areaOnly, rodent_veg_siteOnly, rodent_veg_siteArea)
+##site only is best
+```
+
+2)  Check diagnostics
+
+-   KS test shows significant deviation
+
+```{r}
+residuals_rodent_veg_siteOnly <- simulateResiduals(fittedModel = rodent_veg_siteOnly, plot = TRUE)
+```
+
+3)  Try negative binomial and check diagnostics.
+
+-   diagnostic plots look good!
+
+```{r}
+rodent_veg_siteOnly_nbin <- glmmTMB(num_burrows ~ cover_type*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                              (1|site_id),
+                            family = nbinom2, 
+                            data = surveys)
+
+#check diagnostics
+#simulate residuals
+residuals_rodent_veg_siteOnly_nbin <- simulateResiduals(fittedModel = rodent_veg_siteOnly_nbin, plot = TRUE)
+```
+
+4.  Plot results.
+
+```{r}
+summary(rodent_veg_siteOnly_nbin)
+```
+
+## Plots
+
+Vegetation
+
+```{r}
+#create new data grid
+rodent_data_veg<- expand.grid(
+  cover_type = unique(surveys$cover_type),
+  plot_type = unique(surveys$plot_type),
+  bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled, na.rm = TRUE)
+)
+
+# Get predicted probabilities and standard errors
+pred_rodent_veg <- predict(rodent_veg_siteOnly_nbin,
+                            newdata = rodent_data_veg,
+                            se.fit = TRUE,
+                            re.form = NA)
+
+# Combine predictions with data frame
+pred_rodent_veg_df <- cbind(rodent_data_veg,
+                 fit = pred_rodent_veg$fit,
+                 se = pred_rodent_veg$se.fit)
+
+# Plot conditional predictions
+ggplot(pred_rodent_veg_df, aes(x = cover_type, y = fit, color = plot_type)) +
+  geom_point(size=3, position = position_dodge(0.6)) +
+  geom_errorbar(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), width = 0.2, position = position_dodge(0.6))+
+  labs(title = "Model Predictions (Log-scale)",
+       x = "Cover type",
+       y = "Predicted burrow count (log-scale)") +
+  theme_classic()
+```
+
+Floral abundance
+
+```{r}
+
+#create new data grid
+rodent_data_floral<- expand.grid(
+  cover_type = "grass",
+  plot_type = unique(surveys$plot_type),
+  bombus_floral_abun_scaled = floral_seq
+)
+
+# Get predicted probabilities and standard errors
+pred_rodent_floral <- predict(rodent_veg_siteOnly_nbin,
+                            newdata = rodent_data_floral,
+                            se.fit = TRUE,
+                            re.form = NA)
+
+# Combine predictions with data frame
+pred_rodent_floral_df <- cbind(rodent_data_floral,
+                 fit = pred_rodent_floral$fit,
+                 se = pred_rodent_floral$se.fit)
+
+ggplot(pred_worker_floral_df, aes(x = bombus_floral_abun_scaled, y = fit, color = plot_type)) +
+  geom_line(size = 1) +
+  geom_ribbon(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), alpha = 0.2) +
+  labs(title = "Model Predictions (Log-scale)",
+       x = "Floral abundance (scaled)",
+       y = "Predicted burrow count (log-scale)") +
+  theme_classic()
+```
+
+## Findings
+
+At field plots, there are more rodent burrows in grassy sites than in bare sites. No siginficant effect of floral abundance on rodent burrows in either plot type.
