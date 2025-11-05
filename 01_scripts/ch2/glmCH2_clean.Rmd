@@ -564,13 +564,13 @@ library(MASS)
 
 surveys$bombus_floral_abun <- factor(surveys$bombus_floral_abun, ordered = TRUE)
 
-floral_full <- clmm(as.factor(bombus_floral_abun) ~ plot_type +
+floral_full <- clmm(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled*plot_type +
                          julian.date_scaled + 
                          (1|area/site_id/plot_id),
                        link = "logit", 
                        data = surveys)
 
-floral_noArea <- clmm(as.factor(bombus_floral_abun) ~ plot_type +
+floral_noArea <- clmm(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled*plot_type +
                          julian.date_scaled + 
                          (1|site_id/plot_id),
                        link = "logit", 
@@ -583,18 +583,18 @@ floral_noArea <- clmm(as.factor(bombus_floral_abun) ~ plot_type +
     #                   data = surveys)
 ##can't use since there are only 2 levels
 
-floral_siteOnly <- clmm(as.factor(bombus_floral_abun) ~ plot_type +
+floral_siteOnly <- clmm(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled*plot_type +
                          julian.date_scaled + 
                          (1|site_id),
                        link = "logit", 
                        data = surveys)
 
-floral_AreaPlot <- clmm(as.factor(bombus_floral_abun) ~ plot_type +
+floral_AreaPlot <- clmm(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled*plot_type +
                          julian.date_scaled + 
                          (1|area/plot_id),
                        link = "logit", 
                        data = surveys)
-floral_noRE <- polr(as.factor(bombus_floral_abun) ~ plot_type +
+floral_noRE <- polr(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled*plot_type +
                          julian.date_scaled,
                        method = "logistic", 
                        data = surveys)
@@ -604,27 +604,13 @@ AIC(floral_full, floral_noArea, floral_siteOnly, floral_AreaPlot, floral_noRE)
 ##shows that model without random effect has best fit
 ```
 
-2.  Compare AIC between model with and without cover_type as a covariate.
-
--   determined that model without cover type as covariate was better
-
-```{r}
-floral_noRE_cover <- polr(as.factor(bombus_floral_abun) ~ plot_type +
-                            cover_type +
-                         julian.date_scaled,
-                       method = "logistic", 
-                       data = surveys)
-
-AIC(floral_noRE_cover, floral_noRE)
-##not including cover is better
-```
-
-3.  Try including julianDate \* plot_type
+2.  Try including julianDate \* plot_type
 
 -   determined that model with interaction term was better
 
 ```{r}
-floral_noRE_interaction <- polr(as.factor(bombus_floral_abun) ~ plot_type*julian.date_scaled,
+floral_noRE_interaction <- polr(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled*plot_type +
+                                  plot_type*julian.date_scaled,
                        method = "logistic", 
                        data = surveys)
 AIC(floral_noRE_interaction, floral_noRE)
@@ -639,6 +625,36 @@ summary(floral_noRE_interaction)
 
 ## Plots
 
+Vegetation
+
+```{r}
+# Get predicted probabilities per category with CIs
+pred_floral_veg <- emmeans(
+  floral_noRE_interaction,
+  ~ grass_forb_perc_scaled * plot_type,
+  at = list(grass_forb_perc_scaled = grass_seq),
+  type = "response",  # To get probabilities
+)
+
+# Convert to dataframe
+pred_floral_veg_df <- as.data.frame(pred_floral_veg)
+
+#plot
+ggplot(pred_floral_veg_df, aes(x = grass_forb_perc_scaled, y = response, color = plot_type)) +
+  geom_line(size = 1) +
+  geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL, fill = plot_type), alpha = 0.2, color = NA) +
+  labs(
+    title = "Predicted Bombus Floral Abundance (scaled)",
+    x = "% grass/forb (scaled)",
+    y = "Floral abundance (scaled)",
+    color = "Plot Type",
+    fill = "Plot Type"
+  ) +
+  theme_classic()
+```
+
+Season
+
 ```{r}
 # Sequence of Julian dates
 date_seq <- seq(
@@ -648,7 +664,7 @@ date_seq <- seq(
 )
 
 # Get predicted probabilities per category with CIs
-pred_floral_veg <- emmeans(
+pred_floral_date <- emmeans(
   floral_noRE_interaction,
   ~ julian.date_scaled * plot_type,
   at = list(julian.date_scaled = date_seq),
@@ -656,10 +672,10 @@ pred_floral_veg <- emmeans(
 )
 
 # Convert to dataframe
-pred_floral_veg_df <- as.data.frame(pred_floral_veg)
+pred_floral_date_df <- as.data.frame(pred_floral_date)
 
 #plot
-ggplot(pred_floral_veg_df, aes(x = julian.date_scaled, y = response, color = plot_type)) +
+ggplot(pred_floral_date_df, aes(x = julian.date_scaled, y = response, color = plot_type)) +
   geom_line(size = 1) +
   geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL, fill = plot_type), alpha = 0.2, color = NA) +
   labs(
@@ -682,7 +698,7 @@ ggplot(pred_floral_veg_df, aes(x = julian.date_scaled, y = response, color = plo
     -   In the ditch, floral abundance increases throughout the season.
 
     -   In the field, floral abundance decreases throughout the season.
--   Plot type alone has no strong main effect but modifies the Julian date effect.
+-   Higher % cover increases the odds of higher floral abundance, especially in ditch plots (although this is not a significant finding)
 
 # Rodent burrows vs. vegetation predictors
 
