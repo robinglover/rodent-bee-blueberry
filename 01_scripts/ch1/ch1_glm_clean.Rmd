@@ -10,7 +10,7 @@ knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_anal
 
 # Predicted path diagram
 
-![](images/pathDiagramOutlineOct272025.jpg)
+![](images/pathDiagramOutline.jpg)
 
 # Load and clean data
 
@@ -74,155 +74,13 @@ field_data <- surveys %>%
   filter(plot_id != "d")
 ```
 
-# Floral abundance vs field management (%grass+forb)
-
-Use cumulative link model aka ordinal logistic regression because bombus-relevant floral abundance has:
-
--   discrete levels (0-5 scale) representing binned counts of blooms
-
--   ordered categories (higher numbers represent more blooms)
-
--   unequal intervals between categories
-
-## Steps
-
-1)  Tried running CLM with different random effect structures (full = 1\|area/site/plot) then compared AIC values to determine best model.
-
--   determined that model without random effect had best fit
-
-```{r}
-floral_full <- clmm(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled +
-                         julian.date_scaled + 
-                         (1|area/site_id/plot_id),
-                       link = "logit", 
-                       data = field_data)
-
-floral_noArea <- clmm(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled +
-                         julian.date_scaled + 
-                         (1|site_id/plot_id),
-                       link = "logit", 
-                       data = field_data)
-
-#floral_plotOnly <- clmm(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled +
- #                        julian.date_scaled + 
-  #                       (1|plot_id),
-   #                    link = "logit", 
-    #                   data = field_data)
-##can't use since there are only 2 levels
-
-floral_siteOnly <- clmm(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled +
-                         julian.date_scaled + 
-                         (1|site_id),
-                       link = "logit", 
-                       data = field_data)
-
-floral_AreaPlot <- clmm(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled +
-                         julian.date_scaled + 
-                         (1|area/plot_id),
-                       link = "logit", 
-                       data = field_data)
-floral_noRE <- polr(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled +
-                         julian.date_scaled,
-                       method = "logistic", 
-                       data = field_data)
-
-#compare models AIC
-AIC(floral_full, floral_noArea, floral_siteOnly, floral_AreaPlot, floral_noRE)
-##shows that model without random effect has best fit
-```
-
-2)  Compare AIC between model with and without cover_type as a covariate.
-
--   determined that model without cover type as covariate was better
-
-```{r}
-floral_noRE_cover <- polr(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled +
-                            cover_type +
-                         julian.date_scaled,
-                       method = "logistic", 
-                       data = field_data)
-
-AIC(floral_noRE_cover, floral_noRE)
-##not including cover is better
-```
-
-3)  Run final model and look at output
-
-```{r}
-summary(floral_noRE)
-```
-
-## Plots
-
-Vegetation
-
-```{r}
-# Define a sequence of values for grass_forb_perc_scaled across its observed range
-grass_seq <- seq(
-  from = min(field_data$grass_forb_perc_scaled, na.rm = TRUE),
-  to = max(field_data$grass_forb_perc_scaled, na.rm = TRUE),
-  length.out = 50
-)
-
-# Get predicted response for grass_forb_perc_scaled, holding other variables at their means 
-pred_floral_veg <- emmeans(floral_noRE,
-               ~ grass_forb_perc_scaled,
-               at = list(grass_forb_perc_scaled = grass_seq,
-                         julian.date_scaled = mean(surveys$julian.date_scaled, na.rm=TRUE)),
-               type = "response")
-
-# Convert to dataframe for plotting
-pred_floral_veg_df <- as.data.frame(pred_floral_veg)
-
-ggplot(pred_floral_veg_df, aes(x = grass_forb_perc_scaled, y = response)) +
-  geom_line(size = 1) +
-  geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL), alpha = 0.2, color = NA) +
-  labs(title = "Predicted Floral Abundance vs Grass/Forb %",
-       x = "Grass and Forb Percentage (scaled)",
-       y = "Predicted Floral Abundance") +
-  theme_classic()
-```
-
-Julian date
-
-```{r}
-# Define a sequence of values for grass_forb_perc_scaled across its observed range
-date_seq <- seq(
-  from = min(field_data$julian.date_scaled, na.rm = TRUE),
-  to = max(field_data$julian.date_scaled, na.rm = TRUE),
-  length.out = 50
-)
-
-# Get predicted response for grass_forb_perc_scaled, holding other variables at their means
-pred_floral_date <- emmeans(floral_noRE,
-               ~ julian.date_scaled,
-               at = list(julian.date_scaled = date_seq,
-                         grass_forb_perc_scaled = mean(surveys$grass_forb_perc_scaled, na.rm=TRUE)),
-               type = "response")
-
-# Convert to dataframe for plotting
-pred_floral_date_df <- as.data.frame(pred_floral_date)
-
-ggplot(pred_floral_date_df, aes(x = julian.date_scaled, y = response)) +
-  geom_line(size = 1) +
-  geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL), alpha = 0.2, color = NA) +
-  labs(title = "Predicted Floral Abundance vs Julian Date",
-       x = "Julian Date (scaled)",
-       y = "Predicted Floral Abundance") +
-  theme_classic()
-```
-
-## Findings
-
-No significant effect of either grass+ forb% or julian date.
-
 # Rodent burrows vs field management (%grass+forb)
 
 Since the number of rodent burrows was count data, I knew I had to use either a poisson or negative binomial GLM family. I started with the simplest family (poisson) first. I didn't include julian.date as a covariate in this model since I assumed that the number of rodent burrows remains relatively consistent over the course of a season (hence why I only sampled each farm once).
 
 ## Steps
 
-1)  Try different random effect structures in the poisson. Compare models using likelihood ratio tests to determine best random effect structure. I did not include plot as a random effect structure since there was only one observation per plot for rodent burrow data.
+1)  Try different random effect structures in the poisson. Compare alternative random effect structures using maximum likelihood (ML) via AIC. I did not include plot as a random effect structure since there was only one observation per plot for rodent burrow data.
 
 -   best fit = 1\|site_id –\> **area not included**
 
@@ -305,24 +163,56 @@ residuals_burrows_zi_nbin <- simulateResiduals(fittedModel = burrows_zi_nbin, pl
 #signficant KS test and combined adjusted quantile test
 ```
 
-6)  Stick with poisson but try using categorical cover_type as predictor instead of % grass/forb cover and check diagnostics.
+6)  Stick with poisson but try using categorical cover_type as predictor instead of % grass/forb cover and try different random effect structures.
 
--   none of the tests were significant! –\> good to keep this one
+-   models using continuous percent grass/forb cover as a predictor showed poor fit and significant residual patterns, likely due to the small sample size (n = 24). Because sites were grouped into two distinct habitat types—grassy plots with high vegetation cover and bare plots with little or no cover—the variable was reclassified as a categorical factor (“grass” vs. “bare”). This simplified model structure improved residual diagnostics and provided a clearer ecological interpretation of differences in burrow abundance between habitat types.
 
 ```{r}
-burrows_pois_cover <- glmmTMB(num_burrows ~ cover_type + 
+burrows_cover_full <- glmmTMB(num_burrows ~ cover_type + 
+                             (1|area/site_id),
+                           family = poisson, 
+                           data = field_data)
+
+burrows_cover_siteOnly <- glmmTMB(num_burrows ~ cover_type + 
                              (1|site_id),
                            family = poisson, 
                            data = field_data)
 
-#simulate residuals
-residuals_burrows_pois_cover <- simulateResiduals(fittedModel = burrows_pois_cover, plot = TRUE)
+burrows_cover_areaOnly <- glmmTMB(num_burrows ~ cover_type + 
+                             (1|area),
+                           family = poisson, 
+                           data = field_data)
+
+
+#compare models using maximum likelihood test
+anova(burrows_cover_full, burrows_cover_siteOnly, burrows_cover_areaOnly)
+
+##full model is best (lowest AIC)
 ```
 
-7.  Plot results
+7.  Check diagnostics
+
+-   significant within-group deviations from uniformity
 
 ```{r}
-summary(burrows_pois_cover)
+
+#simulate residuals
+residuals_burrows_cover_full <- simulateResiduals(fittedModel = burrows_cover_full, plot = TRUE)
+```
+
+8.  Try simpler random effect structure (site-only) and re-check diagnostics
+
+-   No significant problems detected.
+
+```{r}
+#simulate residuals
+residuals_burrows_cover_siteOnly <- simulateResiduals(fittedModel = burrows_cover_siteOnly, plot = TRUE)
+```
+
+9.  Plot results
+
+```{r}
+summary(burrows_cover_siteOnly)
 ```
 
 ## Plots
@@ -330,7 +220,6 @@ summary(burrows_pois_cover)
 Number of rodent burrows vs cover type
 
 ```{r}
-
 #create new data grid
 rodent_data_cover<- expand.grid(
   grass_forb_perc_scaled = mean(field_data$grass_forb_perc_scaled, na.rm = TRUE),
@@ -339,7 +228,7 @@ rodent_data_cover<- expand.grid(
 )
 
 # Get predicted probabilities and standard errors
-pred_rodent_cover <- predict(burrows_pois_cover,
+pred_rodent_cover <- predict(burrows_cover_siteOnly,
                             newdata = rodent_data_cover,
                             se.fit = TRUE,
                             re.form = NA)
@@ -362,6 +251,129 @@ ggplot(pred_rodent_cover_df, aes(x = cover_type, y = fit)) +
 
 Neither grass + forb % nor julian date had significant effects on rodent burrow abundance. However, cover type showed a marginally insignificant trend (p=0.0839), where grassy sites had a higher abundance of burrows.
 
+# Floral abundance vs field management (%grass+forb)
+
+Use cumulative link model aka ordinal logistic regression because bombus-relevant floral abundance has:
+
+-   discrete levels (0-5 scale) representing binned counts of blooms
+
+-   ordered categories (higher numbers represent more blooms)
+
+-   unequal intervals between categories
+
+## Steps
+
+1)  Tried running CLM with different random effect structures (full = 1\|area/site/plot) then compared AIC values to determine best model.
+
+-   determined that model without random effect had best fit
+
+```{r}
+floral_full <- clmm(as.factor(bombus_floral_abun) ~ cover_type +
+                         julian.date_scaled + 
+                         (1|area/site_id/plot_id),
+                       link = "logit", 
+                       data = field_data)
+
+floral_noArea <- clmm(as.factor(bombus_floral_abun) ~ cover_type +
+                         julian.date_scaled + 
+                         (1|site_id/plot_id),
+                       link = "logit", 
+                       data = field_data)
+
+#floral_plotOnly <- clmm(as.factor(bombus_floral_abun) ~ cover_type +
+ #                        julian.date_scaled + 
+  #                       (1|plot_id),
+   #                    link = "logit", 
+    #                   data = field_data)
+##can't use since there are only 2 levels
+
+floral_siteOnly <- clmm(as.factor(bombus_floral_abun) ~ cover_type +
+                         julian.date_scaled + 
+                         (1|site_id),
+                       link = "logit", 
+                       data = field_data)
+
+floral_AreaPlot <- clmm(as.factor(bombus_floral_abun) ~ cover_type +
+                         julian.date_scaled + 
+                         (1|area/plot_id),
+                       link = "logit", 
+                       data = field_data)
+floral_noRE <- polr(as.factor(bombus_floral_abun) ~ cover_type +
+                         julian.date_scaled,
+                       method = "logistic", 
+                       data = field_data)
+
+#compare models AIC
+AIC(floral_full, floral_noArea, floral_siteOnly, floral_AreaPlot, floral_noRE)
+##shows that model without random effect has best fit
+```
+
+2.  Run final model and look at output
+
+```{r}
+summary(floral_noRE)
+```
+
+## Plots
+
+Vegetation
+
+```{r}
+# Get predicted response for cover_type, holding other variables at their means 
+pred_floral_veg <- emmeans(
+  floral_noRE,
+  ~ cover_type,
+  at = list(julian.date_scaled = mean(surveys$julian.date_scaled, na.rm=TRUE)), 
+  type = "response")
+
+# Convert to dataframe for plotting
+pred_floral_veg_df <- as.data.frame(pred_floral_veg)
+
+#plot
+ggplot(pred_floral_veg_df, aes(x = cover_type, y = response)) +
+  geom_point(size = 3) +
+  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL), width = 0.2) +
+  labs(
+    title = "Predicted Floral Abundance by Cover Type",
+    x = "Cover Type",
+    y = "Predicted Floral Abundance"
+  ) +
+  theme_classic()
+```
+
+Julian date
+
+```{r}
+# Define a sequence of values for grass_forb_perc_scaled across its observed range
+date_seq <- seq(
+  from = min(field_data$julian.date_scaled, na.rm = TRUE),
+  to = max(field_data$julian.date_scaled, na.rm = TRUE),
+  length.out = 50
+)
+
+# Get predicted response for grass_forb_perc_scaled, holding other variables at their means
+pred_floral_date <- emmeans(floral_noRE,
+               ~ julian.date_scaled,
+               at = list(julian.date_scaled = date_seq,
+                         cover_type = "grass"),
+               type = "response")
+
+# Convert to dataframe for plotting
+pred_floral_date_df <- as.data.frame(pred_floral_date)
+
+ggplot(pred_floral_date_df, aes(x = julian.date_scaled, y = response)) +
+  geom_line(size = 1) +
+  geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL), alpha = 0.2, color = NA) +
+  labs(title = "Predicted Floral Abundance vs Julian Date",
+       x = "Julian Date (scaled)",
+       y = "Predicted Floral Abundance") +
+  theme_classic()
+```
+
+## Findings
+
+No significant effect of either grass+ forb% or julian date.
+
 # Number of nest-searching queens vs flowers, rodents, and field management technique
 
 Start by plotting a zero-inflated poisson, since \# of nest-searching queens is count data with a lot of zeros. I added bee_season_type as a covariate, since during my exploratory data analyses I saw that there was only a significant different in nest-searching queens among grassy vs bare sites during nesting season.
@@ -373,12 +385,12 @@ Start by plotting a zero-inflated poisson, since \# of nest-searching queens is 
 -   best fit = no random effect
 
 ```{r}
-NSQ_full <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled + 
+NSQ_full <- glmmTMB(nest_searching_queens ~ cover_type + 
                       bombus_floral_abun_scaled + 
                       num_burrows_scaled + 
                       bee_season_type + 
                       (1|area/site_id/plot_id),
-                    ziformula = ~ grass_forb_perc_scaled + 
+                    ziformula = ~ cover_type + 
                       bombus_floral_abun_scaled + 
                       num_burrows_scaled + 
                       bee_season_type +
@@ -387,12 +399,12 @@ NSQ_full <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled +
                     data = field_data)
 
 
-NSQ_noArea <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled + 
+NSQ_noArea <- glmmTMB(nest_searching_queens ~ cover_type + 
                         bombus_floral_abun_scaled + 
                         num_burrows_scaled + 
                         bee_season_type + 
                         (1|site_id/plot_id),
-                      ziformula = ~ grass_forb_perc_scaled + 
+                      ziformula = ~ cover_type + 
                         bombus_floral_abun_scaled + 
                         num_burrows_scaled + 
                         bee_season_type +
@@ -400,12 +412,12 @@ NSQ_noArea <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled +
                       family = poisson, 
                       data = field_data)
 
-NSQ_plotOnly <-  glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled + 
+NSQ_plotOnly <-  glmmTMB(nest_searching_queens ~ cover_type + 
                         bombus_floral_abun_scaled + 
                         num_burrows_scaled + 
                         bee_season_type + 
                         (1|plot_id),
-                      ziformula = ~ grass_forb_perc_scaled + 
+                      ziformula = ~ cover_type + 
                         bombus_floral_abun_scaled + 
                         num_burrows_scaled + 
                         bee_season_type +
@@ -413,12 +425,12 @@ NSQ_plotOnly <-  glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled +
                       family = poisson, 
                       data = field_data)
 
-NSQ_siteOnly <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled + 
+NSQ_siteOnly <- glmmTMB(nest_searching_queens ~ cover_type + 
                         bombus_floral_abun_scaled + 
                         num_burrows_scaled + 
                         bee_season_type + 
                         (1|site_id),
-                      ziformula = ~ grass_forb_perc_scaled + 
+                      ziformula = ~ cover_type + 
                         bombus_floral_abun_scaled + 
                         num_burrows_scaled + 
                         bee_season_type +
@@ -426,12 +438,12 @@ NSQ_siteOnly <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled +
                       family = poisson, 
                       data = field_data)
 
-NSQ_AreaPlot <-  glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled + 
+NSQ_AreaPlot <-  glmmTMB(nest_searching_queens ~ cover_type + 
                         bombus_floral_abun_scaled + 
                         num_burrows_scaled + 
                         bee_season_type + 
                         (1|area/plot_id),
-                      ziformula = ~ grass_forb_perc_scaled + 
+                      ziformula = ~ cover_type + 
                         bombus_floral_abun_scaled + 
                         num_burrows_scaled + 
                         bee_season_type +
@@ -439,11 +451,11 @@ NSQ_AreaPlot <-  glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled +
                       family = poisson, 
                       data = field_data)
 
-NSQ_noRE <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled + 
+NSQ_noRE <- glmmTMB(nest_searching_queens ~ cover_type + 
                     bombus_floral_abun_scaled + 
                     num_burrows_scaled + 
                     bee_season_type, 
-                  ziformula = ~ grass_forb_perc_scaled + 
+                  ziformula = ~ cover_type + 
                     bombus_floral_abun_scaled + 
                     num_burrows_scaled + 
                     bee_season_type,  # zero-inflation model
@@ -478,53 +490,52 @@ Number of nest-searching queens vs grass/forb
 Conditional model:
 
 ```{r}
-# Define a sequence of values for grass_forb_perc_scaled across its observed range
-grass_seq <- seq(
-  from = min(field_data$grass_forb_perc_scaled, na.rm = TRUE),
-  to = max(field_data$grass_forb_perc_scaled, na.rm = TRUE),
-  length.out = 50
-)
-
-# Create data grid over grass_forb_perc_scaled
-nsq_data_veg <- data.frame(
-  grass_forb_perc_scaled = grass_seq,
+#create new data grid
+nsq_data_cover<- expand.grid(
+  cover_type = unique(field_data$cover_type),
   bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled),
   num_burrows_scaled = mean(field_data$num_burrows_scaled),
-  bee_season_type = "nestsearching"  
+  bee_season_type = "nestsearching"
 )
 
 # Predictions for conditional model (count)
-pred_nsq_veg_cond <- predict(NSQ_noRE, newdata = nsq_data_veg, type = "conditional", se.fit = TRUE)
+pred_nsq_cover_cond <- predict(NSQ_noRE,
+                            newdata = nsq_data_cover,
+                            type = "conditional",
+                            se.fit = TRUE)
 
-# Predictions for zero-inflation model
-pred_nsq_veg_zi <- predict(NSQ_noRE, newdata = nsq_data_veg, type = "zprob", se.fit = TRUE)
+# Predictions for zero-inflated model 
+pred_nsq_cover_zi <- predict(NSQ_noRE,
+                            newdata = nsq_data_cover,
+                            type = "zprob",
+                            se.fit = TRUE)
 
-# Combine predictions with newdata
-pred_nsq_veg_df <- cbind(nsq_data_veg,
-                 cond_fit = pred_nsq_veg_cond$fit,
-                 cond_se = pred_nsq_veg_cond$se.fit,
-                 zi_fit = pred_nsq_veg_zi$fit,
-                 zi_se = pred_nsq_veg_zi$se.fit)
+# Combine predictions with data frame
+pred_nsq_cover_df <- cbind(nsq_data_cover,
+                 cond_fit = pred_nsq_cover_cond$fit,
+                 cond_se = pred_nsq_cover_cond$se.fit,
+                 zi_fit = pred_nsq_cover_zi$fit,
+                 zi_se = pred_nsq_cover_zi$se.fit)
 
-# Plot conditional predictions
-ggplot(pred_nsq_veg_df, aes(x = grass_forb_perc_scaled, y = cond_fit)) +
-  geom_line(color = "blue") +
-  geom_ribbon(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), alpha = 0.2) +
-  labs(title = "Conditional Model Predictions (log-scale)", y = "Predicted NSQ count (log-scale)") +
+#plot
+ggplot(pred_nsq_cover_df, aes(x = cover_type, y = cond_fit)) +
+  geom_point(size = 3) +
+  geom_errorbar(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), width = 0.2, position = position_dodge(0.6)) +
+  labs(title = "Model Predictions (Log-scale)",
+       x = "Cover Type",
+       y = "Predicted NSQ count (log-scale)") +
   theme_classic()
-
 ```
 
 Zero-inflated model:
 
 ```{r}
 # Plot zi predictions
-ggplot(pred_nsq_veg_df, aes(x = grass_forb_perc_scaled, y = zi_fit)) +
-  geom_line(color = "blue") +
-  geom_ribbon(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), alpha = 0.2) +
+ggplot(pred_nsq_cover_df, aes(x = cover_type, y = zi_fit)) +
+  geom_point(size = 3) +
+  geom_errorbar(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), width = 0.2, position = position_dodge(0.6)) +
   labs(title = "Zero-inflation Model Predictions (NSQ Presence/absence)", y = "Predicted Probability of Structural Zero") +
   theme_classic()
-
 ```
 
 Number of nest-searching queens vs floral abundance
@@ -542,7 +553,7 @@ floral_seq <- seq(
 # Create data grid over bombus_floral_abun_scaled
 nsq_data_floral <- data.frame(
   bombus_floral_abun_scaled = floral_seq,
-  grass_forb_perc_scaled = mean(field_data$grass_forb_perc_scaled),
+  cover_type = "grass",
   num_burrows_scaled = mean(field_data$num_burrows_scaled),
   bee_season_type = "nestsearching"  
 )
@@ -589,7 +600,7 @@ Conditional model:
 # Create data grid over rodent_burrows_scaled
 nsq_data_rodent <- data.frame(
   num_burrows_scaled = seq(min(field_data$num_burrows_scaled), max(field_data$num_burrows_scaled), length.out = 50),
-  grass_forb_perc_scaled = mean(field_data$grass_forb_perc_scaled),
+  cover_type = "grass",
   bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled),
   bee_season_type = "nestsearching"  
 )
@@ -632,7 +643,7 @@ Conditional model:
 ```{r}
 # Create newdata with discrete factor levels for bee_season_type
 nsq_data_season <- data.frame(
-  grass_forb_perc_scaled = mean(field_data$grass_forb_perc_scaled),
+  cover_type = "grass",
   bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled),
   num_burrows_scaled = mean(field_data$num_burrows_scaled),
   bee_season_type = factor(c("nestsearching", "worker"), levels = levels(field_data$bee_season_type))
@@ -791,7 +802,7 @@ anova(workers_noArea, worker_negbin)
 summary(worker_negbin)
 ```
 
-## ![](images/clipboard-1682655846.png)Plots
+## Plots
 
 Number of workers vs number of nest-searching queens
 
@@ -937,4 +948,4 @@ Number of nest-searching queens and number of rodent burrows is does not signifi
 
 # Final Path Diagram
 
-![](images/pathDiagramFinalOct272025.jpg)
+![](images/pathDiagramFinal.jpg)
