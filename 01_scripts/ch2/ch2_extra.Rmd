@@ -306,3 +306,116 @@ ggplot(vacoforaging_caste_summary, aes(x = caste, y = n_foraging_vaco, fill = ca
   ) +
   theme_classic()
 ```
+
+# Number of individuals observed 
+
+## Bees
+
+```{r}
+#load bee data
+bee <- read.csv("06_cleandata/bee_clean.csv")
+
+#add column for ditch vs field
+bee <- bee %>%
+  mutate(field_ditch = case_when(
+    str_detect(plot_id, "p1|p2") ~ "field",
+    str_detect(plot_id, "d") ~ "ditch",
+    TRUE ~ NA_character_
+  ))
+
+##counts per caste
+bee_count_summary <- bee %>%
+  #change blanks to unknown
+  mutate(caste = ifelse(caste == "" , "unknown", caste)) %>%
+  # Group by species and caste
+  group_by(caste) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  # Add a total row
+  bind_rows(tibble(caste = "overall", n = sum(.$n)))
+
+##counts per plot type 
+bee_count_summary_plot <- bee %>%
+  # Group by plot type 
+  group_by(field_ditch) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  # Add a total row
+  bind_rows(tibble(field_ditch = "overall", n = sum(.$n)))
+  
+#number of species
+bee_species_summary <- bee %>%
+  #change blanks to unknown
+  mutate(caste = ifelse(caste == "" , "unknown", caste)) %>%
+  mutate(bee_species = ifelse(bee_species == "" , "unknown", bee_species)) %>%
+  # Group by species and caste
+  group_by(bee_species, caste) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  # Pivot caste levels into columns
+  pivot_wider(
+    names_from = caste,
+    values_from = n,
+    values_fill = 0  # fill missing combinations with 0
+  ) %>%
+  # Add a total count column
+  mutate(n_overall = rowSums(across(-bee_species)))
+
+#number of species per plot type
+bee_species_summary_plot <- bee %>%
+  #change blanks to unknown
+  mutate(bee_species = ifelse(bee_species == "" , "unknown", bee_species)) %>%
+  # Group by species and caste
+  group_by(bee_species, field_ditch) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  # Pivot caste levels into columns
+  pivot_wider(
+    names_from = field_ditch,
+    values_from = n,
+    values_fill = 0  # fill missing combinations with 0
+  ) %>%
+  # Add a total count column
+  mutate(n_overall = rowSums(across(-bee_species)))
+
+```
+
+## Rodents
+
+```{r}
+#load bee data
+rodent <- read.csv("06_cleandata/rodent_clean.csv")
+
+#number of individuals
+total_rodent <- count(rodent) ##1037 across all sites
+#average per plot
+rodent_plot_summary <- rodent %>%
+  # Group by plot and site
+  group_by(site_id, plot_id) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  # Pivot caste levels into columns
+  pivot_wider(
+    names_from = site_id,
+    values_from = n,
+    values_fill = 0  # fill missing combinations with 0
+  )
+```
+
+## Floral species
+
+```{r}
+floral <- read.csv("06_cleandata/floral_clean.csv")
+
+beefloral <- read.csv("06_cleandata/useful_flowers.csv")
+
+floral_bombus <- floral %>%
+  filter(flower_species %in% beefloral$flower_species |
+           str_detect(flower_species, "brassica_") |
+           str_detect(flower_species, "rhododendron_") |
+           str_detect(flower_species, "rorippa_") |
+           str_detect(flower_species, "rubus_") |
+           str_detect(flower_species, "rosa_") |
+           str_detect(flower_species, "calystegia_") |
+           str_detect(flower_species, "prunus_") |
+           str_detect(flower_species, "phacelia_") 
+  )
+
+#count number of floral species:
+length(unique(floral_bombus$flower_species)) ##53
+```

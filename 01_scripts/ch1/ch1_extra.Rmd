@@ -12,6 +12,7 @@ knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_anal
 
 ```{r}
 #load packages
+library(tidyverse)
 library(ggplot2) #for plots
 library(dplyr) #for working with dataframes
 library(tidyr) #for working with datasets
@@ -194,4 +195,95 @@ ggplot(prop_inactive, aes(x = site_id, y = prop_inactive)) +
 weighted_avg_prop_inactive <- sum(prop_inactive$inactive_burrows) / sum(prop_inactive$total_burrows)
 weighted_avg_prop_inactive
 ##0.4928571
+```
+
+# Number of individuals observed 
+
+## Bees
+
+```{r}
+#load bee data
+bee <- read.csv("06_cleandata/bee_clean.csv")
+bee <- filter(bee, plot_id != "d")
+
+#number of individuals seen in each caste
+queen_num <- count(bee, caste == "q") ##168
+worker_num <- count(bee, caste == "w") ##36
+male_num <- count(bee, caste == "m") ##9
+unknown_num <- count(bee, caste == "") ##108
+total_bee <- count(bee) ##321
+##put into table
+bee_count_summary <- bee %>%
+  #change blanks to unknown
+  mutate(caste = ifelse(caste == "" , "unknown", caste)) %>%
+  # Group by species and caste
+  group_by(caste) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  # Add a total row
+  bind_rows(tibble(caste = "overall", n = sum(.$n)))
+  
+#number of species
+#put into a table
+bee_species_summary <- bee %>%
+  #change blanks to unknown
+  mutate(caste = ifelse(caste == "" , "unknown", caste)) %>%
+  mutate(bee_species = ifelse(bee_species == "" , "unknown", bee_species)) %>%
+  # Group by species and caste
+  group_by(bee_species, caste) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  # Pivot caste levels into columns
+  pivot_wider(
+    names_from = caste,
+    values_from = n,
+    values_fill = 0  # fill missing combinations with 0
+  ) %>%
+  # Add a total count column
+  mutate(n_overall = rowSums(across(-bee_species)))
+
+```
+
+## Rodents
+
+```{r}
+#load bee data
+rodent <- read.csv("06_cleandata/rodent_clean.csv")
+rodent <- filter(rodent, plot_id != "d")
+
+#number of individuals
+total_rodent <- count(rodent) ##517 across all sites
+#average per plot
+rodent_plot_summary <- rodent %>%
+  # Group by plot and site
+  group_by(site_id, plot_id) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  # Pivot caste levels into columns
+  pivot_wider(
+    names_from = site_id,
+    values_from = n,
+    values_fill = 0  # fill missing combinations with 0
+  )
+```
+
+## Floral species
+
+```{r}
+floral <- read.csv("06_cleandata/floral_clean.csv")
+floral <- filter(floral, plot_id != "d")
+
+beefloral <- read.csv("06_cleandata/useful_flowers.csv")
+
+floral_bombus <- floral %>%
+  filter(flower_species %in% beefloral$flower_species |
+           str_detect(flower_species, "brassica_") |
+           str_detect(flower_species, "rhododendron_") |
+           str_detect(flower_species, "rorippa_") |
+           str_detect(flower_species, "rubus_") |
+           str_detect(flower_species, "rosa_") |
+           str_detect(flower_species, "calystegia_") |
+           str_detect(flower_species, "prunus_") |
+           str_detect(flower_species, "phacelia_") 
+  )
+
+#count number of floral species:
+length(unique(floral_bombus$flower_species)) ##31
 ```
