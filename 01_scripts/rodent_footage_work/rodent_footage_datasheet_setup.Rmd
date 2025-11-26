@@ -1,0 +1,71 @@
+---
+title: "rodent_burrow_analysis"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_analysis/rodent-bee-blueberry")
+```
+
+# Loading packages
+
+```{r}
+#load packages
+library(tidyverse)
+library(lubridate) #package used to generate julian date from calendar date
+
+#read in data
+rodent_footage <- read.csv("06_cleandata/rodent_camera_data_clean.csv")
+site_info <- read.csv("06_cleandata/site_info_clean.csv")
+```
+
+# Clean data
+
+```{r}
+#rename site column to "site_id" in rodent data
+rodent_footage <- rodent_footage %>%
+  rename(site_id = site)
+
+#add area and covertype to rodent data
+rodent_footage <- rodent_footage %>% 
+  left_join(site_info %>% select(site_id, area, cover_type), 
+            by = c("site_id"))
+
+#add column to rodent data for rodent (either y or n)
+rodent_footage <- rodent_footage %>% 
+  mutate(rodent = if_else(str_detect(species_common, "vole|deer|rat"), "y", "n"))
+
+#correct date format
+rodent_footage$date <- dmy(rodent_footage$date)
+
+#change character columns to factors
+rodent_footage <- rodent_footage %>%
+   mutate(
+     site_id = as.factor(site_id),
+     plot = as.factor(plot),
+     date = as.Date(date),
+     species_common = as.factor(species_common),
+     species_scientific = as.factor(species_scientific),
+     bait_interaction = as.factor(bait_interaction),
+     hole_interaction = as.factor(hole_interaction), 
+     area = as.factor(area),
+     cover_type = as.factor(cover_type),
+     rodent = as.factor(rodent)
+     )
+
+#check structure of final dataframe
+str(rodent_footage)
+```
+
+View final dataframe.
+
+```{r}
+View(rodent_footage)
+```
+
+Export final dataframe.
+
+```{r}
+write_csv(rodent_footage, file = file.path("06_cleandata","rodent_footage_data.csv"))
+```

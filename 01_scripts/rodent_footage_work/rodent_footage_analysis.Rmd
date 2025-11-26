@@ -1,0 +1,71 @@
+---
+title: "rodent_footage_analysis"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_analysis/rodent-bee-blueberry")
+```
+
+# Load packages and data
+
+```{r}
+#load packages
+library(tidyverse)
+
+#load data
+rodent_footage <- read.csv("06_cleandata/rodent_footage_data.csv")
+```
+
+# Creating graphs
+
+1: \# rodent (deermice, voles, rats) vs area, grouped by cover type (bare vs grassy).
+
+```{r}
+
+```
+
+2: \# rodent vs site, grouped by rodent species.
+
+```{r}
+
+```
+
+3: \# rodent vs cover type, grouped by rodent species.
+
+```{r}
+
+```
+
+4: \# deermice vs cover type
+
+```{r}
+
+```
+
+5: \# vole vs cover type
+
+```{r}
+
+```
+
+# Running stats
+
+1: Are there more voles at grassy sites than bare? 
+
+```{r}
+
+```
+
+2: Are there more deermice at grassy sites than bare?
+
+```{r}
+
+```
+
+3: Are there overall more rodents at grassy sites than bare?
+
+```{r}
+
+```
