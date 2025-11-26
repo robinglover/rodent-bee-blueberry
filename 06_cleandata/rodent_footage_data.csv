@@ -1,0 +1,451 @@
+site_id,plot,date,time,video_id,species_common,species_scientific,num_ind,bait_interaction,hole_interaction,nice,notes,area,cover_type,rodent
+lbf_ladnertrunk,d,2025-08-19,23:03:57,8190001,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,d,2025-08-20,23:54:00,8190002,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,d,2025-08-20,23:55:30,8190003,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-18,20:35:06,8180001,rabbit,Oryctolagus_cuniculus,1,n,n,,rabbit running in background,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-18,20:36:21,8180002,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-19,0:14:39,8190003,coyote,Canis_latrans,1,n,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-19,0:16:11,8190004,coyote,Canis_latrans,1,n,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-19,0:26:35,8190005,coyote,Canis_latrans,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-19,5:53:29,8190006,coyote,Canis_latrans,1,y,n,coyote pees on bait! maybe marking territory?,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-20,1:50:37,8200007,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-20,1:51:50,8200008,rabbit,Oryctolagus_cuniculus,1,n,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-20,1:56:42,8200009,rabbit,Oryctolagus_cuniculus,1,n,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-20,1:58:01,8200010,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-20,1:59:16,8200011,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-20,2:02:21,8200012,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-20,2:58:49,8200013,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-20,3:00:08,8200014,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-20,3:01:23,8200015,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-20,3:02:38,8200016,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-20,3:03:54,8200017,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-20,20:43:31,8200018,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-20,20:44:47,8200019,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-20,20:46:03,8200020,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-20,20:47:18,8200021,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-20,22:11:17,8200022,rabbit,Oryctolagus_cuniculus,1,n,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-21,1:31:56,8210023,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-21,1:33:20,8210024,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-21,1:34:52,8210025,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-21,1:36:05,8210026,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-21,1:37:20,8210027,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-21,1:38:43,8210028,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-21,1:40:02,8210029,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-21,1:41:16,8210030,rabbit,Oryctolagus_cuniculus,1,n,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-21,1:42:48,8210031,rabbit,Oryctolagus_cuniculus,1,n,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-21,3:26:14,8210032,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-21,3:27:32,8210033,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-21,3:48:29,8210034,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-21,3:30:06,8210035,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-21,3:31:33,8210036,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-21,3:32:56,8210037,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-21,3:34:14,8210038,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-21,3:35:37,8210039,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,grass,n
+lbf_ladnertrunk,p1,2025-08-21,3:36:56,8210040,rabbit,Oryctolagus_cuniculus,1,n,n,,,delta_4,grass,n
+bates_57b,p1,2025-08-18,22:04:57,8180002,rabbit,Oryctolagus_cuniculus,1,n,n,,,delta_1,grass,n
+bates_57b,p1,2025-08-18,23:11:47,8180004,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-18,23:40:02,8180005,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-19,0:37:39,8190006,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-19,0:41:40,8190007,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-19,1:45:51,8190008,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-19,20:39:37,8190009,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-19,21:13:18,8190010,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-19,23:39:36,8190012,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-19,23:50:09,8190013,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-20,1:06:03,8200014,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-20,2:23:14,8200015,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-20,2:57:53,8200016,rabbit,Oryctolagus_cuniculus,1,n,n,,,delta_1,grass,n
+bates_57b,p1,2025-08-20,3:33:58,8200017,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-20,3:44,8200019,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-20,4:06:10,8200021,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-20,4:38:18,8200024,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-20,5:08:14,8200025,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-20,21:07:58,8200027,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-20,21:14:43,8200028,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-20,21:16:34,8200029,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-20,27:26:21,8200031,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-20,21:30:49,8200032,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-20,22:24:06,8200034,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-20,22:27:33,8200035,north_american_deermouse,Peromyscus_maniculatus,1,n,y,,,delta_1,grass,y
+bates_57b,p1,2025-08-20,22:38:13,8200036,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-20,22:45:23,8200037,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-20,23:07:37,8200038,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-20,23:54:40,8200040,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-21,0:21:21,8210042,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-21,1:09:07,8210044,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-21,1:19:10,8210046,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-21,1:45:17,8210047,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-21,1:57:06,8210048,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-21,2:16,8210050,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-21,2:21:49,8210051,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-21,3:02:47,8210053,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-21,3:05:20,8210054,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-21,3:25:36,8210055,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-21,3:39:05,8210057,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-21,3:43:23,8210058,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-21,3:45:51,8210059,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-21,3:51:35,8210060,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-21,4:00:14,8210061,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-21,4:03:23,8210062,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-21,4:22:23,8210064,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-21,4:28:30,8210066,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-21,4:37:03,8210067,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-21,4:41:08,8210068,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-21,4:50:38,8210069,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p1,2025-08-21,4:59:16,8210070,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-21,20:31:59,8210003,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-21,21:37:46,8210004,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-21,21:58:05,8210005,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-21,22:03:44,8210006,north_american_deermouse,Peromyscus_maniculatus,2,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-21,22:06:15,8210007,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-21,22:08:37,8210008,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-21,23:29:46,8210011,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-21,23:48:01,8210012,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-21,23:49:55,8210013,north_american_deermouse,Peromyscus_maniculatus,2,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-21,23:57:11,8210015,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,0:12:39,8220017,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,0:29:40,8220018,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,0:37:00,8220019,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,0:39:27,8220020,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,1:06:52,8220023,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,1:08:34,8220024,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,1:10:24,8220025,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,1:13:07,8220027,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,1:17:00,8220028,north_american_deermouse,Peromyscus_maniculatus,2,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,1:58:16,8220031,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,2:27:32,8220033,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,2:26:54,8220034,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,2:47:59,8220035,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,2:55:59,8220036,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,3:47:28,8220037,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,3:51:22,8220038,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,3:52:57,8220039,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,3:54:32,8220040,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,3:59:08,8220041,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,4:09:33,8220043,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,4:13:33,8220044,north_american_deermouse,Peromyscus_maniculatus,1,y,n,Something messing with the camera,,delta_1,grass,y
+bates_57b,p2,2025-08-22,5:40:41,8220048,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,6:05:19,8220049,townsends_vole,Microtus_townsendii,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,21:40:35,8220050,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,21:45:37,8220051,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,22:04:13,8220052,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,22:15:33,8220053,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,22:46:22,8220056,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,23:33:44,8220058,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-22,0:46:08,8230059,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,0:47:32,8230060,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,1:17:52,8230061,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,1:42:52,8230062,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,1:52:24,8230063,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,1:57:42,8230064,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,1:58:57,8230065,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,2:36:31,8230067,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,2:43:41,8230068,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,3:47:53,8230069,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,3:49:18,8230070,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,4:02:00,8230071,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,4:03:15,8230072,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,4:08:09,8230074,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,4:09:24,8230075,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,4:37:56,8230078,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,4:39:33,8230079,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,4:48:17,8230081,north_american_deermouse,Peromyscus_maniculatus,2,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,4:54:41,8230082,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,5:04:07,8230084,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,5:10:43,8230086,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,5:16:36,8230088,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,5:18:29,8230089,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,5:48:13,8230091,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,21:01:22,8230092,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,21:10:26,8230094,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,21:54:29,8230096,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,23:05:07,8230098,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,23:10:14,8230099,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,23:13:46,8230100,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-23,23:44:31,8230102,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,0:48:47,8240103,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,0:50:22,8240104,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,0:55:20,8240105,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,0:58:03,8240106,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,1:03:10,8240108,north_american_deermouse,Peromyscus_maniculatus,2,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,1:08:40,8240110,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,1:25:30,8240113,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,1:29:53,8240114,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,1:30:58,8240115,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,1:35:02,8240117,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,1:37:50,8240118,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,1:38:56,8240119,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,1:49:10,8240120,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,2:30:46,8240121,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,2:34:50,8240123,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,2:38:11,8240125,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,2:55:00,8240130,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,3:04:01,8240132,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,3:05:27,8240133,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,3:09:33,8240134,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,3:14:49,8240136,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,3:33:17,8240139,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,3:35:37,8240140,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,3:49:08,8240144,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,3:50:48,8240145,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,3:58:47,8240147,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,4:21:14,8240150,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,4:22:44,8240151,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,4:25:16,8240152,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,4:29:10,8240153,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,4:42:32,8240154,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,4:44:25,8240155,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,5:04:29,8240156,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bates_57b,p2,2025-08-24,5:06:41,8240157,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,grass,y
+bks_56,d,2025-08-21,3:44:32,8210001,coyote,Canis_latrans,1,n,n,,,delta_1,bare,n
+bks_56,p1,2025-08-18,20:36:29,8180001,bird,Aves,2,n,n,,,delta_1,bare,n
+bks_56,p1,2025-08-19,23:41:05,8190003,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,bare,y
+bks_56,p1,2025-08-20,2:50:20,8200004,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,bare,y
+bks_56,p1,2025-08-20,23:44:16,8200005,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,bare,y
+bks_56,p2,2025-08-19,23:32:13,8190002,north_american_deermouse,Peromyscus_maniculatus,1,n,n,Close up deer mouse,,delta_1,bare,y
+bks_56,p2,2025-08-20,3:18:49,8200003,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,bare,y
+bks_56,p2,2025-08-20,23:20:48,8200004,north_american_deermouse,Peromyscus_maniculatus,1,y,n,Deer mouse eating bait,,delta_1,bare,y
+bks_56,p2,2025-08-21,1:35:38,8210005,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_1,bare,y
+chong_96,d,2025-08-18,22:45:40,8180001,deer,Cervidae_sp,1,n,n,,,delta_3,grass,y
+chong_96,d,2025-08-18,22:47:04,8180002,deer,Cervidae_sp,1,n,n,,,delta_3,grass,y
+chong_96,p1,2025-08-18,20:36:12,8180001,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_3,grass,y
+chong_96,p1,2025-08-18,22:33:04,8180002,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,grass,y
+chong_96,p1,2025-08-18,23:18:03,8180003,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_3,grass,y
+chong_96,p1,2025-08-19,0:42:15,8190004,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_3,grass,y
+chong_96,p1,2025-08-19,2:24:40,8190006,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,grass,y
+chong_96,p1,2025-08-19,2:47:42,8190007,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,grass,y
+chong_96,p1,2025-08-19,2:57:24,8190008,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,grass,y
+chong_96,p1,2025-08-19,3:12:39,8190010,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,grass,y
+chong_96,p1,2025-08-19,3:16:36,8190011,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,grass,y
+chong_96,p1,2025-08-19,4:13:40,8190012,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,grass,y
+chong_96,p1,2025-08-19,4:16:02,8190013,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_3,grass,y
+chong_96,p1,2025-08-19,4:38:07,8190014,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,grass,y
+chong_96,p1,2025-08-19,5:09:46,8190015,rabbit,Oryctolagus_cuniculus,1,n,n,,,delta_3,grass,n
+chong_96,p1,2025-08-19,21:37:54,8190016,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,grass,y
+chong_96,p1,2025-08-19,21:41:32,8190017,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,grass,y
+chong_96,p1,2025-08-19,21:54:43,8190018,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,grass,y
+chong_96,p1,2025-08-19,22:34:53,8190019,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_3,grass,y
+chong_96,p1,2025-08-19,23:44:38,8190020,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,grass,y
+chong_96,p1,2025-08-20,4:44:27,8200021,rabbit,Oryctolagus_cuniculus,1,y,n,Rabbit eating bait,,delta_3,grass,n
+chong_96,p1,2025-08-20,21:24:32,8200023,north_american_deermouse,Peromyscus_maniculatus,2,y,n,,,delta_3,grass,y
+chong_96,p1,2025-08-21,0:25:37,8210024,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,grass,y
+chong_96,p1,2025-08-21,0:27:35,8210025,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,grass,y
+chong_96,p1,2025-08-21,0:28:49,8210026,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,grass,y
+chong_96,p1,2025-08-21,2:43:56,8210027,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,grass,y
+chong_96,p1,2025-08-21,4:08:25,8210028,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,grass,y
+chong_96,p1,2025-08-21,4:09:30,8210029,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,grass,y
+chong_96,p2,2025-08-18,23:03:14,8180002,rabbit,Oryctolagus_cuniculus,1,n,n,,,delta_3,grass,n
+chong_96,p2,2025-08-18,23:45:42,8180003,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_3,grass,y
+chong_96,p2,2025-08-19,0:27:04,8190004,rabbit,Oryctolagus_cuniculus,1,n,n,,,delta_3,grass,n
+chong_96,p2,2025-08-19,0:28:26,8190005,rabbit,Oryctolagus_cuniculus,1,n,n,,,delta_3,grass,n
+chong_96,p2,2025-08-19,1:38:04,8190006,rabbit,Oryctolagus_cuniculus,1,n,n,,,delta_3,grass,n
+chong_96,p2,2025-08-19,2:22:38,8190007,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_3,grass,y
+chong_96,p2,2025-08-19,2:25:27,8190008,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,grass,y
+chong_96,p2,2025-08-19,2:27:05,8190009,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_3,grass,y
+chong_96,p2,2025-08-19,3:51:53,8190011,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_3,grass,y
+chong_96,p2,2025-08-19,4:02:58,8190014,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_3,grass,y
+chong_96,p2,2025-08-19,4:04:18,8190015,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_3,grass,y
+chong_96,p2,2025-08-19,4:59:29,8190016,rabbit,Oryctolagus_cuniculus,1,n,n,,,delta_3,grass,n
+chong_96,p2,2025-08-19,20:23:50,8190017,bird,Aves,1,n,n,,,delta_3,grass,n
+chong_96,p2,2025-08-19,21:55:32,8190018,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_3,grass,y
+chong_96,p2,2025-08-19,22:02:39,8190019,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,grass,y
+chong_96,p2,2025-08-19,22:08:25,8190020,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,grass,y
+chong_96,p2,2025-08-19,22:10:19,8190021,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_3,grass,y
+chong_96,p2,2025-08-20,1:11:05,8200022,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,grass,y
+chong_96,p2,2025-08-20,1:12:29,8200023,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_3,grass,y
+chong_96,p2,2025-08-20,1:13:51,8200024,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_3,grass,y
+chong_96,p2,2025-08-20,4:19:03,8200025,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,grass,y
+chong_96,p2,2025-08-20,21:21:08,8200026,rabbit,Oryctolagus_cuniculus,1,n,n,,,delta_3,grass,n
+chong_96,p2,2025-08-20,21:27:04,8200027,rabbit,Oryctolagus_cuniculus,1,n,n,,,delta_3,grass,n
+chong_96,p2,2025-08-20,22:20:46,8200028,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_3,grass,n
+chong_96,p2,2025-08-20,23:23:24,8200029,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_3,grass,y
+chong_96,p2,2025-08-20,23:45:01,8200030,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,grass,y
+chong_96,p2,2025-08-21,3:25:30,8210033,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_3,grass,n
+bks_96,d,2025-08-19,3:19:06,8190002,deer,Cervidae_sp,1,n,n,,,delta_3,bare,y
+bks_96,d,2025-08-19,21:32:46,8190003,coyote,Canis_latrans,1,n,n,,,delta_3,bare,n
+bks_96,d,2025-08-20,1:53:47,8200004,bird,Aves,1,n,n,,,delta_3,bare,n
+bks_96,d,2025-08-20,2:48:14,8200006,bird,Aves,1,n,n,,,delta_3,bare,n
+bks_96,p1,2025-08-19,1:26:21,8190001,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,bare,y
+bks_96,p1,2025-08-19,2:23:08,8190002,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,bare,y
+bks_96,p2,2025-08-18,21:30:26,8180001,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,bare,y
+bks_96,p2,2025-08-18,22:23:16,8180002,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,bare,y
+bks_96,p2,2025-08-19,0:48:14,8190003,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_3,bare,y
+bks_96,p2,2025-08-19,2:16:02,8190005,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_3,bare,y
+bks_96,p2,2025-08-19,2:54:50,8190006,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,bare,y
+bks_96,p2,2025-08-19,23:55:57,8190008,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,bare,y
+bks_96,p2,2025-08-20,3:15:34,8200009,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_3,bare,y
+bks_96,p2,2025-08-21,2:13:24,8210010,deer,Cervidae_sp,1,y,n,,,delta_3,bare,y
+bks_68,p1,2025-08-29,2:31:18,8290001,unknown,unknown,1,n,n,,"eyes moving, rabbit?",delta_2,bare,n
+bks_68,p2,2025-08-27,0:47:03,8270001,bird,Aves,1,n,n,,,delta_2,bare,n
+bks_68,p2,2025-08-27,5:10:06,8270002,bird,Aves,1,n,n,,,delta_2,bare,n
+bks_68,p2,2025-08-28,5:19:57,8280003,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_2,bare,y
+bks_68,p2,2025-08-28,21:27:52,8280004,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_2,bare,y
+bks_68,d,2025-08-26,21:41:23,8260001,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_2,bare,y
+bks_68,d,2025-08-27,4:53:58,8270002,bird,Aves,1,n,n,,,delta_2,bare,n
+bks_68,d,2025-08-28,2:50:05,8280003,unknown,unknown,2,n,n,,"Unknown movement around bait, maybe shrew? ",delta_2,bare,n
+lbf_ladnertrunk,p2,2025-08-18,23:20:22,8180001,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_4,grass,y
+lbf_ladnertrunk,p2,2025-08-20,21:26:55,8200003,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_4,grass,y
+lbf_ladnertrunk,p2,2025-08-21,2:33:34,8210004,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,delta_4,grass,y
+lbf_ladnertrunk,p2,2025-08-21,4:34:12,8210005,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_4,grass,y
+lbf_ladnertrunk,p2,2025-08-21,4:37:11,8210006,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_4,grass,y
+lbf_ladnertrunk,p2,2025-08-21,4:38:28,8210007,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,delta_4,grass,y
+sandhu_ladnertrunk,p1,2025-08-18,22:18:33,8180003,unknown,unknown,1,n,n,,"Eyes moving in background, likely rabbit",delta_4,bare,n
+sandhu_ladnertrunk,p1,2025-08-19,3:41:25,8190004,rabbit,Oryctolagus_cuniculus,1,n,n,,Eyes moving in background,delta_4,bare,n
+sandhu_ladnertrunk,p2,2025-08-18,23:25:25,8180001,rabbit,Oryctolagus_cuniculus,1,n,n,,eyes moving,delta_4,bare,n
+sandhu_ladnertrunk,p2,2025-08-18,23:36:00,8180002,unknown,unknown,1,n,n,,likely rabbit ,delta_4,bare,n
+sandhu_ladnertrunk,p2,2025-08-19,22:37:01,8190003,rabbit,Oryctolagus_cuniculus,1,n,n,,,delta_4,bare,n
+sandhu_ladnertrunk,p2,2025-08-20,1:37:37,8200004,rabbit,Oryctolagus_cuniculus,1,n,n,,,delta_4,bare,n
+sandhu_ladnertrunk,p2,2025-08-20,1:38:59,8200005,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,bare,n
+sandhu_ladnertrunk,p2,2025-08-20,1:40:37,8200006,rabbit,Oryctolagus_cuniculus,1,n,n,,,delta_4,bare,n
+sandhu_ladnertrunk,p2,2025-08-20,1:42:10,8200007,rabbit,Oryctolagus_cuniculus,1,n,n,,,delta_4,bare,n
+sandhu_ladnertrunk,p2,2025-08-21,2:41:25,8210008,rabbit,Oryctolagus_cuniculus,1,n,n,,,delta_4,bare,n
+sandhu_ladnertrunk,p2,2025-08-21,2:42:25,8210009,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,bare,n
+sandhu_ladnertrunk,p2,2025-08-21,2:44:09,8210010,rabbit,Oryctolagus_cuniculus,1,n,n,,,delta_4,bare,n
+sandhu_ladnertrunk,p2,2025-08-21,2:58:53,8210011,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,bare,n
+sandhu_ladnertrunk,p2,2025-08-21,3:00:11,8210012,rabbit,Oryctolagus_cuniculus,1,y,n,Clear video of rabbit eating bait ,,delta_4,bare,n
+sandhu_ladnertrunk,p2,2025-08-21,3:01:28,8210013,rabbit,Oryctolagus_cuniculus,1,n,n,,,delta_4,bare,n
+sandhu_ladnertrunk,p2,2025-08-21,3:30:18,8210015,rabbit,Oryctolagus_cuniculus,1,n,n,,,delta_4,bare,n
+sandhu_ladnertrunk,p2,2025-08-21,3:31:37,8210016,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,bare,n
+sandhu_ladnertrunk,p2,2025-08-21,3:32:54,8210017,rabbit,Oryctolagus_cuniculus,1,y,n,,,delta_4,bare,n
+sandhu_ladnertrunk,d,2025-08-18,21:13:55,8180001,bird,Aves,1,n,n,,,delta_4,bare,n
+sandhu_ladnertrunk,d,2025-08-18,22:19:48,8180002,bird,Aves,1,n,n,,,delta_4,bare,n
+sandhu_ladnertrunk,d,2025-08-18,23:40:44,8180003,bird,Aves,1,n,n,,,delta_4,bare,n
+sandhu_ladnertrunk,d,2025-08-19,0:45:56,8190004,bird,Aves,1,n,n,,,delta_4,bare,n
+sandhu_ladnertrunk,d,2025-08-19,1:53:51,8190005,bird,Aves,1,n,n,,,delta_4,bare,n
+sandhu_ladnertrunk,d,2025-08-19,2:31:12,8190006,bird,Aves,1,n,n,,,delta_4,bare,n
+sandhu_ladnertrunk,d,2025-08-19,5:21:54,8190007,coyote,Canis_latrans,1,y,n,,,delta_4,bare,n
+sandhu_ladnertrunk,d,2025-08-19,22:14:13,8190011,bird,Aves,1,n,n,,,delta_4,bare,n
+sandhu_ladnertrunk,d,2025-08-19,23:38:11,8190012,bird,Aves,1,n,n,,,delta_4,bare,n
+sandhu_ladnertrunk,d,2025-08-20,0:15:02,8200013,bird,Aves,1,n,n,,,delta_4,bare,n
+sandhu_ladnertrunk,d,2025-08-20,4:50:21,8200014,bird,Aves,1,n,n,,,delta_4,bare,n
+sandhu_ladnertrunk,d,2025-08-20,23:28:49,8200015,bird,Aves,1,n,n,,,delta_4,bare,n
+bks_neaves,p1,2025-08-21,23:21:01,8210001,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,pittmeadows_1,bare,y
+bks_neaves,d,2025-08-19,21:24:24,8190001,bird,Aves,1,n,n,,,pittmeadows_1,bare,n
+avtar_168,p1,2025-08-20,1:04:50,8200001,unknown,unknown,1,n,n,,Eyes moving in background (likely rabbit),surrey_1,grass,n
+avtar_168,p1,2025-08-20,1:26:35,8200002,unknown,unknown,1,n,n,,Eyes moving in background (likely coyote),surrey_1,grass,n
+avtar_168,p1,2025-08-20,23:06:31,8200003,unknown,unknown,1,n,n,,Eyes moving in background (likely coyote),surrey_1,grass,n
+avtar_168,p2,2025-08-20,2:03:27,8200001,unknown,unknown,1,n,n,,Eyes moving in background (likely rabbit),surrey_1,grass,n
+avtar_168,p2,2025-08-20,4:23:47,8200002,rabbit,Oryctolagus_cuniculus,1,n,n,,,surrey_1,grass,n
+avtar_168,p2,2025-08-20,4:25:10,8200003,rabbit,Oryctolagus_cuniculus,1,n,n,,,surrey_1,grass,n
+avtar_168,p2,2025-08-20,2:26:45,8210005,unknown,unknown,1,n,n,,Eyes moving in background ,surrey_1,grass,n
+avtar_168,p2,2025-08-20,3:37:48,8220007,rabbit,Oryctolagus_cuniculus,1,n,n,,,surrey_1,grass,n
+avtar_168,d,2025-08-19,20:47:59,8190001,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,surrey_1,grass,y
+avtar_168,d,2025-08-20,21:29:42,8200003,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,surrey_1,grass,y
+avtar_168,d,2025-08-20,23:08:36,8200004,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,surrey_1,grass,y
+avtar_168,d,2025-08-21,21:14:08,8210005,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,surrey_1,grass,y
+avtar_168,d,2025-08-21,21:23:07,8210006,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,surrey_1,grass,y
+avtar_168,d,2025-08-21,23:25:06,8210007,north_american_deermouse,Peromyscus_maniculatus,1,n,n,,,surrey_1,grass,y
+avtar_168,d,2025-08-21,23:32:18,8210008,unknown,unknown,1,n,n,,Likely deermouse ,surrey_1,grass,n
+surjit_168,p1,2025-08-20,1:21:36,8200002,rabbit,Oryctolagus_cuniculus,1,y,n,,,surrey_1,bare,n
+surjit_168,p1,2025-08-22,1:03:32,8220003,rabbit,Oryctolagus_cuniculus,1,y,n,,,surrey_1,bare,n
+surjit_168,p2,2025-08-20,22:20:40,8200002,rabbit,Oryctolagus_cuniculus,1,n,n,,,surrey_1,bare,n
+surjit_168,p2,2025-08-20,22:30:31,8200003,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,surrey_1,bare,y
+surjit_168,p2,2025-08-20,22:37:53,8200004,north_american_deermouse,Peromyscus_maniculatus,1,y,n,,,surrey_1,bare,y
+surjit_168,p2,2025-08-21,4:25:01,8210005,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-21,4:27:02,8210006,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-21,21:55:02,8210007,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-21,22:23:33,8210008,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-21,22:41:23,8210009,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-21,22:42:38,8210010,north_american_deermouse,Peromyscus_maniculatus,1,n,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,0:14:10,8220011,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,0:16:23,8220012,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,1:02:15,8220013,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,1:07:17,8220014,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,1:25:06,8220015,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,1:35:18,8220016,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,1:58:14,8220017,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,2:06:23,8220018,north_american_deermouse,Peromyscus_maniculatus,1,n,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,2:18:11,8220019,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,2:20:15,8220020,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,2:25:53,8220021,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,2:41:45,8220022,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,2:54:54,8220024,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,2:57:41,8220025,north_american_deermouse,Peromyscus_maniculatus,2,n,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,3:22:00,8220026,north_american_deermouse,Peromyscus_maniculatus,1,n,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,3:26:45,8220027,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,3:27:53,8220028,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,3:29:15,8220029,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,3:30:29,8220030,north_american_deermouse,Peromyscus_maniculatus,1,n,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,3:59:52,8220031,north_american_deermouse,Peromyscus_maniculatus,1,n,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,4:05:32,8220032,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,4:06:53,8220033,north_american_deermouse,Peromyscus_maniculatus,2,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,4:08:14,8220034,north_american_deermouse,Peromyscus_maniculatus,2,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,4:20:40,8220035,north_american_deermouse,Peromyscus_maniculatus,1,n,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,4:21:58,8220036,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,4:43:57,8220038,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,4:45:45,8220039,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,5:13:18,8220040,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,p2,2025-08-22,5:31:26,8220041,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-19,23:19:29,8190002,rat,Rattus_sp,1,n,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-20,4:34:06,8200003,townsends_vole,Microtus_townsendii,1,n,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-21,0:49:03,8210004,raccoon,Procyon_lotor,1,y,n ,,,surrey_1,bare,n
+surjit_168,d,2025-08-21,0:50:18,8210005,raccoon,Procyon_lotor,1,y,n ,,,surrey_1,bare,n
+surjit_168,d,2025-08-21,0:51:33,8210006,raccoon,Procyon_lotor,1,y,n ,,,surrey_1,bare,n
+surjit_168,d,2025-08-21,0:52:49,8210007,raccoon,Procyon_lotor,1,y,n ,,,surrey_1,bare,n
+surjit_168,d,2025-08-21,0:54:04,8210008,raccoon,Procyon_lotor,1,y,n ,,,surrey_1,bare,n
+surjit_168,d,2025-08-21,1:54:09,8210009,townsends_vole,Microtus_townsendii,1,n,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-21,1:55:28,8210010,townsends_vole,Microtus_townsendii,1,y,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-21,2:06:04,8210011,townsends_vole,Microtus_townsendii,1,y,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-21,2:08:02,8210012,townsends_vole,Microtus_townsendii,1,y,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-21,2:15:44,8210013,townsends_vole,Microtus_townsendii,1,y,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-21,2:17:05,8210014,townsends_vole,Microtus_townsendii,1,y,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-21,2:43:57,8210016,townsends_vole,Microtus_townsendii,1,y,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-21,2:45:21,8210017,townsends_vole,Microtus_townsendii,1,y,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-21,2:46:49,8210018,townsends_vole,Microtus_townsendii,1,y,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-21,2:49:40,8210020,townsends_vole,Microtus_townsendii,1,y,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-21,2:53:30,8210021,townsends_vole,Microtus_townsendii,1,n,y,,,surrey_1,bare,y
+surjit_168,d,2025-08-21,2:54:47,8210022,townsends_vole,Microtus_townsendii,1,y,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-21,3:05:24,8210023,townsends_vole,Microtus_townsendii,1,y,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-21,3:06:37,8210024,townsends_vole,Microtus_townsendii,1,y,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-21,3:09:15,8210025,townsends_vole,Microtus_townsendii,1,y,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-21,3:10:29,8210026,townsends_vole,Microtus_townsendii,1,y,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-21,3:16:28,8210027,townsends_vole,Microtus_townsendii,1,y,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-21,3:32:44,8210028,coyote,Canis_latrans,1,n,n ,,,surrey_1,bare,n
+surjit_168,d,2025-08-21,21:40:49,8210030,townsends_vole,Microtus_townsendii,1,y,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-21,21:42:06,8210031,townsends_vole,Microtus_townsendii,1,y,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-22,0:01:53,8220032,townsends_vole,Microtus_townsendii,1,y,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-22,1:56:32,8220033,townsends_vole,Microtus_townsendii,1,y,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-22,1:57:51,8220034,townsends_vole,Microtus_townsendii,1,y,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-22,1:59:09,8220035,townsends_vole,Microtus_townsendii,1,y,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-22,2:00:28,8220036,townsends_vole,Microtus_townsendii,1,n,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-22,2:01:54,8220037,townsends_vole,Microtus_townsendii,1,n,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-22,3:22:24,8220039,townsends_vole,Microtus_townsendii,1,y,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-22,3:23:40,8220040,townsends_vole,Microtus_townsendii,1,y,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-22,3:24:59,8220041,townsends_vole,Microtus_townsendii,1,y,n ,,,surrey_1,bare,y
+surjit_168,d,2025-08-22,3:26:22,8220042,townsends_vole,Microtus_townsendii,1,y,n ,,,surrey_1,bare,y
+gwb_neaves,p1,2025-08-19,22:08:28,8190001,north_american_deermouse,Peromyscus_maniculatus,1,n,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p1,2025-08-19,23:25:39,8190002,north_american_deermouse,Peromyscus_maniculatus,1,n,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p1,2025-08-20,0:16:56,8200003,north_american_deermouse,Peromyscus_maniculatus,1,n,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p1,2025-08-20,2:03:57,8200004,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p1,2025-08-20,6:04:56,8200005,bird,Aves,1,n,n ,,,pittmeadows_1,grass,n
+gwb_neaves,p1,2025-08-21,22:14:13,8200006,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p1,2025-08-21,22:12:07,8210008,north_american_deermouse,Peromyscus_maniculatus,1,n,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p1,2025-08-21,22:14:13,8210009,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p1,2025-08-22,4:15:43,8220010,north_american_deermouse,Peromyscus_maniculatus,1,n,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p2,2025-08-19,21:32:41,8190001,north_american_deermouse,Peromyscus_maniculatus,1,n,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p2,2025-08-20,1:00:00,8200002,north_american_deermouse,Peromyscus_maniculatus,1,n,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p2,2025-08-20,23:57:51,8200003,north_american_deermouse,Peromyscus_maniculatus,1,n,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p2,2025-08-20,23:59:08,8200004,north_american_deermouse,Peromyscus_maniculatus,1,n,n ,deermouse eating on back legs,,pittmeadows_1,grass,y
+gwb_neaves,p2,2025-08-21,0:09:25,8210005,north_american_deermouse,Peromyscus_maniculatus,1,n,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p2,2025-08-21,0:19:43,8210006,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p2,2025-08-21,0:21:24,8210007,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p2,2025-08-21,0:22:45,8210008,north_american_deermouse,Peromyscus_maniculatus,1,n,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p2,2025-08-21,0:23:58,8210009,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p2,2025-08-21,0:26:55,8210010,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p2,2025-08-21,1:05:59,8210011,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p2,2025-08-21,1:10:12,8210013,unknown,unknown,1,n,n ,,Most likely deermouse,pittmeadows_1,grass,n
+gwb_neaves,p2,2025-08-21,1:11:35,8210014,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p2,2025-08-21,1:13:00,8210015,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p2,2025-08-21,1:14:28,8210016,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p2,2025-08-21,4:44:39,8210017,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p2,2025-08-21,4:50:53,8210018,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p2,2025-08-21,4:52:28,8210019,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p2,2025-08-21,5:05:18,8210020,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p2,2025-08-23,0:41:11,8230024,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p2,2025-08-23,0:42:29,8230025,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p2,2025-08-23,0:43:46,8230026,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p2,2025-08-23,0:45:06,8230027,north_american_deermouse,Peromyscus_maniculatus,1,n,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p2,2025-08-23,3:41:54,8230028,north_american_deermouse,Peromyscus_maniculatus,1,y,n ,,,pittmeadows_1,grass,y
+gwb_neaves,p2,2025-08-23,3:43:56,8230029,north_american_deermouse,Peromyscus_maniculatus,1,n,n ,,,pittmeadows_1,grass,y
+gwb_neaves,d,2025-08-19,23:33:54,8190003,north_american_deermouse,Peromyscus_maniculatus,1,n,n ,,,pittmeadows_1,grass,y
+gwb_neaves,d,2025-08-21,22:18:55,8210004,coyote,Canis_latrans,1,y,n ,,,pittmeadows_1,grass,n
