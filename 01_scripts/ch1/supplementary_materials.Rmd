@@ -1,0 +1,138 @@
+---
+title: "supplementary_materials"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_analysis/rodent-bee-blueberry")
+```
+
+Load data
+
+```{r}
+#load package
+library(tidyverse)   #data manipulation, visualization etc. (dplyr, ggplot2, tidyr)
+
+#read in data
+bee <- read.csv("06_cleandata/bee_clean.csv")
+floral <- read.csv("06_cleandata/floral_clean.csv")
+rodent <- read.csv("06_cleandata/rodent_clean.csv")
+site_info <- read.csv("06_cleandata/site_info_clean.csv")
+```
+
+Add area names to datasets
+
+```{r}
+bee <- bee %>%
+  left_join(site_info %>% select(site_id, area, cover_type), by = c("site_id"))
+
+floral <- floral %>%
+  left_join(site_info %>% select(site_id, area, cover_type), by = c("site_id"))
+
+rodent <- rodent %>%
+  left_join(site_info %>% select(site_id, area, cover_type), by = c("site_id"))
+```
+
+Filter to only include within field plots
+
+```{r}
+#filter to only include field data
+bee <- bee %>%
+  filter(plot_id != "d")
+
+floral <- floral %>%
+  filter(plot_id != "d")
+
+rodent <- rodent %>%
+  filter(plot_id != "d")
+```
+
+Create bee summary table
+
+```{r}
+bee_summary <- bee %>%
+  # treat empty strings as NA
+  mutate(
+    caste = na_if(caste, ""),
+    bee_species = na_if(bee_species, "")
+  ) %>%
+  group_by(bee_species) %>%
+  summarise(
+    `Total individuals (count)` = n(),
+    `Queens (count)` = sum(caste == "q", na.rm = TRUE),
+    `Workers (count)` = sum(caste == "w", na.rm = TRUE),
+    `Males (count)` = sum(caste == "m", na.rm = TRUE),
+    `Unknown caste (count)` = sum(is.na(caste)),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    `Relative frequency` = 
+      `Total individuals (count)` / sum(`Total individuals (count)`)
+  ) %>%
+  arrange(desc(`Total individuals (count)`))  %>%
+  mutate(
+    bee_species = replace_na(bee_species, "unknown")
+  )
+```
+
+Create site-level summary table for bumble bees, rodent burrows, and flowers
+
+```{r}
+#bee
+site_level_summary_bee <- bee %>%
+  mutate(
+    cover_type = factor(cover_type, levels = c("grass", "bare")), 
+    bee_species = na_if(bee_species, "")
+  ) %>%
+  group_by(area, site_id, cover_type) %>%
+  summarise(
+    `Bombus individuals (count)` = n(),
+    `Bee species richness` = n_distinct(bee_species, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  arrange(area, cover_type)
+
+#rodent
+site_level_summary_rodent <- rodent %>%
+  mutate(
+    cover_type = factor(cover_type, levels = c("grass", "bare"))
+  ) %>%
+  group_by(area, site_id, cover_type) %>%
+  summarise(
+    `Rodent burrows (count)` = n(),
+    .groups = "drop"
+  ) %>%
+  arrange(area, cover_type)
+
+#floral
+site_level_summary_floral <- floral %>%
+  mutate(
+    cover_type = factor(cover_type, levels = c("grass", "bare"))
+  ) %>%
+  group_by(area, site_id, cover_type) %>%
+  summarise(
+    `Average floral abundance (log-scale)` = mean(abundance),
+    `Floral species richness` = n(),
+    .groups = "drop"
+  ) %>%
+  arrange(area, cover_type)
+```
+
+Combine into one site-level summary table
+
+```{r}
+site_level_summary <- site_level_summary_bee %>%
+  left_join(
+    site_level_summary_rodent %>%
+      select(area, site_id, cover_type, `Rodent burrows (count)`),
+    by = c("area", "site_id", "cover_type")
+  ) %>% 
+  left_join(
+    site_level_summary_floral %>%
+      select(area, site_id, cover_type, `Average floral abundance (log-scale)`, `Floral species richness`),
+    by = c("area", "site_id", "cover_type")
+  )
+
+    
+```
