@@ -184,6 +184,38 @@ summary(nsq_glm_veg_noRE)
 
 ## Plots
 
+Plot type (ditch vs field)
+
+Conditional
+
+```{r}
+# Create newdata with discrete factor levels for bee_season_type
+nsq_data_plottype <- data.frame(
+  grass_forb_perc_scaled = mean(surveys$grass_forb_perc_scaled),
+  bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled),
+  bee_season_type = "nestsearching",
+  plot_type = factor(c("ditch", "field"), levels = levels(surveys$plot_type))
+)
+
+# Get predicted zero probabilities and standard errors
+pred_nsq_plottype_cond <- predict(nsq_glm_veg_noRE,
+                            newdata = nsq_data_plottype,
+                            type = "conditional",
+                            se.fit = TRUE) 
+
+# Combine predictions with data frame
+pred_nsq_plottype_df <- cbind(nsq_data_plottype,
+                 cond_fit = pred_nsq_plottype_cond$fit,
+                 cond_se = pred_nsq_plottype_cond$se.fit)
+
+ggplot(pred_nsq_plottype_df, aes(x = plot_type, y = cond_fit)) +
+  geom_point(size = 8) +
+  geom_errorbar(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
+  labs(x = "Plot type",
+       y = "Predicted NSQ count\n(log-scale)") +
+  theme_classic(base_size = 23)
+```
+
 Grass and forb % cover
 
 Conditional model:
@@ -453,6 +485,36 @@ summary(workers_veg_noArea_nbin)
 ```
 
 ## Plots
+
+Plot type
+
+```{r}
+# Create newdata with discrete factor levels for bee_season_type
+worker_data_plottype <- data.frame(
+  grass_forb_perc_scaled = mean(surveys$grass_forb_perc_scaled),
+  bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled),
+  bee_season_type = "worker",
+  plot_type = factor(c("ditch", "field"), levels = levels(surveys$plot_type))
+)
+
+# Get predicted zero probabilities and standard errors
+pred_worker_plottype <- predict(workers_veg_noArea_nbin,
+                            newdata = worker_data_plottype,
+                            se.fit = TRUE,
+                            re.form = NA) 
+
+# Combine predictions with data frame
+pred_worker_plottype_df <- cbind(worker_data_plottype,
+                 fit = pred_worker_plottype$fit,
+                 se = pred_worker_plottype$se.fit)
+
+ggplot(pred_worker_plottype_df, aes(x = plot_type, y = fit)) +
+  geom_point(size = 8) +
+  geom_errorbar(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
+  labs(x = "Plot type",
+       y = "Predicted worker count\n(log-scale)") +
+  theme_classic(base_size = 23)
+```
 
 Vegetation
 

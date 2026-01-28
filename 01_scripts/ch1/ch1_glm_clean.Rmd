@@ -240,10 +240,10 @@ pred_rodent_cover_df <- cbind(rodent_data_cover,
 
 ggplot(pred_rodent_cover_df, aes(x = cover_type, y = fit)) +
   geom_point(size = 8) +
-  geom_errorbar(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), width = 0.2, position = position_dodge(0.6)) +
+  geom_errorbar(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Cover type",
-       y = "Predicted burrow count (log-scale)") +
-  theme_classic(base_size = 18)
+       y = "Predicted burrow count\n(log-scale)") +
+  theme_classic(base_size = 23)
 ```
 
 ## Findings
@@ -331,12 +331,12 @@ pred_floral_veg_df <- as.data.frame(pred_floral_veg)
 #plot
 ggplot(pred_floral_veg_df, aes(x = cover_type, y = response)) +
   geom_point(size = 8) +
-  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL), width = 0.2) +
+  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL), width = 0.2, linewidth = 1.5) +
   labs(
     x = "Cover type",
-    y = "Predicted floral abundance\n(log-scale)"
+    y = "Predicted floral\nabundance (log-scale)"
   ) +
-  theme_classic(base_size = 18)
+  theme_classic(base_size = 23)
 ```
 
 Julian date
@@ -364,8 +364,8 @@ ggplot(pred_floral_date_df, aes(x = julian.date_scaled, y = response)) +
   geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL), alpha = 0.2, color = NA) +
   labs(
        x = "Julian date (scaled)",
-       y = "Predicted floral abundance\n(log-scale)") +
-  theme_classic(base_size = 18)
+       y = "Predicted floral\nabundance (log-scale)") +
+  theme_classic(base_size = 23)
 ```
 
 ## Findings
@@ -518,11 +518,11 @@ pred_nsq_cover_df <- cbind(nsq_data_cover,
 #plot
 ggplot(pred_nsq_cover_df, aes(x = cover_type, y = cond_fit)) +
   geom_point(size = 8) +
-  geom_errorbar(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), width = 0.2, position = position_dodge(0.6)) +
+  geom_errorbar(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(
        x = "Cover type",
-       y = "Predicted NSQ count (log-scale)") +
-  theme_classic(base_size = 18)
+       y = "Predicted NSQ count\n(log-scale)") +
+  theme_classic(base_size = 23)
 ```
 
 Zero-inflated model:
@@ -531,9 +531,9 @@ Zero-inflated model:
 # Plot zi predictions
 ggplot(pred_nsq_cover_df, aes(x = cover_type, y = zi_fit)) +
   geom_point(size = 8) +
-  geom_errorbar(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), width = 0.2, position = position_dodge(0.6)) +
+  geom_errorbar(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs( x = "Cover type", y = "Predicted probability\nof structural zeros") +
-  theme_classic(base_size = 18) 
+  theme_classic(base_size = 23) 
 ```
 
 Number of nest-searching queens vs floral abundance
@@ -557,24 +557,30 @@ nsq_data_floral <- data.frame(
 )
 
 # Predictions for conditional model (count)
-pred_nsq_floral_cond <- predict(NSQ_noRE, newdata = nsq_data_floral, type = "conditional", se.fit = TRUE)
-
-# Predictions for zero-inflation model
-pred_nsq_floral_zi <- predict(NSQ_noRE, newdata = nsq_data_floral, type = "zprob", se.fit = TRUE)
+pred_nsq_floral_cond <- predict(NSQ_noRE, 
+                                newdata = nsq_data_floral, 
+                                type = "link", 
+                                se.fit = TRUE)
 
 # Combine predictions with newdata
 pred_nsq_floral_df <- cbind(nsq_data_floral,
-                 cond_fit = pred_nsq_floral_cond$fit,
-                 cond_se = pred_nsq_floral_cond$se.fit,
-                 zi_fit = pred_nsq_floral_zi$fit,
-                 zi_se = pred_nsq_floral_zi$se.fit)
+                 cond_fit_log = pred_nsq_floral_cond$fit,
+                 cond_se_log = pred_nsq_floral_cond$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_nsq_floral_df <- pred_nsq_floral_df %>%
+  mutate(
+    cond_fit = exp(cond_fit_log),
+    cond_lower = exp(cond_fit_log - 1.96 * cond_se_log),
+    cond_upper = exp(cond_fit_log + 1.96 * cond_se_log)
+  )
 
 # Plot conditional predictions
 ggplot(pred_nsq_floral_df, aes(x = bombus_floral_abun_scaled, y = cond_fit)) +
   geom_line(size = 3) +
-  geom_ribbon(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), alpha = 0.2) +
-  labs( x = "Floral abundance (scaled)" , y = "Predicted NSQ count (log-scale)") +
-  theme_classic(base_size = 18)
+  geom_ribbon(aes(ymin = cond_lower, ymax = cond_upper), alpha = 0.2) +
+  labs( x = "Floral abundance (scaled)" , y = "Predicted mean NSQ\ncount (per plot)") +
+  theme_classic(base_size = 23)
 
 ```
 
@@ -586,7 +592,7 @@ ggplot(pred_nsq_floral_df, aes(x = bombus_floral_abun_scaled, y = zi_fit)) +
   geom_line(size = 3) +
   geom_ribbon(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), alpha = 0.2) +
   labs(x = "Floral abundance (scaled)", y = "Predicted probability\nof structural zeros") +
-  theme_classic(base_size = 18)
+  theme_classic(base_size = 23)
 
 ```
 
@@ -604,24 +610,33 @@ nsq_data_rodent <- data.frame(
 )
 
 # Predictions for conditional model (count)
-pred_nsq_rodent_cond <- predict(NSQ_noRE, newdata = nsq_data_rodent, type = "conditional", se.fit = TRUE)
-
-# Predictions for zero-inflation model
-pred_nsq_rodent_zi <- predict(NSQ_noRE, newdata = nsq_data_rodent, type = "zprob", se.fit = TRUE)
+pred_nsq_rodent_cond <- predict(
+  NSQ_noRE, 
+  newdata = nsq_data_rodent, 
+  type = "link", ##log-scale
+  se.fit = TRUE)
 
 # Combine predictions with newdata
 pred_nsq_rodent_df <- cbind(nsq_data_rodent,
-                 cond_fit = pred_nsq_rodent_cond$fit,
-                 cond_se = pred_nsq_rodent_cond$se.fit,
-                 zi_fit = pred_nsq_rodent_zi$fit,
-                 zi_se = pred_nsq_rodent_zi$se.fit)
+                 cond_fit_log = pred_nsq_rodent_cond$fit,
+                 cond_se_log = pred_nsq_rodent_cond$se.fit)
 
-# Plot conditional predictions
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_nsq_rodent_df <- pred_nsq_rodent_df %>%
+  mutate(
+    cond_fit = exp(cond_fit_log),
+    cond_lower = exp(cond_fit_log - 1.96 * cond_se_log),
+    cond_upper = exp(cond_fit_log + 1.96 * cond_se_log)
+  )
+
 ggplot(pred_nsq_rodent_df, aes(x = num_burrows_scaled, y = cond_fit)) +
   geom_line(size = 3) +
-  geom_ribbon(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), alpha = 0.2) +
-  labs(x = "Burrow abundance (scaled)", y = "Predicted NSQ count (log-scale)") +
-  theme_classic(base_size = 18)
+  geom_ribbon(aes(ymin = cond_lower, ymax = cond_upper), alpha = 0.2) +
+  labs(
+    x = "Burrow abundance (scaled)",
+    y = "Predicted mean NSQ\ncount (per plot)"
+  ) +
+  theme_classic(base_size = 23)
 ```
 
 Zero-inflated model:
@@ -631,7 +646,7 @@ ggplot(pred_nsq_rodent_df, aes(x = num_burrows_scaled, y = zi_fit)) +
   geom_line(size = 3) +
   geom_ribbon(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), alpha = 0.2) +
   labs(x = "Burrow abundance (scaled)", y = "Predicted probability\nof structural zeros") +
-  theme_classic(base_size = 18)
+  theme_classic(base_size = 23)
 ```
 
 Number of nest-searching queens vs season type
@@ -663,9 +678,9 @@ pred_nsq_season_df <- cbind(nsq_data_season,
 # Plot conditional predictions
 ggplot(pred_nsq_season_df, aes(x = bee_season_type, y = cond_fit)) +
   geom_point(size=8) +
-  geom_errorbar(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), width = 0.2, position = position_dodge(0.6))+
-  labs(x = "Bee season", y = "Predicted NSQ count (log-scale)") +
-  theme_classic(base_size = 18)
+  geom_errorbar(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), width = 0.2, position = position_dodge(0.6), linewidth = 1.5)+
+  labs(x = "Bee season", y = "Predicted NSQ count\n(log-scale)") +
+  theme_classic(base_size = 23)
 ```
 
 Zero-inflated model:
@@ -673,9 +688,9 @@ Zero-inflated model:
 ```{r}
 ggplot(pred_nsq_season_df, aes(x = bee_season_type, y = zi_fit)) +
   geom_point(size=8) +
-  geom_errorbar(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), width = 0.2, position = position_dodge(0.6))+
+  geom_errorbar(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), width = 0.2, position = position_dodge(0.6), linewidth = 1.5)+
   labs(x = "Bee season", y = "Predicted probability\nof structural zeros") +
-  theme_classic(base_size = 18)
+  theme_classic(base_size = 23)
 ```
 
 ## Findings
@@ -837,7 +852,7 @@ ggplot(pred_worker_nsq_df, aes(x = nest_searching_queens_scaled, y = fit)) +
   labs(
        x = "NSQ abundance (scaled)",
        y = "Predicted worker count\n(log-scale)") +
-  theme_classic(base_size = 18)
+  theme_classic(base_size = 23)
 ```
 
 Number of workers vs floral abundance
@@ -868,7 +883,7 @@ ggplot(pred_worker_floral_df, aes(x = bombus_floral_abun_scaled, y = fit)) +
   labs(
        x = "Floral abundance (scaled)",
        y = "Predicted worker count\n(log-scale)") +
-  theme_classic(base_size = 18)
+  theme_classic(base_size = 23)
 ```
 
 Number of workers vs number of rodent burrows
@@ -905,7 +920,7 @@ ggplot(pred_worker_rodent_df, aes(x = num_burrows_scaled, y = fit)) +
   labs(
        x = "Burrow abundance (scaled)",
        y = "Predicted worker count\n(log-scale)") +
-  theme_classic(base_size = 18)
+  theme_classic(base_size = 23)
 ```
 
 Number of workers vs season
@@ -933,17 +948,13 @@ pred_worker_season_df <- cbind(worker_data_season,
 ggplot(pred_worker_season_df, aes(x = bee_season_type, y = fit)) +
   geom_point(size = 8) +
   geom_errorbar(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), 
-                width = 0.2, position = position_dodge(0.6)) +
+                width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(
        x = "Bee season",
        y = "Predicted worker count\n(log-scale)") +
-  theme_classic(base_size = 18)
+  theme_classic(base_size = 23)
 ```
 
 ## Findings
 
-Number of nest-searching queens and number of rodent burrows is does not significantly effect number of workers. Significantly more workers during worker season than during nest-searching season. Marginally insignificant (p=0.0573) positive effect of bombus-relevant floral abundance on worker abundance.
-
-# Final Path Diagram
-
-![](images/pathDiagramFinal.jpg)
+Number of nest-searching queens and number of rodent burrows is does not significantly effect number of workers. Significantly more workers during worker season than during nest-searching season. Margin
