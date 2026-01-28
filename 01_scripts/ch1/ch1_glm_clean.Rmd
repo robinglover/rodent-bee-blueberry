@@ -957,4 +957,8 @@ ggplot(pred_worker_season_df, aes(x = bee_season_type, y = fit)) +
 
 ## Findings
 
-Number of nest-searching queens and number of rodent burrows is does not significantly effect number of workers. Significantly more workers during worker season than during nest-searching season. Margin
+Number of nest-searching queens and number of rodent burrows is does not significantly effect number of workers. Significantly more workers during worker season than during nest-searching season. Marginally insignificant (p=0.0573) positive effect of bombus-relevant floral abundance on worker abundance.
+
+# Final Path Diagram
+
+![](images/pathDiagramFinal.jpg)
