@@ -69,6 +69,18 @@ surveys$num_inactive_dm_scaled <- as.numeric(scale(surveys$num_inactive_dm))
 surveys$prop_inactive_burrows_scaled <- as.numeric(scale(surveys$prop_inactive_burrows))
 surveys$num_runway_burrows_scaled <- as.numeric(scale(surveys$num_runway_burrows))
 
+#create variable for proportion of vacant burrows (# inactive / total)
+surveys$prop_inactive <- surveys$num_inactive_burrows / surveys$num_burrows
+#scale
+surveys$prop_inactive_scaled <- as.numeric(scale(surveys$prop_inactive))
+#check correlation
+cor(
+  surveys$prop_inactive,
+  surveys$num_burrows,
+  use = "complete.obs"
+)
+##r = -0.149. This means that the vacancy probability and rodent burrow abundance are largely independent. This means we can include both in our models.
+
 #filter to only include field data
 field_data <- surveys %>%
   filter(plot_id != "d")
@@ -250,6 +262,60 @@ ggplot(pred_rodent_cover_df, aes(x = cover_type, y = fit)) +
 
 Neither grass + forb % nor julian date had significant effects on rodent burrow abundance. However, cover type showed a marginally insignificant trend (p=0.0839), where grassy sites had a higher abundance of burrows.
 
+# Rodent burrow vacancy analysis
+
+I want to determine what influences the proportion of burrows that are inactive (available as nest sites for bumble bees) across my sites.
+
+## Steps
+
+1)  Try different random effect structures in a binomial model. Compare alternative random effect structures using maximum likelihood (ML) via AIC. I did not include plot as a random effect structure since there was only one observation per plot for rodent burrow data.
+
+    ```{r}
+    burrows_vacancy_full <- glmmTMB(
+      cbind(num_inactive_burrows, num_active_burrows) #tells the model that successes = number of inactive (vacant) burrows and failures = number of active burrows
+      ~ cover_type + (1|area/site_id),
+      family = binomial(link = "logit"), 
+      data = field_data)
+
+    burrows_vacancy_siteOnly <- glmmTMB(
+      cbind(num_inactive_burrows, num_active_burrows) #tells the model that successes = number of inactive (vacant) burrows and failures = number of active burrows
+      ~ cover_type + (1|site_id),
+      family = binomial(link = "logit"), 
+      data = field_data)
+
+    burrows_vacancy_areaOnly <- glmmTMB(
+      cbind(num_inactive_burrows, num_active_burrows) #tells the model that successes = number of inactive (vacant) burrows and failures = number of active burrows
+      ~ cover_type + (1|area),
+      family = binomial(link = "logit"), 
+      data = field_data)
+
+
+    #compare models using maximum likelihood test
+    anova(burrows_vacancy_full, burrows_vacancy_siteOnly, burrows_vacancy_areaOnly)
+
+    ##results tells us the burrows_siteOnly is best model (lowest AIC)
+    ```
+
+2)  Check diagnostics
+
+-   The diagnostic plot indicates a significant KS test. The significant KS test likely reflects low variability in vacancy probabilities across farms, with vacancy rates clustering near 0.5, rather than substantive lack of fit. No evidence of overdispersion, zero inflation, outliers, or group-level structure was detected.
+
+```{r}
+#simulate residuals 
+residuals_burrows_vacancy_siteOnly <- simulateResiduals(fittedModel = burrows_vacancy_siteOnly, plot = TRUE)
+##KS test significant
+```
+
+3.  Plot results
+
+```{r}
+summary(burrows_vacancy_siteOnly)
+```
+
+## Findings
+
+There was not a significant difference in burrow vacancy probability between grassy and bare sites (log-odds difference = –0.36, SE = 0.83, *p* = 0.67). Burrow vacancy probability was approximately 50% across sites, meaning that roughly one in two burrows at blueberry farms in this study were available as potential nest sites for bumble bees.
+
 # Floral abundance vs field management (%grass+forb)
 
 Use cumulative link model aka ordinal logistic regression because bombus-relevant floral abundance has:
@@ -386,11 +452,13 @@ Start by plotting a zero-inflated poisson, since \# of nest-searching queens is 
 NSQ_full <- glmmTMB(nest_searching_queens ~ cover_type + 
                       bombus_floral_abun_scaled + 
                       num_burrows_scaled + 
+                      prop_inactive_scaled +
                       bee_season_type + 
                       (1|area/site_id/plot_id),
                     ziformula = ~ cover_type + 
                       bombus_floral_abun_scaled + 
-                      num_burrows_scaled + 
+                      num_burrows_scaled +
+                      prop_inactive_scaled +
                       bee_season_type +
                       (1|area/site_id/plot_id),
                     family = poisson, 
@@ -400,11 +468,13 @@ NSQ_full <- glmmTMB(nest_searching_queens ~ cover_type +
 NSQ_noArea <- glmmTMB(nest_searching_queens ~ cover_type + 
                         bombus_floral_abun_scaled + 
                         num_burrows_scaled + 
+                        prop_inactive_scaled +
                         bee_season_type + 
                         (1|site_id/plot_id),
                       ziformula = ~ cover_type + 
                         bombus_floral_abun_scaled + 
                         num_burrows_scaled + 
+                        prop_inactive_scaled +
                         bee_season_type +
                         (1|site_id/plot_id),
                       family = poisson, 
@@ -413,11 +483,13 @@ NSQ_noArea <- glmmTMB(nest_searching_queens ~ cover_type +
 NSQ_plotOnly <-  glmmTMB(nest_searching_queens ~ cover_type + 
                         bombus_floral_abun_scaled + 
                         num_burrows_scaled + 
+                        prop_inactive_scaled +
                         bee_season_type + 
                         (1|plot_id),
                       ziformula = ~ cover_type + 
                         bombus_floral_abun_scaled + 
                         num_burrows_scaled + 
+                        prop_inactive_scaled +
                         bee_season_type +
                         (1|plot_id),
                       family = poisson, 
@@ -426,11 +498,13 @@ NSQ_plotOnly <-  glmmTMB(nest_searching_queens ~ cover_type +
 NSQ_siteOnly <- glmmTMB(nest_searching_queens ~ cover_type + 
                         bombus_floral_abun_scaled + 
                         num_burrows_scaled + 
+                        prop_inactive_scaled +
                         bee_season_type + 
                         (1|site_id),
                       ziformula = ~ cover_type + 
                         bombus_floral_abun_scaled + 
                         num_burrows_scaled + 
+                        prop_inactive_scaled +
                         bee_season_type +
                         (1|site_id),
                       family = poisson, 
@@ -439,11 +513,13 @@ NSQ_siteOnly <- glmmTMB(nest_searching_queens ~ cover_type +
 NSQ_AreaPlot <-  glmmTMB(nest_searching_queens ~ cover_type + 
                         bombus_floral_abun_scaled + 
                         num_burrows_scaled + 
+                        prop_inactive_scaled +
                         bee_season_type + 
                         (1|area/plot_id),
                       ziformula = ~ cover_type + 
                         bombus_floral_abun_scaled + 
                         num_burrows_scaled + 
+                        prop_inactive_scaled +
                         bee_season_type +
                         (1|area/plot_id),
                       family = poisson, 
@@ -452,10 +528,12 @@ NSQ_AreaPlot <-  glmmTMB(nest_searching_queens ~ cover_type +
 NSQ_noRE <- glmmTMB(nest_searching_queens ~ cover_type + 
                     bombus_floral_abun_scaled + 
                     num_burrows_scaled + 
+                    prop_inactive_scaled +
                     bee_season_type, 
                   ziformula = ~ cover_type + 
                     bombus_floral_abun_scaled + 
                     num_burrows_scaled + 
+                    prop_inactive_scaled +
                     bee_season_type,  # zero-inflation model
                   family = poisson, #poisson
                   data = field_data)
@@ -468,17 +546,41 @@ anova(NSQ_full, NSQ_noArea, NSQ_plotOnly, NSQ_siteOnly, NSQ_AreaPlot, NSQ_noRE)
 
 2.  Check diagnostics of best model.
 
--   No significant problems detected.
+-   Indicates significant combined adjusted quantile test.
 
 ```{r}
 residuals_nsq_noRE <- simulateResiduals(fittedModel =NSQ_noRE, plot = TRUE)
-##looks good
 ```
 
-3.  Look at results
+3.  Try ZI negative binomial
+
+    ```{r}
+    NSQ_noRE_nbin <- glmmTMB(nest_searching_queens ~ cover_type + 
+                        bombus_floral_abun_scaled + 
+                        num_burrows_scaled + 
+                        prop_inactive_scaled +
+                        bee_season_type, 
+                      ziformula = ~ cover_type + 
+                        bombus_floral_abun_scaled + 
+                        num_burrows_scaled + 
+                        prop_inactive_scaled +
+                        bee_season_type,  # zero-inflation model
+                      family = nbinom2, #poisson
+                      data = field_data)
+    ```
+
+4.  Check diagnostic plot
+
+    Looks good!
+
+    ```{r}
+    residuals_nsq_noRE_nbin <- simulateResiduals(fittedModel =NSQ_noRE_nbin, plot = TRUE)
+    ```
+
+5.  Look at results
 
 ```{r}
-summary(NSQ_noRE)
+summary(NSQ_noRE_nbin)
 ```
 
 ## Plots
@@ -723,6 +825,7 @@ Go through similar model selection steps as for the rodent burrow model.
 workers_full <- glmmTMB(workers ~ nest_searching_queens_scaled +
                        bombus_floral_abun_scaled + 
                        num_burrows_scaled + 
+                         prop_inactive_scaled +
                        bee_season_type +
                          (1|area/site_id/plot_id), 
                      family = poisson,
@@ -733,6 +836,7 @@ workers_full <- glmmTMB(workers ~ nest_searching_queens_scaled +
 workers_noArea <- glmmTMB(workers ~ nest_searching_queens_scaled +
                        bombus_floral_abun_scaled + 
                        num_burrows_scaled + 
+                         prop_inactive_scaled +
                        bee_season_type+
                          (1|site_id/plot_id), 
                      family = poisson,
@@ -742,6 +846,7 @@ workers_noArea <- glmmTMB(workers ~ nest_searching_queens_scaled +
 workers_plotOnly <-  glmmTMB(workers ~ nest_searching_queens_scaled +
                        bombus_floral_abun_scaled + 
                        num_burrows_scaled + 
+                         prop_inactive_scaled +
                        bee_season_type+
                          (1|plot_id), 
                      family = poisson,
@@ -751,6 +856,7 @@ workers_plotOnly <-  glmmTMB(workers ~ nest_searching_queens_scaled +
 workers_siteOnly <- glmmTMB(workers ~ nest_searching_queens_scaled +
                        bombus_floral_abun_scaled + 
                        num_burrows_scaled + 
+                         prop_inactive_scaled +
                        bee_season_type+
                          (1|site_id), 
                      family = poisson,
@@ -760,6 +866,7 @@ workers_siteOnly <- glmmTMB(workers ~ nest_searching_queens_scaled +
 workers_AreaPlot <-  glmmTMB(workers ~ nest_searching_queens_scaled +
                        bombus_floral_abun_scaled + 
                        num_burrows_scaled + 
+                         prop_inactive_scaled +
                        bee_season_type+
                          (1|area/plot_id), 
                      family = poisson,
@@ -769,6 +876,7 @@ workers_AreaPlot <-  glmmTMB(workers ~ nest_searching_queens_scaled +
 workers_noRE <- glmmTMB(workers ~ nest_searching_queens_scaled +
                        bombus_floral_abun_scaled + 
                        num_burrows_scaled + 
+                         prop_inactive_scaled +
                        bee_season_type, 
                      family = poisson,
                      data = field_data
@@ -782,7 +890,7 @@ anova(workers_full, workers_noArea, workers_plotOnly, workers_siteOnly, workers_
 
 2.  Check diagnostics of best model.
 
--   Residual plots show that there are no significant issues with model fit. Check to see if negative binomial straightens lines in residual plot.
+-   Significant combined adjusted quantile test.
 
 ```{r}
 #simulate residuals
@@ -791,12 +899,13 @@ residuals_workers_noArea <- simulateResiduals(fittedModel = workers_noArea, plot
 
 3.  Plot negative binomial and check diagnostics.
 
--   Residual plot shows better fit (straighter horizontal lines). AIC is also lower for negative binomial. This shows that the negative binomial is a better fit.
+-   Residual plot shows better fit and no significant deviations.
 
 ```{r}
 worker_negbin <- glmmTMB(workers ~ nest_searching_queens_scaled +
                        bombus_floral_abun_scaled + 
                        num_burrows_scaled + 
+                         prop_inactive_scaled +
                        bee_season_type +
                          (1|site_id/plot_id), 
                      family = nbinom2,
@@ -804,9 +913,6 @@ worker_negbin <- glmmTMB(workers ~ nest_searching_queens_scaled +
                        )
 
 residuals_workers_negbin <- simulateResiduals(fittedModel = worker_negbin, plot = TRUE)
-
-anova(workers_noArea, worker_negbin)
-##negative binomial is better (lower AIC)
 ```
 
 4.  Check results of final model
@@ -957,61 +1063,7 @@ ggplot(pred_worker_season_df, aes(x = bee_season_type, y = fit)) +
 
 ## Findings
 
-Number of nest-searching queens and number of rodent burrows is does not significantly effect number of workers. Significantly more workers during worker season than during nest-searching season. Marginally insignificant (p=0.0573) positive effect of bombus-relevant floral abundance on worker abundance.
-
-# Rodent burrow vacancy analysis
-
-I want to determine what influences the proportion of burrows that are inactive (available as nest sites for bumble bees) across my sites.
-
-## Steps
-
-1)  Try different random effect structures in a binomial model. Compare alternative random effect structures using maximum likelihood (ML) via AIC. I did not include plot as a random effect structure since there was only one observation per plot for rodent burrow data.
-
-    ```{r}
-    burrows_vacancy_full <- glmmTMB(
-      cbind(num_inactive_burrows, num_active_burrows) #tells the model that successes = number of inactive (vacant) burrows and failures = number of active burrows
-      ~ cover_type + (1|area/site_id),
-      family = binomial(link = "logit"), 
-      data = field_data)
-
-    burrows_vacancy_siteOnly <- glmmTMB(
-      cbind(num_inactive_burrows, num_active_burrows) #tells the model that successes = number of inactive (vacant) burrows and failures = number of active burrows
-      ~ cover_type + (1|site_id),
-      family = binomial(link = "logit"), 
-      data = field_data)
-
-    burrows_vacancy_areaOnly <- glmmTMB(
-      cbind(num_inactive_burrows, num_active_burrows) #tells the model that successes = number of inactive (vacant) burrows and failures = number of active burrows
-      ~ cover_type + (1|area),
-      family = binomial(link = "logit"), 
-      data = field_data)
-
-
-    #compare models using maximum likelihood test
-    anova(burrows_vacancy_full, burrows_vacancy_siteOnly, burrows_vacancy_areaOnly)
-
-    ##results tells us the burrows_siteOnly is best model (lowest AIC)
-    ```
-
-2)  Check diagnostics
-
--   The diagnostic plot indicates a significant KS test. The significant KS test likely reflects low variability in vacancy probabilities across farms, with vacancy rates clustering near 0.5, rather than substantive lack of fit. No evidence of overdispersion, zero inflation, outliers, or group-level structure was detected.
-
-```{r}
-#simulate residuals 
-residuals_burrows_vacancy_siteOnly <- simulateResiduals(fittedModel = burrows_vacancy_siteOnly, plot = TRUE)
-##KS test significant
-```
-
-3.  Plot results
-
-```{r}
-summary(burrows_vacancy_siteOnly)
-```
-
-## Findings
-
-There was not a significant difference in burrow vacancy probability between grassy and bare sites (log-odds difference = –0.36, SE = 0.83, *p* = 0.67). Burrow vacancy probability was approximately 50% across sites, meaning that roughly one in two burrows at blueberry farms in this study were available as potential nest sites for bumble bees.
+Number of nest-searching queens, number of rodent burrows and the proportion of burrow vacancy does not significantly predict number of workers. Significantly more workers during worker season than during nest-searching season. Significant positive effect of bombus-relevant floral abundance on worker abundance (p=0.049).
 
 # Final Path Diagram
 
