@@ -959,6 +959,60 @@ ggplot(pred_worker_season_df, aes(x = bee_season_type, y = fit)) +
 
 Number of nest-searching queens and number of rodent burrows is does not significantly effect number of workers. Significantly more workers during worker season than during nest-searching season. Marginally insignificant (p=0.0573) positive effect of bombus-relevant floral abundance on worker abundance.
 
+# Rodent burrow vacancy analysis
+
+I want to determine what influences the proportion of burrows that are inactive (available as nest sites for bumble bees) across my sites.
+
+## Steps
+
+1)  Try different random effect structures in a binomial model. Compare alternative random effect structures using maximum likelihood (ML) via AIC. I did not include plot as a random effect structure since there was only one observation per plot for rodent burrow data.
+
+    ```{r}
+    burrows_vacancy_full <- glmmTMB(
+      cbind(num_inactive_burrows, num_active_burrows) #tells the model that successes = number of inactive (vacant) burrows and failures = number of active burrows
+      ~ cover_type + (1|area/site_id),
+      family = binomial(link = "logit"), 
+      data = field_data)
+
+    burrows_vacancy_siteOnly <- glmmTMB(
+      cbind(num_inactive_burrows, num_active_burrows) #tells the model that successes = number of inactive (vacant) burrows and failures = number of active burrows
+      ~ cover_type + (1|site_id),
+      family = binomial(link = "logit"), 
+      data = field_data)
+
+    burrows_vacancy_areaOnly <- glmmTMB(
+      cbind(num_inactive_burrows, num_active_burrows) #tells the model that successes = number of inactive (vacant) burrows and failures = number of active burrows
+      ~ cover_type + (1|area),
+      family = binomial(link = "logit"), 
+      data = field_data)
+
+
+    #compare models using maximum likelihood test
+    anova(burrows_vacancy_full, burrows_vacancy_siteOnly, burrows_vacancy_areaOnly)
+
+    ##results tells us the burrows_siteOnly is best model (lowest AIC)
+    ```
+
+2)  Check diagnostics
+
+-   The diagnostic plot indicates a significant KS test. The significant KS test likely reflects low variability in vacancy probabilities across farms, with vacancy rates clustering near 0.5, rather than substantive lack of fit. No evidence of overdispersion, zero inflation, outliers, or group-level structure was detected.
+
+```{r}
+#simulate residuals 
+residuals_burrows_vacancy_siteOnly <- simulateResiduals(fittedModel = burrows_vacancy_siteOnly, plot = TRUE)
+##KS test significant
+```
+
+3.  Plot results
+
+```{r}
+summary(burrows_vacancy_siteOnly)
+```
+
+## Findings
+
+There was not a significant difference in burrow vacancy probability between grassy and bare sites (log-odds difference = –0.36, SE = 0.83, *p* = 0.67). Burrow vacancy probability was approximately 50% across sites, meaning that roughly one in two burrows at blueberry farms in this study were available as potential nest sites for bumble bees.
+
 # Final Path Diagram
 
 ![](images/pathDiagramFinal.jpg)
