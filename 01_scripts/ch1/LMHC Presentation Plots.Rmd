@@ -1,0 +1,134 @@
+---
+title: "LMHC Presentation Plots"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_analysis/rodent-bee-blueberry")
+```
+
+Load data
+
+```{r}
+#load packages
+library(tidyverse)   #data manipulation, visualization etc. (dplyr, ggplot2, tidyr)
+
+#read in data
+data <- read.csv("06_cleandata/combined_plot_data.csv")
+
+#change character columns to factors
+surveys <- data %>%
+   mutate(
+     site_id = as.factor(site_id),
+     round = as.factor(round),
+     plot_id = as.factor(plot_id),
+     bee_date = as.Date(bee_date),
+     bee_season_type = as.factor(bee_season_type),
+     area = as.factor(area),
+     cover_type = as.factor(cover_type))
+```
+
+Plot cover type vs burrow abundance for field data
+
+```{r}
+#filter to only include field data
+field_data <- surveys %>%
+  filter(plot_id != "d")
+
+field_data %>%
+  group_by(cover_type) %>%
+  summarise(total_burrows = sum(num_burrows, na.rm = TRUE)) %>%
+  ggplot(aes(x = cover_type, y = total_burrows, fill = cover_type)) +
+  geom_col() +
+  labs(
+    x = "Cover type",
+    y = "Total number of burrows"
+  ) +
+  theme_classic(base_size = 23) +
+  theme(legend.position = "none") +
+  scale_fill_manual(
+    values = c(
+      "grass" = "#4DAF4A",  # grass green
+      "bare"  = "#A67C52"   # dirt brown
+    ))
+```
+Plot cover type vs floral abundance for field data
+```{r}
+field_data %>%
+  group_by(cover_type) %>%
+  summarise(average_floral = mean(floral_abun, na.rm = TRUE)) %>%
+  ggplot(aes(x = cover_type, y = average_floral, fill = cover_type)) +
+  geom_col() +
+  labs(
+    x = "Cover type",
+    y = "Average floral abundance\n(log-scale)"
+  ) +
+  theme_classic(base_size = 23) +
+  theme(legend.position = "none")+
+  scale_fill_manual(
+    values = c(
+      "grass" = "#4DAF4A",  # grass green
+      "bare"  = "#A67C52"   # dirt brown
+    ))
+```
+
+Bar graph of NSQ count vs plot type
+
+```{r}
+#add plot type column and make it a factor
+surveys <- surveys %>% 
+  mutate(plot_type = if_else(plot_id == "d", "ditch", "field"))
+surveys <- surveys %>%
+   mutate(
+     plot_type = as.factor(plot_type))
+
+nsq_totals <- surveys %>%
+  group_by(plot_type) %>%
+  summarise(total_NSQ = sum(nest_searching_queens, na.rm = TRUE)) %>%
+  mutate(
+    total_NSQ_effort_corrected = ifelse(
+      plot_type == "field",
+      total_NSQ * 0.5,
+      total_NSQ
+    )
+  )
+
+ggplot(nsq_totals,
+       aes(x = plot_type,
+           y = total_NSQ_effort_corrected,
+           fill = plot_type)) +
+  geom_col(width = 0.6) +
+  labs(
+    x = "Plot type",
+    y = "NSQ count"
+  ) +
+  theme_classic(base_size = 23) +
+  theme(legend.position = "none")
+```
+Bar graph of worker count vs plot type
+
+```{r}
+workers_totals <- surveys %>%
+  group_by(plot_type) %>%
+  summarise(total_workers = sum(workers, na.rm = TRUE)) %>%
+  mutate(
+    total_workers_effort_corrected = ifelse(
+      plot_type == "field",
+      total_workers * 0.5,
+      total_workers
+    )
+  )
+
+ggplot(workers_totals,
+       aes(x = plot_type,
+           y = total_workers_effort_corrected,
+           fill = plot_type)) +
+  geom_col(width = 0.6) +
+  labs(
+    x = "Plot type",
+    y = "Worker count"
+  ) +
+  theme_classic(base_size = 23) +
+  theme(legend.position = "none")
+```
