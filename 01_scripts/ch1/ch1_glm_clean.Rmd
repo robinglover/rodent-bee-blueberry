@@ -70,7 +70,7 @@ surveys$prop_inactive_burrows_scaled <- as.numeric(scale(surveys$prop_inactive_b
 surveys$num_runway_burrows_scaled <- as.numeric(scale(surveys$num_runway_burrows))
 
 #create variable for proportion of vacant burrows (# inactive / total)
-surveys$prop_inactive <- surveys$num_inactive_burrows / surveys$num_burrows
+surveys$prop_inactive <- surveys$num_inactive_burrows / (surveys$num_inactive_burrows + surveys$num_active_burrows)
 #scale
 surveys$prop_inactive_scaled <- as.numeric(scale(surveys$prop_inactive))
 #check correlation
@@ -79,7 +79,7 @@ cor(
   surveys$num_burrows,
   use = "complete.obs"
 )
-##r = -0.149. This means that the vacancy probability and rodent burrow abundance are largely independent. This means we can include both in our models.
+##r = 0.06. This means that the vacancy probability and rodent burrow abundance are largely independent. This means we can include both in our models.
 
 #filter to only include field data
 field_data <- surveys %>%
@@ -546,41 +546,16 @@ anova(NSQ_full, NSQ_noArea, NSQ_plotOnly, NSQ_siteOnly, NSQ_AreaPlot, NSQ_noRE)
 
 2.  Check diagnostics of best model.
 
--   Indicates significant combined adjusted quantile test.
+-   Looks good
 
 ```{r}
 residuals_nsq_noRE <- simulateResiduals(fittedModel =NSQ_noRE, plot = TRUE)
 ```
 
-3.  Try ZI negative binomial
-
-    ```{r}
-    NSQ_noRE_nbin <- glmmTMB(nest_searching_queens ~ cover_type + 
-                        bombus_floral_abun_scaled + 
-                        num_burrows_scaled + 
-                        prop_inactive_scaled +
-                        bee_season_type, 
-                      ziformula = ~ cover_type + 
-                        bombus_floral_abun_scaled + 
-                        num_burrows_scaled + 
-                        prop_inactive_scaled +
-                        bee_season_type,  # zero-inflation model
-                      family = nbinom2, #poisson
-                      data = field_data)
-    ```
-
-4.  Check diagnostic plot
-
-    Looks good!
-
-    ```{r}
-    residuals_nsq_noRE_nbin <- simulateResiduals(fittedModel =NSQ_noRE_nbin, plot = TRUE)
-    ```
-
-5.  Look at results
+3.  Look at results
 
 ```{r}
-summary(NSQ_noRE_nbin)
+summary(NSQ_noRE)
 ```
 
 ## Plots
@@ -890,35 +865,17 @@ anova(workers_full, workers_noArea, workers_plotOnly, workers_siteOnly, workers_
 
 2.  Check diagnostics of best model.
 
--   Significant combined adjusted quantile test.
+-   No significant diagnostic tests. Good to go.
 
 ```{r}
 #simulate residuals
 residuals_workers_noArea <- simulateResiduals(fittedModel = workers_noArea, plot = TRUE)
 ```
 
-3.  Plot negative binomial and check diagnostics.
-
--   Residual plot shows better fit and no significant deviations.
+3.  Check results of final model
 
 ```{r}
-worker_negbin <- glmmTMB(workers ~ nest_searching_queens_scaled +
-                       bombus_floral_abun_scaled + 
-                       num_burrows_scaled + 
-                         prop_inactive_scaled +
-                       bee_season_type +
-                         (1|site_id/plot_id), 
-                     family = nbinom2,
-                     data = field_data
-                       )
-
-residuals_workers_negbin <- simulateResiduals(fittedModel = worker_negbin, plot = TRUE)
-```
-
-4.  Check results of final model
-
-```{r}
-summary(worker_negbin)
+summary(workers_noArea)
 ```
 
 ## Plots
@@ -1063,7 +1020,7 @@ ggplot(pred_worker_season_df, aes(x = bee_season_type, y = fit)) +
 
 ## Findings
 
-Number of nest-searching queens, number of rodent burrows and the proportion of burrow vacancy does not significantly predict number of workers. Significantly more workers during worker season than during nest-searching season. Significant positive effect of bombus-relevant floral abundance on worker abundance (p=0.049).
+Number of nest-searching queens, number of rodent burrows and the proportion of burrow vacancy does not significantly predict number of workers. Significantly more workers during worker season than during nest-searching season. Significant positive effect of bombus-relevant floral abundance on worker abundance (p=0.0012).
 
 # Final Path Diagram
 
