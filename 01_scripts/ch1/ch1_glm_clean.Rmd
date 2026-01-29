@@ -234,27 +234,35 @@ Number of rodent burrows vs cover type
 ```{r}
 #create new data grid
 rodent_data_cover<- expand.grid(
-  grass_forb_perc_scaled = mean(field_data$grass_forb_perc_scaled, na.rm = TRUE),
-  cover_type = unique(field_data$cover_type),
-  julian.date_scaled = mean(field_data$julian.date_scaled, na.rm = TRUE)
+  cover_type = unique(field_data$cover_type)
 )
 
 # Get predicted probabilities and standard errors
 pred_rodent_cover <- predict(burrows_cover_siteOnly,
                             newdata = rodent_data_cover,
+                            type = "link",
                             se.fit = TRUE,
                             re.form = NA)
 
 # Combine predictions with data frame
 pred_rodent_cover_df <- cbind(rodent_data_cover,
-                 fit = pred_rodent_cover$fit,
-                 se = pred_rodent_cover$se.fit)
+                 fit_log = pred_rodent_cover$fit,
+                 se_log = pred_rodent_cover$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_rodent_cover_df <- pred_rodent_cover_df %>%
+  mutate(
+    fit = exp(fit_log),
+    lower = exp(fit_log - 1.96 * se_log),
+    upper = exp(fit_log + 1.96 * se_log)
+  )
+
 
 ggplot(pred_rodent_cover_df, aes(x = cover_type, y = fit)) +
   geom_point(size = 8) +
-  geom_errorbar(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Cover type",
-       y = "Predicted burrow count\n(log-scale)") +
+       y = "Predicted burrow count\n(per plot)") +
   theme_classic(base_size = 23)
 ```
 
@@ -310,6 +318,45 @@ residuals_burrows_vacancy_siteOnly <- simulateResiduals(fittedModel = burrows_va
 
 ```{r}
 summary(burrows_vacancy_siteOnly)
+```
+
+## Plots
+
+Proportion of vacant burrows vs cover type
+
+```{r}
+#create new data grid
+vacancy_data_cover<- expand.grid(
+  cover_type = unique(field_data$cover_type)
+)
+
+# Get predicted probabilities and standard errors
+pred_vacancy_cover <- predict(burrows_vacancy_siteOnly,
+                            newdata = vacancy_data_cover,
+                            type = "link",
+                            se.fit = TRUE,
+                            re.form = NA)
+
+# Combine predictions with data frame
+pred_vacancy_cover_df <- cbind(vacancy_data_cover,
+                 fit_logit = pred_vacancy_cover$fit,
+                 se_logit = pred_vacancy_cover$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not logit scale)
+pred_vacancy_cover_df <- pred_vacancy_cover_df %>%
+  mutate(
+    fit = plogis(fit_logit),
+    lower = plogis(fit_logit - 1.96 * se_logit),
+    upper = plogis(fit_logit + 1.96 * se_logit)
+  )
+
+
+ggplot(pred_vacancy_cover_df, aes(x = cover_type, y = fit)) +
+  geom_point(size = 8) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
+  labs(x = "Cover type",
+       y = "Predicted proportion\nof vacant burrows\n(per plot)") +
+  theme_classic(base_size = 23)
 ```
 
 ## Findings
@@ -384,23 +431,33 @@ summary(floral_noRE)
 Vegetation
 
 ```{r}
+floral_veg_data <- data.frame(
+  cover_type = factor(c("bare", "grass"), levels = levels(field_data$cover_type)),
+  julian.date_scaled = mean(field_data$julian.date_scaled, na.rm = TRUE)
+)
+
 # Get predicted response for cover_type, holding other variables at their means 
-pred_floral_veg <- emmeans(
-  floral_noRE,
-  ~ cover_type,
-  at = list(julian.date_scaled = mean(surveys$julian.date_scaled, na.rm=TRUE)), 
-  type = "response")
+pred_floral_veg <- predict(floral_noRE,
+                      newdata = floral_veg_data,
+                      type = "prob")
 
-# Convert to dataframe for plotting
-pred_floral_veg_df <- as.data.frame(pred_floral_veg)
 
-#plot
-ggplot(pred_floral_veg_df, aes(x = cover_type, y = response)) +
-  geom_point(size = 8) +
-  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL), width = 0.2, linewidth = 1.5) +
+# Convert to long dataframe for plotting
+
+pred_floral_veg_df <- as.data.frame(pred_floral_veg) %>%
+  mutate(cover_type = rownames(pred_floral_veg)) %>%
+  pivot_longer(cols = -cover_type, names_to = "response", values_to = "prob")
+
+# Convert cover_type to factor with proper labels
+pred_floral_veg_df$cover_type <- factor(pred_floral_veg_df$cover_type,
+                                   levels = c(1, 2),
+                                   labels = c("bare", "grass"))
+
+ggplot(pred_floral_veg_df, aes(x = cover_type, y = prob, fill = response)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.9), width = 0.8) +
   labs(
     x = "Cover type",
-    y = "Predicted floral\nabundance (log-scale)"
+    y = "Predicted probability"
   ) +
   theme_classic(base_size = 23)
 ```
@@ -415,23 +472,34 @@ date_seq <- seq(
   length.out = 50
 )
 
-# Get predicted response for grass_forb_perc_scaled, holding other variables at their means
-pred_floral_date <- emmeans(floral_noRE,
-               ~ julian.date_scaled,
-               at = list(julian.date_scaled = date_seq,
-                         cover_type = "grass"),
-               type = "response")
+floral_date_data <- data.frame(
+  cover_type = "grass",
+  julian.date_scaled = date_seq
+)
 
-# Convert to dataframe for plotting
-pred_floral_date_df <- as.data.frame(pred_floral_date)
+# Get predicted response for cover_type, holding other variables at their means 
+pred_floral_date <- predict(floral_noRE,
+                      newdata = floral_date_data,
+                      type = "prob")
 
-ggplot(pred_floral_date_df, aes(x = julian.date_scaled, y = response)) +
+
+# Convert to long dataframe for plotting
+pred_floral_date_df <- as.data.frame(pred_floral_date) %>%
+  mutate(julian.date_scaled = floral_date_data$julian.date_scaled) %>%
+  pivot_longer(
+    cols = 0:4,
+    names_to = "floral_abun_cat",
+    values_to = "prob"
+  )
+
+ggplot(pred_floral_date_df, aes(x = julian.date_scaled, y = prob, fill = floral_abun_cat)) +
   geom_line(size = 3) +
-  geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL), alpha = 0.2, color = NA) +
   labs(
-       x = "Julian date (scaled)",
-       y = "Predicted floral\nabundance (log-scale)") +
-  theme_classic(base_size = 23)
+    x = "Julian date (scaled)",
+    y = "Predicted probability",
+    color = "Floral abundance category"
+  ) +
+  theme_classic(base_size = 27)
 ```
 
 ## Findings
@@ -568,47 +636,62 @@ Conditional model:
 #create new data grid
 nsq_data_cover<- expand.grid(
   cover_type = unique(field_data$cover_type),
-  bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled),
-  num_burrows_scaled = mean(field_data$num_burrows_scaled),
-  bee_season_type = "nestsearching"
+  bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled, na.rm = TRUE),
+  num_burrows_scaled = mean(field_data$num_burrows_scaled, na.rm = TRUE),
+  bee_season_type = "nestsearching",
+  prop_inactive_scaled = mean(field_data$prop_inactive_scaled, na.rm = TRUE)
 )
 
 # Predictions for conditional model (count)
 pred_nsq_cover_cond <- predict(NSQ_noRE,
                             newdata = nsq_data_cover,
-                            type = "conditional",
-                            se.fit = TRUE)
-
-# Predictions for zero-inflated model 
-pred_nsq_cover_zi <- predict(NSQ_noRE,
-                            newdata = nsq_data_cover,
-                            type = "zprob",
+                            type = "link",
                             se.fit = TRUE)
 
 # Combine predictions with data frame
 pred_nsq_cover_df <- cbind(nsq_data_cover,
-                 cond_fit = pred_nsq_cover_cond$fit,
-                 cond_se = pred_nsq_cover_cond$se.fit,
-                 zi_fit = pred_nsq_cover_zi$fit,
-                 zi_se = pred_nsq_cover_zi$se.fit)
+                 cond_fit_log = pred_nsq_cover_cond$fit,
+                 cond_se_log = pred_nsq_cover_cond$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_nsq_cover_df <- pred_nsq_cover_df %>%
+  mutate(
+    cond_fit = exp(cond_fit_log),
+    cond_lower = exp(cond_fit_log - 1.96 * cond_se_log),
+    cond_upper = exp(cond_fit_log + 1.96 * cond_se_log)
+  )
 
 #plot
 ggplot(pred_nsq_cover_df, aes(x = cover_type, y = cond_fit)) +
   geom_point(size = 8) +
-  geom_errorbar(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
+  geom_errorbar(aes(ymin = cond_lower, ymax = cond_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(
        x = "Cover type",
-       y = "Predicted NSQ count\n(log-scale)") +
+       y = "Predicted NSQ count\n(per plot)") +
   theme_classic(base_size = 23)
 ```
 
 Zero-inflated model:
 
 ```{r}
+# Predictions for ZI model 
+pred_nsq_cover_zi <- predict(NSQ_noRE, 
+                                newdata = nsq_data_cover, 
+                                type = "zlink",
+                              se.fit = TRUE)
+
+# Combine predictions and transform to response scale (by applying the inverse logit (plogit))
+pred_nsq_cover_df <- cbind(
+  nsq_data_cover,
+  zi_fit = plogis(pred_nsq_cover_zi$fit),
+  zi_lower = plogis(pred_nsq_cover_zi$fit - 1.96 * pred_nsq_cover_zi$se.fit),
+  zi_upper = plogis(pred_nsq_cover_zi$fit + 1.96 * pred_nsq_cover_zi$se.fit)
+)
+
 # Plot zi predictions
 ggplot(pred_nsq_cover_df, aes(x = cover_type, y = zi_fit)) +
   geom_point(size = 8) +
-  geom_errorbar(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
+  geom_errorbar(aes(ymin = zi_lower, ymax = zi_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs( x = "Cover type", y = "Predicted probability\nof structural zeros") +
   theme_classic(base_size = 23) 
 ```
@@ -629,7 +712,8 @@ floral_seq <- seq(
 nsq_data_floral <- data.frame(
   bombus_floral_abun_scaled = floral_seq,
   cover_type = "grass",
-  num_burrows_scaled = mean(field_data$num_burrows_scaled),
+  num_burrows_scaled = mean(field_data$num_burrows_scaled, na.rm = TRUE),
+  prop_inactive_scaled = mean(field_data$prop_inactive_scaled, na.rm = TRUE),
   bee_season_type = "nestsearching"  
 )
 
@@ -654,7 +738,7 @@ pred_nsq_floral_df <- pred_nsq_floral_df %>%
 
 # Plot conditional predictions
 ggplot(pred_nsq_floral_df, aes(x = bombus_floral_abun_scaled, y = cond_fit)) +
-  geom_line(size = 3) +
+  geom_line(linewidth = 3) +
   geom_ribbon(aes(ymin = cond_lower, ymax = cond_upper), alpha = 0.2) +
   labs( x = "Floral abundance (scaled)" , y = "Predicted mean NSQ\ncount (per plot)") +
   theme_classic(base_size = 23)
@@ -664,13 +748,97 @@ ggplot(pred_nsq_floral_df, aes(x = bombus_floral_abun_scaled, y = cond_fit)) +
 Zero-inflated model:
 
 ```{r}
+# Predictions for ZI model 
+pred_nsq_floral_zi <- predict(NSQ_noRE, 
+                                newdata = nsq_data_floral, 
+                                type = "zlink",
+                              se.fit = TRUE)
+
+# Combine predictions and transform to response scale (by applying the inverse logit (plogit))
+pred_nsq_floral_df <- cbind(
+  nsq_data_floral,
+  zi_fit = plogis(pred_nsq_floral_zi$fit),
+  zi_lower = plogis(pred_nsq_floral_zi$fit - 1.96 * pred_nsq_floral_zi$se.fit),
+  zi_upper = plogis(pred_nsq_floral_zi$fit + 1.96 * pred_nsq_floral_zi$se.fit)
+)
+
 # Plot zi predictions
 ggplot(pred_nsq_floral_df, aes(x = bombus_floral_abun_scaled, y = zi_fit)) +
-  geom_line(size = 3) +
-  geom_ribbon(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), alpha = 0.2) +
+  geom_line(linewidth = 3) +
+  geom_ribbon(aes(ymin = zi_lower, ymax = zi_upper), alpha = 0.2) +
   labs(x = "Floral abundance (scaled)", y = "Predicted probability\nof structural zeros") +
   theme_classic(base_size = 23)
 
+```
+
+Number of nest-searching queens vs burrow vacancy proportion
+
+Conditional model:
+
+```{r}
+#create new data grid
+nsq_data_vacancy<- expand.grid(
+  cover_type = "grass",
+  bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled, na.rm = TRUE),
+  num_burrows_scaled = mean(field_data$num_burrows_scaled, na.rm = TRUE),
+  bee_season_type = "nestsearching",
+  prop_inactive_scaled = seq(min(field_data$prop_inactive_scaled, na.rm = TRUE), 
+                             max(field_data$prop_inactive_scaled, na.rm = TRUE), 
+                             length.out = 50)
+)
+
+# Predictions for conditional model (count)
+pred_nsq_vacancy_cond <- predict(NSQ_noRE,
+                            newdata = nsq_data_vacancy,
+                            type = "link",
+                            se.fit = TRUE)
+
+# Combine predictions with data frame
+pred_nsq_vacancy_df <- cbind(nsq_data_vacancy,
+                 cond_fit_log = pred_nsq_vacancy_cond$fit,
+                 cond_se_log = pred_nsq_vacancy_cond$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_nsq_vacancy_df <- pred_nsq_vacancy_df %>%
+  mutate(
+    cond_fit = exp(cond_fit_log),
+    cond_lower = exp(cond_fit_log - 1.96 * cond_se_log),
+    cond_upper = exp(cond_fit_log + 1.96 * cond_se_log)
+  )
+
+#plot
+ggplot(pred_nsq_vacancy_df, aes(x = prop_inactive_scaled, y = cond_fit)) +
+  geom_line(linewidth = 3) +
+  geom_ribbon(aes(ymin = cond_lower, ymax = cond_upper), alpha = 0.2) +
+  labs(
+       x = "Proportion of vacant burrows (scaled)",
+       y = "Predicted NSQ count\n(per plot)") +
+  theme_classic(base_size = 23)
+```
+
+Zero-inflated model:
+
+```{r}
+# Predictions for ZI model 
+pred_nsq_vacancy_zi <- predict(NSQ_noRE, 
+                                newdata = nsq_data_vacancy, 
+                                type = "zlink",
+                              se.fit = TRUE)
+
+# Combine predictions and transform to response scale (by applying the inverse logit (plogit))
+pred_nsq_vacancy_df <- cbind(
+  nsq_data_vacancy,
+  zi_fit = plogis(pred_nsq_vacancy_zi$fit),
+  zi_lower = plogis(pred_nsq_vacancy_zi$fit - 1.96 * pred_nsq_vacancy_zi$se.fit),
+  zi_upper = plogis(pred_nsq_vacancy_zi$fit + 1.96 * pred_nsq_vacancy_zi$se.fit)
+)
+
+# Plot zi predictions
+ggplot(pred_nsq_vacancy_df, aes(x = prop_inactive_scaled, y = zi_fit)) +
+  geom_line(linewidth = 3) +
+  geom_ribbon(aes(ymin = zi_lower, ymax = zi_upper), alpha = 0.2) +
+  labs( x = "Proportion of vacant burrows (scaled)", y = "Predicted probability\nof structural zeros") +
+  theme_classic(base_size = 23) 
 ```
 
 Number of nest-searching queens vs number of rodent burrows
@@ -681,8 +849,9 @@ Conditional model:
 # Create data grid over rodent_burrows_scaled
 nsq_data_rodent <- data.frame(
   num_burrows_scaled = seq(min(field_data$num_burrows_scaled), max(field_data$num_burrows_scaled), length.out = 50),
+  prop_inactive_scaled = mean(field_data$prop_inactive_scaled, na.rm = TRUE),
   cover_type = "grass",
-  bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled),
+  bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled, na.rm = TRUE),
   bee_season_type = "nestsearching"  
 )
 
@@ -719,9 +888,23 @@ ggplot(pred_nsq_rodent_df, aes(x = num_burrows_scaled, y = cond_fit)) +
 Zero-inflated model:
 
 ```{r}
+# Predictions for ZI model 
+pred_nsq_rodent_zi <- predict(NSQ_noRE, 
+                                newdata = nsq_data_rodent, 
+                                type = "zlink",
+                              se.fit = TRUE)
+
+# Combine predictions and transform to response scale (by applying the inverse logit (plogit))
+pred_nsq_rodent_df <- cbind(
+  nsq_data_rodent,
+  zi_fit = plogis(pred_nsq_rodent_zi$fit),
+  zi_lower = plogis(pred_nsq_rodent_zi$fit - 1.96 * pred_nsq_rodent_zi$se.fit),
+  zi_upper = plogis(pred_nsq_rodent_zi$fit + 1.96 * pred_nsq_rodent_zi$se.fit)
+)
+
 ggplot(pred_nsq_rodent_df, aes(x = num_burrows_scaled, y = zi_fit)) +
   geom_line(size = 3) +
-  geom_ribbon(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), alpha = 0.2) +
+  geom_ribbon(aes(ymin = zi_lower, ymax = zi_upper), alpha = 0.2) +
   labs(x = "Burrow abundance (scaled)", y = "Predicted probability\nof structural zeros") +
   theme_classic(base_size = 23)
 ```
@@ -735,37 +918,59 @@ Conditional model:
 nsq_data_season <- data.frame(
   cover_type = "grass",
   bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled),
-  num_burrows_scaled = mean(field_data$num_burrows_scaled),
+  num_burrows_scaled = mean(field_data$num_burrows_scaled, na.rm = TRUE),
+  prop_inactive_scaled = mean(field_data$prop_inactive_scaled, na.rm = TRUE),
   bee_season_type = factor(c("nestsearching", "worker"), levels = levels(field_data$bee_season_type))
 )
 
 # Predictions for conditional model (count)
-pred_nsq_season_cond <- predict(NSQ_noRE, newdata = nsq_data_season, type = "conditional", se.fit = TRUE)
-
-# Predictions for zero-inflation model
-pred_nsq_season_zi <- predict(NSQ_noRE, newdata = nsq_data_season, type = "zprob", se.fit = TRUE)
+pred_nsq_season_cond <- predict(
+  NSQ_noRE, 
+  newdata = nsq_data_season, 
+  type = "link", ##log-scale
+  se.fit = TRUE)
 
 # Combine predictions with newdata
 pred_nsq_season_df <- cbind(nsq_data_season,
-                 cond_fit = pred_nsq_season_cond$fit,
-                 cond_se = pred_nsq_season_cond$se.fit,
-                 zi_fit = pred_nsq_season_zi$fit,
-                 zi_se = pred_nsq_season_zi$se.fit)
+                 cond_fit_log = pred_nsq_season_cond$fit,
+                 cond_se_log = pred_nsq_season_cond$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_nsq_season_df <- pred_nsq_season_df %>%
+  mutate(
+    cond_fit = exp(cond_fit_log),
+    cond_lower = exp(cond_fit_log - 1.96 * cond_se_log),
+    cond_upper = exp(cond_fit_log + 1.96 * cond_se_log)
+  )
 
 # Plot conditional predictions
 ggplot(pred_nsq_season_df, aes(x = bee_season_type, y = cond_fit)) +
   geom_point(size=8) +
-  geom_errorbar(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), width = 0.2, position = position_dodge(0.6), linewidth = 1.5)+
-  labs(x = "Bee season", y = "Predicted NSQ count\n(log-scale)") +
+  geom_errorbar(aes(ymin = cond_lower, ymax = cond_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5)+
+  labs(x = "Bee season", y = "Predicted NSQ count\n(per plot)") +
   theme_classic(base_size = 23)
 ```
 
 Zero-inflated model:
 
 ```{r}
+# Predictions for ZI model 
+pred_nsq_season_zi <- predict(NSQ_noRE, 
+                                newdata = nsq_data_season, 
+                                type = "zlink",
+                              se.fit = TRUE)
+
+# Combine predictions and transform to response scale (by applying the inverse logit (plogit))
+pred_nsq_season_df <- cbind(
+  nsq_data_season,
+  zi_fit = plogis(pred_nsq_season_zi$fit),
+  zi_lower = plogis(pred_nsq_season_zi$fit - 1.96 * pred_nsq_season_zi$se.fit),
+  zi_upper = plogis(pred_nsq_season_zi$fit + 1.96 * pred_nsq_season_zi$se.fit)
+)
+
 ggplot(pred_nsq_season_df, aes(x = bee_season_type, y = zi_fit)) +
   geom_point(size=8) +
-  geom_errorbar(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), width = 0.2, position = position_dodge(0.6), linewidth = 1.5)+
+  geom_errorbar(aes(ymin = zi_lower, ymax = zi_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5)+
   labs(x = "Bee season", y = "Predicted probability\nof structural zeros") +
   theme_classic(base_size = 23)
 ```
@@ -895,26 +1100,36 @@ worker_data_nsq<- expand.grid(
   nest_searching_queens_scaled = queen_seq,
   bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled, na.rm = TRUE),
   num_burrows_scaled = mean(field_data$num_burrows_scaled, na.rm = TRUE),
+  prop_inactive_scaled = mean(field_data$prop_inactive_scaled, na.rm = TRUE),
   bee_season_type = "worker"
 )
 
 # Get predicted probabilities and standard errors
-pred_worker_nsq <- predict(worker_negbin,
+pred_worker_nsq <- predict(workers_noArea,
                             newdata = worker_data_nsq,
+                           type = "link",
                             se.fit = TRUE,
                             re.form = NA)
 
 # Combine predictions with data frame
 pred_worker_nsq_df <- cbind(worker_data_nsq,
-                 fit = pred_worker_nsq$fit,
-                 se = pred_worker_nsq$se.fit)
+                 fit_log = pred_worker_nsq$fit,
+                 se_log = pred_worker_nsq$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_worker_nsq_df <- pred_worker_nsq_df %>%
+  mutate(
+    fit = exp(fit_log),
+    lower = exp(fit_log - 1.96 * se_log),
+    upper = exp(fit_log + 1.96 * se_log)
+  )
 
 ggplot(pred_worker_nsq_df, aes(x = nest_searching_queens_scaled, y = fit)) +
   geom_line(size = 3) +
-  geom_ribbon(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), alpha = 0.2) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
   labs(
        x = "NSQ abundance (scaled)",
-       y = "Predicted worker count\n(log-scale)") +
+       y = "Predicted worker count\n(per plot)") +
   theme_classic(base_size = 23)
 ```
 
@@ -926,23 +1141,33 @@ worker_data_floral<- expand.grid(
   nest_searching_queens_scaled = mean(field_data$nest_searching_queens_scaled, na.rm = TRUE),
   bombus_floral_abun_scaled = floral_seq,
   num_burrows_scaled = mean(field_data$num_burrows_scaled, na.rm = TRUE),
+  prop_inactive_scaled = mean(field_data$prop_inactive_scaled, na.rm = TRUE),
   bee_season_type = "worker"
 )
 
 # Get predicted probabilities and standard errors
-pred_worker_floral <- predict(worker_negbin,
+pred_worker_floral <- predict(workers_noArea,
                             newdata = worker_data_floral,
+                            type = "link",
                             se.fit = TRUE,
                             re.form = NA)
 
 # Combine predictions with data frame
 pred_worker_floral_df <- cbind(worker_data_floral,
-                 fit = pred_worker_floral$fit,
-                 se = pred_worker_floral$se.fit)
+                 fit_log = pred_worker_floral$fit,
+                 se_log = pred_worker_floral$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_worker_floral_df <- pred_worker_floral_df %>%
+  mutate(
+    fit = exp(fit_log),
+    lower = exp(fit_log - 1.96 * se_log),
+    upper = exp(fit_log + 1.96 * se_log)
+  )
 
 ggplot(pred_worker_floral_df, aes(x = bombus_floral_abun_scaled, y = fit)) +
   geom_line(size = 3) +
-  geom_ribbon(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), alpha = 0.2) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
   labs(
        x = "Floral abundance (scaled)",
        y = "Predicted worker count\n(log-scale)") +
@@ -963,26 +1188,36 @@ worker_data_rodent<- expand.grid(
   nest_searching_queens_scaled = mean(field_data$nest_searching_queens_scaled, na.rm = TRUE),
   bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled, na.rm = TRUE),
   num_burrows_scaled =rodent_seq,
+  prop_inactive_scaled = mean(field_data$prop_inactive_scaled, na.rm = TRUE),
   bee_season_type = "worker"
 )
 
 # Get predicted probabilities and standard errors
-pred_worker_rodent <- predict(worker_negbin,
+pred_worker_rodent <- predict(workers_noArea,
                             newdata = worker_data_rodent,
+                            type = "link",
                             se.fit = TRUE,
                             re.form = NA)
 
 # Combine predictions with data frame
 pred_worker_rodent_df <- cbind(worker_data_rodent,
-                 fit = pred_worker_rodent$fit,
-                 se = pred_worker_rodent$se.fit)
+                 fit_log = pred_worker_rodent$fit,
+                 se_log = pred_worker_rodent$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_worker_rodent_df <- pred_worker_rodent_df %>%
+  mutate(
+    fit = exp(fit_log),
+    lower = exp(fit_log - 1.96 * se_log),
+    upper = exp(fit_log + 1.96 * se_log)
+  )
 
 ggplot(pred_worker_rodent_df, aes(x = num_burrows_scaled, y = fit)) +
   geom_line(size = 3) +
-  geom_ribbon(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), alpha = 0.2) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
   labs(
        x = "Burrow abundance (scaled)",
-       y = "Predicted worker count\n(log-scale)") +
+       y = "Predicted worker count\n(per plot)") +
   theme_classic(base_size = 23)
 ```
 
@@ -994,27 +1229,37 @@ worker_data_season<- expand.grid(
   nest_searching_queens_scaled = mean(field_data$nest_searching_queens_scaled, na.rm = TRUE),
   bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled, na.rm = TRUE),
   num_burrows_scaled = mean(field_data$num_burrows_scaled, na.rm = TRUE),
+  prop_inactive_scaled = mean(field_data$prop_inactive_scaled, na.rm = TRUE),
   bee_season_type = unique(field_data$bee_season_type)
 )
 
 # Get predicted probabilities and standard errors
-pred_worker_season <- predict(worker_negbin,
+pred_worker_season <- predict(workers_noArea,
                             newdata = worker_data_season,
+                            type = "link",
                             se.fit = TRUE,
                             re.form = NA)
 
 # Combine predictions with data frame
 pred_worker_season_df <- cbind(worker_data_season,
-                 fit = pred_worker_season$fit,
-                 se = pred_worker_season$se.fit)
+                 fit_log = pred_worker_season$fit,
+                 se_log = pred_worker_season$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_worker_season_df <- pred_worker_season_df %>%
+  mutate(
+    fit = exp(fit_log),
+    lower = exp(fit_log - 1.96 * se_log),
+    upper = exp(fit_log + 1.96 * se_log)
+  )
 
 ggplot(pred_worker_season_df, aes(x = bee_season_type, y = fit)) +
   geom_point(size = 8) +
-  geom_errorbar(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), 
+  geom_errorbar(aes(ymin = lower, ymax = upper), 
                 width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(
        x = "Bee season",
-       y = "Predicted worker count\n(log-scale)") +
+       y = "Predicted worker count\n(per plot)") +
   theme_classic(base_size = 23)
 ```
 
