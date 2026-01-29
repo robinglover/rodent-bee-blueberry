@@ -487,17 +487,17 @@ pred_floral_date <- predict(floral_noRE,
 pred_floral_date_df <- as.data.frame(pred_floral_date) %>%
   mutate(julian.date_scaled = floral_date_data$julian.date_scaled) %>%
   pivot_longer(
-    cols = 0:4,
+    cols = 0:5,
     names_to = "floral_abun_cat",
     values_to = "prob"
   )
 
-ggplot(pred_floral_date_df, aes(x = julian.date_scaled, y = prob, fill = floral_abun_cat)) +
+ggplot(pred_floral_date_df, aes(x = julian.date_scaled, y = prob, color = floral_abun_cat)) +
   geom_line(size = 3) +
   labs(
     x = "Julian date (scaled)",
     y = "Predicted probability",
-    color = "Floral abundance category"
+    color = "Floral\nabundance"
   ) +
   theme_classic(base_size = 27)
 ```
