@@ -314,7 +314,7 @@ residuals_burrows_vacancy_siteOnly <- simulateResiduals(fittedModel = burrows_va
 ##KS test significant
 ```
 
-3.  Plot results
+3.  Print results
 
 ```{r}
 summary(burrows_vacancy_siteOnly)
@@ -457,7 +457,8 @@ ggplot(pred_floral_veg_df, aes(x = cover_type, y = prob, fill = response)) +
   geom_bar(stat = "identity", position = position_dodge(width = 0.9), width = 0.8) +
   labs(
     x = "Cover type",
-    y = "Predicted probability"
+    y = "Predicted probability",
+    fill = "Floral\nabundance\ncategory"
   ) +
   theme_classic(base_size = 23)
 ```
@@ -493,11 +494,11 @@ pred_floral_date_df <- as.data.frame(pred_floral_date) %>%
   )
 
 ggplot(pred_floral_date_df, aes(x = julian.date_scaled, y = prob, color = floral_abun_cat)) +
-  geom_line(size = 3) +
+  geom_line(linewidth = 3) +
   labs(
     x = "Julian date (scaled)",
     y = "Predicted probability",
-    color = "Floral\nabundance"
+    color = "Floral\nabundance\ncategory"
   ) +
   theme_classic(base_size = 27)
 ```
@@ -667,7 +668,7 @@ ggplot(pred_nsq_cover_df, aes(x = cover_type, y = cond_fit)) +
   geom_errorbar(aes(ymin = cond_lower, ymax = cond_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(
        x = "Cover type",
-       y = "Predicted NSQ count\n(per plot)") +
+       y = "Predicted mean NSQ\ncount (per plot)") +
   theme_classic(base_size = 23)
 ```
 
@@ -812,7 +813,7 @@ ggplot(pred_nsq_vacancy_df, aes(x = prop_inactive_scaled, y = cond_fit)) +
   geom_ribbon(aes(ymin = cond_lower, ymax = cond_upper), alpha = 0.2) +
   labs(
        x = "Proportion of vacant burrows (scaled)",
-       y = "Predicted NSQ count\n(per plot)") +
+       y = "Predicted mean NSQ\ncount (per plot)") +
   theme_classic(base_size = 23)
 ```
 
@@ -947,7 +948,7 @@ pred_nsq_season_df <- pred_nsq_season_df %>%
 ggplot(pred_nsq_season_df, aes(x = bee_season_type, y = cond_fit)) +
   geom_point(size=8) +
   geom_errorbar(aes(ymin = cond_lower, ymax = cond_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5)+
-  labs(x = "Bee season", y = "Predicted NSQ count\n(per plot)") +
+  labs(x = "Bee season", y = "Predicted mean NSQ\ncount (per plot)") +
   theme_classic(base_size = 23)
 ```
 
@@ -1129,7 +1130,7 @@ ggplot(pred_worker_nsq_df, aes(x = nest_searching_queens_scaled, y = fit)) +
   geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
   labs(
        x = "NSQ abundance (scaled)",
-       y = "Predicted worker count\n(per plot)") +
+       y = "Predicted mean worker\ncount (per plot)") +
   theme_classic(base_size = 23)
 ```
 
@@ -1170,7 +1171,7 @@ ggplot(pred_worker_floral_df, aes(x = bombus_floral_abun_scaled, y = fit)) +
   geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
   labs(
        x = "Floral abundance (scaled)",
-       y = "Predicted worker count\n(log-scale)") +
+       y = "Predicted mean worker\ncount (per plot)") +
   theme_classic(base_size = 23)
 ```
 
@@ -1217,7 +1218,52 @@ ggplot(pred_worker_rodent_df, aes(x = num_burrows_scaled, y = fit)) +
   geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
   labs(
        x = "Burrow abundance (scaled)",
-       y = "Predicted worker count\n(per plot)") +
+       y = "Predicted mean worker\ncount (per plot)") +
+  theme_classic(base_size = 23)
+```
+
+Number of workers vs burrow vacancy proportion
+
+```{r}
+#create new data grid
+worker_data_vacancy <- expand.grid(
+  nest_searching_queens_scaled = mean(field_data$nest_searching_queens_scaled, na.rm = TRUE),
+  bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled, na.rm = TRUE),
+  num_burrows_scaled =mean(field_data$num_burrows_scaled, na.rm = TRUE),
+  bee_season_type = "worker",
+  prop_inactive_scaled = seq(min(field_data$prop_inactive_scaled, na.rm = TRUE), 
+                             max(field_data$prop_inactive_scaled, na.rm = TRUE), 
+                             length.out = 50)
+)
+
+# Predictions 
+pred_worker_vacancy <- predict(workers_noArea,
+                            newdata = worker_data_vacancy,
+                            type = "link",
+                            se.fit = TRUE,
+                            re.form = NA
+                            )
+
+# Combine predictions with data frame
+pred_worker_vacancy_df <- cbind(worker_data_vacancy,
+                 fit_log = pred_worker_vacancy$fit,
+                 se_log = pred_worker_vacancy$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_worker_vacancy_df <- pred_worker_vacancy_df %>%
+  mutate(
+    fit = exp(fit_log),
+    lower = exp(fit_log - 1.96 * se_log),
+    upper = exp(fit_log + 1.96 * se_log)
+  )
+
+#plot
+ggplot(pred_worker_vacancy_df, aes(x = prop_inactive_scaled, y = fit)) +
+  geom_line(linewidth = 3) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
+  labs(
+       x = "Proportion of vacant burrows (scaled)",
+       y = "Predicted mean worker\ncount (per plot)") +
   theme_classic(base_size = 23)
 ```
 
@@ -1259,7 +1305,7 @@ ggplot(pred_worker_season_df, aes(x = bee_season_type, y = fit)) +
                 width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(
        x = "Bee season",
-       y = "Predicted worker count\n(per plot)") +
+       y = "Predicted mean worker\ncount (per plot)") +
   theme_classic(base_size = 23)
 ```
 
