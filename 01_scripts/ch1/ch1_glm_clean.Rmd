@@ -10,7 +10,7 @@ knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_anal
 
 # Predicted path diagram
 
-![](images/pathDiagramOutline.jpg)
+![](images/path diagram.png)
 
 # Load and clean data
 
@@ -262,7 +262,7 @@ ggplot(pred_rodent_cover_df, aes(x = cover_type, y = fit)) +
   geom_point(size = 8) +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Cover type",
-       y = "Predicted burrow count\n(per plot)") +
+       y = "Predicted mean burrow\ncount (per plot)") +
   theme_classic(base_size = 23)
 ```
 
@@ -457,7 +457,7 @@ ggplot(pred_floral_veg_df, aes(x = cover_type, y = prob, fill = response)) +
   geom_bar(stat = "identity", position = position_dodge(width = 0.9), width = 0.8) +
   labs(
     x = "Cover type",
-    y = "Predicted probability",
+    y = "Predicted probability\n(per plot)",
     fill = "Floral\nabundance\ncategory"
   ) +
   theme_classic(base_size = 23)
@@ -497,7 +497,7 @@ ggplot(pred_floral_date_df, aes(x = julian.date_scaled, y = prob, color = floral
   geom_line(linewidth = 3) +
   labs(
     x = "Julian date (scaled)",
-    y = "Predicted probability",
+    y = "Predicted probability\n(per plot)",
     color = "Floral\nabundance\ncategory"
   ) +
   theme_classic(base_size = 27)
@@ -877,7 +877,7 @@ pred_nsq_rodent_df <- pred_nsq_rodent_df %>%
   )
 
 ggplot(pred_nsq_rodent_df, aes(x = num_burrows_scaled, y = cond_fit)) +
-  geom_line(size = 3) +
+  geom_line(linewidth = 3) +
   geom_ribbon(aes(ymin = cond_lower, ymax = cond_upper), alpha = 0.2) +
   labs(
     x = "Burrow abundance (scaled)",
@@ -1315,4 +1315,4 @@ Number of nest-searching queens, number of rodent burrows and the proportion of 
 
 # Final Path Diagram
 
-![](images/pathDiagramFinal.jpg)
+![](images/path diagram final.png)
