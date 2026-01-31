@@ -10,7 +10,7 @@ knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_anal
 
 # Predicted path diagram
 
-![](images/path diagram.png)
+![](images/path%20diagram.png)
 
 # Load and clean data
 
@@ -431,34 +431,27 @@ summary(floral_noRE)
 Vegetation
 
 ```{r}
-floral_veg_data <- data.frame(
-  cover_type = factor(c("bare", "grass"), levels = levels(field_data$cover_type)),
-  julian.date_scaled = mean(field_data$julian.date_scaled, na.rm = TRUE)
+emm_floral <- emmeans(
+  floral_noRE,
+  ~ cover_type,
+  at = list(julian.date_scaled = mean(field_data$julian.date_scaled, na.rm = TRUE)),
+  mode = "mean.class" ## The expected floral abundance category (mean ordinal score)
 )
 
-# Get predicted response for cover_type, holding other variables at their means 
-pred_floral_veg <- predict(floral_noRE,
-                      newdata = floral_veg_data,
-                      type = "prob")
+#convert to dataframe
+emm_floral_df <- as.data.frame(emm_floral)
 
-
-# Convert to long dataframe for plotting
-
-pred_floral_veg_df <- as.data.frame(pred_floral_veg) %>%
-  mutate(cover_type = rownames(pred_floral_veg)) %>%
-  pivot_longer(cols = -cover_type, names_to = "response", values_to = "prob")
-
-# Convert cover_type to factor with proper labels
-pred_floral_veg_df$cover_type <- factor(pred_floral_veg_df$cover_type,
-                                   levels = c(1, 2),
-                                   labels = c("bare", "grass"))
-
-ggplot(pred_floral_veg_df, aes(x = cover_type, y = prob, fill = response)) +
-  geom_bar(stat = "identity", position = position_dodge(width = 0.9), width = 0.8) +
+#plot
+ggplot(emm_floral_df, aes(x = cover_type, y = mean.class)) +
+  geom_point(size = 6) +
+  geom_errorbar(
+    aes(ymin = asymp.LCL, ymax = asymp.UCL),
+    width = 0.2,
+    linewidth = 1.5
+  ) +
   labs(
     x = "Cover type",
-    y = "Predicted probability\n(per plot)",
-    fill = "Floral\nabundance\ncategory"
+    y = "Predicted mean\nlog-scaled floral\nabundance category\n(per plot)"
   ) +
   theme_classic(base_size = 23)
 ```
@@ -466,41 +459,33 @@ ggplot(pred_floral_veg_df, aes(x = cover_type, y = prob, fill = response)) +
 Julian date
 
 ```{r}
-# Define a sequence of values for grass_forb_perc_scaled across its observed range
-date_seq <- seq(
-  from = min(field_data$julian.date_scaled, na.rm = TRUE),
-  to = max(field_data$julian.date_scaled, na.rm = TRUE),
-  length.out = 50
+emm_floral_date <- emmeans(
+  floral_noRE,
+  ~ julian.date_scaled,
+  at = list(cover_type = "grass",
+             julian.date_scaled = seq(
+               min(field_data$julian.date_scaled, na.rm = TRUE), 
+               max(field_data$julian.date_scaled, na.rm = TRUE),
+               length.out = 50)),
+  mode = "mean.class" ## The expected floral abundance category (mean ordinal score)
 )
 
-floral_date_data <- data.frame(
-  cover_type = "grass",
-  julian.date_scaled = date_seq
-)
+#convert to dataframe
+emm_floral_date_df <- as.data.frame(emm_floral_date)
 
-# Get predicted response for cover_type, holding other variables at their means 
-pred_floral_date <- predict(floral_noRE,
-                      newdata = floral_date_data,
-                      type = "prob")
-
-
-# Convert to long dataframe for plotting
-pred_floral_date_df <- as.data.frame(pred_floral_date) %>%
-  mutate(julian.date_scaled = floral_date_data$julian.date_scaled) %>%
-  pivot_longer(
-    cols = 0:5,
-    names_to = "floral_abun_cat",
-    values_to = "prob"
-  )
-
-ggplot(pred_floral_date_df, aes(x = julian.date_scaled, y = prob, color = floral_abun_cat)) +
+#plot
+  
+ggplot(emm_floral_date_df, aes(x = julian.date_scaled, y = mean.class)) +
   geom_line(linewidth = 3) +
+  geom_ribbon(
+    aes(ymin = asymp.LCL, ymax = asymp.UCL),
+    alpha = 0.2
+  ) +
   labs(
     x = "Julian date (scaled)",
-    y = "Predicted probability\n(per plot)",
-    color = "Floral\nabundance\ncategory"
+    y = "Predicted mean\nlog-scaled floral\nabundance category\n(per plot)"
   ) +
-  theme_classic(base_size = 27)
+  theme_classic(base_size = 23)
 ```
 
 ## Findings
@@ -509,11 +494,30 @@ No significant effect of either grass+ forb% or julian date.
 
 # Number of nest-searching queens vs flowers, rodents, and field management technique
 
-Start by plotting a zero-inflated poisson, since \# of nest-searching queens is count data with a lot of zeros. I added bee_season_type as a covariate, since during my exploratory data analyses I saw that there was only a significant different in nest-searching queens among grassy vs bare sites during nesting season.
+I added bee_season_type as a covariate, since during my exploratory data analyses I saw that there was only a significant different in nest-searching queens among grassy vs bare sites during nesting season.
 
 ## Steps
 
-1.  Try multiple random effects structures
+1.  Check for zero-inflation in the data by comparing expected proportion of zeros in the dataset to the actual proportion of zeros. If observed \> expected, ZI model is justified.
+
+-   use ZI Poisson model to account for high proportion of zeros in NSQ counts (~84%\ of\ plots\ had\ zero\ queens),\ which\ exceeded\ expectations\ under\ a\ standard\ Poisson\ distribution\ (~78%).
+
+```{r}
+# Fit a simple Poisson
+pois_mod <- glm(nest_searching_queens ~ 1, family = poisson, data = field_data)
+
+# Observed proportion of zeros
+obs_zeros <- mean(field_data$nest_searching_queens == 0)
+
+# Expected proportion of zeros under Poisson
+lambda <- mean(field_data$nest_searching_queens)
+exp_zeros <- dpois(0, lambda)
+
+obs_zeros
+exp_zeros
+```
+
+2.  Try multiple random effects structures
 
 -   best fit = no random effect
 
@@ -613,7 +617,7 @@ anova(NSQ_full, NSQ_noArea, NSQ_plotOnly, NSQ_siteOnly, NSQ_AreaPlot, NSQ_noRE)
 ##results tells us the model without random effects is best (lowest AIC). 
 ```
 
-2.  Check diagnostics of best model.
+3.  Check diagnostics of best model.
 
 -   Looks good
 
@@ -621,7 +625,7 @@ anova(NSQ_full, NSQ_noArea, NSQ_plotOnly, NSQ_siteOnly, NSQ_AreaPlot, NSQ_noRE)
 residuals_nsq_noRE <- simulateResiduals(fittedModel =NSQ_noRE, plot = TRUE)
 ```
 
-3.  Look at results
+4.  Look at results
 
 ```{r}
 summary(NSQ_noRE)
@@ -1315,4 +1319,4 @@ Number of nest-searching queens, number of rodent burrows and the proportion of 
 
 # Final Path Diagram
 
-![](images/path diagram final.png)
+![](images/path%20diagram%20final.png)
