@@ -500,7 +500,7 @@ I added bee_season_type as a covariate, since during my exploratory data analyse
 
 1.  Check for zero-inflation in the data by comparing expected proportion of zeros in the dataset to the actual proportion of zeros. If observed \> expected, ZI model is justified.
 
--   use ZI Poisson model to account for high proportion of zeros in NSQ counts (~84%\ of\ plots\ had\ zero\ queens),\ which\ exceeded\ expectations\ under\ a\ standard\ Poisson\ distribution\ (~78%).
+-   use ZI Poisson model to account for high proportion of zeros in NSQ counts (~84% of plots had zero queens), which exceeded expectations under a standard Poisson distribution (~78%).
 
 ```{r}
 # Fit a simple Poisson
