@@ -150,6 +150,41 @@ summary(null_model_rod2)
 
 This model shows that variation in the data is only meaningfully described by site_id.
 
+## Proportion vacant burrows
+
+```{r}
+rodent_summary3 <- rodent %>%
+  filter(powder_active_FINAL == "n") %>%
+  group_by(area, site_id, plot_id, transect_id) %>%
+  summarise(num_inactive_burrows = n(), .groups = "drop") ##drop the groupings
+
+rodent_summary4 <- rodent %>%
+  filter(powder_active_FINAL == "y") %>%
+  group_by(area, site_id, plot_id, transect_id) %>%
+  summarise(num_active_burrows = n(), .groups = "drop") ##drop the groupings
+
+
+rodent_summary4 <- rodent_summary4 %>%
+  left_join(rodent_summary3 %>% 
+              select(area, site_id, plot_id, transect_id, num_inactive_burrows), 
+            by = c("area", "site_id", "plot_id", "transect_id"))
+            
+#create variable for proportion of vacant burrows (# inactive / total)
+rodent_summary4$prop_inactive <- rodent_summary4$num_inactive_burrows / (rodent_summary4$num_inactive_burrows + rodent_summary4$num_active_burrows)
+
+# Null model with nested random effects
+null_model_rod3 <- lmer(prop_inactive ~ 1 + 
+                (1 | area) + 
+                (1 | site_id) + 
+                (1 | plot_id) +
+                  (1 | transect_id),
+              data = rodent_summary4)
+
+#check variance of each random effect
+summary(null_model_rod3)
+```
+This model shows that there is little evidence that spatial grouping by plot, area, or transect explain variation in the proportion of inactive burrows.
+
 ## Num nest-searching queens
 
 ```{r}
