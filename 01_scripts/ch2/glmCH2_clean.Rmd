@@ -200,20 +200,56 @@ nsq_data_plottype <- data.frame(
 # Get predicted zero probabilities and standard errors
 pred_nsq_plottype_cond <- predict(nsq_glm_veg_noRE,
                             newdata = nsq_data_plottype,
-                            type = "conditional",
+                            type = "link",
                             se.fit = TRUE) 
 
 # Combine predictions with data frame
 pred_nsq_plottype_df <- cbind(nsq_data_plottype,
-                 cond_fit = pred_nsq_plottype_cond$fit,
-                 cond_se = pred_nsq_plottype_cond$se.fit)
+                 cond_fit_log = pred_nsq_plottype_cond$fit,
+                 cond_se_log = pred_nsq_plottype_cond$se.fit)
 
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_nsq_plottype_df <- pred_nsq_plottype_df %>%
+  mutate(
+    cond_fit = exp(cond_fit_log),
+    cond_lower = exp(cond_fit_log - 1.96 * cond_se_log),
+    cond_upper = exp(cond_fit_log + 1.96 * cond_se_log)
+  )
+
+#Plot
 ggplot(pred_nsq_plottype_df, aes(x = plot_type, y = cond_fit)) +
   geom_point(size = 8) +
-  geom_errorbar(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
+  geom_errorbar(aes(ymin = cond_lower, ymax = cond_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Plot type",
-       y = "Predicted NSQ count\n(log-scale)") +
+       y = "Predicted mean NSQ\ncount (per plot)") +
   theme_classic(base_size = 23)
+```
+
+Zero-inflated model:
+
+```{r}
+# Predictions for ZI model 
+pred_nsq_plottype_zi <- predict(nsq_glm_veg_noRE, 
+                                newdata = nsq_data_plottype, 
+                                type = "zlink",
+                              se.fit = TRUE)
+
+# Combine predictions and transform to response scale (by applying the inverse logit (plogit))
+pred_nsq_plottype_zi_df <- cbind(
+  nsq_data_plottype,
+  zi_fit = plogis(pred_nsq_plottype_zi$fit),
+  zi_lower = plogis(pred_nsq_plottype_zi$fit - 1.96 * pred_nsq_plottype_zi$se.fit),
+  zi_upper = plogis(pred_nsq_plottype_zi$fit + 1.96 * pred_nsq_plottype_zi$se.fit)
+)
+
+# Plot zi predictions
+ggplot(pred_nsq_plottype_zi_df, aes(x = plot_type, y = zi_fit)) +
+  geom_point(size = 8) +
+  geom_errorbar(aes(ymin = zi_lower, ymax = zi_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
+  labs(x = "Plot type",
+       y = "Predicted probability\nof structural zeros") +
+  theme_classic(base_size = 23) 
+
 ```
 
 Grass and forb % cover
@@ -239,21 +275,29 @@ nsq_data_veg<- expand.grid(
 # Get predicted conditional probabilities and standard errors
 pred_nsq_veg_cond <- predict(nsq_glm_veg_noRE,
                             newdata = nsq_data_veg,
-                            type = "conditional",
+                            type = "link",
                             se.fit = TRUE)
 
 # Combine predictions with data frame
-pred_nsq_rodent_df <- cbind(nsq_data_veg,
-                 cond_fit = pred_nsq_veg_cond$fit,
-                 cond_se = pred_nsq_veg_cond$se.fit)
+pred_nsq_veg_df <- cbind(nsq_data_veg,
+                 cond_fit_log = pred_nsq_veg_cond$fit,
+                 cond_se_log = pred_nsq_veg_cond$se.fit)
 
-ggplot(pred_nsq_rodent_df, aes(x = grass_forb_perc_scaled, y = cond_fit, color = plot_type)) +
-  geom_line(size = 1) +
-  geom_ribbon(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), alpha = 0.2) +
-  labs(title = "Conditional Model Predictions (Log-scale)",
-       x = "Grass and Forb % (scaled)",
-       y = "Predicted NSQ count (log-scale)") +
-  theme_classic()
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_nsq_veg_df <- pred_nsq_veg_df %>%
+  mutate(
+    cond_fit = exp(cond_fit_log),
+    cond_lower = exp(cond_fit_log - 1.96 * cond_se_log),
+    cond_upper = exp(cond_fit_log + 1.96 * cond_se_log)
+  )
+
+#Plot
+ggplot(pred_nsq_veg_df, aes(x = grass_forb_perc_scaled, y = cond_fit, color = plot_type)) +
+  geom_line(linewidth = 1.5) +
+  geom_ribbon(aes(ymin = cond_lower, ymax = cond_upper), alpha = 0.2) +
+  labs(x = "Grass and Forb % (scaled)",
+       y = "Predicted mean NSQ\ncount (per plot)") +
+  theme_classic(base_size = 23)
 ```
 
 Zero-inflated model:
@@ -262,21 +306,24 @@ Zero-inflated model:
 # Get predicted zero probabilities and standard errors
 pred_nsq_veg_zi <- predict(nsq_glm_veg_noRE,
                             newdata = nsq_data_veg,
-                            type = "zprob",
+                            type = "zlink",
                             se.fit = TRUE) 
 
-# Combine predictions with data frame
-pred_nsq_veg_df <- cbind(nsq_data_veg,
-                 zi_fit = pred_nsq_veg_zi$fit,
-                 zi_se = pred_nsq_veg_zi$se.fit)
+# Combine predictions and transform to response scale (by applying the inverse logit (plogit))
+pred_nsq_veg_df <- cbind(
+  nsq_data_veg,
+  zi_fit = plogis(pred_nsq_veg_zi$fit),
+  zi_lower = plogis(pred_nsq_veg_zi$fit - 1.96 * pred_nsq_veg_zi$se.fit),
+  zi_upper = plogis(pred_nsq_veg_zi$fit + 1.96 * pred_nsq_veg_zi$se.fit)
+)
+
 
 ggplot(pred_nsq_veg_df, aes(x = grass_forb_perc_scaled, y = zi_fit, color = plot_type)) +
-  geom_line(size = 1) +
-  geom_ribbon(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), alpha = 0.2) +
-  labs(title = "Zero-Inflation Model: Probability of Structural Zeros",
-       x = "Grass and Forb % (scaled)",
-       y = "Probability of Excess Zeros") +
-  theme_classic()
+  geom_line(linewidth = 1.5) +
+  geom_ribbon(aes(ymin = zi_lower, ymax = zi_upper), alpha = 0.2) +
+  labs(x = "Grass and Forb % (scaled)",
+       y = "Probability of\nExcess Zeros") +
+  theme_classic(base_size = 23)
 ```
 
 Floral abundance
@@ -302,21 +349,30 @@ nsq_data_floral<- expand.grid(
 # Get predicted conditional probabilities and standard errors
 pred_nsq_floral_cond <- predict(nsq_glm_veg_noRE,
                             newdata = nsq_data_floral,
-                            type = "conditional",
+                            type = "link",
                             se.fit = TRUE)
 
 # Combine predictions with data frame
 pred_nsq_floral_df <- cbind(nsq_data_floral,
-                 cond_fit = pred_nsq_floral_cond$fit,
-                 cond_se = pred_nsq_floral_cond$se.fit)
+                 cond_fit_log = pred_nsq_floral_cond$fit,
+                 cond_se_log = pred_nsq_floral_cond$se.fit)
 
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_nsq_floral_df <- pred_nsq_floral_df %>%
+  mutate(
+    cond_fit = exp(cond_fit_log),
+    cond_lower = exp(cond_fit_log - 1.96 * cond_se_log),
+    cond_upper = exp(cond_fit_log + 1.96 * cond_se_log)
+  )
+
+#plot
 ggplot(pred_nsq_floral_df, aes(x = bombus_floral_abun_scaled, y = cond_fit, color = plot_type)) +
-  geom_line(size = 1) +
-  geom_ribbon(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), alpha = 0.2) +
-  labs(title = "Conditional Model Predictions (Log-scale)",
+  geom_line(linewidth = 1.5) +
+  geom_ribbon(aes(ymin = cond_lower, ymax = cond_upper), alpha = 0.2) +
+  labs(
        x = "Floral abundance (scaled)",
-       y = "Predicted NSQ count (log-scale)") +
-  theme_classic()
+       y = "Predicted mean NSQ\ncount (per plot)") +
+  theme_classic(base_size = 23)
 ```
 
 Zero-inflated model:
@@ -325,21 +381,25 @@ Zero-inflated model:
 # Get predicted zero probabilities and standard errors
 pred_nsq_floral_zi <- predict(nsq_glm_veg_noRE,
                             newdata = nsq_data_floral,
-                            type = "zprob",
+                            type = "zlink",
                             se.fit = TRUE) 
 
-# Combine predictions with data frame
-pred_nsq_floral_df <- cbind(nsq_data_floral,
-                 zi_fit = pred_nsq_floral_zi$fit,
-                 zi_se = pred_nsq_floral_zi$se.fit)
+# Combine predictions and transform to response scale (by applying the inverse logit (plogit))
+pred_nsq_floral_df <- cbind(
+  nsq_data_floral,
+  zi_fit = plogis(pred_nsq_floral_zi$fit),
+  zi_lower = plogis(pred_nsq_floral_zi$fit - 1.96 * pred_nsq_floral_zi$se.fit),
+  zi_upper = plogis(pred_nsq_floral_zi$fit + 1.96 * pred_nsq_floral_zi$se.fit)
+)
 
+#plot
 ggplot(pred_nsq_floral_df, aes(x = bombus_floral_abun_scaled, y = zi_fit, color = plot_type)) +
-  geom_line(size = 1) +
-  geom_ribbon(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), alpha = 0.2) +
-  labs(title = "Zero-Inflation Model: Probability of Structural Zeros",
+  geom_line(linewidth = 1.5) +
+  geom_ribbon(aes(ymin = zi_lower, ymax = zi_upper), alpha = 0.2) +
+  labs(
        x = "Floral abundance (scaled)",
-       y = "Probability of Excess Zeros") +
-  theme_classic()
+       y = "Probability of\nExcess Zeros") +
+  theme_classic(base_size = 23)
 ```
 
 Season
@@ -358,21 +418,28 @@ nsq_data_season <- data.frame(
 # Get predicted zero probabilities and standard errors
 pred_nsq_season_cond <- predict(nsq_glm_veg_noRE,
                             newdata = nsq_data_season,
-                            type = "conditional",
+                            type = "link",
                             se.fit = TRUE) 
 
 # Combine predictions with data frame
 pred_nsq_season_df <- cbind(nsq_data_season,
-                 cond_fit = pred_nsq_season_cond$fit,
-                 cond_se = pred_nsq_season_cond$se.fit)
+                 cond_fit_log = pred_nsq_season_cond$fit,
+                 cond_se_log = pred_nsq_season_cond$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_nsq_season_df <- pred_nsq_season_df %>%
+  mutate(
+    cond_fit = exp(cond_fit_log),
+    cond_lower = exp(cond_fit_log - 1.96 * cond_se_log),
+    cond_upper = exp(cond_fit_log + 1.96 * cond_se_log)
+  )
 
 ggplot(pred_nsq_season_df, aes(x = bee_season_type, y = cond_fit)) +
-  geom_point(size = 3) +
-  geom_errorbar(aes(ymin = cond_fit - 1.96*cond_se, ymax = cond_fit + 1.96*cond_se), width = 0.2, position = position_dodge(0.6)) +
-  labs(title = "Conditional Model Predictions (Log-scale)",
-       x = "Bee season",
-       y = "Predicted NSQ count (log-scale)") +
-  theme_classic()
+  geom_point(size = 8) +
+  geom_errorbar(aes(ymin = cond_lower, ymax = cond_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
+  labs(x = "Bee season",
+       y = "Predicted mean NSQ\ncount (per plot)") +
+  theme_classic(base_size = 23)
 ```
 
 Zero-inflated model:
@@ -389,13 +456,13 @@ pred_nsq_season_df <- cbind(nsq_data_season,
                  zi_fit = pred_nsq_season_zi$fit,
                  zi_se = pred_nsq_season_zi$se.fit)
 
+#plot
 ggplot(pred_nsq_season_df, aes(x = bee_season_type, y = zi_fit)) +
-  geom_point(size = 3) +
-  geom_errorbar(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), width = 0.2, position = position_dodge(0.6)) +
-  labs(title = "Zero-Inflation Model: Probability of Structural Zeros",
-       x = "Bee season (scaled)",
-       y = "Probability of Excess Zeros") +
-  theme_classic()
+  geom_point(size = 8) +
+  geom_errorbar(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
+  labs(x = "Bee season",
+       y = "Probability of\nExcess Zeros") +
+  theme_classic(base_size = 23)
 ```
 
 ## Findings
@@ -497,22 +564,32 @@ worker_data_plottype <- data.frame(
   plot_type = factor(c("ditch", "field"), levels = levels(surveys$plot_type))
 )
 
-# Get predicted zero probabilities and standard errors
+# Get predicted probabilities and standard errors
 pred_worker_plottype <- predict(workers_veg_noArea_nbin,
                             newdata = worker_data_plottype,
                             se.fit = TRUE,
-                            re.form = NA) 
+                            re.form = NA,
+                            type = "link") 
 
 # Combine predictions with data frame
 pred_worker_plottype_df <- cbind(worker_data_plottype,
-                 fit = pred_worker_plottype$fit,
-                 se = pred_worker_plottype$se.fit)
+                 fit_log = pred_worker_plottype$fit,
+                 se_log = pred_worker_plottype$se.fit)
 
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_worker_plottype_df <- pred_worker_plottype_df %>%
+  mutate(
+    fit = exp(fit_log),
+    lower = exp(fit_log - 1.96 * se_log),
+    upper = exp(fit_log + 1.96 * se_log)
+  )
+
+#Plot
 ggplot(pred_worker_plottype_df, aes(x = plot_type, y = fit)) +
   geom_point(size = 8) +
-  geom_errorbar(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Plot type",
-       y = "Predicted worker count\n(log-scale)") +
+       y = "Predicted mean worker\ncount (per plot)") +
   theme_classic(base_size = 23)
 ```
 
@@ -531,20 +608,29 @@ worker_data_veg<- expand.grid(
 pred_worker_veg <- predict(workers_veg_noArea_nbin,
                             newdata = worker_data_veg,
                             se.fit = TRUE,
-                            re.form = NA)
+                            re.form = NA,
+                           type = "link")
 
 # Combine predictions with data frame
 pred_worker_veg_df <- cbind(worker_data_veg,
-                 fit = pred_worker_veg$fit,
-                 se = pred_worker_veg$se.fit)
+                 fit_log = pred_worker_veg$fit,
+                 se_log = pred_worker_veg$se.fit)
 
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_worker_veg_df <- pred_worker_veg_df %>%
+  mutate(
+    fit = exp(fit_log),
+    lower = exp(fit_log - 1.96 * se_log),
+    upper = exp(fit_log + 1.96 * se_log)
+  )
+
+#Plot
 ggplot(pred_worker_veg_df, aes(x = grass_forb_perc_scaled, y = fit, color = plot_type)) +
-  geom_line(size = 1) +
-  geom_ribbon(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), alpha = 0.2) +
-  labs(title = "Model Predictions (Log-scale)",
-       x = "Grass and Forb % (scaled)",
-       y = "Predicted worker count (log-scale)") +
-  theme_classic()
+  geom_line(size = 1.5) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
+  labs(x = "Grass and Forb % (scaled)",
+       y = "Predicted mean worker\ncount (per plot)") +
+  theme_classic(base_size = 23)
 ```
 
 Floral abundance
@@ -562,20 +648,29 @@ worker_data_floral<- expand.grid(
 pred_worker_floral <- predict(workers_veg_noArea_nbin,
                             newdata = worker_data_floral,
                             se.fit = TRUE,
-                            re.form = NA)
+                            re.form = NA,
+                            type = "link")
 
 # Combine predictions with data frame
 pred_worker_floral_df <- cbind(worker_data_floral,
-                 fit = pred_worker_floral$fit,
-                 se = pred_worker_floral$se.fit)
+                 fit_log = pred_worker_floral$fit,
+                 se_log = pred_worker_floral$se.fit)
 
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_worker_floral_df <- pred_worker_floral_df %>%
+  mutate(
+    fit = exp(fit_log),
+    lower = exp(fit_log - 1.96 * se_log),
+    upper = exp(fit_log + 1.96 * se_log)
+  )
+
+#Plot
 ggplot(pred_worker_floral_df, aes(x = bombus_floral_abun_scaled, y = fit, color = plot_type)) +
-  geom_line(size = 1) +
-  geom_ribbon(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), alpha = 0.2) +
-  labs(title = "Model Predictions (Log-scale)",
-       x = "Floral abundance (scaled)",
-       y = "Predicted worker count (log-scale)") +
-  theme_classic()
+  geom_line(size = 1.5) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
+  labs(x = "Floral abundance (scaled)",
+       y = "Predicted mean worker\ncount (per plot)") +
+  theme_classic(base_size = 23)
 ```
 
 Season
@@ -593,20 +688,29 @@ worker_data_season<- expand.grid(
 pred_worker_season <- predict(workers_veg_noArea_nbin,
                             newdata = worker_data_season,
                             se.fit = TRUE,
-                            re.form = NA)
+                            re.form = NA,
+                            type = "link")
 
 # Combine predictions with data frame
 pred_worker_season_df <- cbind(worker_data_season,
-                 fit = pred_worker_season$fit,
-                 se = pred_worker_season$se.fit)
+                 fit_log = pred_worker_season$fit,
+                 se_log = pred_worker_season$se.fit)
 
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_worker_season_df <- pred_worker_season_df %>%
+  mutate(
+    fit = exp(fit_log),
+    lower = exp(fit_log - 1.96 * se_log),
+    upper = exp(fit_log + 1.96 * se_log)
+  )
+
+#Plot
 ggplot(pred_worker_season_df, aes(x = bee_season_type, y = fit)) +
-  geom_point(size = 3) +
-  geom_errorbar(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), width = 0.2, position = position_dodge(0.6)) +
-  labs(title = "Model Predictions (Log-scale)",
-       x = "Bee season",
-       y = "Predicted worker count (log-scale)") +
-  theme_classic()
+  geom_point(size = 8) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
+  labs(x = "Bee season",
+       y = "Predicted mean worker\ncount (per plot)") +
+  theme_classic(base_size = 23)
 ```
 
 ## Findings
@@ -695,24 +799,23 @@ pred_floral_veg <- emmeans(
   floral_noRE_interaction,
   ~ grass_forb_perc_scaled * plot_type,
   at = list(grass_forb_perc_scaled = grass_seq),
-  type = "response",  # To get probabilities
+  mode = "mean.class" ## The expected floral abundance category (mean ordinal score)
 )
 
 # Convert to dataframe
 pred_floral_veg_df <- as.data.frame(pred_floral_veg)
 
 #plot
-ggplot(pred_floral_veg_df, aes(x = grass_forb_perc_scaled, y = response, color = plot_type)) +
-  geom_line(size = 1) +
+ggplot(pred_floral_veg_df, aes(x = grass_forb_perc_scaled, y = mean.class, color = plot_type)) +
+  geom_line(size = 1.5) +
   geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL, fill = plot_type), alpha = 0.2, color = NA) +
   labs(
-    title = "Predicted Bombus Floral Abundance (scaled)",
     x = "% grass/forb (scaled)",
-    y = "Floral abundance (scaled)",
+    y = "Predicted mean floral\nabundance category\n(log-scaled)",
     color = "Plot Type",
     fill = "Plot Type"
   ) +
-  theme_classic()
+  theme_classic(base_size = 23)
 ```
 
 Season
@@ -730,27 +833,23 @@ pred_floral_date <- emmeans(
   floral_noRE_interaction,
   ~ julian.date_scaled * plot_type,
   at = list(julian.date_scaled = date_seq),
-  type = "response",  # To get probabilities
+  mode = "mean.class" ## The expected floral abundance category (mean ordinal score)
 )
 
 # Convert to dataframe
 pred_floral_date_df <- as.data.frame(pred_floral_date)
 
 #plot
-ggplot(pred_floral_date_df, aes(x = julian.date_scaled, y = response, color = plot_type)) +
-  geom_line(size = 1) +
+ggplot(pred_floral_date_df, aes(x = julian.date_scaled, y = mean.class, color = plot_type)) +
+  geom_line(size = 1.5) +
   geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL, fill = plot_type), alpha = 0.2, color = NA) +
   labs(
-    title = "Predicted Bombus Floral Abundance (scaled)",
-    x = "Julian Date (scaled)",
-    y = "Floral abundance (scaled)",
-    color = "Plot Type",
-    fill = "Plot Type"
+    x = "Julian date (scaled)",
+    y = "Predicted mean floral\nabundance category\n(log-scaled)",
+    color = "Plot type",
+    fill = "Plot type"
   ) +
-  theme_classic()
-
-
-
+  theme_classic(base_size = 23)
 ```
 
 ## Findings
@@ -840,27 +939,34 @@ rodent_data_veg<- expand.grid(
 pred_rodent_veg <- predict(rodent_veg_siteOnly_nbin,
                             newdata = rodent_data_veg,
                             se.fit = TRUE,
-                            re.form = NA)
+                            re.form = NA,
+                           type = "link")
 
 # Combine predictions with data frame
 pred_rodent_veg_df <- cbind(rodent_data_veg,
-                 fit = pred_rodent_veg$fit,
-                 se = pred_rodent_veg$se.fit)
+                 fit_log = pred_rodent_veg$fit,
+                 se_log = pred_rodent_veg$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_rodent_veg_df <- pred_rodent_veg_df %>%
+  mutate(
+    fit = exp(fit_log),
+    lower = exp(fit_log - 1.96 * se_log),
+    upper = exp(fit_log + 1.96 * se_log)
+  )
 
 # Plot conditional predictions
 ggplot(pred_rodent_veg_df, aes(x = cover_type, y = fit, color = plot_type)) +
-  geom_point(size=3, position = position_dodge(0.6)) +
-  geom_errorbar(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), width = 0.2, position = position_dodge(0.6))+
-  labs(title = "Model Predictions (Log-scale)",
-       x = "Cover type",
-       y = "Predicted burrow count (log-scale)") +
-  theme_classic()
+  geom_point(size=8, position = position_dodge(0.6)) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5)+
+  labs(x = "Cover type",
+       y = "Predicted mean burrow\ncount (per plot)") +
+  theme_classic(base_size = 23)
 ```
 
 Floral abundance
 
 ```{r}
-
 #create new data grid
 rodent_data_floral<- expand.grid(
   cover_type = "grass",
@@ -872,20 +978,29 @@ rodent_data_floral<- expand.grid(
 pred_rodent_floral <- predict(rodent_veg_siteOnly_nbin,
                             newdata = rodent_data_floral,
                             se.fit = TRUE,
-                            re.form = NA)
+                            re.form = NA,
+                            type = "link")
 
 # Combine predictions with data frame
 pred_rodent_floral_df <- cbind(rodent_data_floral,
-                 fit = pred_rodent_floral$fit,
-                 se = pred_rodent_floral$se.fit)
+                 fit_log = pred_rodent_floral$fit,
+                 se_log = pred_rodent_floral$se.fit)
 
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_rodent_floral_df <- pred_rodent_floral_df %>%
+  mutate(
+    fit = exp(fit_log),
+    lower = exp(fit_log - 1.96 * se_log),
+    upper = exp(fit_log + 1.96 * se_log)
+  )
+
+#Plot
 ggplot(pred_worker_floral_df, aes(x = bombus_floral_abun_scaled, y = fit, color = plot_type)) +
-  geom_line(size = 1) +
-  geom_ribbon(aes(ymin = fit - 1.96*se, ymax = fit + 1.96*se), alpha = 0.2) +
-  labs(title = "Model Predictions (Log-scale)",
-       x = "Floral abundance (scaled)",
-       y = "Predicted burrow count (log-scale)") +
-  theme_classic()
+  geom_line(size = 1.5) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
+  labs(x = "Floral abundance (scaled)",
+       y = "Predicted mean burrow\ncount (per plot)") +
+  theme_classic(base_size = 23)
 ```
 
 ## Findings
