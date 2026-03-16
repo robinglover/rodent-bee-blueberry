@@ -3,8 +3,263 @@ title: "ch2_exploratory"
 output: html_document
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_analysis/rodent-bee-blueberry")
+```
+
+Load and clean data
+
+```{r}
+#load packages
+library(tidyverse) #data manipulation, visualization etc. (dplyr, ggplot2, tidyr)
+library(DHARMa) #diagnostic tools for mixed regression models
+library(glmmTMB) #fits generalized linear mixed models, including zero-inflated and overdispersed models
+library(car) #tools for regression diagnostics and hypothesis tests
+library(emmeans)   # for estimated marginal means (predictions)
+
+#read in data
+data <- read.csv("06_cleandata/combined_plot_data.csv")
+
+#change character columns to factors
+surveys <- data %>%
+   mutate(
+     site_id = as.factor(site_id),
+     round = as.factor(round),
+     plot_id = as.factor(plot_id),
+     bee_date = as.Date(bee_date),
+     bee_season_type = as.factor(bee_season_type),
+     area = as.factor(area),
+     cover_type = as.factor(cover_type))
+
+#add plot type column and make it a factor
+surveys <- surveys %>% 
+  mutate(plot_type = if_else(plot_id == "d", "ditch", "field"))
+surveys <- surveys %>%
+   mutate(
+     plot_type = as.factor(plot_type))
+
+#scale continuous predictors
+surveys$julian.date_scaled <- as.numeric(scale(surveys$julian.date))
+surveys$bare_perc_scaled <- as.numeric(scale(surveys$bare_perc))
+surveys$grass_perc_scaled <- as.numeric(scale(surveys$grass_perc))
+surveys$forb_perc_scaled <- as.numeric(scale(surveys$forb_perc))
+surveys$grass_forb_perc_scaled <- as.numeric(scale(surveys$grass_forb_perc))
+surveys$grass_h_scaled <- as.numeric(scale(surveys$grass_h))
+surveys$forb_h_scaled <- as.numeric(scale(surveys$forb_h))
+surveys$floral_perc_scaled <- as.numeric(scale(surveys$floral_perc))
+surveys$grass_forb_floral_perc_scaled <- as.numeric(scale(surveys$grass_forb_floral_perc))
+surveys$bombus_floral_perc_scaled <- as.numeric(scale(surveys$bombus_floral_perc))
+surveys$flood_perc_scaled <- as.numeric(scale(surveys$flood_perc))
+surveys$dry_root_perc_scaled <- as.numeric(scale(surveys$dry_root_perc))
+surveys$bryo_perc_scaled <- as.numeric(scale(surveys$bryo_perc))
+surveys$bare_flood_dry_bryo_perc_scaled <- as.numeric(scale(surveys$bare_flood_dry_bryo_perc))
+surveys$floral_richness_scaled <- as.numeric(scale(surveys$floral_richness))
+surveys$bombus_floral_richness_scaled <- as.numeric(scale(surveys$bombus_floral_richness))
+surveys$bombus_floral_abun_scaled <- as.numeric(scale(surveys$bombus_floral_abun))
+surveys$nest_searching_queens_scaled <- as.numeric(scale(surveys$nest_searching_queens))
+surveys$workers_scaled <- as.numeric(scale(surveys$workers))
+surveys$forage_vaco_scaled <- as.numeric(scale(surveys$forage_vaco))
+surveys$num_burrows_scaled <- as.numeric(scale(surveys$num_burrows))
+surveys$num_inactive_burrows_scaled <- as.numeric(scale(surveys$num_inactive_burrows))
+surveys$num_active_dm_scaled <- as.numeric(scale(surveys$num_active_dm))
+surveys$num_dm_size_scaled <- as.numeric(scale(surveys$num_dm_size))
+surveys$num_inactive_dm_scaled <- as.numeric(scale(surveys$num_inactive_dm))
+```
+
 Look at composition of ditches vs within field plots composition at grassy vs bare sites
 
 -   \% grass and forb
 
--   \% floral abundance
+LM
+
+```{r}
+#adjust % grass and forb so that all values are positive
+surveys$grass_forb_perc_adj <- surveys$grass_forb_perc + 0.001
+
+#model with gamma distribution
+ditchVSfield_veg_full <- glmmTMB(grass_forb_perc_adj ~ cover_type*plot_type + julian.date_scaled +
+                              (1|area/site_id/plot_id),
+                            family = Gamma(link = "log"), 
+                            data = surveys)
+
+ditchVSfield_veg_noArea <- glmmTMB(grass_forb_perc_adj ~ cover_type*plot_type + julian.date_scaled +
+                              (1|site_id/plot_id),
+                            family = Gamma(link = "log"), 
+                            data = surveys)
+
+ditchVSfield_veg_plotOnly <- glmmTMB(grass_forb_perc_adj ~ cover_type*plot_type + julian.date_scaled +
+                              (1|plot_id),
+                            family = Gamma(link = "log"), 
+                            data = surveys)
+
+ditchVSfield_veg_siteOnly <- glmmTMB(grass_forb_perc_adj ~ cover_type*plot_type + julian.date_scaled +
+                              (1|site_id),
+                            family = Gamma(link = "log"), 
+                            data = surveys)
+
+ditchVSfield_veg_siteArea <- glmmTMB(grass_forb_perc_adj ~ cover_type*plot_type + julian.date_scaled +
+                              (1|area/site_id),
+                            family = Gamma(link = "log"), 
+                            data = surveys)
+
+ditchVSfield_veg_areaPlot <- glmmTMB(grass_forb_perc_adj ~ cover_type*plot_type + julian.date_scaled +
+                              (1|area/plot_id),
+                            family = Gamma(link = "log"), 
+                            data = surveys)
+
+ditchVSfield_veg_noRE <- glmmTMB(grass_forb_perc_adj ~ cover_type*plot_type + julian.date_scaled,
+                            family = Gamma(link = "log"), 
+                            data = surveys)
+
+#compare models
+anova(ditchVSfield_veg_full, ditchVSfield_veg_noArea, ditchVSfield_veg_plotOnly, ditchVSfield_veg_siteOnly, ditchVSfield_veg_siteArea,
+      ditchVSfield_veg_areaPlot, ditchVSfield_veg_noRE)
+##siteArea is best
+```
+
+Check diagnostics
+
+```{r}
+#simulate residuals
+residuals_ditchVSfield_veg_siteArea <- simulateResiduals(fittedModel = ditchVSfield_veg_siteArea, plot = TRUE)
+
+##results indicate plot is not a good fit.
+```
+
+Try log-transforming the data (log(x+1) and running a Gaussian model
+
+```{r}
+##Log transform and add one to account for zeros.
+surveys$log_grass_forb <- log(surveys$grass_forb_perc + 1)
+
+##Model with gaussian distribution
+ditchVSfield_veg_full <- glmmTMB(log_grass_forb ~ cover_type*plot_type + julian.date_scaled +
+                              (1|area/site_id/plot_id),
+                            family = gaussian(), 
+                            data = surveys)
+ditchVSfield_veg_noArea <- glmmTMB(log_grass_forb ~ cover_type*plot_type + julian.date_scaled +
+                              (1|site_id/plot_id),
+                            family = gaussian(), 
+                            data = surveys)
+
+ditchVSfield_veg_plotOnly <- glmmTMB(log_grass_forb ~ cover_type*plot_type + julian.date_scaled +
+                              (1|plot_id),
+                            family = gaussian(), 
+                            data = surveys)
+
+ditchVSfield_veg_siteOnly <- glmmTMB(log_grass_forb ~ cover_type*plot_type + julian.date_scaled +
+                              (1|site_id),
+                            family = gaussian(), 
+                            data = surveys)
+ditchVSfield_veg_siteArea <- glmmTMB(log_grass_forb ~ cover_type*plot_type + julian.date_scaled +
+                              (1|area/site_id),
+                            family = gaussian(), 
+                            data = surveys)
+
+ditchVSfield_veg_areaPlot <- glmmTMB(log_grass_forb ~ cover_type*plot_type + julian.date_scaled +
+                              (1|area/plot_id),
+                            family = gaussian(), 
+                            data = surveys)
+
+ditchVSfield_veg_noRE <- glmmTMB(log_grass_forb ~ cover_type*plot_type + julian.date_scaled,
+                            family = gaussian(), 
+                            data = surveys)
+
+#compare models
+anova(ditchVSfield_veg_full, ditchVSfield_veg_noArea, ditchVSfield_veg_plotOnly, ditchVSfield_veg_siteOnly, ditchVSfield_veg_siteArea,
+      ditchVSfield_veg_areaPlot, ditchVSfield_veg_noRE)
+##siteArea is best
+```
+
+Check diagnostics
+
+```{r}
+#simulate residuals
+residuals_ditchVSfield_veg_siteArea <- simulateResiduals(fittedModel = ditchVSfield_veg_siteArea, plot = TRUE)
+
+##model fit is good enough.  
+```
+
+Plot results
+
+```{r}
+summary(ditchVSfield_veg_siteArea)
+```
+
+Plot
+
+```{r}
+ggplot(surveys, aes(y = grass_forb_perc_scaled, x = plot_type, color = cover_type)) +
+  geom_boxplot() +
+  labs(x = "Plot type",
+       y = "% grass and forb") +
+  theme_classic(base_size = 23)
+```
+
+Floral abundance model
+
+```{r}
+#Load packages needed for CLM
+library(ordinal)
+library(MASS)
+
+surveys$bombus_floral_abun <- factor(surveys$bombus_floral_abun, ordered = TRUE)
+
+floral_full <- clmm(bombus_floral_abun ~ cover_type*plot_type +
+                         julian.date_scaled*plot_type + 
+                         (1|area/site_id/plot_id),
+                       link = "logit", 
+                       data = surveys)
+
+floral_noArea <- clmm(bombus_floral_abun ~ cover_type*plot_type +
+                         julian.date_scaled*plot_type + 
+                         (1|site_id/plot_id),
+                       link = "logit", 
+                       data = surveys)
+
+#floral_plotOnly <- clmm(bombus_floral_abun ~ plot_type +
+ #                        julian.date_scaled + 
+  #                       (1|plot_id),
+   #                    link = "logit", 
+    #                   data = surveys)
+##can't use since there are only 2 levels
+
+floral_siteOnly <- clmm(bombus_floral_abun ~ cover_type*plot_type +
+                         julian.date_scaled*plot_type + 
+                         (1|site_id),
+                       link = "logit", 
+                       data = surveys)
+
+floral_AreaPlot <- clmm(bombus_floral_abun ~ cover_type*plot_type +
+                         julian.date_scaled*plot_type + 
+                         (1|area/plot_id),
+                       link = "logit", 
+                       data = surveys)
+floral_noRE <- polr(bombus_floral_abun ~ cover_type*plot_type +
+                         julian.date_scaled*plot_type,
+                       method = "logistic", 
+                       data = surveys)
+
+#compare models AIC
+AIC(floral_full, floral_noArea, floral_siteOnly, floral_AreaPlot, floral_noRE)
+##shows that model without random effect has best fit
+```
+
+Check output
+
+```{r}
+summary(floral_noRE)
+```
+
+Plot floral abundance vs cover type and plot type
+
+```{r}
+ggplot(surveys, aes(y = bombus_floral_abun_scaled, x = plot_type, color = cover_type)) +
+  geom_boxplot() +
+  labs(x = "Plot type",
+       y = "Floral abun") +
+  theme_classic(base_size = 23)
+```
+
+Plot floral abundance vs season
