@@ -3,3 +3,8 @@ title: "ch2_exploratory"
 output: html_document
 ---
 
+Look at composition of ditches vs within field plots composition at grassy vs bare sites
+
+-   \% grass and forb
+
+-   \% floral abundance
