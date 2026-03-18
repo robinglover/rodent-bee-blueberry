@@ -346,7 +346,7 @@ pred_floral_date_df <- as.data.frame(pred_floral_date)
 
 #plot
 ggplot(pred_floral_date_df, aes(x = julian.date_scaled, y = mean.class, color = plot_type)) +
-  geom_line(size = 1.5) +
+  geom_line(linewidth = 1.5) +
   geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL, fill = plot_type), alpha = 0.2, color = NA) +
   labs(
     x = "Julian date (scaled)",
@@ -507,8 +507,8 @@ pred_rodent_floral_df <- pred_rodent_floral_df %>%
 
 #Plot
 ggplot(pred_rodent_floral_df, aes(x = bombus_floral_abun_scaled, y = fit, color = plot_type)) +
-  geom_line(size = 1.5) +
-  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
+  geom_line(linewidth = 1.5) +
+  geom_ribbon(aes(ymin = lower, ymax = upper, fill = plot_type), alpha = 0.2, color = NA) +
   labs(x = "Floral abundance (scaled)",
        y = "Predicted mean burrow\ncount (per plot)") +
   theme_classic(base_size = 23)
@@ -737,7 +737,7 @@ pred_nsq_floral_df <- cbind(
 #plot
 ggplot(pred_nsq_floral_df, aes(x = bombus_floral_abun_scaled, y = zi_fit, color = plot_type)) +
   geom_line(linewidth = 1.5) +
-  geom_ribbon(aes(ymin = zi_lower, ymax = zi_upper), alpha = 0.2) +
+  geom_ribbon(aes(ymin = zi_lower, ymax = zi_upper, fill = plot_type), alpha = 0.2, color=NA) +
   labs(
        x = "Floral abundance (scaled)",
        y = "Probability of\nExcess Zeros") +
@@ -751,7 +751,7 @@ Conditional model:
 ```{r}
 # Create newdata with discrete factor levels for bee_season_type
 nsq_data_season <- data.frame(
-  grass_forb_perc_scaled = mean(surveys$grass_forb_perc_scaled),
+  cover_type = "grass",
   bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled),
   bee_season_type = factor(c("nestsearching", "worker"), levels = levels(surveys$bee_season_type)),
   plot_type = "ditch"
@@ -878,19 +878,19 @@ summary(workers_veg_noArea)
 
 ### Plots
 
-Plot type
+Plot type x cover type
 
 ```{r}
-# Create newdata with discrete factor levels for bee_season_type
-worker_data_plottype <- data.frame(
-  grass_forb_perc_scaled = mean(surveys$grass_forb_perc_scaled),
-  bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled),
-  bee_season_type = "worker",
+# Create newdata 
+worker_data_plottype <- expand.grid(
+  cover_type = factor(c("grass", "bare"), levels = levels(surveys$cover_type)),
   plot_type = factor(c("ditch", "field"), levels = levels(surveys$plot_type))
 )
+worker_data_plottype$bombus_floral_abun_scaled <- mean(surveys$bombus_floral_abun_scaled)
+worker_data_plottype$bee_season_type <- "worker"
 
 # Get predicted probabilities and standard errors
-pred_worker_plottype <- predict(workers_veg_noArea_nbin,
+pred_worker_plottype <- predict(workers_veg_noArea,
                             newdata = worker_data_plottype,
                             se.fit = TRUE,
                             re.form = NA,
@@ -910,67 +910,27 @@ pred_worker_plottype_df <- pred_worker_plottype_df %>%
   )
 
 #Plot
-ggplot(pred_worker_plottype_df, aes(x = plot_type, y = fit)) +
-  geom_point(size = 8) +
+ggplot(pred_worker_plottype_df, aes(x = plot_type, y = fit, color = cover_type)) +
+  geom_point(size = 8, position = position_dodge(0.6)) +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Plot type",
        y = "Predicted mean worker\ncount (per plot)") +
   theme_classic(base_size = 23)
 ```
 
-Vegetation
-
-```{r}
-#create new data grid
-worker_data_veg<- expand.grid(
-  grass_forb_perc_scaled = grass_seq,
-  plot_type = unique(surveys$plot_type),
-  bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled, na.rm = TRUE),
-  bee_season_type = "worker"
-)
-
-# Get predicted probabilities and standard errors
-pred_worker_veg <- predict(workers_veg_noArea_nbin,
-                            newdata = worker_data_veg,
-                            se.fit = TRUE,
-                            re.form = NA,
-                           type = "link")
-
-# Combine predictions with data frame
-pred_worker_veg_df <- cbind(worker_data_veg,
-                 fit_log = pred_worker_veg$fit,
-                 se_log = pred_worker_veg$se.fit)
-
-#calculate predictions and confidence intervals on response scale (not log scale)
-pred_worker_veg_df <- pred_worker_veg_df %>%
-  mutate(
-    fit = exp(fit_log),
-    lower = exp(fit_log - 1.96 * se_log),
-    upper = exp(fit_log + 1.96 * se_log)
-  )
-
-#Plot
-ggplot(pred_worker_veg_df, aes(x = grass_forb_perc_scaled, y = fit, color = plot_type)) +
-  geom_line(size = 1.5) +
-  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
-  labs(x = "Grass and Forb % (scaled)",
-       y = "Predicted mean worker\ncount (per plot)") +
-  theme_classic(base_size = 23)
-```
-
-Floral abundance
+Floral abundance x plot type
 
 ```{r}
 #create new data grid
 worker_data_floral<- expand.grid(
-  grass_forb_perc_scaled = mean(surveys$grass_forb_perc_scaled, na.rm = TRUE),
+  cover_type = "grass",
   plot_type = unique(surveys$plot_type),
   bombus_floral_abun_scaled = floral_seq,
   bee_season_type = "worker"
 )
 
 # Get predicted probabilities and standard errors
-pred_worker_floral <- predict(workers_veg_noArea_nbin,
+pred_worker_floral <- predict(workers_veg_noArea,
                             newdata = worker_data_floral,
                             se.fit = TRUE,
                             re.form = NA,
@@ -992,7 +952,7 @@ pred_worker_floral_df <- pred_worker_floral_df %>%
 #Plot
 ggplot(pred_worker_floral_df, aes(x = bombus_floral_abun_scaled, y = fit, color = plot_type)) +
   geom_line(size = 1.5) +
-  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
+  geom_ribbon(aes(ymin = lower, ymax = upper, fill = plot_type), alpha = 0.2, color=NA) +
   labs(x = "Floral abundance (scaled)",
        y = "Predicted mean worker\ncount (per plot)") +
   theme_classic(base_size = 23)
@@ -1003,14 +963,14 @@ Season
 ```{r}
 #create new data grid
 worker_data_season<- expand.grid(
-  grass_forb_perc_scaled = mean(surveys$grass_forb_perc_scaled, na.rm = TRUE),
+  cover_type = "grass",
   plot_type = "ditch",
   bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled, na.rm = TRUE),
   bee_season_type = unique(surveys$bee_season_type)
 )
 
 # Get predicted probabilities and standard errors
-pred_worker_season <- predict(workers_veg_noArea_nbin,
+pred_worker_season <- predict(workers_veg_noArea,
                             newdata = worker_data_season,
                             se.fit = TRUE,
                             re.form = NA,
