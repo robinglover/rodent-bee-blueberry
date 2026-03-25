@@ -19,6 +19,7 @@ library(DHARMa) #diagnostic tools for mixed regression models
 library(glmmTMB) #fits generalized linear mixed models, including zero-inflated and overdispersed models
 library(car) #tools for regression diagnostics and hypothesis tests
 library(emmeans)   # for estimated marginal means (predictions)
+library(lubridate) #date <-> julian date
 
 #read in data
 data <- read.csv("06_cleandata/combined_plot_data.csv")
@@ -231,9 +232,133 @@ Print results
 summary(ditchVSfield_veg_siteArea)
 ```
 
+Find effect of cover type within each plot type
+
+```{r}
+library(emmeans)
+
+pairs(emmeans(ditchVSfield_veg_siteArea, ~ cover_type | plot_type))
+```
+
 ### Plots
 
+Cover type x plot type
+
+```{r}
+#create new data grid
+veg_data<- expand.grid(
+  cover_type = unique(surveys$cover_type),
+  plot_type = unique(surveys$plot_type),
+  julian.date_scaled = mean(surveys$julian.date_scaled, na.rm = TRUE)
+)
+
+# Get predicted probabilities and standard errors
+pred_veg <- predict(ditchVSfield_veg_siteArea,
+                            newdata = veg_data,
+                            se.fit = TRUE,
+                            re.form = NA,
+                           type = "link")
+
+# Combine predictions with data frame
+pred_veg_df <- cbind(veg_data,
+                 fit_log = pred_veg$fit,
+                 se_log = pred_veg$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_veg_df <- pred_veg_df %>%
+  mutate(
+    fit = exp(fit_log),
+    lower = exp(fit_log - 1.96 * se_log),
+    upper = exp(fit_log + 1.96 * se_log)
+  )
+
+# Plot conditional predictions
+ggplot(pred_veg_df, aes(x = plot_type, y = fit, color = cover_type)) +
+  geom_point(size=8, position = position_dodge(0.6)) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5)+
+  # Use scale_color_manual to define specific colors
+  scale_color_manual(values = c("grass" = "darkgreen", "bare" = "tan4")) +
+  labs(x = "Plot type",
+       y = "Predicted mean\n% grass and forb\n(per plot)",
+       color = "Cover type") +
+  theme_classic(base_size = 20)
+```
+
+Julian date
+
+```{r}
+date_seq <- seq(
+  from = min(surveys$julian.date_scaled, na.rm = TRUE),
+  to = max(surveys$julian.date_scaled, na.rm = TRUE),
+  length.out = 50
+)
+
+#create new data grid
+veg_data_date<- expand.grid(
+  cover_type = "grass",
+  plot_type = unique(surveys$plot_type),
+  julian.date_scaled = date_seq
+)
+
+# Get predicted probabilities and standard errors
+pred_veg_date <- predict(ditchVSfield_veg_siteArea,
+                            newdata = veg_data_date,
+                            se.fit = TRUE,
+                            re.form = NA,
+                           type = "link")
+
+# Combine predictions with data frame
+pred_veg_date_df <- cbind(veg_data_date,
+                 fit_log = pred_veg_date$fit,
+                 se_log = pred_veg_date$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_veg_date_df <- pred_veg_date_df %>%
+  mutate(
+    fit = exp(fit_log),
+    lower = exp(fit_log - 1.96 * se_log),
+    upper = exp(fit_log + 1.96 * se_log)
+  )
+
+#convert x-axis to actual dates
+## Get scaling parameters from original data
+jd_mean <- mean(surveys$julian.date, na.rm = TRUE)
+jd_sd <- sd(surveys$julian.date, na.rm = TRUE)
+
+## Convert scaled values back to dates
+pred_veg_date_df <- pred_veg_date_df %>%
+  mutate(
+    # Reverse the (x - mean) / sd formula
+    julian_orig = (julian.date_scaled * jd_sd) + jd_mean,
+    # Convert Day of Year to an actual Date object (using 2024 as a reference year)
+    date_formatted = as.Date(round(julian_orig) - 1, origin = "2024-01-01")
+  )
+
+#Plot
+ggplot(pred_veg_date_df, aes(x = date_formatted, y = fit, color = plot_type)) +
+  geom_line(linewidth = 1.5) + 
+  geom_ribbon(aes(ymin = lower, ymax = upper, fill = plot_type), alpha = 0.2, color=NA) +
+  scale_x_date(date_breaks = "1 month", date_labels = "%b") + # Format x-axis to show Month names (e.g., May, Jun, Jul)
+  labs(x = "Month",
+       y = "Predicted mean\n% grass and forb\n(per plot)",
+       color = "Plot type",
+       fill = "Plot type") +
+  theme_classic(base_size = 20)
+```
+
 ### Findings
+
+Cover type
+
+-   Significantly more veg at grassy sites than bare both along the ditch (p=0.037) and within the field (p\<0.0001)
+
+-   Significant interaction between plot type and cover type, difference in veg between grassy and bare is much greater in the field than along the ditch (p=0.0004)
+
+-   Significantly less veg within the field than along the ditch (p\<0.0001)
+
+Date
+
+-   \% veg decreases over time, though not significant (p=0.118)
 
 ## Floral
 
@@ -310,17 +435,17 @@ pred_floral_veg <- emmeans(
 pred_floral_veg_df <- as.data.frame(pred_floral_veg)
 
 #plot
-ggplot(pred_floral_veg_df, aes(x = cover_type, y = mean.class, color = plot_type)) +
+ggplot(pred_floral_veg_df, aes(color = cover_type, y = mean.class, x = plot_type)) +
   geom_point(size = 8, position = position_dodge(0.6)) +
   geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL), width = 0.2, linewidth = 1.5, position = position_dodge(0.6)) +
   labs(
-    x = "Cover type",
+    x = "Plot type",
     y = "Predicted mean floral\nabundance category\n(log-scaled)",
-    color = "Plot Type",
-    fill = "Plot Type"
+    color = "Cover type",
+    fill = "Cover type"
   ) +
-  theme_classic(base_size = 23)
-
+  scale_color_manual(values = c("grass" = "darkgreen", "bare" = "tan4")) +
+  theme_classic(base_size = 20)
 ```
 
 Season x plot type
@@ -330,7 +455,7 @@ Season x plot type
 date_seq <- seq(
   from = min(surveys$julian.date_scaled, na.rm = TRUE),
   to = max(surveys$julian.date_scaled, na.rm = TRUE),
-  length.out = 50
+  length.out = 200
 )
 
 # Get predicted probabilities per category with CIs
@@ -344,27 +469,55 @@ pred_floral_date <- emmeans(
 # Convert to dataframe
 pred_floral_date_df <- as.data.frame(pred_floral_date)
 
+#convert x-axis to actual dates
+## Convert scaled values back to dates
+pred_floral_date_df <- pred_floral_date_df %>%
+  mutate(
+    # Reverse the (x - mean) / sd formula
+    julian_orig = (julian.date_scaled * jd_sd) + jd_mean,
+    # Convert Day of Year to an actual Date object (using 2024 as a reference year)
+    date_formatted = as.Date(round(julian_orig) - 1, origin = "2024-01-01")
+  )
+
+
 #plot
-ggplot(pred_floral_date_df, aes(x = julian.date_scaled, y = mean.class, color = plot_type)) +
+ggplot(pred_floral_date_df, aes(x = date_formatted, y = mean.class, color = plot_type)) +
   geom_line(linewidth = 1.5) +
   geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL, fill = plot_type), alpha = 0.2, color = NA) +
+  scale_x_date(date_breaks = "1 month", date_labels = "%b") + # Format x-axis to show Month names (e.g., May, Jun, Jul) 
+  # Add vertical dashed lines for start and end dates
+  geom_vline(xintercept = as.Date("2024-04-19"), linetype = "dashed", color = "steelblue", linewidth = 1) +
+  geom_vline(xintercept = as.Date("2024-05-24"), linetype = "dashed", color = "steelblue", linewidth = 1) +
+  
+  #Add a text label between the lines at the top
+  annotate("text", x = as.Date("2024-05-06"), y = 4.3, 
+           label = "Peak\nBlueberry\nBloom", color = "steelblue") +
   labs(
-    x = "Julian date (scaled)",
+    x = "Month",
     y = "Predicted mean floral\nabundance category\n(log-scaled)",
     color = "Plot type",
     fill = "Plot type"
   ) +
-  theme_classic(base_size = 23)
+  theme_classic(base_size = 13)
 ```
 
 ### Findings
 
--   Julian date is a significant predictor: floral abundance tends to increase as season progresses.
--   The effect of Julian date changes depending on plot type (significant interaction).
-    -   In the ditch, floral abundance increases throughout the season.
+Cover type
 
-    -   In the field, floral abundance decreases throughout the season.
--   Higher % cover increases the odds of higher floral abundance, especially in ditch plots (although this is not a significant finding)
+-   No significant difference in floral abundance between ditch and field at beginning of the study (t=1.01)
+-   No difference in floral abundance between grass and bare sites (t=0.531).
+-   No significant interaction between plot type and cover type (t=-0.360)
+
+Date
+
+-   Significant effect of julian date (t=3.112)
+
+-   Significant interaction between julian date and plot type (t=-3.444).
+
+    -   Ditches get more flowers over time (+0.64 per unit of time).
+
+    -   Fields get fewer flowers over time (-0.26 per unit of time)
 
 ## Rodents
 
@@ -377,18 +530,15 @@ ggplot(pred_floral_date_df, aes(x = julian.date_scaled, y = mean.class, color = 
 ```{r}
 
 rodent_veg_areaOnly <- glmmTMB(num_burrows ~ cover_type*plot_type +
-                                bombus_floral_abun_scaled*plot_type +
                               (1|area),
                             family = poisson, 
                             data = surveys)
 
 rodent_veg_siteOnly <- glmmTMB(num_burrows ~ cover_type*plot_type +
-                                bombus_floral_abun_scaled*plot_type +
                               (1|site_id),
                             family = poisson, 
                             data = surveys)
 rodent_veg_siteArea <- glmmTMB(num_burrows ~ cover_type*plot_type +
-                                bombus_floral_abun_scaled*plot_type +
                               (1|area/site_id),
                             family = poisson, 
                             data = surveys)
@@ -412,7 +562,6 @@ residuals_rodent_veg_siteOnly <- simulateResiduals(fittedModel = rodent_veg_site
 
 ```{r}
 rodent_veg_siteOnly_nbin <- glmmTMB(num_burrows ~ cover_type*plot_type +
-                                bombus_floral_abun_scaled*plot_type +
                               (1|site_id),
                             family = nbinom2, 
                             data = surveys)
@@ -426,6 +575,12 @@ residuals_rodent_veg_siteOnly_nbin <- simulateResiduals(fittedModel = rodent_veg
 
 ```{r}
 summary(rodent_veg_siteOnly_nbin)
+```
+
+Find effect of cover type in each plot type
+
+```{r}
+pairs(emmeans(rodent_veg_siteOnly_nbin, ~ cover_type | plot_type))
 ```
 
 ### Plots
@@ -465,58 +620,21 @@ ggplot(pred_rodent_veg_df, aes(x = plot_type, y = fit, color = cover_type)) +
   geom_point(size=8, position = position_dodge(0.6)) +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5)+
   labs(x = "Plot type",
-       y = "Predicted mean burrow\ncount (per plot)") +
-  theme_classic(base_size = 23)
-```
-
-Floral abundance x plot type
-
-```{r}
-# Sequence of floral abun
-floral_seq <- seq(
-  from = min(surveys$bombus_floral_abun_scaled, na.rm = TRUE),
-  to = max(surveys$bombus_floral_abun_scaled, na.rm = TRUE),
-  length.out = 50
-)
-#create new data grid
-rodent_data_floral<- expand.grid(
-  cover_type = "grass",
-  plot_type = unique(surveys$plot_type),
-  bombus_floral_abun_scaled = floral_seq
-)
-
-# Get predicted probabilities and standard errors
-pred_rodent_floral <- predict(rodent_veg_siteOnly_nbin,
-                            newdata = rodent_data_floral,
-                            se.fit = TRUE,
-                            re.form = NA,
-                            type = "link")
-
-# Combine predictions with data frame
-pred_rodent_floral_df <- cbind(rodent_data_floral,
-                 fit_log = pred_rodent_floral$fit,
-                 se_log = pred_rodent_floral$se.fit)
-
-#calculate predictions and confidence intervals on response scale (not log scale)
-pred_rodent_floral_df <- pred_rodent_floral_df %>%
-  mutate(
-    fit = exp(fit_log),
-    lower = exp(fit_log - 1.96 * se_log),
-    upper = exp(fit_log + 1.96 * se_log)
-  )
-
-#Plot
-ggplot(pred_rodent_floral_df, aes(x = bombus_floral_abun_scaled, y = fit, color = plot_type)) +
-  geom_line(linewidth = 1.5) +
-  geom_ribbon(aes(ymin = lower, ymax = upper, fill = plot_type), alpha = 0.2, color = NA) +
-  labs(x = "Floral abundance (scaled)",
-       y = "Predicted mean burrow\ncount (per plot)") +
-  theme_classic(base_size = 23)
+       y = "Predicted mean burrow\ncount (per plot)",
+       color = "Cover type") +
+  scale_color_manual(values = c("grass" = "darkgreen", "bare" = "tan4")) +
+  theme_classic(base_size = 20)
 ```
 
 ### Findings
 
-At field plots, there are more rodent burrows in grassy sites than in bare sites. No siginficant effect of floral abundance on rodent burrows in either plot type.
+-   Significant interaction between cover type and plot type (p\<0.0001)
+
+    -   Marginal effect of cover type on rodent burrow abundance within the field only (p=0.0735)
+
+    -   No effect of cover type on burrow abundance along the ditch (probably because less difference in vegetation) (p=0.826)
+
+-   Significantly more rodents along the ditch than within the field (p\<0.0001)
 
 ## NSQ
 
@@ -631,8 +749,10 @@ ggplot(pred_nsq_plottype_df, aes(x = plot_type, y = cond_fit, color = cover_type
   geom_point(size = 8, position = position_dodge(0.6)) +
   geom_errorbar(aes(ymin = cond_lower, ymax = cond_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Plot type",
-       y = "Predicted mean NSQ\ncount (per plot)") +
-  theme_classic(base_size = 23)
+       y = "Predicted mean NSQ\ncount (per plot)",
+       color = "Cover type") +
+  scale_color_manual(values = c("grass" = "darkgreen", "bare" = "tan4")) +
+  theme_classic(base_size = 20)
 ```
 
 Zero-inflated model:
@@ -657,8 +777,10 @@ ggplot(pred_nsq_plottype_zi_df, aes(x = plot_type, y = zi_fit, color = cover_typ
   geom_point(size = 8,  position = position_dodge(0.6)) +
   geom_errorbar(aes(ymin = zi_lower, ymax = zi_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Plot type",
-       y = "Predicted probability\nof structural zeros") +
-  theme_classic(base_size = 23) 
+       y = "Predicted probability\nof structural zeros",
+       color = "Cover type") +
+  scale_color_manual(values = c("grass" = "darkgreen", "bare" = "tan4")) +
+  theme_classic(base_size = 20) 
 ```
 
 Floral abundance x plot type
@@ -712,9 +834,11 @@ ggplot(pred_nsq_floral_df,
               color = NA) +
   labs(
     x = "Floral abundance (scaled)",
-    y = "Predicted mean NSQ\ncount (per plot)"
+    y = "Predicted mean NSQ\ncount (per plot)",
+    fill = "Plot type",
+    color = "Plot type"
   ) +
-  theme_classic(base_size = 23)
+  theme_classic(base_size = 20)
 ```
 
 Zero-inflated model:
@@ -740,8 +864,10 @@ ggplot(pred_nsq_floral_df, aes(x = bombus_floral_abun_scaled, y = zi_fit, color 
   geom_ribbon(aes(ymin = zi_lower, ymax = zi_upper, fill = plot_type), alpha = 0.2, color=NA) +
   labs(
        x = "Floral abundance (scaled)",
-       y = "Probability of\nExcess Zeros") +
-  theme_classic(base_size = 23)
+       y = "Probability of\nExcess Zeros", 
+       fill = "Plot type",
+       color = "Plot type") +
+  theme_classic(base_size = 20)
 ```
 
 Season
@@ -781,7 +907,7 @@ ggplot(pred_nsq_season_df, aes(x = bee_season_type, y = cond_fit)) +
   geom_errorbar(aes(ymin = cond_lower, ymax = cond_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Bee season",
        y = "Predicted mean NSQ\ncount (per plot)") +
-  theme_classic(base_size = 23)
+  theme_classic(base_size = 20)
 ```
 
 Zero-inflated model:
@@ -804,22 +930,26 @@ ggplot(pred_nsq_season_df, aes(x = bee_season_type, y = zi_fit)) +
   geom_errorbar(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Bee season",
        y = "Probability of\nExcess Zeros") +
-  theme_classic(base_size = 23)
+  theme_classic(base_size = 20)
 ```
 
 ### Findings
 
 Conditional model (predicts abundance of nest-searching queens at sites where queens are present). Ditch is reference plot type.
 
--   Significant positive effect of grass+forb% on number of NSQ in ditch plots
+-   No significant effect of cover type, plot type, floral abundance, or season on NSQ abundance
 
--   Marginal negative effect of plot type on \# NSQ (fewer queens in field)
+-   No significant interaction between cover type and plot type of floral abundance and plot type
 
 Zero-inflation model (predicts presence/absence of nest-searching queens).
 
--   Significant positive effect of floral abundance in **field** plots on NSQ presence (fewer zeros when there are more flowers in the field)
+-   NSQ are more likely to be absent from bare sites than grassy sites
 
--   Marginal negative effect of floral abundance in ditch plots on NSQ presence (more zeros when there are more flowers along the ditch)
+-   NSQ are more likely to be absent during worker season than NSQ season
+
+-   No significant effect of plot type or floral abundance on NSQ abundance
+
+-   No significant interaction between cover type and plot type of floral abundance and plot type
 
 ## Workers
 
@@ -876,6 +1006,22 @@ residuals_workers_veg_noArea <- simulateResiduals(fittedModel = workers_veg_noAr
 summary(workers_veg_noArea)
 ```
 
+Effect of cover type within each plot type
+
+```{r}
+pairs(emmeans(workers_veg_noArea, ~ cover_type | plot_type))
+```
+
+Effect of floral abundance within each plot type
+
+```{r}
+#calculate the slope of floral abundance for each plot type
+eff_slopes <- emtrends(workers_veg_noArea, ~ plot_type, var = "bombus_floral_abun_scaled")
+
+#test if those slopes are significantly different from zero
+summary(eff_slopes, infer = c(TRUE, TRUE))
+```
+
 ### Plots
 
 Plot type x cover type
@@ -914,8 +1060,10 @@ ggplot(pred_worker_plottype_df, aes(x = plot_type, y = fit, color = cover_type))
   geom_point(size = 8, position = position_dodge(0.6)) +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Plot type",
-       y = "Predicted mean worker\ncount (per plot)") +
-  theme_classic(base_size = 23)
+       y = "Predicted mean worker\ncount (per plot)",
+       color = "Cover type") +
+  scale_color_manual(values = c("grass" = "darkgreen", "bare" = "tan4")) +
+  theme_classic(base_size = 20)
 ```
 
 Floral abundance x plot type
@@ -951,11 +1099,13 @@ pred_worker_floral_df <- pred_worker_floral_df %>%
 
 #Plot
 ggplot(pred_worker_floral_df, aes(x = bombus_floral_abun_scaled, y = fit, color = plot_type)) +
-  geom_line(size = 1.5) +
+  geom_line(linewidth = 1.5) +
   geom_ribbon(aes(ymin = lower, ymax = upper, fill = plot_type), alpha = 0.2, color=NA) +
   labs(x = "Floral abundance (scaled)",
-       y = "Predicted mean worker\ncount (per plot)") +
-  theme_classic(base_size = 23)
+       y = "Predicted mean worker\ncount (per plot)",
+       fill = "Plot type",
+       color = "Plot type") +
+  theme_classic(base_size = 20)
 ```
 
 Season
@@ -994,28 +1144,30 @@ ggplot(pred_worker_season_df, aes(x = bee_season_type, y = fit)) +
   geom_point(size = 8) +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Bee season",
-       y = "Predicted mean worker\ncount (per plot)") +
-  theme_classic(base_size = 23)
+       y = "Predicted mean worker\ncount (per plot)",
+       fill = "Plot type",
+       color = "Plot type") +
+  theme_classic(base_size = 20)
 ```
 
 ### Findings
 
-No significant effect of any variables on worker abundance/presence.
+Cover type
 
-# What features (% veg, floral abun, burrow number) in the ditches improve NSQ and worker abundance? (Looking at ditch data only).
+-   No effect of cover type on worker abundance (p=0.80)
 
-## NSQ
+-   More workers along the ditch than within the field (p=0.0243)
 
-### Steps
+-   No interaction between cover type and plot type
 
-### Plots
+Floral abundance
 
-### Findings
+-   No overall impact of floral abundance on workers (p=0.9984)
 
-## Workers
+-   Significant interaction between plot type and floral abundance (p=0.0169)
 
-### Steps
+-   Floral abundance influences worker abundance within the field but NOT along the ditch
 
-### Plots
+Date
 
-### Findings
+-   Significantly more workers in worker season that NS (p\<0.0001)
