@@ -65,6 +65,8 @@ bee <- bee %>%
     TRUE ~ NA_character_
   ))
 
+#remove observations of bees foraging VACO along the ditch (where VACO branches from the field extended into the ditch plot)
+bee <- filter(bee, !(flower_code == "vaco" & field_ditch == "ditch"))
 
 #add column for julian date
 bee$julian.date <- yday(bee$date)
@@ -74,6 +76,7 @@ queens <- bee %>%
   filter(caste == "q", flower_species != "" & !is.na(flower_species))
 workers <- bee %>%
   filter(caste == "w", flower_species != "" & !is.na(flower_species))
+
 ```
 
 ## Flower species used by bees
@@ -129,9 +132,12 @@ queens %>%
             vjust = -0.15, 
             size = 3) +
   theme_classic(base_size = 15) +
-  xlab("Floral species") +
-  ylab("Queen count") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+  labs(
+    x = "Floral species",
+    y = "Queen count",
+    fill = "Plot type"
+  ) +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
 ```
 
 Workers
@@ -151,9 +157,12 @@ workers %>%
             vjust = -0.15, 
             size = 3) +
   theme_classic(base_size = 15) +
-  xlab("Floral species") +
-  ylab("Workers count") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+  labs(
+    x = "Floral species",
+    y = "Worker count",
+    fill = "Plot type"
+  ) +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
 ```
 
 Plot \# foraging bees in ditch vs field across time
@@ -165,56 +174,27 @@ foraging_summary <- bee %>%
   filter(behaviour == "foraging") %>%
   count(julian.date, field_ditch, name = "n_foraging")
 
-# Step 2: Plot
-ggplot(foraging_summary, aes(x = julian.date, y = n_foraging, color = field_ditch)) +
-  geom_line(size = 1.2) +
-  labs(
-    title = "# Bombus Foraging vs. Julian Date",
-    x = "Julian Date",
-    y = "# Foraging Bombus",
-    color = "Plot Type"
-  ) +
-  theme_classic()
-```
+#convert x-axis to actual dates
+## Convert scaled values back to dates
+foraging_summary <- foraging_summary %>%
+  mutate(
+    # Convert Day of Year to an actual Date object (using 2024 as a reference year)
+    date_formatted = as.Date(round(julian.date) - 1, origin = "2024-01-01")
+  )
 
-Queens only
-
-```{r}
-# Step 1: Filter and summarize data
-foraging_queen_summary <- queens %>%
-  filter(behaviour == "foraging") %>%
-  count(julian.date, field_ditch, name = "n_foraging")
 
 # Step 2: Plot
-ggplot(foraging_queen_summary, aes(x = julian.date, y = n_foraging, color = field_ditch)) +
-  geom_line(size = 1.2) +
+ggplot(foraging_summary, aes(x = date_formatted, y = n_foraging, color = field_ditch)) +
+  geom_line(size = 1.5) +
+  scale_x_date(limits = c(as.Date("2024-04-02"), as.Date("2024-07-03")),
+               date_breaks = "1 month", 
+               date_labels = "%b") +
   labs(
-    title = "# Bombus Foraging vs. Julian Date",
-    x = "Julian Date",
-    y = "# Foraging Queens",
-    color = "Plot Type"
+    x = "Date",
+    y = "Foraging bombus (count)",
+    color = "Plot type"
   ) +
-  theme_classic()
-```
-
-Workers only
-
-```{r}
-# Step 1: Filter and summarize data
-foraging_worker_summary <- workers %>%
-  filter(behaviour == "foraging") %>%
-  count(julian.date, field_ditch, name = "n_foraging")
-
-# Step 2: Plot
-ggplot(foraging_worker_summary, aes(x = julian.date, y = n_foraging, color = field_ditch)) +
-  geom_line(size = 1.2) +
-  labs(
-    title = "# Bombus Foraging vs. Julian Date",
-    x = "Julian Date",
-    y = "# Foraging workers",
-    color = "Plot Type"
-  ) +
-  theme_classic()
+  theme_classic(base_size = 20)
 ```
 
 Plot number foraging vs time, by caste
@@ -223,19 +203,30 @@ Plot number foraging vs time, by caste
 # Step 1: Filter and summarize data
 foraging_caste_summary <- bee %>%
   filter(behaviour == "foraging") %>%
-  filter(caste != "")%>%
-  count(julian.date, caste, name = "n_foraging")
+  filter(caste != "" & caste != "m")%>%
+  count(julian.date, caste, field_ditch, name = "n_foraging") 
+
+#convert x-axis to actual dates
+## Convert scaled values back to dates
+foraging_caste_summary <- foraging_caste_summary %>%
+  mutate(
+    # Convert Day of Year to an actual Date object (using 2024 as a reference year)
+    date_formatted = as.Date(round(julian.date) - 1, origin = "2024-01-01")
+  )
 
 # Step 2: Plot
-ggplot(foraging_caste_summary, aes(x = julian.date, y = n_foraging, color = caste)) +
+ggplot(foraging_caste_summary, aes(x = date_formatted, y = n_foraging, color = field_ditch)) +
   geom_line(size = 1.2) +
+  facet_wrap(~ caste, ncol = 1, scales = "free_y", labeller = as_labeller(c("w" = "Workers", "q" = "Queens"))) +
+  scale_x_date(limits = c(as.Date("2024-04-02"), as.Date("2024-07-03")),
+               date_breaks = "1 month", 
+               date_labels = "%b") +
   labs(
-    title = "# Bombus Foraging vs. Julian Date",
-    x = "Julian Date",
-    y = "# Foraging Bombus",
-    color = "Caste"
+    x = "Date",
+    y = "Foraging bumblebees (count)",
+    color = "Plot type"
   ) +
-  theme_classic()
+  theme_classic(base_size = 20)
 ```
 
 Floral availability of VACO over time
@@ -293,21 +284,21 @@ Compare number of queens vs males vs workers foraging on vaco
 vacoforaging_caste_summary <- bee %>%
   filter(behaviour == "foraging") %>%
   filter(flower_code == "vaco") %>%
-  filter(caste != "")%>%
+  filter(caste != "" & caste != "m")%>%
   count(caste, name = "n_foraging_vaco")
 
 # Step 2: Plot
-ggplot(vacoforaging_caste_summary, aes(x = caste, y = n_foraging_vaco, fill = caste)) +
+ggplot(vacoforaging_caste_summary, aes(x = caste, y = n_foraging_vaco)) +
   geom_bar(stat = "identity") +
+  scale_x_discrete(labels = c("w" = "Workers", "q" = "Queens")) +
   labs(
-    title = "# Bombus Foraging on VACO vs. Caste",
     x = "Caste",
-    y = "# Bombus foraging on vaco"
+    y = "Bombus foraging on blueberry\n(count)"
   ) +
-  theme_classic()
+  theme_classic(base_size = 20)
 ```
 
-# Number of individuals observed 
+# Number of individuals observed
 
 ## Bees
 
