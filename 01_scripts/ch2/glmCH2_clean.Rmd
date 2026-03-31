@@ -1168,4 +1168,156 @@ pred_worker_plottype_df <- pred_worker_plottype_df %>%
   )
 
 #Plot
-ggplot(pred_worker_pl
+ggplot(pred_worker_plottype_df, aes(x = plot_type, y = fit)) +
+  geom_point(size = 8, position = position_dodge(0.6)) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
+  labs(x = "Plot type",
+       y = "Predicted mean worker\ncount (per plot)")  +
+  theme_classic(base_size = 20)
+```
+
+Cover type
+
+```{r}
+# Create newdata 
+worker_data_covertype <- expand.grid(
+  cover_type = factor(c("grass", "bare"), levels = levels(surveys$cover_type)),
+  plot_type = "ditch"
+)
+worker_data_covertype$bombus_floral_abun_scaled <- mean(surveys$bombus_floral_abun_scaled)
+worker_data_covertype$bee_season_type <- "worker"
+
+# Get predicted probabilities and standard errors
+pred_worker_covertype <- predict(workers_veg_noArea,
+                            newdata = worker_data_covertype,
+                            se.fit = TRUE,
+                            re.form = NA,
+                            type = "link") 
+
+# Combine predictions with data frame
+pred_worker_covertype_df <- cbind(worker_data_covertype,
+                 fit_log = pred_worker_covertype$fit,
+                 se_log = pred_worker_covertype$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_worker_covertype_df <- pred_worker_covertype_df %>%
+  mutate(
+    fit = exp(fit_log),
+    lower = exp(fit_log - 1.96 * se_log),
+    upper = exp(fit_log + 1.96 * se_log)
+  )
+
+#Plot
+ggplot(pred_worker_covertype_df, aes(x = cover_type, y = fit)) +
+  geom_point(size = 8, position = position_dodge(0.6)) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
+  labs(x = "Cover type",
+       y = "Predicted mean worker\ncount (per plot)") +
+  theme_classic(base_size = 20)
+```
+
+Floral abundance x plot type
+
+```{r}
+#create new data grid
+worker_data_floral<- expand.grid(
+  cover_type = "grass",
+  plot_type = unique(surveys$plot_type),
+  bombus_floral_abun_scaled = floral_seq,
+  bee_season_type = "worker"
+)
+
+# Get predicted probabilities and standard errors
+pred_worker_floral <- predict(workers_veg_noArea,
+                            newdata = worker_data_floral,
+                            se.fit = TRUE,
+                            re.form = NA,
+                            type = "link")
+
+# Combine predictions with data frame
+pred_worker_floral_df <- cbind(worker_data_floral,
+                 fit_log = pred_worker_floral$fit,
+                 se_log = pred_worker_floral$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_worker_floral_df <- pred_worker_floral_df %>%
+  mutate(
+    fit = exp(fit_log),
+    lower = exp(fit_log - 1.96 * se_log),
+    upper = exp(fit_log + 1.96 * se_log)
+  )
+
+#Plot
+ggplot(pred_worker_floral_df, aes(x = bombus_floral_abun_scaled, y = fit, color = plot_type)) +
+  geom_line(linewidth = 1.5) +
+  geom_ribbon(aes(ymin = lower, ymax = upper, fill = plot_type), alpha = 0.2, color=NA) +
+  labs(x = "Floral abundance (scaled)",
+       y = "Predicted mean worker\ncount (per plot)",
+       fill = "Plot type",
+       color = "Plot type") +
+  theme_classic(base_size = 20)
+```
+
+Season
+
+```{r}
+#create new data grid
+worker_data_season<- expand.grid(
+  cover_type = "grass",
+  plot_type = "ditch",
+  bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled, na.rm = TRUE),
+  bee_season_type = unique(surveys$bee_season_type)
+)
+
+# Get predicted probabilities and standard errors
+pred_worker_season <- predict(workers_veg_noArea,
+                            newdata = worker_data_season,
+                            se.fit = TRUE,
+                            re.form = NA,
+                            type = "link")
+
+# Combine predictions with data frame
+pred_worker_season_df <- cbind(worker_data_season,
+                 fit_log = pred_worker_season$fit,
+                 se_log = pred_worker_season$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_worker_season_df <- pred_worker_season_df %>%
+  mutate(
+    fit = exp(fit_log),
+    lower = exp(fit_log - 1.96 * se_log),
+    upper = exp(fit_log + 1.96 * se_log)
+  )
+
+#Plot
+ggplot(pred_worker_season_df, aes(x = bee_season_type, y = fit)) +
+  geom_point(size = 8) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
+  labs(x = "Bee season",
+       y = "Predicted mean worker\ncount (per plot)",
+       fill = "Plot type",
+       color = "Plot type") +
+  theme_classic(base_size = 20)
+```
+
+### Findings
+
+Cover type
+
+-   No effect of cover type on worker abundance (p=0.80)
+
+-   More workers along the ditch than within the field (p=0.0243)
+
+-   No interaction between cover type and plot type
+
+Floral abundance
+
+-   No overall impact of floral abundance on workers (p=0.9984)
+
+-   Significant interaction between plot type and floral abundance (p=0.0169)
+
+-   Floral abundance influences worker abundance within the field but NOT along the ditch
+
+Date
+
+-   Significantly more workers in worker season that NS (p\<0.0001)
