@@ -189,11 +189,17 @@ ggplot(foraging_summary, aes(x = date_formatted, y = n_foraging, color = field_d
   scale_x_date(limits = c(as.Date("2024-04-02"), as.Date("2024-07-03")),
                date_breaks = "1 month", 
                date_labels = "%b") +
+  # Add vertical dashed lines for start and end dates
+  geom_vline(xintercept = as.Date("2024-04-19"), linetype = "dashed", color = "steelblue", linewidth = 1) +
+  geom_vline(xintercept = as.Date("2024-05-24"), linetype = "dashed", color = "steelblue", linewidth = 1) +
   labs(
     x = "Date",
     y = "Foraging bombus (count)",
     color = "Plot type"
   ) +
+  #Add a text label between the lines at the top
+  annotate("text", x = as.Date("2024-05-06"), y = 20, 
+           label = "PBB", color = "steelblue", size = 8) +
   theme_classic(base_size = 20)
 ```
 
@@ -221,6 +227,17 @@ ggplot(foraging_caste_summary, aes(x = date_formatted, y = n_foraging, color = f
   scale_x_date(limits = c(as.Date("2024-04-02"), as.Date("2024-07-03")),
                date_breaks = "1 month", 
                date_labels = "%b") +
+  # Add vertical dashed lines for start and end dates
+  geom_vline(xintercept = as.Date("2024-04-19"), linetype = "dashed", color = "steelblue", linewidth = 1) +
+  geom_vline(xintercept = as.Date("2024-05-24"), linetype = "dashed", color = "steelblue", linewidth = 1) +
+  labs(
+    x = "Date",
+    y = "Foraging bombus (count)",
+    color = "Plot type"
+  ) +
+  #Add a text label between the lines at the top
+  annotate("text", x = as.Date("2024-05-06"), y = 12, 
+           label = "PBB", color = "steelblue", size = 5) +
   labs(
     x = "Date",
     y = "Foraging bumblebees (count)",
@@ -244,15 +261,35 @@ vaco_summary <- floral %>%
   group_by(julian.date) %>%
   summarise(vaco_abun = sum(abundance), .groups = "drop") 
 
+#convert x-axis to actual dates
+## Convert scaled values back to dates
+vaco_summary <- vaco_summary %>%
+  mutate(
+    # Convert Day of Year to an actual Date object (using 2024 as a reference year)
+    date_formatted = as.Date(round(julian.date) - 1, origin = "2024-01-01"))
+
 # Step 2: Plot
-ggplot(vaco_summary, aes(x = julian.date, y = vaco_abun)) +
+ggplot(vaco_summary, aes(x = date_formatted, y = vaco_abun)) +
   geom_line(size = 1.2) +
+  scale_x_date(limits = c(as.Date("2024-04-02"), as.Date("2024-07-03")),
+               date_breaks = "1 month", 
+               date_labels = "%b") +
+  # Add vertical dashed lines for start and end dates
+  geom_vline(xintercept = as.Date("2024-04-19"), linetype = "dashed", color = "steelblue", linewidth = 1) +
+  geom_vline(xintercept = as.Date("2024-05-24"), linetype = "dashed", color = "steelblue", linewidth = 1) +
   labs(
-    title = "VACO abundance vs Julian Date",
-    x = "Julian Date",
-    y =  "VACO abundance"
+    x = "Date",
+    y = "Foraging bombus (count)",
+    color = "Plot type"
   ) +
-  theme_classic()
+  #Add a text label between the lines at the top
+  annotate("text", x = as.Date("2024-05-10"), y = 30, 
+           label = "PBB", color = "steelblue", size = 5) +
+  labs(
+    x = "Date",
+    y =  "Blueberry flower\nabundance"
+  ) +
+  theme_classic(base_size = 20)
 ```
 
 Number of bees foraging on vaco over time, by caste
@@ -265,16 +302,33 @@ vacoforaging_caste_summary <- bee %>%
   filter(caste != "")%>%
   count(julian.date, caste, name = "n_foraging_vaco")
 
+#convert x-axis to actual dates
+## Convert scaled values back to dates
+vacoforaging_caste_summary <- vacoforaging_caste_summary %>%
+  mutate(
+    # Convert Day of Year to an actual Date object (using 2024 as a reference year)
+    date_formatted = as.Date(round(julian.date) - 1, origin = "2024-01-01"))
+
 # Step 2: Plot
-ggplot(vacoforaging_caste_summary, aes(x = julian.date, y = n_foraging_vaco, color = caste)) +
+ggplot(vacoforaging_caste_summary, aes(x = date_formatted, y = n_foraging_vaco, color = caste)) +
   geom_line(size = 1.2) +
+  scale_color_manual(values = c("q" = "pink", "w" = "purple"),
+                        labels = c("q" = "Queens", "w" = "Workers"))+
+  scale_x_date(limits = c(as.Date("2024-04-02"), as.Date("2024-07-03")),
+               date_breaks = "1 month", 
+               date_labels = "%b") +
+  # Add vertical dashed lines for start and end dates
+  geom_vline(xintercept = as.Date("2024-04-19"), linetype = "dashed", color = "steelblue", linewidth = 1) +
+  geom_vline(xintercept = as.Date("2024-05-24"), linetype = "dashed", color = "steelblue", linewidth = 1) +
+  #Add a text label between the lines at the top
+  annotate("text", x = as.Date("2024-05-06"), y = 15, 
+           label = "PBB", color = "steelblue", size = 5) +
   labs(
-    title = "# Bombus Foraging on VACO vs. Julian Date",
-    x = "Julian Date",
-    y = "# Bombus foraging on vaco",
+    x = "Date",
+    y = "Bombus foraging on\nblueberry (count)",
     color = "Caste"
   ) +
-  theme_classic()
+  theme_classic(base_size = 20)
 ```
 
 Compare number of queens vs males vs workers foraging on vaco
