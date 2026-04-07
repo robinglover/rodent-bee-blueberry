@@ -501,18 +501,17 @@ pred_floral_date_df <- pred_floral_date_df %>%
 min(pred_floral_date_df$date_formatted, na.rm = TRUE)
 max(pred_floral_date_df$date_formatted, na.rm = TRUE)
 
+#set peak bloom start and end dates
+bloom_start <- as.Date("2024-04-19")
+bloom_end <- as.Date("2024-05-24")
+
 #plot
 ggplot(pred_floral_date_df, aes(x = date_formatted, y = mean.class, color = plot_type)) +
   geom_line(linewidth = 1.5) +
   geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL, fill = plot_type), alpha = 0.2, color = NA) +
   scale_x_date(date_breaks = "1 month", date_labels = "%b") + # Format x-axis to show Month names (e.g., May, Jun, Jul) 
-  # Add vertical dashed lines for start and end dates
-  geom_vline(xintercept = as.Date("2024-04-19"), linetype = "dashed", color = "steelblue", linewidth = 1) +
-  geom_vline(xintercept = as.Date("2024-05-24"), linetype = "dashed", color = "steelblue", linewidth = 1) +
-  
-  #Add a text label between the lines at the top
-  annotate("text", x = as.Date("2024-05-06"), y = 4.3, 
-           label = "Peak\nBlueberry\nBloom", color = "steelblue") +
+  annotate("rect", xmin = bloom_start, xmax = bloom_end, ymin = -Inf, ymax = Inf, 
+           alpha = .2, fill = "steelblue")+
   labs(
     x = "Month",
     y = "Predicted mean floral\nabundance category\n(log-scaled)",
