@@ -1,0 +1,1047 @@
+---
+title: "glmCH2_clean"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_analysis/rodent-bee-blueberry")
+```
+
+# Load and clean data
+
+```{r}
+#load packages
+library(tidyverse) #data manipulation, visualization etc. (dplyr, ggplot2, tidyr)
+library(DHARMa) #diagnostic tools for mixed regression models
+library(glmmTMB) #fits generalized linear mixed models, including zero-inflated and overdispersed models
+library(car) #tools for regression diagnostics and hypothesis tests
+library(emmeans)   # for estimated marginal means (predictions)
+
+#read in data
+data <- read.csv("06_cleandata/combined_plot_data.csv")
+
+#change character columns to factors
+surveys <- data %>%
+   mutate(
+     site_id = as.factor(site_id),
+     round = as.factor(round),
+     plot_id = as.factor(plot_id),
+     bee_date = as.Date(bee_date),
+     bee_season_type = as.factor(bee_season_type),
+     area = as.factor(area),
+     cover_type = as.factor(cover_type))
+
+#add plot type column and make it a factor
+surveys <- surveys %>% 
+  mutate(plot_type = if_else(plot_id == "d", "ditch", "field"))
+surveys <- surveys %>%
+   mutate(
+     plot_type = as.factor(plot_type))
+
+#scale continuous predictors
+surveys$julian.date_scaled <- as.numeric(scale(surveys$julian.date))
+surveys$bare_perc_scaled <- as.numeric(scale(surveys$bare_perc))
+surveys$grass_perc_scaled <- as.numeric(scale(surveys$grass_perc))
+surveys$forb_perc_scaled <- as.numeric(scale(surveys$forb_perc))
+surveys$grass_forb_perc_scaled <- as.numeric(scale(surveys$grass_forb_perc))
+surveys$grass_h_scaled <- as.numeric(scale(surveys$grass_h))
+surveys$forb_h_scaled <- as.numeric(scale(surveys$forb_h))
+surveys$floral_perc_scaled <- as.numeric(scale(surveys$floral_perc))
+surveys$grass_forb_floral_perc_scaled <- as.numeric(scale(surveys$grass_forb_floral_perc))
+surveys$bombus_floral_perc_scaled <- as.numeric(scale(surveys$bombus_floral_perc))
+surveys$flood_perc_scaled <- as.numeric(scale(surveys$flood_perc))
+surveys$dry_root_perc_scaled <- as.numeric(scale(surveys$dry_root_perc))
+surveys$bryo_perc_scaled <- as.numeric(scale(surveys$bryo_perc))
+surveys$bare_flood_dry_bryo_perc_scaled <- as.numeric(scale(surveys$bare_flood_dry_bryo_perc))
+surveys$floral_richness_scaled <- as.numeric(scale(surveys$floral_richness))
+surveys$bombus_floral_richness_scaled <- as.numeric(scale(surveys$bombus_floral_richness))
+surveys$bombus_floral_abun_scaled <- as.numeric(scale(surveys$bombus_floral_abun))
+surveys$nest_searching_queens_scaled <- as.numeric(scale(surveys$nest_searching_queens))
+surveys$workers_scaled <- as.numeric(scale(surveys$workers))
+surveys$forage_vaco_scaled <- as.numeric(scale(surveys$forage_vaco))
+surveys$num_burrows_scaled <- as.numeric(scale(surveys$num_burrows))
+surveys$num_inactive_burrows_scaled <- as.numeric(scale(surveys$num_inactive_burrows))
+surveys$num_active_dm_scaled <- as.numeric(scale(surveys$num_active_dm))
+surveys$num_dm_size_scaled <- as.numeric(scale(surveys$num_dm_size))
+surveys$num_inactive_dm_scaled <- as.numeric(scale(surveys$num_inactive_dm))
+```
+
+# Choosing which vegetation variables to include as predictors
+
+1.  Use PCA to determine which vegetation variables to include in my models. I don't want to include all of the predictors, since some will be correlated with each other and therefore dilute their effects of the response variables. I am using PCA so I can pick one variable that drives each of the main 3 components, and use these as the predictors in my model.
+
+```{r}
+pca_res <- prcomp(surveys[, c("bare_perc_scaled",
+                              "grass_forb_perc_scaled",
+                              "grass_h_scaled",
+                              "forb_h_scaled",
+                              "bombus_floral_perc_scaled",
+                              "flood_perc_scaled",
+                              "dry_root_perc_scaled",
+                              "bombus_floral_richness_scaled",
+                              "bombus_floral_abun_scaled")], scale. = TRUE)
+summary(pca_res)
+
+#see which variable drives each of the principle components
+print(pca_res$rotation)
+```
+
+-   PCA Results:
+
+    -   PC1: grass_h_scaled (-0.50),forb_h_scaled (-0.48),grass_forb_perc_scaled (-0.42),bombus_floral_richness_scaled (-0.43),bombus_floral_abun_scaled (-0.22)
+
+    -   PC2: bare_perc_scaled (0.51),bombus_floral_abun_scaled (0.52),bombus_floral_perc_scaled (0.40), dry_root_perc_scaled (-0.40)
+
+-   Based on these PCA results and my research question, I am selecting to include the following predictors in my model:
+
+    -   grass_forb_perc_scaled (loads strongly on PCA1)
+
+    -   bombus_floral_abun_scaled (loads strongly on PCA1 &2)
+
+3.  Check pairwise correlations between this reduced set of variables
+
+-   correlation among all the pairs are all near zero --\> predictors are all sufficiently independent! (R\<\<0.7)
+
+```{r}
+cor(surveys[, c("grass_forb_perc_scaled", "bombus_floral_abun_scaled")])
+```
+
+# Nest-searching queens vs vegetation predictors
+
+Plot model with interaction between vegetation variables and plot type to investigate whether the effects of vegetation cover and floral abundance on queen abundance/presence change depending on plot type (ditch vs field).
+
+## Steps
+
+1)  Try different random effect structures.
+
+-   Model without random effect fit data the best.
+
+```{r}
+nsq_glm_veg_full <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled*plot_type+
+                                bombus_floral_abun_scaled*plot_type +
+                              bee_season_type +
+                              (1|area/site_id/plot_id),
+                            ziformula = ~grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                              bee_season_type +
+                              (1|area/site_id/plot_id),  # zero-inflation model
+                            family = poisson, 
+                            data = surveys)
+
+nsq_glm_veg_noArea <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type+
+                              bee_season_type+
+                              (1|site_id/plot_id),
+                            ziformula = ~grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                              bee_season_type +
+                              (1|site_id/plot_id),  # zero-inflation model
+                            family = poisson, 
+                            data = surveys)
+
+nsq_glm_veg_justSite <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                              bee_season_type+
+                              (1|site_id),
+                            ziformula = ~grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type+
+                              bee_season_type +
+                              (1|site_id),  # zero-inflation model
+                            family = poisson,
+                            data = surveys)
+
+nsq_glm_veg_noRE <- glmmTMB(nest_searching_queens ~ grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                              bee_season_type,
+                            ziformula = ~grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                              bee_season_type,  # zero-inflation model
+                            family = poisson,
+                            data = surveys)
+
+#compare models
+anova(nsq_glm_veg_noRE, nsq_glm_veg_justSite, nsq_glm_veg_noArea, nsq_glm_veg_full)
+##no random effect model is best, followed by just site model
+```
+
+2)  Check diagnostics of model
+
+-   look good
+
+```{r}
+#simulate residuals
+residuals_nsq_glm_veg_noRE <- simulateResiduals(fittedModel = nsq_glm_veg_noRE, plot = TRUE)
+```
+
+3)  Plot results
+
+```{r}
+summary(nsq_glm_veg_noRE)
+```
+
+## Plots
+
+Plot type (ditch vs field)
+
+Conditional
+
+```{r}
+# Create newdata with discrete factor levels for bee_season_type
+nsq_data_plottype <- data.frame(
+  grass_forb_perc_scaled = mean(surveys$grass_forb_perc_scaled),
+  bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled),
+  bee_season_type = "nestsearching",
+  plot_type = factor(c("ditch", "field"), levels = levels(surveys$plot_type))
+)
+
+# Get predicted zero probabilities and standard errors
+pred_nsq_plottype_cond <- predict(nsq_glm_veg_noRE,
+                            newdata = nsq_data_plottype,
+                            type = "link",
+                            se.fit = TRUE) 
+
+# Combine predictions with data frame
+pred_nsq_plottype_df <- cbind(nsq_data_plottype,
+                 cond_fit_log = pred_nsq_plottype_cond$fit,
+                 cond_se_log = pred_nsq_plottype_cond$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_nsq_plottype_df <- pred_nsq_plottype_df %>%
+  mutate(
+    cond_fit = exp(cond_fit_log),
+    cond_lower = exp(cond_fit_log - 1.96 * cond_se_log),
+    cond_upper = exp(cond_fit_log + 1.96 * cond_se_log)
+  )
+
+#Plot
+ggplot(pred_nsq_plottype_df, aes(x = plot_type, y = cond_fit)) +
+  geom_point(size = 8) +
+  geom_errorbar(aes(ymin = cond_lower, ymax = cond_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
+  labs(x = "Plot type",
+       y = "Predicted mean NSQ\ncount (per plot)") +
+  theme_classic(base_size = 23)
+```
+
+Zero-inflated model:
+
+```{r}
+# Predictions for ZI model 
+pred_nsq_plottype_zi <- predict(nsq_glm_veg_noRE, 
+                                newdata = nsq_data_plottype, 
+                                type = "zlink",
+                              se.fit = TRUE)
+
+# Combine predictions and transform to response scale (by applying the inverse logit (plogit))
+pred_nsq_plottype_zi_df <- cbind(
+  nsq_data_plottype,
+  zi_fit = plogis(pred_nsq_plottype_zi$fit),
+  zi_lower = plogis(pred_nsq_plottype_zi$fit - 1.96 * pred_nsq_plottype_zi$se.fit),
+  zi_upper = plogis(pred_nsq_plottype_zi$fit + 1.96 * pred_nsq_plottype_zi$se.fit)
+)
+
+# Plot zi predictions
+ggplot(pred_nsq_plottype_zi_df, aes(x = plot_type, y = zi_fit)) +
+  geom_point(size = 8) +
+  geom_errorbar(aes(ymin = zi_lower, ymax = zi_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
+  labs(x = "Plot type",
+       y = "Predicted probability\nof structural zeros") +
+  theme_classic(base_size = 23) 
+
+```
+
+Grass and forb % cover
+
+Conditional model:
+
+```{r}
+# Define a sequence of values for grass_forb_perc_scaled across its observed range
+grass_seq <- seq(
+  from = min(surveys$grass_forb_perc_scaled, na.rm = TRUE),
+  to = max(surveys$grass_forb_perc_scaled, na.rm = TRUE),
+  length.out = 50
+)
+
+#create new data gri
+nsq_data_veg<- expand.grid(
+  grass_forb_perc_scaled = grass_seq,
+  plot_type = unique(surveys$plot_type),
+  bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled, na.rm = TRUE),
+  bee_season_type = "nestsearching")
+
+
+# Get predicted conditional probabilities and standard errors
+pred_nsq_veg_cond <- predict(nsq_glm_veg_noRE,
+                            newdata = nsq_data_veg,
+                            type = "link",
+                            se.fit = TRUE)
+
+# Combine predictions with data frame
+pred_nsq_veg_df <- cbind(nsq_data_veg,
+                 cond_fit_log = pred_nsq_veg_cond$fit,
+                 cond_se_log = pred_nsq_veg_cond$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_nsq_veg_df <- pred_nsq_veg_df %>%
+  mutate(
+    cond_fit = exp(cond_fit_log),
+    cond_lower = exp(cond_fit_log - 1.96 * cond_se_log),
+    cond_upper = exp(cond_fit_log + 1.96 * cond_se_log)
+  )
+
+#Plot
+ggplot(pred_nsq_veg_df, aes(x = grass_forb_perc_scaled, y = cond_fit, color = plot_type)) +
+  geom_line(linewidth = 1.5) +
+  geom_ribbon(aes(ymin = cond_lower, ymax = cond_upper), alpha = 0.2) +
+  labs(x = "Grass and Forb % (scaled)",
+       y = "Predicted mean NSQ\ncount (per plot)") +
+  theme_classic(base_size = 23)
+```
+
+Zero-inflated model:
+
+```{r}
+# Get predicted zero probabilities and standard errors
+pred_nsq_veg_zi <- predict(nsq_glm_veg_noRE,
+                            newdata = nsq_data_veg,
+                            type = "zlink",
+                            se.fit = TRUE) 
+
+# Combine predictions and transform to response scale (by applying the inverse logit (plogit))
+pred_nsq_veg_df <- cbind(
+  nsq_data_veg,
+  zi_fit = plogis(pred_nsq_veg_zi$fit),
+  zi_lower = plogis(pred_nsq_veg_zi$fit - 1.96 * pred_nsq_veg_zi$se.fit),
+  zi_upper = plogis(pred_nsq_veg_zi$fit + 1.96 * pred_nsq_veg_zi$se.fit)
+)
+
+
+ggplot(pred_nsq_veg_df, aes(x = grass_forb_perc_scaled, y = zi_fit, color = plot_type)) +
+  geom_line(linewidth = 1.5) +
+  geom_ribbon(aes(ymin = zi_lower, ymax = zi_upper), alpha = 0.2) +
+  labs(x = "Grass and Forb % (scaled)",
+       y = "Probability of\nExcess Zeros") +
+  theme_classic(base_size = 23)
+```
+
+Floral abundance
+
+Conditional model:
+
+```{r}
+# Define a sequence of values for grass_forb_perc_scaled across its observed range
+floral_seq <- seq(
+  from = min(surveys$bombus_floral_abun_scaled, na.rm = TRUE),
+  to = max(surveys$bombus_floral_abun_scaled, na.rm = TRUE),
+  length.out = 50
+)
+
+#create new data gri
+nsq_data_floral<- expand.grid(
+  grass_forb_perc_scaled = mean(surveys$bombus_floral_abun_scaled, na.rm = TRUE),
+  plot_type = unique(surveys$plot_type),
+  bombus_floral_abun_scaled = floral_seq,
+  bee_season_type = "nestsearching"
+)
+
+# Get predicted conditional probabilities and standard errors
+pred_nsq_floral_cond <- predict(nsq_glm_veg_noRE,
+                            newdata = nsq_data_floral,
+                            type = "link",
+                            se.fit = TRUE)
+
+# Combine predictions with data frame
+pred_nsq_floral_df <- cbind(nsq_data_floral,
+                 cond_fit_log = pred_nsq_floral_cond$fit,
+                 cond_se_log = pred_nsq_floral_cond$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_nsq_floral_df <- pred_nsq_floral_df %>%
+  mutate(
+    cond_fit = exp(cond_fit_log),
+    cond_lower = exp(cond_fit_log - 1.96 * cond_se_log),
+    cond_upper = exp(cond_fit_log + 1.96 * cond_se_log)
+  )
+
+#plot
+ggplot(pred_nsq_floral_df, aes(x = bombus_floral_abun_scaled, y = cond_fit, color = plot_type)) +
+  geom_line(linewidth = 1.5) +
+  geom_ribbon(aes(ymin = cond_lower, ymax = cond_upper), alpha = 0.2) +
+  labs(
+       x = "Floral abundance (scaled)",
+       y = "Predicted mean NSQ\ncount (per plot)") +
+  theme_classic(base_size = 23)
+```
+
+Zero-inflated model:
+
+```{r}
+# Get predicted zero probabilities and standard errors
+pred_nsq_floral_zi <- predict(nsq_glm_veg_noRE,
+                            newdata = nsq_data_floral,
+                            type = "zlink",
+                            se.fit = TRUE) 
+
+# Combine predictions and transform to response scale (by applying the inverse logit (plogit))
+pred_nsq_floral_df <- cbind(
+  nsq_data_floral,
+  zi_fit = plogis(pred_nsq_floral_zi$fit),
+  zi_lower = plogis(pred_nsq_floral_zi$fit - 1.96 * pred_nsq_floral_zi$se.fit),
+  zi_upper = plogis(pred_nsq_floral_zi$fit + 1.96 * pred_nsq_floral_zi$se.fit)
+)
+
+#plot
+ggplot(pred_nsq_floral_df, aes(x = bombus_floral_abun_scaled, y = zi_fit, color = plot_type)) +
+  geom_line(linewidth = 1.5) +
+  geom_ribbon(aes(ymin = zi_lower, ymax = zi_upper), alpha = 0.2) +
+  labs(
+       x = "Floral abundance (scaled)",
+       y = "Probability of\nExcess Zeros") +
+  theme_classic(base_size = 23)
+```
+
+Season
+
+Conditional model:
+
+```{r}
+# Create newdata with discrete factor levels for bee_season_type
+nsq_data_season <- data.frame(
+  grass_forb_perc_scaled = mean(surveys$grass_forb_perc_scaled),
+  bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled),
+  bee_season_type = factor(c("nestsearching", "worker"), levels = levels(surveys$bee_season_type)),
+  plot_type = "ditch"
+)
+
+# Get predicted zero probabilities and standard errors
+pred_nsq_season_cond <- predict(nsq_glm_veg_noRE,
+                            newdata = nsq_data_season,
+                            type = "link",
+                            se.fit = TRUE) 
+
+# Combine predictions with data frame
+pred_nsq_season_df <- cbind(nsq_data_season,
+                 cond_fit_log = pred_nsq_season_cond$fit,
+                 cond_se_log = pred_nsq_season_cond$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_nsq_season_df <- pred_nsq_season_df %>%
+  mutate(
+    cond_fit = exp(cond_fit_log),
+    cond_lower = exp(cond_fit_log - 1.96 * cond_se_log),
+    cond_upper = exp(cond_fit_log + 1.96 * cond_se_log)
+  )
+
+ggplot(pred_nsq_season_df, aes(x = bee_season_type, y = cond_fit)) +
+  geom_point(size = 8) +
+  geom_errorbar(aes(ymin = cond_lower, ymax = cond_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
+  labs(x = "Bee season",
+       y = "Predicted mean NSQ\ncount (per plot)") +
+  theme_classic(base_size = 23)
+```
+
+Zero-inflated model:
+
+```{r}
+# Get predicted zero probabilities and standard errors
+pred_nsq_season_zi <- predict(nsq_glm_veg_noRE,
+                            newdata = nsq_data_season,
+                            type = "zprob",
+                            se.fit = TRUE) 
+
+# Combine predictions with data frame
+pred_nsq_season_df <- cbind(nsq_data_season,
+                 zi_fit = pred_nsq_season_zi$fit,
+                 zi_se = pred_nsq_season_zi$se.fit)
+
+#plot
+ggplot(pred_nsq_season_df, aes(x = bee_season_type, y = zi_fit)) +
+  geom_point(size = 8) +
+  geom_errorbar(aes(ymin = zi_fit - 1.96*zi_se, ymax = zi_fit + 1.96*zi_se), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
+  labs(x = "Bee season",
+       y = "Probability of\nExcess Zeros") +
+  theme_classic(base_size = 23)
+```
+
+## Findings
+
+Conditional model (predicts abundance of nest-searching queens at sites where queens are present). Ditch is reference plot type.
+
+-   Significant positive effect of grass+forb% on number of NSQ in ditch plots
+
+-   Marginal negative effect of plot type on \# NSQ (fewer queens in field)
+
+Zero-inflation model (predicts presence/absence of nest-searching queens).
+
+-   Significant positive effect of floral abundance in **field** plots on NSQ presence (fewer zeros when there are more flowers in the field)
+
+-   Marginal negative effect of floral abundance in ditch plots on NSQ presence (more zeros when there are more flowers along the ditch)
+
+# Workers vs. vegetation predictors
+
+## Steps
+
+1)  Try random effect structures with poisson.
+
+-   model with plot nested in site (no area) is best
+
+```{r}
+workers_veg_full <- glmmTMB(workers ~ grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                              bee_season_type+
+                              (1|area/site_id/plot_id),
+                            family = poisson, 
+                            data = surveys)
+
+workers_veg_noArea <- glmmTMB(workers ~ grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                                bee_season_type +
+                              (1|site_id/plot_id),
+                            family = poisson, 
+                            data = surveys)
+
+workers_veg_siteOnly <- glmmTMB(workers ~ grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                                bee_season_type +
+                              (1|site_id),
+                            family = poisson, 
+                            data = surveys)
+workers_veg_noPlot <- glmmTMB(workers ~ grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                                bee_season_type +
+                              (1|area/site_id),
+                            family = poisson, 
+                            data = surveys)
+
+#compare models
+anova(workers_veg_full, workers_veg_noArea, workers_veg_siteOnly, workers_veg_noPlot)
+##no area is best
+```
+
+2)  Check diagnostics
+
+-   quantile test shows significant deviation
+
+```{r}
+residuals_workers_veg_noArea <- simulateResiduals(fittedModel = workers_veg_noArea, plot = TRUE)
+```
+
+3)  Try negative binomial and check diagnostics.
+
+-   diagnostic plots look good!
+
+```{r}
+workers_veg_noArea_nbin <- glmmTMB(workers ~ grass_forb_perc_scaled*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                                bee_season_type +
+                              (1|site_id/plot_id),
+                            family = nbinom2, 
+                            data = surveys)
+
+#check diagnostics
+#simulate residuals
+residuals_workers_veg_noArea_nbin <- simulateResiduals(fittedModel = workers_veg_noArea_nbin, plot = TRUE)
+```
+
+4.  Plot results.
+
+```{r}
+summary(workers_veg_noArea_nbin)
+```
+
+## Plots
+
+Plot type
+
+```{r}
+# Create newdata with discrete factor levels for bee_season_type
+worker_data_plottype <- data.frame(
+  grass_forb_perc_scaled = mean(surveys$grass_forb_perc_scaled),
+  bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled),
+  bee_season_type = "worker",
+  plot_type = factor(c("ditch", "field"), levels = levels(surveys$plot_type))
+)
+
+# Get predicted probabilities and standard errors
+pred_worker_plottype <- predict(workers_veg_noArea_nbin,
+                            newdata = worker_data_plottype,
+                            se.fit = TRUE,
+                            re.form = NA,
+                            type = "link") 
+
+# Combine predictions with data frame
+pred_worker_plottype_df <- cbind(worker_data_plottype,
+                 fit_log = pred_worker_plottype$fit,
+                 se_log = pred_worker_plottype$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_worker_plottype_df <- pred_worker_plottype_df %>%
+  mutate(
+    fit = exp(fit_log),
+    lower = exp(fit_log - 1.96 * se_log),
+    upper = exp(fit_log + 1.96 * se_log)
+  )
+
+#Plot
+ggplot(pred_worker_plottype_df, aes(x = plot_type, y = fit)) +
+  geom_point(size = 8) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
+  labs(x = "Plot type",
+       y = "Predicted mean worker\ncount (per plot)") +
+  theme_classic(base_size = 23)
+```
+
+Vegetation
+
+```{r}
+#create new data grid
+worker_data_veg<- expand.grid(
+  grass_forb_perc_scaled = grass_seq,
+  plot_type = unique(surveys$plot_type),
+  bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled, na.rm = TRUE),
+  bee_season_type = "worker"
+)
+
+# Get predicted probabilities and standard errors
+pred_worker_veg <- predict(workers_veg_noArea_nbin,
+                            newdata = worker_data_veg,
+                            se.fit = TRUE,
+                            re.form = NA,
+                           type = "link")
+
+# Combine predictions with data frame
+pred_worker_veg_df <- cbind(worker_data_veg,
+                 fit_log = pred_worker_veg$fit,
+                 se_log = pred_worker_veg$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_worker_veg_df <- pred_worker_veg_df %>%
+  mutate(
+    fit = exp(fit_log),
+    lower = exp(fit_log - 1.96 * se_log),
+    upper = exp(fit_log + 1.96 * se_log)
+  )
+
+#Plot
+ggplot(pred_worker_veg_df, aes(x = grass_forb_perc_scaled, y = fit, color = plot_type)) +
+  geom_line(size = 1.5) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
+  labs(x = "Grass and Forb % (scaled)",
+       y = "Predicted mean worker\ncount (per plot)") +
+  theme_classic(base_size = 23)
+```
+
+Floral abundance
+
+```{r}
+#create new data grid
+worker_data_floral<- expand.grid(
+  grass_forb_perc_scaled = mean(surveys$grass_forb_perc_scaled, na.rm = TRUE),
+  plot_type = unique(surveys$plot_type),
+  bombus_floral_abun_scaled = floral_seq,
+  bee_season_type = "worker"
+)
+
+# Get predicted probabilities and standard errors
+pred_worker_floral <- predict(workers_veg_noArea_nbin,
+                            newdata = worker_data_floral,
+                            se.fit = TRUE,
+                            re.form = NA,
+                            type = "link")
+
+# Combine predictions with data frame
+pred_worker_floral_df <- cbind(worker_data_floral,
+                 fit_log = pred_worker_floral$fit,
+                 se_log = pred_worker_floral$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_worker_floral_df <- pred_worker_floral_df %>%
+  mutate(
+    fit = exp(fit_log),
+    lower = exp(fit_log - 1.96 * se_log),
+    upper = exp(fit_log + 1.96 * se_log)
+  )
+
+#Plot
+ggplot(pred_worker_floral_df, aes(x = bombus_floral_abun_scaled, y = fit, color = plot_type)) +
+  geom_line(size = 1.5) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
+  labs(x = "Floral abundance (scaled)",
+       y = "Predicted mean worker\ncount (per plot)") +
+  theme_classic(base_size = 23)
+```
+
+Season
+
+```{r}
+#create new data grid
+worker_data_season<- expand.grid(
+  grass_forb_perc_scaled = mean(surveys$grass_forb_perc_scaled, na.rm = TRUE),
+  plot_type = "ditch",
+  bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled, na.rm = TRUE),
+  bee_season_type = unique(surveys$bee_season_type)
+)
+
+# Get predicted probabilities and standard errors
+pred_worker_season <- predict(workers_veg_noArea_nbin,
+                            newdata = worker_data_season,
+                            se.fit = TRUE,
+                            re.form = NA,
+                            type = "link")
+
+# Combine predictions with data frame
+pred_worker_season_df <- cbind(worker_data_season,
+                 fit_log = pred_worker_season$fit,
+                 se_log = pred_worker_season$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_worker_season_df <- pred_worker_season_df %>%
+  mutate(
+    fit = exp(fit_log),
+    lower = exp(fit_log - 1.96 * se_log),
+    upper = exp(fit_log + 1.96 * se_log)
+  )
+
+#Plot
+ggplot(pred_worker_season_df, aes(x = bee_season_type, y = fit)) +
+  geom_point(size = 8) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
+  labs(x = "Bee season",
+       y = "Predicted mean worker\ncount (per plot)") +
+  theme_classic(base_size = 23)
+```
+
+## Findings
+
+No significant effect of any variables on worker abundance/presence.
+
+# Floral vs. plot type
+
+## Steps
+
+1.  Try random effect structures
+
+```{r}
+#Load packages needed for CLM
+library(ordinal)
+library(MASS)
+
+surveys$bombus_floral_abun <- factor(surveys$bombus_floral_abun, ordered = TRUE)
+
+floral_full <- clmm(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled*plot_type +
+                         julian.date_scaled + 
+                         (1|area/site_id/plot_id),
+                       link = "logit", 
+                       data = surveys)
+
+floral_noArea <- clmm(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled*plot_type +
+                         julian.date_scaled + 
+                         (1|site_id/plot_id),
+                       link = "logit", 
+                       data = surveys)
+
+#floral_plotOnly <- clmm(as.factor(bombus_floral_abun) ~ plot_type +
+ #                        julian.date_scaled + 
+  #                       (1|plot_id),
+   #                    link = "logit", 
+    #                   data = surveys)
+##can't use since there are only 2 levels
+
+floral_siteOnly <- clmm(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled*plot_type +
+                         julian.date_scaled + 
+                         (1|site_id),
+                       link = "logit", 
+                       data = surveys)
+
+floral_AreaPlot <- clmm(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled*plot_type +
+                         julian.date_scaled + 
+                         (1|area/plot_id),
+                       link = "logit", 
+                       data = surveys)
+floral_noRE <- polr(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled*plot_type +
+                         julian.date_scaled,
+                       method = "logistic", 
+                       data = surveys)
+
+#compare models AIC
+AIC(floral_full, floral_noArea, floral_siteOnly, floral_AreaPlot, floral_noRE)
+##shows that model without random effect has best fit
+```
+
+2.  Try including julianDate \* plot_type
+
+-   determined that model with interaction term was better
+
+```{r}
+floral_noRE_interaction <- polr(as.factor(bombus_floral_abun) ~ grass_forb_perc_scaled*plot_type +
+                                  plot_type*julian.date_scaled,
+                       method = "logistic", 
+                       data = surveys)
+AIC(floral_noRE_interaction, floral_noRE)
+##interaction is better
+```
+
+4.  Look at output
+
+```{r}
+summary(floral_noRE_interaction)
+```
+
+## Plots
+
+Vegetation
+
+```{r}
+# Get predicted probabilities per category with CIs
+pred_floral_veg <- emmeans(
+  floral_noRE_interaction,
+  ~ grass_forb_perc_scaled * plot_type,
+  at = list(grass_forb_perc_scaled = grass_seq),
+  mode = "mean.class" ## The expected floral abundance category (mean ordinal score)
+)
+
+# Convert to dataframe
+pred_floral_veg_df <- as.data.frame(pred_floral_veg)
+
+#plot
+ggplot(pred_floral_veg_df, aes(x = grass_forb_perc_scaled, y = mean.class, color = plot_type)) +
+  geom_line(size = 1.5) +
+  geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL, fill = plot_type), alpha = 0.2, color = NA) +
+  labs(
+    x = "% grass/forb (scaled)",
+    y = "Predicted mean floral\nabundance category\n(log-scaled)",
+    color = "Plot Type",
+    fill = "Plot Type"
+  ) +
+  theme_classic(base_size = 23)
+```
+
+Season
+
+```{r}
+# Sequence of Julian dates
+date_seq <- seq(
+  from = min(surveys$julian.date_scaled, na.rm = TRUE),
+  to = max(surveys$julian.date_scaled, na.rm = TRUE),
+  length.out = 50
+)
+
+# Get predicted probabilities per category with CIs
+pred_floral_date <- emmeans(
+  floral_noRE_interaction,
+  ~ julian.date_scaled * plot_type,
+  at = list(julian.date_scaled = date_seq),
+  mode = "mean.class" ## The expected floral abundance category (mean ordinal score)
+)
+
+# Convert to dataframe
+pred_floral_date_df <- as.data.frame(pred_floral_date)
+
+#plot
+ggplot(pred_floral_date_df, aes(x = julian.date_scaled, y = mean.class, color = plot_type)) +
+  geom_line(size = 1.5) +
+  geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL, fill = plot_type), alpha = 0.2, color = NA) +
+  labs(
+    x = "Julian date (scaled)",
+    y = "Predicted mean floral\nabundance category\n(log-scaled)",
+    color = "Plot type",
+    fill = "Plot type"
+  ) +
+  theme_classic(base_size = 23)
+```
+
+## Findings
+
+-   Julian date is a significant predictor: floral abundance tends to increase as season progresses.
+-   The effect of Julian date changes depending on plot type (significant interaction).
+    -   In the ditch, floral abundance increases throughout the season.
+
+    -   In the field, floral abundance decreases throughout the season.
+-   Higher % cover increases the odds of higher floral abundance, especially in ditch plots (although this is not a significant finding)
+
+# Rodent burrows vs. vegetation predictors
+
+## Steps
+
+1)  Try random effect structures with poisson.
+
+-   model with site only is best
+
+```{r}
+
+rodent_veg_areaOnly <- glmmTMB(num_burrows ~ cover_type*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                              (1|area),
+                            family = poisson, 
+                            data = surveys)
+
+rodent_veg_siteOnly <- glmmTMB(num_burrows ~ cover_type*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                              (1|site_id),
+                            family = poisson, 
+                            data = surveys)
+rodent_veg_siteArea <- glmmTMB(num_burrows ~ cover_type*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                              (1|area/site_id),
+                            family = poisson, 
+                            data = surveys)
+
+#compare models
+anova(rodent_veg_areaOnly, rodent_veg_siteOnly, rodent_veg_siteArea)
+##site only is best
+```
+
+2)  Check diagnostics
+
+-   KS test shows significant deviation
+
+```{r}
+residuals_rodent_veg_siteOnly <- simulateResiduals(fittedModel = rodent_veg_siteOnly, plot = TRUE)
+```
+
+3)  Try negative binomial and check diagnostics.
+
+-   diagnostic plots look good!
+
+```{r}
+rodent_veg_siteOnly_nbin <- glmmTMB(num_burrows ~ cover_type*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                              (1|site_id),
+                            family = nbinom2, 
+                            data = surveys)
+
+#check diagnostics
+#simulate residuals
+residuals_rodent_veg_siteOnly_nbin <- simulateResiduals(fittedModel = rodent_veg_siteOnly_nbin, plot = TRUE)
+```
+
+4.  Plot results.
+
+```{r}
+summary(rodent_veg_siteOnly_nbin)
+```
+
+## Plots
+
+Plot type
+
+```{r}
+# Create newdata with discrete factor levels for bee_season_type
+rodent_data_plottype <- data.frame(
+  cover_type = "grass",
+  bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled),
+  plot_type = factor(c("ditch", "field"), levels = levels(surveys$plot_type))
+)
+
+# Get predicted probabilities and standard errors
+pred_rodent_plottype <- predict(rodent_veg_siteOnly_nbin,
+                            newdata = rodent_data_plottype,
+                            se.fit = TRUE,
+                            re.form = NA,
+                            type = "link") 
+
+# Combine predictions with data frame
+pred_rodent_plottype_df <- cbind(rodent_data_plottype,
+                 fit_log = pred_rodent_plottype$fit,
+                 se_log = pred_rodent_plottype$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_rodent_plottype_df <- pred_rodent_plottype_df %>%
+  mutate(
+    fit = exp(fit_log),
+    lower = exp(fit_log - 1.96 * se_log),
+    upper = exp(fit_log + 1.96 * se_log)
+  )
+
+#Plot
+ggplot(pred_rodent_plottype_df, aes(x = plot_type, y = fit)) +
+  geom_point(size = 8) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
+  labs(x = "Plot type",
+       y = "Predicted mean burrow\ncount (per plot)") +
+  theme_classic(base_size = 23)
+```
+
+Vegetation
+
+```{r}
+#create new data grid
+rodent_data_veg<- expand.grid(
+  cover_type = unique(surveys$cover_type),
+  plot_type = unique(surveys$plot_type),
+  bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled, na.rm = TRUE)
+)
+
+# Get predicted probabilities and standard errors
+pred_rodent_veg <- predict(rodent_veg_siteOnly_nbin,
+                            newdata = rodent_data_veg,
+                            se.fit = TRUE,
+                            re.form = NA,
+                           type = "link")
+
+# Combine predictions with data frame
+pred_rodent_veg_df <- cbind(rodent_data_veg,
+                 fit_log = pred_rodent_veg$fit,
+                 se_log = pred_rodent_veg$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_rodent_veg_df <- pred_rodent_veg_df %>%
+  mutate(
+    fit = exp(fit_log),
+    lower = exp(fit_log - 1.96 * se_log),
+    upper = exp(fit_log + 1.96 * se_log)
+  )
+
+# Plot conditional predictions
+ggplot(pred_rodent_veg_df, aes(x = plot_type, y = fit, color = cover_type)) +
+  geom_point(size=8, position = position_dodge(0.6)) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5)+
+  labs(x = "Plot type",
+       y = "Predicted mean burrow\ncount (per plot)") +
+  theme_classic(base_size = 23)
+```
+
+Floral abundance
+
+```{r}
+#create new data grid
+rodent_data_floral<- expand.grid(
+  cover_type = "grass",
+  plot_type = unique(surveys$plot_type),
+  bombus_floral_abun_scaled = floral_seq
+)
+
+# Get predicted probabilities and standard errors
+pred_rodent_floral <- predict(rodent_veg_siteOnly_nbin,
+                            newdata = rodent_data_floral,
+                            se.fit = TRUE,
+                            re.form = NA,
+                            type = "link")
+
+# Combine predictions with data frame
+pred_rodent_floral_df <- cbind(rodent_data_floral,
+                 fit_log = pred_rodent_floral$fit,
+                 se_log = pred_rodent_floral$se.fit)
+
+#calculate predictions and confidence intervals on response scale (not log scale)
+pred_rodent_floral_df <- pred_rodent_floral_df %>%
+  mutate(
+    fit = exp(fit_log),
+    lower = exp(fit_log - 1.96 * se_log),
+    upper = exp(fit_log + 1.96 * se_log)
+  )
+
+#Plot
+ggplot(pred_worker_floral_df, aes(x = bombus_floral_abun_scaled, y = fit, color = plot_type)) +
+  geom_line(size = 1.5) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
+  labs(x = "Floral abundance (scaled)",
+       y = "Predicted mean burrow\ncount (per plot)") +
+  theme_classic(base_size = 23)
+```
+
+## Findings
+
+At field plots, there are more rodent burrows in grassy sites than in bare sites. No siginficant effect of floral abundance on rodent burrows in either plot type.
