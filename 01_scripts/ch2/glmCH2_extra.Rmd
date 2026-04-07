@@ -1,0 +1,249 @@
+---
+title: "glmCH2_extra"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_analysis/rodent-bee-blueberry")
+```
+
+Create dataframe where each row represents one survey event
+
+Load dataframes
+
+```{r}
+#load packages
+library(tidyverse)
+library(lubridate) #package used to generate julian date from calendar date
+
+
+#read in data
+bee <- read.csv("06_cleandata/bee_clean.csv")
+floral <- read.csv("06_cleandata/floral_clean.csv")
+rodent <- read.csv("06_cleandata/rodent_clean.csv")
+veg <- read.csv("06_cleandata/veg_clean.csv")
+site_info <- read.csv("06_cleandata/site_info_clean.csv")
+surveys <- read.csv("06_cleandata/surveys.csv")
+```
+
+Fix dataframe structure
+
+```{r}
+#bee
+str(bee)
+bee$date <- ymd(bee$date)
+
+#floral
+str(floral)
+floral$date <- ymd(floral$date)
+
+#rodent
+str(rodent)
+rodent$date_day <- ymd(rodent$date_day)
+
+#veg
+str(veg)
+veg$date <- ymd(veg$date) 
+
+#site_info
+str(site_info)
+
+#surveys
+str(surveys)
+surveys <- surveys %>%
+  rename(site_id = site)
+surveys <- surveys %>%
+  rename(plot_id = plots)
+```
+
+# Add date of bee survey to the associated row in the survey data, based on site, plot and round.
+
+```{r}
+# Extract relevant bee dates first 
+bee_dates <- bee %>% 
+  select(site_id, plot_id, round, date) %>% 
+  rename(bee_date = date)
+
+#Make bee_dates file only contain one row for each site/plot/round/date combination 
+bee_dates_unique <- bee_dates %>% 
+  group_by(site_id, round) %>% 
+  summarise(bee_date = first(bee_date), .groups = "drop") #choose first date since all dates within a site/plot/round combo are the same
+
+#Join bee_date onto survey data
+
+surveys <- surveys %>% left_join(bee_dates_unique, by = c("site_id", "round"))
+
+#Need to manually add in the dates for 2 surveys where I didn't find any bees (surjit_168 during 2025_r2, bks_neaves during 2025_r1, bks_56 during 2024_r3, bks_56 during 2025_r3, bks_neaves during 2025_r3, surjit_169 during 2025_r3, sandhu_ladnertrunk during 2025_r3)
+missing_dates <- tibble::tribble( 
+  ~site_id, ~round, ~bee_date, 
+  "surjit_168", "2025_r2", as.Date("2025-05-13"),
+  "bks_neaves", "2025_r1", as.Date("2025-04-14"), 
+  "bks_56", "2024_r3", as.Date("2025-06-21"), 
+  "bks_56", "2025_r3", as.Date("2025-06-18"),
+  "bks_neaves", "2025_r3", as.Date("2025-06-24"),
+  "surjit_168", "2025_r3", as.Date("2025-06-25"), 
+  "sandhu_ladnertrunk", "2025_r3", as.Date("2025-06-23") )
+
+surveys <- surveys %>% rows_patch(missing_dates, by = c("site_id", "round"))
+
+#add column for julian date 
+surveys$julian.date <- yday(surveys$bee_date)
+```
+
+# Add area to survey dataframe based on site_id
+
+```{r}
+surveys <- surveys %>%
+  left_join(site_info %>% select(site_id, area, cover_type), by = c("site_id"))
+
+```
+
+# Adding all the desired variables summarized at plot level as columns to the surveys dataframe
+
+The random effect structure I first want to try in my models is to have plot nested within area.Therefore, I need to get all my desired variables to be at plot level, not transect or quadrat.
+
+## The desired variables are:
+
+Bee caste
+
+Bee abundance
+
+```{r}
+# 1. Summarize your actual bee observations
+bee_counts <- bee %>%
+  filter(caste %in% c("q", "w")) %>%
+  group_by(site_id, round, plot_id, caste) %>%
+  summarise(n_bees = n(), .groups = "drop")
+
+# 2. Use your existing 'surveys' dataframe as the base
+# This ensures you ONLY have rows for actual survey events
+surveys <- surveys %>%
+  # Create a slot for both 'q' and 'w' for every real survey row
+  crossing(caste = c("q", "w")) %>% 
+  # Join the counts
+  left_join(bee_counts, by = c("site_id", "round", "plot_id", "caste")) %>%
+  # Fill the zeros for the surveys where that caste wasn't seen
+  mutate(n_bees = replace_na(n_bees, 0))
+```
+
+Run model
+
+```{r}
+#Load packages
+library(DHARMa) #diagnostic tools for mixed regression models
+library(glmmTMB) #fits generalized linear mixed models, including zero-inflated and overdispersed models
+
+#clean surveys dataframe and scale continuous predictors
+
+#change character columns to factors
+surveys <- surveys %>%
+   mutate(
+     site_id = as.factor(site_id),
+     round = as.factor(round),
+     plot_id = as.factor(plot_id),
+     bee_date = as.Date(bee_date),
+     area = as.factor(area),
+     cover_type = as.factor(cover_type))
+
+#add plot type column and make it a factor
+surveys <- surveys %>% 
+  mutate(plot_type = if_else(plot_id == "d", "ditch", "field"))
+surveys <- surveys %>%
+   mutate(
+     plot_type = as.factor(plot_type))
+
+#scale continuous predictors
+surveys$julian.date_scaled <- as.numeric(scale(surveys$julian.date))
+surveys$n_bees_scaled <- as.numeric(scale(surveys$n_bees))
+```
+
+Try different random effects structures. Use zero-inflated model to account for high abundance of zeros in the dataset.
+
+```{r}
+{r}
+caste_glm_full <- glmmTMB(n_bees ~ caste*julian.date_scaled*plot_type +
+                            cover_type +
+                              (1|area/site_id/plot_id),
+                          ziformula = ~ caste*julian.date_scaled*plot_type +
+                            cover_type +
+                              (1|area/site_id/plot_id),  # zero-inflation model
+                            family = poisson, 
+                            data = surveys)
+
+caste_glm_noArea <- glmmTMB(n_bees ~ caste*julian.date_scaled*plot_type +
+                            cover_type +
+                              (1|site_id/plot_id),
+                            ziformula = ~ caste*julian.date_scaled*plot_type +
+                            cover_type +
+                              (1|site_id/plot_id),
+                            family = poisson, 
+                            data = surveys)
+
+caste_glm_justSite <- glmmTMB(n_bees ~ caste*julian.date_scaled*plot_type +
+                            cover_type +
+                              (1|site_id),
+                            ziformula = ~ caste*julian.date_scaled*plot_type +
+                            cover_type +
+                              (1|site_id),
+                            family = poisson,
+                            data = surveys)
+
+caste_glm_noRE <- glmmTMB(n_bees ~ caste*julian.date_scaled*plot_type +
+                            cover_type,
+                          ziformula = ~ caste*julian.date_scaled*plot_type +
+                            cover_type,
+                            family = poisson,
+                            data = surveys)
+
+#compare models
+anova(caste_glm_noRE, caste_glm_justSite, caste_glm_noArea, caste_glm_full)
+##no area model is best
+```
+
+2)  Check diagnostics of model
+
+-   look good
+
+```{r}
+#simulate residuals
+residuals_caste_glm_noArea <- simulateResiduals(fittedModel = caste_glm_noArea, plot = TRUE)
+```
+
+3)  Plot results
+
+```{r}
+summary(caste_glm_noArea)
+```
+
+Use emmeans to look at estimates
+
+```{r}
+library(emmeans)
+
+#compare the seasonal slopes for each caste in each plot type
+emtrends(caste_glm_noArea, ~ caste | plot_type, var = "julian.date_scaled")
+
+#predicted counts for each group at the mean date
+emmeans(caste_glm_noArea, ~ caste * plot_type)
+```
+
+Plots
+
+```{r}
+#set peak bloom start and end dates
+bloom_start <- as.numeric(format(as.Date("2024-04-19"), "%j"))
+bloom_end <- as.numeric(format(as.Date("2024-05-24"), "%j"))
+
+ggplot(surveys, aes(x = julian.date, y = n_bees, color = plot_type)) +
+  # Add the bloom window as a shaded background
+  annotate("rect", xmin = bloom_start, xmax = bloom_end, ymin = -Inf, ymax = Inf, 
+           alpha = .2, fill = "steelblue") +
+  stat_summary(fun = mean, geom = "line", size = 1.2) +
+  facet_wrap(~caste) +
+  labs(title = "Bee Activity Relative to Blueberry Bloom (Shaded)",
+       x = "Julian Date", y = "Average Bees per Survey") +
+  theme_classic()
+```
