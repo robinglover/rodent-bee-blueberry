@@ -183,8 +183,8 @@ foraging_summary <- foraging_summary %>%
   )
 
 #set peak bloom start and end dates
-bloom_start <- as.numeric(format(as.Date("2024-04-19"), "%j"))
-bloom_end <- as.numeric(format(as.Date("2024-05-24"), "%j"))
+bloom_start <- as.Date("2024-04-19")
+bloom_end <- as.Date("2024-05-24")
 
 
 # Step 2: Plot
