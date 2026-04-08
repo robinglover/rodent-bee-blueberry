@@ -10,9 +10,9 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_analysis/rodent-bee-blueberry")
 ```
 
-Create dataframe where each row represents one survey event
+# Create dataframe where each row represents number of queens and workers seen during each survey event
 
-Load dataframes
+## Load dataframes
 
 ```{r}
 #load packages
@@ -29,7 +29,7 @@ site_info <- read.csv("06_cleandata/site_info_clean.csv")
 surveys <- read.csv("06_cleandata/surveys.csv")
 ```
 
-Fix dataframe structure
+## Fix dataframe structure
 
 ```{r}
 #bee
@@ -59,7 +59,7 @@ surveys <- surveys %>%
   rename(plot_id = plots)
 ```
 
-# Add date of bee survey to the associated row in the survey data, based on site, plot and round.
+## Add date of bee survey to the associated row in the survey data, based on site, plot and round.
 
 ```{r}
 # Extract relevant bee dates first 
@@ -93,7 +93,7 @@ surveys <- surveys %>% rows_patch(missing_dates, by = c("site_id", "round"))
 surveys$julian.date <- yday(surveys$bee_date)
 ```
 
-# Add area to survey dataframe based on site_id
+## Add area and cover type to survey dataframe based on site_id
 
 ```{r}
 surveys <- surveys %>%
@@ -101,15 +101,9 @@ surveys <- surveys %>%
 
 ```
 
-# Adding all the desired variables summarized at plot level as columns to the surveys dataframe
+## Adding all the desired variables summarized at plot level as columns to the surveys dataframe
 
-The random effect structure I first want to try in my models is to have plot nested within area.Therefore, I need to get all my desired variables to be at plot level, not transect or quadrat.
-
-## The desired variables are:
-
-Bee caste
-
-Bee abundance
+The desired variables are bee abundance for each caste of bees (queen and worker)
 
 ```{r}
 # 1. Summarize your actual bee observations
@@ -129,7 +123,9 @@ surveys <- surveys %>%
   mutate(n_bees = replace_na(n_bees, 0))
 ```
 
-Run model
+# Run model to see the effect of date, caste, and plot type on bee abundance.
+
+1.  Load packages and clean dataframe
 
 ```{r}
 #Load packages
@@ -160,10 +156,9 @@ surveys$julian.date_scaled <- as.numeric(scale(surveys$julian.date))
 surveys$n_bees_scaled <- as.numeric(scale(surveys$n_bees))
 ```
 
-Try different random effects structures. Use zero-inflated model to account for high abundance of zeros in the dataset.
+2.  Try different random effects structures. Use zero-inflated model to account for high abundance of zeros in the dataset.
 
 ```{r}
-{r}
 caste_glm_full <- glmmTMB(n_bees ~ caste*julian.date_scaled*plot_type +
                             cover_type +
                               (1|area/site_id/plot_id),
@@ -218,7 +213,7 @@ residuals_caste_glm_noArea <- simulateResiduals(fittedModel = caste_glm_noArea, 
 summary(caste_glm_noArea)
 ```
 
-Use emmeans to look at estimates
+# Use emmeans to look at estimates
 
 ```{r}
 library(emmeans)
@@ -230,20 +225,58 @@ emtrends(caste_glm_noArea, ~ caste | plot_type, var = "julian.date_scaled")
 emmeans(caste_glm_noArea, ~ caste * plot_type)
 ```
 
-Plots
+# Plots
 
 ```{r}
 #set peak bloom start and end dates
-bloom_start <- as.numeric(format(as.Date("2024-04-19"), "%j"))
-bloom_end <- as.numeric(format(as.Date("2024-05-24"), "%j"))
+bloom_start <- as.Date("2024-04-19")
+bloom_end <- as.Date("2024-05-24")
 
-ggplot(surveys, aes(x = julian.date, y = n_bees, color = plot_type)) +
+## Create date column
+surveys <- surveys %>%
+  mutate(
+    # Convert Day of Year to an actual Date object (using 2024 as a reference year)
+    date_formatted = as.Date(round(julian.date) - 1, origin = "2024-01-01")
+  )
+
+ggplot(surveys, aes(x = date_formatted, y = n_bees, color = plot_type)) +
   # Add the bloom window as a shaded background
   annotate("rect", xmin = bloom_start, xmax = bloom_end, ymin = -Inf, ymax = Inf, 
            alpha = .2, fill = "steelblue") +
-  stat_summary(fun = mean, geom = "line", size = 1.2) +
-  facet_wrap(~caste) +
-  labs(title = "Bee Activity Relative to Blueberry Bloom (Shaded)",
-       x = "Julian Date", y = "Average Bees per Survey") +
-  theme_classic()
+  stat_summary(fun = mean, geom = "line", linewidth = 1.2) +
+  stat_summary(fun.data = mean_se, geom = "ribbon", alpha = 0.1, aes(fill = plot_type), color = NA) +
+  facet_wrap(~ caste, ncol = 1, scales = "free_y", labeller = as_labeller(c("w" = "Workers", "q" = "Queens"))) +
+  labs(x = "Date", y = "Average bees per plot", color = "Plot type", fill = "Plot type") +
+  theme_classic(base_size = 20)
+```
+
+# Plot behaviours of each caste in each plot type
+
+```{r}
+
+#add plot type column to bee dataframe
+bee <- bee %>% 
+  mutate(plot_type = if_else(plot_id == "d", "ditch", "field"))
+bee <- bee %>% 
+   mutate(
+     plot_type = as.factor(plot_type))
+# Summary data for behavior proportions
+behavior_summary <- bee %>%
+  filter(caste %in% c("q", "w")) %>%
+  group_by(plot_type, caste, behaviour) %>%
+  summarise(total_count = n(), .groups = "drop") %>%
+  group_by(plot_type, caste) %>%
+  mutate(proportion = total_count / sum(total_count))
+
+# Plotting the breakdown
+ggplot(behavior_summary, aes(x = plot_type, y = proportion, fill = behaviour)) +
+  geom_bar(stat = "identity", position = "fill") +
+  facet_wrap(~caste, labeller = as_labeller(c("w" = "Workers", "q" = "Queens"))) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    x = "Plot Type",
+    y = "Percentage of Observations",
+    fill = "Behaviour"
+  ) +
+  theme_minimal(base_size = 15)
 ```
