@@ -273,10 +273,16 @@ ggplot(behavior_summary, aes(x = plot_type, y = proportion, fill = behaviour)) +
   geom_bar(stat = "identity", position = "fill") +
   facet_wrap(~caste, labeller = as_labeller(c("w" = "Workers", "q" = "Queens"))) +
   scale_y_continuous(labels = scales::percent) +
+  scale_fill_discrete(labels = c(
+    "flying" = "Flying", 
+    "foraging" = "Foraging", 
+    "nest_searching" = "Nest searching", 
+    "resting" = "Resting"
+  )) +
   labs(
-    x = "Plot Type",
-    y = "Percentage of Observations",
+    x = "Plot type",
+    y = "Percentage of observations",
     fill = "Behaviour"
   ) +
-  theme_minimal(base_size = 15)
+  theme_classic(base_size = 15)
 ```
