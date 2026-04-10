@@ -27,6 +27,7 @@ rodent <- read.csv("06_cleandata/rodent_clean.csv")
 veg <- read.csv("06_cleandata/veg_clean.csv")
 site_info <- read.csv("06_cleandata/site_info_clean.csv")
 surveys <- read.csv("06_cleandata/surveys.csv")
+
 ```
 
 ## Fix dataframe structure
@@ -64,8 +65,8 @@ surveys <- surveys %>%
 ```{r}
 # Extract relevant bee dates first 
 bee_dates <- bee %>% 
-  select(site_id, plot_id, round, date) %>% 
-  rename(bee_date = date)
+  dplyr::select(site_id, plot_id, round, date) %>% 
+  dplyr::rename(bee_date = date)
 
 #Make bee_dates file only contain one row for each site/plot/round/date combination 
 bee_dates_unique <- bee_dates %>% 
@@ -97,8 +98,8 @@ surveys$julian.date <- yday(surveys$bee_date)
 
 ```{r}
 surveys <- surveys %>%
-  left_join(site_info %>% select(site_id, area, cover_type), by = c("site_id"))
-
+  left_join(site_info %>% 
+              dplyr::select(site_id, area, cover_type), by = c("site_id"))
 ```
 
 ## Adding all the desired variables summarized at plot level as columns to the surveys dataframe
@@ -211,18 +212,6 @@ residuals_caste_glm_noArea <- simulateResiduals(fittedModel = caste_glm_noArea, 
 
 ```{r}
 summary(caste_glm_noArea)
-```
-
-# Use emmeans to look at estimates
-
-```{r}
-library(emmeans)
-
-#compare the seasonal slopes for each caste in each plot type
-emtrends(caste_glm_noArea, ~ caste | plot_type, var = "julian.date_scaled")
-
-#predicted counts for each group at the mean date
-emmeans(caste_glm_noArea, ~ caste * plot_type)
 ```
 
 # Plots
