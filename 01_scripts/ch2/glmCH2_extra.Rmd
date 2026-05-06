@@ -275,3 +275,44 @@ ggplot(behavior_summary, aes(x = plot_type, y = proportion, fill = behaviour)) +
   ) +
   theme_classic(base_size = 15)
 ```
+
+# Number of individuals observed
+
+```{r}
+#number of individuals seen in each caste
+queen_num <- count(bee, caste == "q") ##262
+worker_num <- count(bee, caste == "w") ##77
+male_num <- count(bee, caste == "m") ##39
+unknown_num <- count(bee, caste == "") ##142
+total_bee <- count(bee) ##321
+##put into table
+bee_count_summary <- bee %>%
+  #change blanks to unknown
+  mutate(caste = ifelse(caste == "" , "unknown", caste)) %>%
+  # Group by species and caste
+  group_by(caste) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  # Add a total row
+  bind_rows(tibble(caste = "overall", n = sum(.$n)))
+
+#number of nest-searching queens
+nsq_num <- count(bee, caste == "q", behaviour == "nest_searching") ##93
+```
+
+Calculate percentage of visits to blueberry for each caste of Bombus
+
+```{r}
+#number of individuals visiting VACO in each caste
+queen_vaco_num <- count(bee, caste == "q", flower_code == "vaco") ##64
+worker_vaco_num <- count(bee, caste == "w", flower_code == "vaco") ##27
+male_vaco_num <- count(bee, caste == "m", flower_code == "vaco") ##1
+unknown_vaco_num <- count(bee, caste == "", flower_code == "vaco") ##25
+
+#total vaco visits by bombus, not including unknowns
+vaco_visit <- count(bee, flower_code == "vaco", caste != "") ##92
+
+#percentage of total VACO visit
+queen_vaco_num/vaco_visit #0.70
+worker_vaco_num/vaco_visit #0.29
+male_vaco_num/vaco_visit #0.01
+```
