@@ -179,42 +179,11 @@ Try transforming data log(x+1) and running gaussian model
 surveys$log_grass_forb <- log(surveys$grass_forb_perc + 1)
 
 ##Model with gaussian distribution
-ditchVSfield_veg_full <- glmmTMB(log_grass_forb ~ cover_type*plot_type + julian.date_scaled +
-                              (1|area/site_id/plot_id),
-                            family = gaussian(), 
-                            data = surveys)
-ditchVSfield_veg_noArea <- glmmTMB(log_grass_forb ~ cover_type*plot_type + julian.date_scaled +
-                              (1|site_id/plot_id),
-                            family = gaussian(), 
-                            data = surveys)
 
-ditchVSfield_veg_plotOnly <- glmmTMB(log_grass_forb ~ cover_type*plot_type + julian.date_scaled +
-                              (1|plot_id),
-                            family = gaussian(), 
-                            data = surveys)
-
-ditchVSfield_veg_siteOnly <- glmmTMB(log_grass_forb ~ cover_type*plot_type + julian.date_scaled +
-                              (1|site_id),
-                            family = gaussian(), 
-                            data = surveys)
 ditchVSfield_veg_siteArea <- glmmTMB(log_grass_forb ~ cover_type*plot_type + julian.date_scaled +
                               (1|area/site_id),
                             family = gaussian(), 
                             data = surveys)
-
-ditchVSfield_veg_areaPlot <- glmmTMB(log_grass_forb ~ cover_type*plot_type + julian.date_scaled +
-                              (1|area/plot_id),
-                            family = gaussian(), 
-                            data = surveys)
-
-ditchVSfield_veg_noRE <- glmmTMB(log_grass_forb ~ cover_type*plot_type + julian.date_scaled,
-                            family = gaussian(), 
-                            data = surveys)
-
-#compare models
-anova(ditchVSfield_veg_full, ditchVSfield_veg_noArea, ditchVSfield_veg_plotOnly, ditchVSfield_veg_siteOnly, ditchVSfield_veg_siteArea,
-      ditchVSfield_veg_areaPlot, ditchVSfield_veg_noRE)
-##siteArea is best
 ```
 
 Check diagnostics
@@ -226,10 +195,31 @@ residuals_ditchVSfield_veg_siteArea <- simulateResiduals(fittedModel = ditchVSfi
 ##model fit is good enough.  
 ```
 
-Print results
+Try accounting for different variance between cover types.
 
 ```{r}
-summary(ditchVSfield_veg_siteArea)
+ditchVSfield_veg_siteArea_hetVar <- glmmTMB(log_grass_forb ~ 
+                                              cover_type*plot_type + 
+                                              julian.date_scaled +
+                                              (1|area/site_id),
+                                            dispformula = ~ cover_type,
+                                            family = gaussian(), 
+                                            data = surveys)
+```
+
+Check diagnostics
+
+```{r}
+#simulate residuals
+residuals_ditchVSfield_veg_siteArea_hetVar <- simulateResiduals(fittedModel = ditchVSfield_veg_siteArea_hetVar, plot = TRUE)
+
+##model fit is worse than gaussian 
+```
+
+Stick with gaussian. Print results
+
+```{r}
+summary(ditchVSfield_veg_siteArea_hetVar)
 ```
 
 Find effect of cover type within each plot type
