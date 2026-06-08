@@ -35,6 +35,9 @@ surveys <- data %>%
      area = as.factor(area),
      cover_type = as.factor(cover_type))
 
+#update cover type names
+levels(surveys$cover_type) <- c("bare", "herbaceous")
+
 #add plot type column and make it a factor
 surveys <- surveys %>% 
   mutate(plot_type = if_else(plot_id == "d", "ditch", "field"))
@@ -243,7 +246,7 @@ veg_data<- expand.grid(
 )
 
 # Get predicted probabilities and standard errors
-pred_veg <- predict(ditchVSfield_veg_siteArea,
+pred_veg <- predict(ditchVSfield_veg_siteArea_gaus,
                             newdata = veg_data,
                             se.fit = TRUE,
                             re.form = NA,
@@ -267,7 +270,7 @@ ggplot(pred_veg_df, aes(x = plot_type, y = fit, color = cover_type)) +
   geom_point(size=8, position = position_dodge(0.6)) +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5)+
   # Use scale_color_manual to define specific colors
-  scale_color_manual(values = c("grass" = "darkgreen", "bare" = "tan4")) +
+  scale_color_manual(values = c("herbaceous" = "darkgreen", "bare" = "tan4")) +
   labs(x = "Plot type",
        y = "Predicted mean\n% grass and forb\n(per plot)",
        color = "Cover type") +
@@ -671,7 +674,7 @@ ggplot(pred_rodent_veg_df, aes(x = plot_type, y = fit, color = cover_type)) +
   labs(x = "Plot type",
        y = "Predicted mean burrow\ncount (per plot)",
        color = "Cover type") +
-  scale_color_manual(values = c("grass" = "darkgreen", "bare" = "tan4")) +
+  scale_color_manual(values = c("herbaceous" = "darkgreen", "bare" = "tan4")) +
   theme_classic(base_size = 20)
 ```
 
@@ -854,7 +857,7 @@ Conditional
 ```{r}
 # Create newdata 
 nsq_data_covertype <- expand.grid(
-  cover_type = factor(c("grass", "bare"), levels = levels(surveys$cover_type)),
+  cover_type = factor(c("herbaceous", "bare"), levels = levels(surveys$cover_type)),
   plot_type = "ditch"
 )
 nsq_data_covertype$bombus_floral_abun_scaled <- mean(surveys$bombus_floral_abun_scaled)
@@ -1189,7 +1192,7 @@ Cover type
 ```{r}
 # Create newdata 
 worker_data_covertype <- expand.grid(
-  cover_type = factor(c("grass", "bare"), levels = levels(surveys$cover_type)),
+  cover_type = factor(c("herbaceous", "bare"), levels = levels(surveys$cover_type)),
   plot_type = "ditch"
 )
 worker_data_covertype$bombus_floral_abun_scaled <- mean(surveys$bombus_floral_abun_scaled)

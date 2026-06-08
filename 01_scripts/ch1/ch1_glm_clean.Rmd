@@ -38,6 +38,9 @@ surveys <- data %>%
      area = as.factor(area),
      cover_type = as.factor(cover_type))
 
+#update cover type names
+levels(surveys$cover_type) <- c("bare", "herbaceous")
+
 #scale continuous predictors
 surveys$julian.date_scaled <- as.numeric(scale(surveys$julian.date))
 surveys$bare_perc_scaled <- as.numeric(scale(surveys$bare_perc))
