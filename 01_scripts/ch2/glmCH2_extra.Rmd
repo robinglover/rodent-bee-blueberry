@@ -314,4 +314,5 @@ vaco_visit <- count(bee, flower_code == "vaco", caste != "") ##92
 #percentage of total VACO visit
 queen_vaco_num/vaco_visit #0.70
 worker_vaco_num/vaco_visit #0.29
-male_vaco_num/vaco_visi
+male_vaco_num/vaco_visit #0.01
+```
