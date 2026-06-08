@@ -180,7 +180,7 @@ surveys$log_grass_forb <- log(surveys$grass_forb_perc + 1)
 
 ##Model with gaussian distribution
 
-ditchVSfield_veg_siteArea <- glmmTMB(log_grass_forb ~ cover_type*plot_type + julian.date_scaled +
+ditchVSfield_veg_siteArea_gaus <- glmmTMB(log_grass_forb ~ cover_type*plot_type + julian.date_scaled +
                               (1|area/site_id),
                             family = gaussian(), 
                             data = surveys)
@@ -190,7 +190,7 @@ Check diagnostics
 
 ```{r}
 #simulate residuals
-residuals_ditchVSfield_veg_siteArea <- simulateResiduals(fittedModel = ditchVSfield_veg_siteArea, plot = TRUE)
+residuals_ditchVSfield_veg_siteArea_gaus <- simulateResiduals(fittedModel = ditchVSfield_veg_siteArea_gaus, plot = TRUE)
 
 ##model fit is good enough.  
 ```
@@ -219,7 +219,7 @@ residuals_ditchVSfield_veg_siteArea_hetVar <- simulateResiduals(fittedModel = di
 Stick with gaussian. Print results
 
 ```{r}
-summary(ditchVSfield_veg_siteArea_hetVar)
+summary(ditchVSfield_veg_siteArea_gaus)
 ```
 
 Find effect of cover type within each plot type
@@ -227,7 +227,7 @@ Find effect of cover type within each plot type
 ```{r}
 library(emmeans)
 
-pairs(emmeans(ditchVSfield_veg_siteArea, ~ cover_type | plot_type))
+pairs(emmeans(ditchVSfield_veg_siteArea_gaus, ~ cover_type | plot_type))
 ```
 
 ### Plots
@@ -691,7 +691,26 @@ Plot model with interaction between vegetation variables and plot type to invest
 
 ### Steps
 
-1)  Try different random effect structures.
+1)  Check for zero-inflation in the data by comparing expected proportion of zeros in the dataset to the actual proportion of zeros. If observed \> expected, ZI model is justified.
+
+-   use ZI Poisson model to account for high proportion of zeros in NSQ counts (~79% of plots had zero queens), which exceeded expectations under a standard Poisson distribution (~64%).
+
+```{r}
+# Fit a simple Poisson
+pois_mod <- glm(nest_searching_queens ~ 1, family = poisson, data = surveys)
+
+# Observed proportion of zeros
+obs_zeros <- mean(surveys$nest_searching_queens == 0)
+
+# Expected proportion of zeros under Poisson
+lambda <- mean(surveys$nest_searching_queens)
+exp_zeros <- dpois(0, lambda)
+
+obs_zeros ##0.7904762
+exp_zeros ##0.6421989
+```
+
+2.  Try different random effect structures.
 
 -   Model without random effect fit data the best.
 
@@ -743,7 +762,7 @@ anova(nsq_glm_veg_noRE, nsq_glm_veg_justSite, nsq_glm_veg_noArea, nsq_glm_veg_fu
 ##no random effect model is best, followed by just site model
 ```
 
-2)  Check diagnostics of model
+3.  Check diagnostics of model
 
 -   look good
 
@@ -752,7 +771,7 @@ anova(nsq_glm_veg_noRE, nsq_glm_veg_justSite, nsq_glm_veg_noArea, nsq_glm_veg_fu
 residuals_nsq_glm_veg_noRE <- simulateResiduals(fittedModel = nsq_glm_veg_noRE, plot = TRUE)
 ```
 
-3)  Plot results
+4.  Plot results
 
 ```{r}
 summary(nsq_glm_veg_noRE)
@@ -798,8 +817,8 @@ ggplot(pred_nsq_plottype_df, aes(x = plot_type, y = cond_fit)) +
   geom_point(size = 8, position = position_dodge(0.6)) +
   geom_errorbar(aes(ymin = cond_lower, ymax = cond_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Plot type",
-       y = "Predicted mean NSQ\ncount (per plot)") +
-  theme_classic(base_size = 20)
+       y = "Predicted mean\nNSQ count\n(per plot)") +
+  theme_classic(base_size = 30)
 ```
 
 Zero-inflated model:
@@ -824,8 +843,8 @@ ggplot(pred_nsq_plottype_zi_df, aes(x = plot_type, y = zi_fit)) +
   geom_point(size = 8,  position = position_dodge(0.6)) +
   geom_errorbar(aes(ymin = zi_lower, ymax = zi_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Plot type",
-       y = "Predicted probability\nof structural zeros") +
-  theme_classic(base_size = 20) 
+       y = "Predicted\nprobability of\nstructural zeros") +
+  theme_classic(base_size = 30) 
 ```
 
 Cover type
@@ -866,8 +885,8 @@ ggplot(pred_nsq_covertype_df, aes(x = cover_type, y = cond_fit)) +
   geom_point(size = 8, position = position_dodge(0.6)) +
   geom_errorbar(aes(ymin = cond_lower, ymax = cond_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Cover type",
-       y = "Predicted mean NSQ\ncount (per plot)") +
-  theme_classic(base_size = 20)
+       y = "Predicted mean\nNSQ count\n(per plot)") +
+  theme_classic(base_size = 30)
 ```
 
 Zero-inflated model:
@@ -892,8 +911,8 @@ ggplot(pred_nsq_covertype_zi_df, aes(x = cover_type, y = zi_fit)) +
   geom_point(size = 8,  position = position_dodge(0.6)) +
   geom_errorbar(aes(ymin = zi_lower, ymax = zi_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Cover type",
-       y = "Predicted probability\nof structural zeros") +
-  theme_classic(base_size = 20) 
+       y = "Predicted\nprobability of\nstructural zeros") +
+  theme_classic(base_size = 30) 
 ```
 
 Floral abundance
@@ -945,9 +964,9 @@ ggplot(pred_nsq_floral_df,
               color = NA) +
   labs(
     x = "Floral abundance (scaled)",
-    y = "Predicted mean NSQ\ncount (per plot)"
+    y = "Predicted mean\nNSQ count\n(per plot)"
   ) +
-  theme_classic(base_size = 20)
+  theme_classic(base_size = 30)
 ```
 
 Zero-inflated model:
@@ -973,8 +992,8 @@ ggplot(pred_nsq_floral_df, aes(x = bombus_floral_abun_scaled, y = zi_fit)) +
   geom_ribbon(aes(ymin = zi_lower, ymax = zi_upper), alpha = 0.2, color=NA) +
   labs(
        x = "Floral abundance (scaled)",
-       y = "Probability of\nExcess Zeros") +
-  theme_classic(base_size = 20)
+       y = "Predicted\nprobability of\nstructural zeros") +
+  theme_classic(base_size = 30)
 ```
 
 Season
@@ -1161,8 +1180,8 @@ ggplot(pred_worker_plottype_df, aes(x = plot_type, y = fit)) +
   geom_point(size = 8, position = position_dodge(0.6)) +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Plot type",
-       y = "Predicted mean worker\ncount (per plot)")  +
-  theme_classic(base_size = 20)
+       y = "Predicted mean\nworker count\n(per plot)")  +
+  theme_classic(base_size = 30)
 ```
 
 Cover type
@@ -1201,8 +1220,8 @@ ggplot(pred_worker_covertype_df, aes(x = cover_type, y = fit)) +
   geom_point(size = 8, position = position_dodge(0.6)) +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Cover type",
-       y = "Predicted mean worker\ncount (per plot)") +
-  theme_classic(base_size = 20)
+       y = "Predicted mean\nworker count\n(per plot)") +
+  theme_classic(base_size = 30)
 ```
 
 Floral abundance x plot type
@@ -1241,10 +1260,15 @@ ggplot(pred_worker_floral_df, aes(x = bombus_floral_abun_scaled, y = fit, color 
   geom_line(linewidth = 1.5) +
   geom_ribbon(aes(ymin = lower, ymax = upper, fill = plot_type), alpha = 0.2, color=NA) +
   labs(x = "Floral abundance (scaled)",
-       y = "Predicted mean worker\ncount (per plot)",
+       y = "Predicted mean\nworker count\n(per plot)",
        fill = "Plot type",
        color = "Plot type") +
-  theme_classic(base_size = 20)
+  theme_classic(base_size = 30) +
+  theme(
+    legend.title = element_text(size = 25),
+    legend.text = element_text(size = 20),
+    legend.key.size = unit(0.5, "cm")
+  )
 ```
 
 Season

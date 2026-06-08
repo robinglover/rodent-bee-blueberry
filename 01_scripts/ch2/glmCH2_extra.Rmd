@@ -235,7 +235,7 @@ ggplot(surveys, aes(x = date_formatted, y = n_bees, color = plot_type)) +
   stat_summary(fun = mean, geom = "line", linewidth = 1.2) +
   stat_summary(fun.data = mean_se, geom = "ribbon", alpha = 0.1, aes(fill = plot_type), color = NA) +
   facet_wrap(~ caste, ncol = 1, scales = "free_y", labeller = as_labeller(c("w" = "Workers", "q" = "Queens"))) +
-  labs(x = "Date", y = "Average bees per plot", color = "Plot type", fill = "Plot type") +
+  labs(x = "Date", y = "Mean bumble bee count\n(per plot)", color = "Plot type", fill = "Plot type") +
   theme_classic(base_size = 20)
 ```
 
