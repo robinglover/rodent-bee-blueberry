@@ -25,7 +25,7 @@ library(car)         #tools for regression diagnostics and hypothesis tests
 library(emmeans)     #calculates predicted results from models
 
 #read in data
-data <- read.csv("06_cleandata/combined_plot_data.csv")
+data <- read.csv("06_cleandata/combined_plot_data_ch1.csv")
 
 #change character columns to factors
 surveys <- data %>%
