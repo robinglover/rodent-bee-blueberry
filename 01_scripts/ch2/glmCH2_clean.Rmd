@@ -2,7 +2,6 @@
 title: "glmCH2_clean"
 output:
   pdf_document: default
-  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -22,7 +21,7 @@ library(emmeans)   # for estimated marginal means (predictions)
 library(lubridate) #date <-> julian date
 
 #read in data
-data <- read.csv("06_cleandata/combined_plot_data.csv")
+data <- read.csv("06_cleandata/combined_plot_data_ch2.csv")
 
 #change character columns to factors
 surveys <- data %>%
@@ -67,10 +66,6 @@ surveys$nest_searching_queens_scaled <- as.numeric(scale(surveys$nest_searching_
 surveys$workers_scaled <- as.numeric(scale(surveys$workers))
 surveys$forage_vaco_scaled <- as.numeric(scale(surveys$forage_vaco))
 surveys$num_burrows_scaled <- as.numeric(scale(surveys$num_burrows))
-surveys$num_inactive_burrows_scaled <- as.numeric(scale(surveys$num_inactive_burrows))
-surveys$num_active_dm_scaled <- as.numeric(scale(surveys$num_active_dm))
-surveys$num_dm_size_scaled <- as.numeric(scale(surveys$num_dm_size))
-surveys$num_inactive_dm_scaled <- as.numeric(scale(surveys$num_inactive_dm))
 ```
 
 # Choosing which vegetation variables to include as predictors
@@ -288,7 +283,7 @@ date_seq <- seq(
 
 #create new data grid
 veg_data_date<- expand.grid(
-  cover_type = "grass",
+  cover_type = "herbaceous",
   plot_type = "ditch",
   julian.date_scaled = date_seq
 )
@@ -603,7 +598,7 @@ Plot type
 ```{r}
 #create new data grid
 rodent_data_plot<- expand.grid(
-  cover_type = "grass",
+  cover_type = "herbaceous",
   plot_type = unique(surveys$plot_type),
   bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled, na.rm = TRUE)
 )
@@ -789,7 +784,7 @@ Conditional
 ```{r}
 # Create newdata 
 nsq_data_plottype <- expand.grid(
-  cover_type = "grass",
+  cover_type = "herbaceous",
   plot_type = factor(c("ditch", "field"), levels = levels(surveys$plot_type))
 )
 nsq_data_plottype$bombus_floral_abun_scaled <- mean(surveys$bombus_floral_abun_scaled)
@@ -932,7 +927,7 @@ floral_seq <- seq(
 
 #create new data grid
 nsq_data_floral<- expand.grid(
-  cover_type = "grass",
+  cover_type = "herbaceous",
   plot_type = "ditch",
   bombus_floral_abun_scaled = floral_seq,
   bee_season_type = "nestsearching"
@@ -1006,7 +1001,7 @@ Conditional model:
 ```{r}
 # Create newdata with discrete factor levels for bee_season_type
 nsq_data_season <- data.frame(
-  cover_type = "grass",
+  cover_type = "herbaceous",
   bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled),
   bee_season_type = factor(c("nestsearching", "worker"), levels = levels(surveys$bee_season_type)),
   plot_type = "ditch"
@@ -1152,7 +1147,7 @@ Plot type
 ```{r}
 # Create newdata 
 worker_data_plottype <- expand.grid(
-  cover_type = "grass",
+  cover_type = "herbaceous",
   plot_type = factor(c("ditch", "field"), levels = levels(surveys$plot_type))
 )
 worker_data_plottype$bombus_floral_abun_scaled <- mean(surveys$bombus_floral_abun_scaled)
@@ -1232,7 +1227,7 @@ Floral abundance x plot type
 ```{r}
 #create new data grid
 worker_data_floral<- expand.grid(
-  cover_type = "grass",
+  cover_type = "herbaceous",
   plot_type = unique(surveys$plot_type),
   bombus_floral_abun_scaled = floral_seq,
   bee_season_type = "worker"
@@ -1279,7 +1274,7 @@ Season
 ```{r}
 #create new data grid
 worker_data_season<- expand.grid(
-  cover_type = "grass",
+  cover_type = "herbaceous",
   plot_type = "ditch",
   bombus_floral_abun_scaled = mean(surveys$bombus_floral_abun_scaled, na.rm = TRUE),
   bee_season_type = unique(surveys$bee_season_type)

@@ -17,21 +17,25 @@ library(tidyverse)   #data manipulation, visualization etc. (dplyr, ggplot2, tid
 #read in data
 bee <- read.csv("06_cleandata/bee_clean.csv")
 floral <- read.csv("06_cleandata/floral_clean.csv")
-rodent <- read.csv("06_cleandata/rodent_clean.csv")
+rodent <- read.csv("06_cleandata/rodent_cleanv2.csv")
 site_info <- read.csv("06_cleandata/site_info_clean.csv")
+
+#filter rodent burrows to only 2024 r1
+rodent <- rodent %>%
+  filter(round == "2024_r1")
 ```
 
 Add area names to datasets
 
 ```{r}
 bee <- bee %>%
-  left_join(site_info %>% select(site_id, area, cover_type), by = c("site_id"))
+  left_join(site_info %>% dplyr::select(site_id, area, cover_type), by = c("site_id"))
 
 floral <- floral %>%
-  left_join(site_info %>% select(site_id, area, cover_type), by = c("site_id"))
+  left_join(site_info %>% dplyr::select(site_id, area, cover_type), by = c("site_id"))
 
 rodent <- rodent %>%
-  left_join(site_info %>% select(site_id, area, cover_type), by = c("site_id"))
+  left_join(site_info %>% dplyr::select(site_id, area, cover_type), by = c("site_id"))
 ```
 
 Add plot type column to datasets
@@ -137,12 +141,12 @@ Combine into one site-level summary table
 site_level_summary <- site_level_summary_bee %>%
   left_join(
     site_level_summary_rodent %>%
-      select(area, site_id, plot_id, cover_type, plot_type, `Rodent burrows (count)`),
+      dplyr::select(area, site_id, plot_id, cover_type, plot_type, `Rodent burrows (count)`),
     by = c("area", "site_id", "plot_id", "cover_type", "plot_type")
   ) %>% 
   left_join(
     site_level_summary_floral %>%
-      select(area, site_id, plot_id, cover_type, plot_type, `Average floral abundance (log-scale)`, `Floral species richness`),
+      dplyr::select(area, site_id, plot_id, cover_type, plot_type, `Average floral abundance (log-scale)`, `Floral species richness`),
     by = c("area", "site_id", "plot_id", "cover_type", "plot_type")
   )
     
@@ -162,7 +166,7 @@ summary_clean <- site_level_summary %>%
 #filter to only grassy
 summary_table_grass <- summary_clean %>%
   filter(cover_type == "grass") %>% 
-  select(area, site_id, plot_type, plot_id, 
+  dplyr::select(area, site_id, plot_type, plot_id, 
          `Bombus individuals (count)`, `Bee species richness`, 
          `Rodent burrows (count)`, `Average floral abundance (log-scale)`, 
          `Floral species richness`) %>%
@@ -171,7 +175,7 @@ summary_table_grass <- summary_clean %>%
 #filter to only bare
 summary_table_bare <- summary_clean %>%
   filter(cover_type == "bare") %>% 
-  select(area, site_id, plot_type, plot_id, 
+  dplyr::select(area, site_id, plot_type, plot_id, 
          `Bombus individuals (count)`, `Bee species richness`, 
          `Rodent burrows (count)`, `Average floral abundance (log-scale)`, 
          `Floral species richness`) %>%
