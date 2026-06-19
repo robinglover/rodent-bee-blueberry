@@ -14,7 +14,7 @@ Load packages
 ```{r}
 library(ggplot2)
 library(dplyr)
-library(tidyr)
+library(tidyverse)
 ```
 
 Creating sample event list
@@ -104,7 +104,7 @@ samples_plot3 <- tibble(site = site_names) %>%
 round <- c("2024_r1_rod")
 
 #create vector for plots
-plots <-c("d")
+plots <-c("p1", "p2", "d")
 
 #add rows to dataframe
 samples_plot4 <- tibble(site = site_names) %>%

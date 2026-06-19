@@ -24,7 +24,7 @@ library(lubridate) #package used to generate julian date from calendar date
 #read in data
 bee <- read.csv("06_cleandata/bee_clean.csv")
 floral <- read.csv("06_cleandata/floral_clean.csv")
-rodent <- read.csv("06_cleandata/rodent_clean.csv")
+rodent <- read.csv("06_cleandata/rodent_cleanv2.csv")
 veg <- read.csv("06_cleandata/veg_clean.csv")
 site_info <- read.csv("06_cleandata/site_info_clean.csv")
 surveys <- read.csv("06_cleandata/surveys.csv")
@@ -582,10 +582,10 @@ surveys <- surveys %>%
 -   transect section level — conversion: add together \# of burrows
     across all transect sections within the same plot
 -   rodent burrows were only surveyed once throughout the survey period.
-    Ditch burrows were surveyed during 2024 R1. P1 and P2 burrows were
-    surveyed during 2024 R4. Therefore, I want to apply the rodent data
-    (eg. num_burrows, num_inactive) for each site and plot across all
-    sampling rounds.
+    Only include P1 and P2 burrowssurveyed during 2024 R4 in these analyses
+    since burrow vacancy was quantified during that round. 
+    Therefore, I want to apply the r4 rodent data (eg. num_burrows, num_inactive) 
+    for each site and plot across all other sampling rounds.
 
 Num burrows
 
@@ -595,6 +595,10 @@ all_combinations_rodent <- expand_grid(
   site_id = unique(rodent$site_id),
   plot_id = unique(rodent$plot_id)
 )
+
+#filter to only r1 data
+rodent <- rodent %>%
+  filter(round == "2024_r4")
 
 #create summary dataframe for rodent data
 rodent_summary <- rodent %>%
@@ -805,7 +809,7 @@ View(surveys)
 # Save final combined surveys dataframe as new CSV
 
 ```{r}
-write_csv(surveys, file = file.path("06_cleandata","combined_plot_data.csv"))
+write_csv(surveys, file = file.path("06_cleandata","combined_plot_data_ch1.csv"))
 ```
 
 # 
