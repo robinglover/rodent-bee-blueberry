@@ -1,0 +1,439 @@
+---
+title: "rodent_burrow_over_time"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_analysis/rodent-bee-blueberry")
+```
+
+# Load data
+
+```{r}
+#load package
+library(tidyverse)   #data manipulation, visualization etc. (dplyr, ggplot2, tidyr)
+
+#read in data
+rodent <- read.csv("06_cleandata/rodent_cleanv2.csv")
+
+#add plot type
+rodent <- rodent %>%
+  mutate(plot_type = if_else(plot_id == "d", "ditch", "field")) %>%
+  mutate(plot_type = as.factor(plot_type)) 
+
+#correct round names
+rodent <- rodent %>%
+  filter(round != "")
+
+#check
+unique(rodent$round)
+
+#Add area names to dataset
+site_info <- read.csv("06_cleandata/site_info_clean.csv")
+
+rodent <- rodent %>%
+  left_join(site_info %>% dplyr::select(site_id, area, cover_type), by = c("site_id"))
+
+```
+
+# Plot difference in rodent burrow abundance between R1 and R4
+
+## 1. Create dataframe for r1 and r4 rodent burrow surveys at all sites
+
+```{r}
+#create vector for site names
+site_names <- c("bates_57b", "bks_56", "chong_68", "bks_68", "chong_96", "bks_96", "gwb_neaves", "bks_neaves", "avtar_168", "surjit_168", "sandhu_ladnertrunk", "lbf_ladnertrunk")
+
+#create vector for round numbers
+round <-c("2024_r1", "2024_r4")
+
+
+#combine vectors into dataframe 
+samples_plot <- tibble(site = site_names) %>%
+  expand_grid(round)
+
+#remove rows from 2024 NS bee round and 2024 R1 veg for Sandhu farms and LBF farms (not sampled during that round)
+surveys <- samples_plot %>%
+  filter(!(site == "sandhu_ladnertrunk" & round == "2024_r1"))
+surveys <- surveys %>%
+  filter(!(site == "lbf_ladnertrunk" & round == "2024_r1"))
+
+str(surveys)
+surveys <- surveys %>%
+  rename(site_id = site)
+
+surveys <- surveys %>%
+  left_join(site_info %>% select(site_id, area, cover_type), by = c("site_id"))
+
+surveys <- surveys %>%
+   mutate(
+     cover_type = as.factor(cover_type),
+     cover_type = fct_recode(cover_type, "bare" = "bare", "herbaceous" = "grass")
+   )
+
+```
+
+## 2. Generate burrow counts for each site within each round
+
+```{r}
+#filter rodent data to only within field
+rodent_field <- rodent %>%
+  filter(plot_type == "field") 
+
+#create summary dataframe for rodent data
+rodent_summary <- rodent_field %>%
+  group_by(site_id, round) %>%
+  summarise(num_burrows = n(), .groups = "drop") ##drop the groupings
+
+#Add number of burrows to surveys dataframe
+surveys <- surveys %>%
+  left_join(rodent_summary, by = c("site_id", "round")) %>%
+   mutate(num_burrows = replace_na(num_burrows, 0))
+
+#remove sandhu ladnertrunk and lbf ladnertrunk since they were only recorded in r4
+surveys <- surveys %>%
+  filter(!(site_id == "sandhu_ladnertrunk"))
+surveys <- surveys %>%
+  filter(!(site_id == "lbf_ladnertrunk"))
+
+#create bare vs grass surveys
+bare_surveys <- surveys %>%
+  filter(cover_type == "bare")
+  
+grass_surveys <- surveys %>%
+  filter(cover_type == "herbaceous")
+
+
+
+```
+
+## 3. Plot
+
+```{r}
+# Plotting the trajectories
+ggplot(surveys, aes(x = round, y = num_burrows, group = site_id)) +
+  # 1. Draw the connecting lines first so they sit behind the points
+  geom_line(color = "grey50", alpha = 0.6, size = 0.8) +
+  
+  # 2. Draw the points on top (using shape = 21 so they can take a 'fill' color)
+  geom_point(shape = 21, size = 5, fill = "black", stroke = 1) +
+  labs(
+    x = "Sampling round",
+    y = "Within-field burrow abundance",
+    fill = "Cover type"
+  ) +
+  # 3. Split into panels by cover type
+  facet_wrap(~cover_type) +
+  theme_classic(base_size = 20)
+
+```
+
+## 4. Stats test
+
+```{r}
+#All sites
+#check significance using paired wilcoxon signed-rank test
+#Reshape data to wide format (one row per site, columns for R1 and R4)
+rodent_wide <- surveys %>%
+  pivot_wider(
+    id_cols = c(site_id, cover_type, area), 
+    names_from = round, 
+    values_from = num_burrows,
+    values_fill = 0 # If a site had no burrows in a round, it's a 0
+  )
+
+# 2. Run the paired test
+wilcox.test(rodent_wide$`2024_r1`, rodent_wide$`2024_r4`, paired = TRUE)
+##p=0.6236. We fail to reject the null hypothesisi that true location shift is equal to zero. 
+##Therefore, we did not find a significant change in rodent burrow abundance over the course of the season.
+
+#bare sites
+rodent_wide_bare <- rodent_wide %>%
+  filter(cover_type == "bare")
+# 2. Run the paired test
+wilcox.test(rodent_wide_bare$`2024_r1`, rodent_wide_bare$`2024_r4`, paired = TRUE)
+##p=0.5839. We fail to reject the null hypothesisi that true location shift is equal to zero. 
+##Therefore, we did not find a significant change in rodent burrow abundance over the course of the season.
+
+#herbaceous sites
+rodent_wide_herb <- rodent_wide %>%
+  filter(cover_type == "herbaceous")
+# 2. Run the paired test
+wilcox.test(rodent_wide_herb$`2024_r1`, rodent_wide_herb$`2024_r4`, paired = TRUE)
+##p=0.8551. We fail to reject the null hypothesisi that true location shift is equal to zero. 
+##Therefore, we did not find a significant change in rodent burrow abundance over the course of the season.
+
+```
+
+# Plot the difference between ditch and field over time.
+
+## 1. Create dataframe for all rodent surveys and plot ids in r1
+
+```{r}
+#filter to round 1 data (since that has ditch and within field measurements)
+rodent_r1 <- rodent %>%
+  filter(round == "2024_r1")
+
+#calculate number of burrows in ditch and average number of burrows in field plots at each site 
+#create vector for site names not "sandhu_ladnertrunk" and "lbf_ladnertrunk" since they were not sampled during that round
+site_names2 <- c("bates_57b", "bks_56", "chong_68", "bks_68", "chong_96", "bks_96", "gwb_neaves", "bks_neaves", "avtar_168", "surjit_168")
+
+#create vector for round numbers
+plot_type <-c("ditch", "field")
+
+
+#combine vectors into dataframe 
+samples_plot2 <- tibble(site_id = site_names2) %>%
+  expand_grid(plot_type)
+
+samples_plot2 <- samples_plot2 %>%
+  left_join(site_info %>% select(site_id, area, cover_type), by = c("site_id"))
+
+surveys2 <- samples_plot2 %>%
+   mutate(
+     cover_type = as.factor(cover_type),
+     cover_type = fct_recode(cover_type, "bare" = "bare", "herbaceous" = "grass")
+   )
+
+#add sampling date
+site_dates <- rodent_r1 %>%
+  group_by(site_id, plot_type) %>%
+  summarise(
+    date = first(date_day),
+    .groups = "drop"
+  )
+surveys2 <- surveys2 %>%
+  # Pull the dates in by matching site_id
+  left_join(site_dates, by = c("site_id", "plot_type"))
+
+library(lubridate) #date <-> julian date
+
+surveys2 <- surveys2 %>%
+   mutate(date = as.Date(date),
+          date = case_when( 
+            site_id == "bks_68" & plot_type == "ditch"   ~ as.Date("2024-05-04"),
+            site_id == "bks_96" & plot_type == "field" ~ as.Date("2024-05-06"),
+            TRUE ~ date # Keeps the original joined date for everything else
+            ))
+```
+
+## 2. Calculate avg rodent abundance by plot type
+
+```{r}
+#create summary dataframe for rodent data
+rodent_summary2 <- rodent_r1 %>%
+  group_by(site_id, plot_id, plot_type) %>%
+  summarise(num_burrows = n(), .groups = "drop") %>%
+  group_by(site_id, plot_type) %>%
+  summarise(avg_burrows = mean(num_burrows), .groups = "drop")
+
+#Add number of burrows to surveys dataframe
+surveys2 <- surveys2 %>%
+  left_join(rodent_summary2, by = c("site_id", "plot_type")) %>%
+   mutate(avg_burrows = replace_na(avg_burrows, 0))
+
+
+```
+
+## 3. Calculate difference in burrow abundance between ditch and field for each site
+
+```{r}
+burrow_differences <- surveys2 %>%
+  # 1. Keep only the columns needed for this calculation
+  select(site_id, cover_type, plot_type, avg_burrows) %>%
+  
+  # 2. Pivot plot_type values (ditch, field) into their own columns
+  pivot_wider(
+    names_from = plot_type, 
+    values_from = avg_burrows
+  ) %>%
+  
+  # 3. Calculate the difference (e.g., Ditch minus Field)
+  mutate(
+    ditch_field_diff = ditch - field
+  )
+
+#add date to dataframe
+# 1. Pivot your dates wide so each site has exactly one row
+site_dates_wide <- site_dates %>%
+  mutate(plot_type = paste0("date_", plot_type)) %>% # turns into "date_ditch" and "date_field"
+  pivot_wider(names_from = plot_type, values_from = date)
+
+# 2. Join it seamlessly to your differences dataframe
+burrow_differences <- burrow_differences %>%
+  left_join(site_dates_wide, by = "site_id") %>%
+  mutate(date_ditch = as.Date(date_ditch),
+         date_field = as.Date(date_field),
+         date_ditch = case_when(site_id == "bks_68" & cover_type == "bare"   ~ as.Date("2024-05-04"),
+            TRUE ~ date_ditch), # Keeps the original joined date for everything else
+         date_field = case_when(site_id == "bks_96" & cover_type == "bare"   ~ as.Date("2024-05-06"),
+            TRUE ~ date_field # Keeps the original joined date for everything else
+            )
+         )
+
+
+range(burrow_differences$date_ditch) ##april 17-may 6
+range(burrow_differences$date_field) ##april 1 - may 23
+```
+
+## 4. Plot
+
+```{r}
+# Plotting the trajectories
+ggplot(burrow_differences, aes(x = date_field, y = ditch_field_diff)) +
+  geom_line(color = "grey50", alpha = 0.6, size = 0.8) +
+  geom_point(shape = 21, size = 5, fill = "black", stroke = 1) +
+  labs(
+    x = "Survey date",
+    y = "Ditch burrow - field burrow",
+    fill = "Cover type"
+  ) +
+  geom_smooth(method = "lm", color = "blue", fill = "blue", alpha = 0.15, se = TRUE) +
+  # 3. Split into panels by cover type
+  facet_wrap(~cover_type) +
+  theme_classic(base_size = 20)
+```
+
+## 5. Stats
+
+```{r}
+#filter for each cover type
+bare_diffs <- burrow_differences %>% filter(cover_type == "bare")
+grass_diffs <- burrow_differences %>% filter(cover_type == "herbaceous")
+
+# Non-parametric trend test
+cor.test(~ ditch_field_diff + as.numeric(date_field), data = bare_diffs, method = "kendall")
+##
+cor.test(~ ditch_field_diff + as.numeric(date_field), data = grass_diffs, method = "kendall")
+```
+
+# Plot the difference between grass and bare over time (within-field plots only).
+
+## 1. Create dataframe for rodent surveys for all sites and rounds
+
+```{r}
+#filter to round 1 data (since that has ditch and within field measurements)
+rodent_field <- rodent %>%
+  filter(plot_type == "field")
+
+#create vector for site names not "sandhu_ladnertrunk" and "lbf_ladnertrunk" since they were not sampled during round 1
+site_names2 <- c("bates_57b", "bks_56", "chong_68", "bks_68", "chong_96", "bks_96", "gwb_neaves", "bks_neaves", "avtar_168", "surjit_168")
+
+#create vector for round
+round <-c("2024_r1", "2024_r4")
+
+
+#combine vectors into dataframe 
+samples_plot3 <- tibble(site_id = site_names2) %>%
+  expand_grid(round)
+
+samples_plot3 <- samples_plot3 %>%
+  left_join(site_info %>% select(site_id, area, cover_type), by = c("site_id"))
+
+surveys3 <- samples_plot3 %>%
+   mutate(
+     cover_type = as.factor(cover_type),
+     cover_type = fct_recode(cover_type, "bare" = "bare", "herbaceous" = "grass")
+   )
+```
+
+## 2. Calculate burrow abundance in each area/site/covertype/round
+
+```{r}
+#create summary dataframe for rodent data
+rodent_summary3 <- rodent_field %>%
+  group_by(site_id, cover_type, area, round) %>%
+  summarise(num_burrows = n(), .groups = "drop")
+
+rodent_summary3 <- rodent_summary3 %>%
+   mutate(
+     cover_type = as.factor(cover_type),
+     cover_type = fct_recode(cover_type, "bare" = "bare", "herbaceous" = "grass")
+   )
+
+#Add number of burrows to surveys dataframe
+surveys3 <- surveys3 %>%
+  left_join(rodent_summary3, by = c("site_id", "area", "cover_type", "round")) %>%
+   mutate(num_burrows = replace_na(num_burrows, 0))
+```
+
+## 3. Calculate difference between bare and grassy sites within each area
+
+```{r}
+burrow_differences_covertype <- surveys3 %>%
+  # 1. Keep only the columns needed for this calculation
+  select(area, cover_type, round, num_burrows) %>%
+  
+  # 2. Pivot plot_type values (ditch, field) into their own columns
+  pivot_wider(
+    names_from = cover_type, 
+    values_from = num_burrows
+  ) %>%
+  
+  # 3. Calculate the difference (e.g., Ditch minus Field)
+  mutate(
+    herb_bare_diff = herbaceous - bare
+  )
+```
+
+## 4. Plot
+
+```{r}
+ggplot(burrow_differences_covertype, aes(x = round, y = herb_bare_diff)) +
+  geom_boxplot(alpha = 0.7, outlier.shape = NA, width = 0.5) +
+  # 2. Add jittered points so you can see the individual 'area' blocks
+  geom_jitter(width = 0.1, size = 3, alpha = 0.8, color = "black", shape = 21, fill = "white") +
+  # 3. Add a reference line at 0 (where herbaceous count == bare count)
+  geom_hline(yintercept = 0, linetype = "dashed", color = "grey40", linewidth = 0.8) +
+  labs(
+    x = "Sampling round",
+    y = "Burrow abundance difference\nbetween cover types\n(herbaceous - bare)"
+  ) +
+  # Using a clean theme and removing the redundant legend
+  theme_classic(base_size = 18) 
+```
+
+# Plot difference in burrow abundance between grassy and bare sites over date (only in R2) 
+
+## 1. Add date to burrow dataframe
+
+```{r}
+# 1. Create a reference dataframe containing just the herbaceous dates for each area
+herb_dates_r2 <- rodent %>%
+  filter(round == "2024_r4" & plot_type == "field" & cover_type == "grass") %>%
+  select(area, herb_date = date_day) %>%
+  distinct(area, .keep_all = TRUE)
+
+burrow_differences_covertype_r2 <- surveys3 %>%
+  # 1. Filter explicitly to only Round 1 data
+  filter(round == "2024_r4") %>%
+  left_join(herb_dates_r2,by = "area") %>%
+  # 3. Clean up columns before the pivot 
+  select(area, cover_type, herb_date, num_burrows) %>%
+  # 4. Pivot cover type wide to calculate the pairing difference
+  pivot_wider(
+    names_from = cover_type, 
+    values_from = num_burrows
+  ) %>%
+  # 5. Calculate your treatment difference
+  mutate(
+    herb_bare_diff = herbaceous - bare
+  )
+  
+```
+
+## 2. Plot
+
+```{r}
+ggplot(burrow_differences_covertype_r2, aes(x = herb_date, y = herb_bare_diff)) +
+  geom_line(color = "grey50", alpha = 0.6, size = 0.8) +
+  geom_point(shape = 21, size = 5, fill = "black", stroke = 1) +
+  labs(
+    x = "Survey date",
+    y = "Burrow count difference\nbetween cover types"
+  ) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "grey40", linewidth = 0.8) +
+  theme_classic(base_size = 20) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+```
