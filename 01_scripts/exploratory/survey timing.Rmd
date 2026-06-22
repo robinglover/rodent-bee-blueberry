@@ -1,0 +1,298 @@
+---
+title: "survey timing"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_analysis/rodent-bee-blueberry")
+```
+
+# Load packages
+
+```{r}
+#load package
+library(tidyverse)   #data manipulation, visualization etc. (dplyr, ggplot2, tidyr)
+library(lubridate) #date <-> julian date
+
+```
+
+# Create lists of dates
+
+```{r}
+dates <- read.csv("06_cleandata/survey_dates.csv")
+
+#create unique row for each plot id at each site for each survey
+dates_long <- dates %>%
+  pivot_longer(
+    cols = c(p1, p2, d),
+    names_to = "plot_id",
+    values_to = "plot_value"
+  ) %>%
+  rename(area = Region.name, ##rename columns
+         date = Date,
+         site_id = Site.name,
+         survey_type = Survey.type,
+         round = Round,
+         dVf = ditchVSfield_analysis,
+         fVb = floralVSburrow_analysis,
+         ) %>%
+  filter(plot_value != "n") %>% ##filter to only rows where plot_type = y
+  select(date, area, site_id, plot_id, round, survey_type, dVf, fVb) %>% #select columns to keep 
+  mutate(plot_type = if_else(plot_id == "d", "ditch", "field")) %>% #add plot type column 
+  mutate(plot_type = as.factor(plot_type)) %>% #make it a factor 
+  mutate(date = as.Date(date)) %>% #fix date formatting
+  mutate(julianDate = julian.Date(date)) #create column for julian date
+
+#create dataframe for just rodent dates
+##dates for surveys included in ditchVSfield (round 1) analyses:
+rodent_dates_dVf <- dates_long %>%
+  filter(survey_type == "rodent" & dVf == "y") %>%
+  select(date, area, site_id, plot_id, round, plot_type, julianDate)
+
+rodent_dates_dVf %>%
+  count(area, site_id, round, plot_id) %>% #looks good
+  View()
+
+write_csv(rodent_dates_dVf, file = file.path("06_cleandata","rodent_dates_dVf.csv"))
+
+##dates for surveys included in floralVSburrow (round 2) analyses:
+rodent_dates_fVb <- dates_long %>%
+  filter(survey_type == "rodent" & fVb == "y") %>%
+  select(date, area, site_id, plot_id, round, plot_type, julianDate)
+
+#check
+rodent_dates_fVb %>%
+  count(area, site_id, round, plot_id) %>% #looks good
+  View()
+
+#save
+write_csv(rodent_dates_fVb, file = file.path("06_cleandata","rodent_dates_fVb.csv"))
+
+#create dataframe for just bee dates
+bee_dates <- dates_long %>%
+  filter(survey_type == "bombus") %>%
+  select(date, area, site_id, plot_id, round, plot_type, julianDate)
+
+#check
+bee_dates %>%
+  count(area, site_id, round, plot_id) %>%
+  View() ##looks good
+
+#save
+write_csv(bee_dates, file = file.path("06_cleandata","bee_dates.csv"))
+
+#create dataframe for just veg dates
+veg_dates <- dates_long %>%
+  filter(survey_type == "vegetation") %>%
+  select(date, area, site_id, plot_id, round, plot_type, julianDate)
+
+#check
+veg_dates %>%
+  count(area, site_id, round, plot_id) %>%
+  View() ##looks good
+
+#save
+write_csv(veg_dates, file = file.path("06_cleandata","veg_dates.csv"))
+
+
+```
+
+# Check survey timing
+
+## Rodents
+
+### Check dates apart for ditch vs field surveys.
+
+```{r}
+rod_days_apart_dVf <- rodent_dates_dVf %>%
+  #1. choose one within-field plot so that there is only one date for field
+  filter(plot_id != "p2") %>%
+  # 2. Pivot plot_type wide so ditch and field dates are on the same row
+  pivot_wider(
+    id_cols = c(area, site_id, round),
+    names_from = plot_type,
+    values_from = julianDate
+  ) %>%
+  
+  # 3. Calculate the absolute number of days apart
+  mutate(
+    days_apart = abs(as.numeric(ditch - field))
+  ) %>%
+  
+  # 4. Clean up column names for presentation
+  rename(
+    `Ditch Date` = ditch,
+    `Field Date` = field,
+    `Days Apart` = days_apart
+  )
+
+View(rod_days_apart_dVf)
+
+#save
+write_csv(rod_days_apart_dVf, file = file.path("07_outputs","rodent_days_apart_dVf.csv"))
+```
+
+### Check dates apart for grass vs bare in each area
+
+```{r}
+rod_days_apart_fVb <- rodent_dates_fVb %>%
+  filter(plot_id == "p1") %>%
+  #add cover type to dataframe
+  left_join(site_info %>% dplyr::select(cover_type, site_id), by = c("site_id"))%>%
+  # 2. Pivot plot_type wide so ditch and field dates are on the same row
+  pivot_wider(
+    id_cols = c(area, round),
+    names_from = cover_type,
+    values_from = julianDate
+  ) %>%
+  
+  # 3. Calculate the absolute number of days apart
+  mutate(
+    days_apart = abs(as.numeric(grass - bare))
+  ) %>%
+  
+  # 4. Clean up column names for presentation
+  rename(
+    `Herb Date` = grass,
+    `Bare Date` = bare,
+    `Days Apart` = days_apart
+  )
+
+View(rod_days_apart_fVb)
+
+#save
+write_csv(rod_days_apart_fVb, file = file.path("07_outputs","rodent_days_apart_fVb.csv"))
+```
+
+## Bees
+
+### Check dates apart for ditch vs field surveys.
+
+```{r}
+bee_days_apart_dVf <- bee_dates %>%
+  #1. choose one within-field plot so that there is only one date for field
+  filter(plot_id != "p2") %>%
+  # 2. Pivot plot_type wide so ditch and field dates are on the same row
+  pivot_wider(
+    id_cols = c(area, site_id, round),
+    names_from = plot_type,
+    values_from = julianDate
+  ) %>%
+  
+  # 3. Calculate the absolute number of days apart
+  mutate(
+    days_apart = abs(as.numeric(ditch - field))
+  ) %>%
+  
+  # 4. Clean up column names for presentation
+  rename(
+    `Ditch Date` = ditch,
+    `Field Date` = field,
+    `Days Apart` = days_apart
+  )
+
+View(bee_days_apart_dVf)
+
+#save
+write_csv(bee_days_apart_dVf, file = file.path("07_outputs","bee_days_apart_dVf.csv"))
+```
+
+### Check dates apart for grass vs bare in each area
+
+```{r}
+bee_days_apart_fVb <- bee_dates %>%
+  filter(plot_id == "p1") %>% #choose one plot id
+  #add cover type to dataframe
+  left_join(site_info %>% dplyr::select(cover_type, site_id), by = c("site_id"))%>%
+  # 2. Pivot plot_type wide so ditch and field dates are on the same row
+  pivot_wider(
+    id_cols = c(area, round),
+    names_from = cover_type,
+    values_from = julianDate
+  ) %>%
+  
+  # 3. Calculate the absolute number of days apart
+  mutate(
+    days_apart = abs(as.numeric(grass - bare))
+  ) %>%
+  
+  # 4. Clean up column names for presentation
+  rename(
+    `Herb Date` = grass,
+    `Bare Date` = bare,
+    `Days Apart` = days_apart
+  )
+
+View(bee_days_apart_fVb)
+
+#save
+write_csv(bee_days_apart_fVb, file = file.path("07_outputs","bee_days_apart_fVb.csv"))
+```
+
+## Veg
+
+### Check dates apart for ditch vs field surveys.
+
+```{r}
+veg_days_apart_dVf <- veg_dates %>%
+  #1. choose one within-field plot so that there is only one date for field
+  filter(plot_id != "p2") %>%
+  # 2. Pivot plot_type wide so ditch and field dates are on the same row 
+  pivot_wider(
+    id_cols = c(area, site_id, round),
+    names_from = plot_type,
+    values_from = julianDate
+  ) %>%
+  
+  # 3. Calculate the absolute number of days apart
+  mutate(
+    days_apart = abs(as.numeric(ditch - field))
+  ) %>%
+  
+  # 4. Clean up column names for presentation
+  rename(
+    `Ditch Date` = ditch,
+    `Field Date` = field,
+    `Days Apart` = days_apart
+  )
+
+View(veg_days_apart_dVf)
+
+#save
+write_csv(veg_days_apart_dVf, file = file.path("07_outputs","veg_days_apart_dVf.csv"))
+```
+
+### Check dates apart for grass vs bare in each area
+
+```{r}
+veg_days_apart_fVb <- veg_dates %>%
+  filter(plot_id == "p1") %>% #choose one plot id
+  #add cover type to dataframe
+  left_join(site_info %>% dplyr::select(cover_type, site_id), by = c("site_id"))%>%
+  # 2. Pivot plot_type wide so ditch and field dates are on the same row
+  pivot_wider(
+    id_cols = c(area, round),
+    names_from = cover_type,
+    values_from = julianDate
+  ) %>%
+  
+  # 3. Calculate the absolute number of days apart
+  mutate(
+    days_apart = abs(as.numeric(grass - bare))
+  ) %>%
+  
+  # 4. Clean up column names for presentation
+  rename(
+    `Herb Date` = grass,
+    `Bare Date` = bare,
+    `Days Apart` = days_apart
+  )
+
+View(veg_days_apart_fVb)
+
+#save
+write_csv(veg_days_apart_fVb, file = file.path("07_outputs","veg_days_apart_fVb.csv"))
+```
+
+## 
