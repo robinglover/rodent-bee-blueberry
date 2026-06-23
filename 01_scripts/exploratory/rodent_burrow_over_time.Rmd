@@ -87,7 +87,7 @@ surveys <- surveys %>%
 
 ```
 
-## 2. Generate burrow counts for each site within each round 
+## 2. Generate burrow counts for each site within each round
 
 Only include within-field data since ditch data was only collected in R1
 
@@ -309,7 +309,7 @@ cor.test(~ ditch_field_diff + as.numeric(avg_date), data = grass_diffs, method =
 ##tau = -0.4, p = 0.4833
 ```
 
-# Plot the difference between grass and bare vs round 
+# Plot the difference between grass and bare vs round
 
 Use within-field date (not ditch data) only since floralVSburrow paper did not include ditch data.
 
@@ -508,7 +508,7 @@ ggplot(burrow_differences_covertype_time, aes(x = avg_date, y = herb_bare_diff, 
   geom_line(color = "grey50", alpha = 0.6, size = 0.8) +
   geom_point(shape = 21, size = 5, fill = "black", stroke = 1) +
   labs(
-    x = "Survey date\n(averaged between field and ditch surveys)",
+    x = "Survey date\n(averaged between herb and bare surveys)",
     y = "Burrow count difference\nbetween cover types\n(herbaceous - bare)"
   ) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "grey40", linewidth = 0.8) +
