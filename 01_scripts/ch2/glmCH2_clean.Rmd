@@ -228,6 +228,14 @@ library(emmeans)
 pairs(emmeans(ditchVSfield_veg_siteArea_gaus, ~ cover_type | plot_type))
 ```
 
+Find effect of plot type within each cover type
+
+```{r}
+pairs(emmeans(ditchVSfield_veg_siteArea_gaus, ~ plot_type | cover_type))
+```
+
+### 
+
 ### Plots
 
 Cover type x plot type
@@ -589,6 +597,12 @@ Find effect of cover type in each plot type
 
 ```{r}
 pairs(emmeans(rodent_veg_siteOnly_nbin, ~ cover_type | plot_type))
+```
+
+Find effect of plot type in each cover type
+
+```{r}
+pairs(emmeans(rodent_veg_siteOnly_nbin, ~ plot_type | cover_type))
 ```
 
 ### Plots
