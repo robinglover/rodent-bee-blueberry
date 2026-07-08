@@ -17,7 +17,7 @@ library(tidyverse)   #data manipulation, visualization etc. (dplyr, ggplot2, tid
 #read in data
 bee <- read.csv("06_cleandata/bee_clean.csv")
 floral <- read.csv("06_cleandata/floral_clean.csv")
-rodent <- read.csv("06_cleandata/rodent_clean.csv")
+rodent <- read.csv("06_cleandata/rodent_cleanv2.csv")
 site_info <- read.csv("06_cleandata/site_info_clean.csv")
 ```
 
@@ -135,4 +135,39 @@ site_level_summary <- site_level_summary_bee %>%
   )
 
     
+```
+Create table for survey dates
+
+```{r}
+#load survey dates
+bee_dates <- read.csv("06_cleandata/bee_dates.csv")
+rod_dates <- read.csv("06_cleandata/rodent_dates_fVb.csv")
+veg_dates <- read.csv("06_cleandata/veg_dates.csv")
+
+# 1. Combine data frames and parse out the Year and Round details
+master_data <- bind_rows(
+  bee_dates %>% mutate(survey_type = "Bombus"),
+  rod_dates %>% mutate(survey_type = "Rodent"),
+  veg_dates %>% mutate(survey_type = "Vegetation")
+) %>%
+  filter(plot_id == "p1") %>% #select only p1 so there is one date per site
+  
+  # Format date to MM-DD to match your image exactly
+  mutate(date_formatted = format(as.Date(date), "%m-%d"))
+
+# 2. Pivot wide using a combined header name
+wide_data <- master_data %>%
+  select(area, site_id, survey_type, round, date_formatted) %>%
+  pivot_wider(
+    id_cols = c(area, site_id),
+    names_from = c(survey_type, round),
+    names_sep = "_",
+    values_from = date_formatted
+  ) %>%
+  # Fill missing cells with empty space instead of NA
+  mutate(across(everything(), ~ replace_na(.x, "")))
+
+#save
+write_csv(wide_data, file = file.path("07_outputs","survey_dates_fVb.csv"))
+
 ```

@@ -52,7 +52,6 @@ rodent_dates_dVf <- dates_long %>%
 
 rodent_dates_dVf %>%
   count(area, site_id, round, plot_id) %>% #looks good
-  View()
 
 write_csv(rodent_dates_dVf, file = file.path("06_cleandata","rodent_dates_dVf.csv"))
 
@@ -64,7 +63,6 @@ rodent_dates_fVb <- dates_long %>%
 #check
 rodent_dates_fVb %>%
   count(area, site_id, round, plot_id) %>% #looks good
-  View()
 
 #save
 write_csv(rodent_dates_fVb, file = file.path("06_cleandata","rodent_dates_fVb.csv"))
@@ -295,4 +293,168 @@ View(veg_days_apart_fVb)
 write_csv(veg_days_apart_fVb, file = file.path("07_outputs","veg_days_apart_fVb.csv"))
 ```
 
-## 
+## Check dates apart for p1 and p2
+
+Rodent
+
+R1
+
+```{r}
+rod_days_apart_r1_p1p2 <- rodent_dates_dVf %>%
+  filter(plot_id != "d") %>%
+  # 2. Pivot plot_type wide so p1 and p2 dates are on the same row
+  pivot_wider(
+    id_cols = c(area, site_id, round),
+    names_from = plot_id,
+    values_from = julianDate
+  ) %>%
+  
+  # 3. Calculate the absolute number of days apart
+  mutate(
+    days_apart = abs(as.numeric(p1 - p2))
+  ) %>%
+  
+  # 4. Clean up column names for presentation
+  rename(
+    `P1 Date` = p1,
+    `P2 Date` = p2,
+    `Days Apart` = days_apart
+  )
+
+View(rod_days_apart_r1_p1p2) ##always done on same day!
+
+
+
+#save
+write_csv(rod_days_apart_r1_p1p2, file = file.path("07_outputs","rodent_days_apart_r1_p1p2.csv"))
+```
+
+R2
+
+```{r}
+rod_days_apart_r2_p1p2 <- rodent_dates_fVb %>%
+  filter(plot_id != "d") %>%
+  # 2. Pivot plot_type wide so p1 and p2 dates are on the same row
+  pivot_wider(
+    id_cols = c(area, site_id, round),
+    names_from = plot_id,
+    values_from = julianDate
+  ) %>%
+  
+  # 3. Calculate the absolute number of days apart
+  mutate(
+    days_apart = abs(as.numeric(p1 - p2))
+  ) %>%
+  
+  # 4. Clean up column names for presentation
+  rename(
+    `P1 Date` = p1,
+    `P2 Date` = p2,
+    `Days Apart` = days_apart
+  )
+
+View(rod_days_apart_r2_p1p2) ##always done on same day!
+
+
+
+#save
+write_csv(rod_days_apart_r2_p1p2, file = file.path("07_outputs","rodent_days_apart_r2_p1p2.csv"))
+```
+
+Bee
+
+```{r}
+bee_days_apart_p1p2 <- bee_dates %>%
+  filter(plot_id != "d") %>%
+  # 2. Pivot plot_type wide so p1 and p2 dates are on the same row
+  pivot_wider(
+    id_cols = c(area, site_id, round),
+    names_from = plot_id,
+    values_from = julianDate
+  ) %>%
+  
+  # 3. Calculate the absolute number of days apart
+  mutate(
+    days_apart = abs(as.numeric(p1 - p2))
+  ) %>%
+  
+  # 4. Clean up column names for presentation
+  rename(
+    `P1 Date` = p1,
+    `P2 Date` = p2,
+    `Days Apart` = days_apart
+  )
+
+View(bee_days_apart_p1p2) ##always done on same day!
+
+
+#save
+write_csv(bee_days_apart_p1p2, file = file.path("07_outputs","bee_days_apart_p1p2.csv"))
+```
+
+Veg
+
+```{r}
+veg_days_apart_p1p2 <- veg_dates %>%
+  filter(plot_id != "d") %>%
+  # 2. Pivot plot_type wide so p1 and p2 dates are on the same row
+  pivot_wider(
+    id_cols = c(area, site_id, round),
+    names_from = plot_id,
+    values_from = julianDate
+  ) %>%
+  
+  # 3. Calculate the absolute number of days apart
+  mutate(
+    days_apart = abs(as.numeric(p1 - p2))
+  ) %>%
+  
+  # 4. Clean up column names for presentation
+  rename(
+    `P1 Date` = p1,
+    `P2 Date` = p2,
+    `Days Apart` = days_apart
+  )
+
+View(veg_days_apart_p1p2) ##almost always done on same day. In R1, p1 and p2 at one site were surveyed 5 days apart and p1 and p2 at another site were surveyed 3 days apart.
+
+#save
+write_csv(veg_days_apart_p1p2, file = file.path("07_outputs","veg_days_apart_p1p2.csv"))
+```
+
+Calculate days between veg survey and bee survey at each site/round
+
+```{r}
+veg_bee_gap <- bind_rows(
+  bee_dates %>% mutate(survey_type = "Bee"),
+  veg_dates %>% mutate(survey_type = "Veg")
+) %>%
+  
+  # 2. Strict filter for p1 to secure exactly one date per site visit
+  filter(plot_id == "p1") %>%
+  
+  # 3. Keep only the core tracking variables
+  select(area, site_id, round, survey_type, julianDate) %>%
+  
+  # 4. Pivot wide so 'Bee' and 'Veg' julian dates sit side-by-side on the same row
+  pivot_wider(
+    id_cols = c(area, site_id, round),
+    names_from = survey_type,
+    values_from = julianDate
+  ) %>%
+  
+  # 5. Calculate the absolute number of days apart between the two surveys
+  mutate(
+    days_apart = abs(as.numeric(Veg - Bee))
+  ) %>%
+  
+  # 6. Clean up column names for clean presentation/saving
+  rename(
+    `Bee Date (Julian)` = Bee,
+    `Veg Date (Julian)` = Veg,
+    `Days Apart` = days_apart
+  )
+
+# View the output dataframe
+View(veg_bee_gap)
+```
