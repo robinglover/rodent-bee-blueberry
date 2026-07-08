@@ -23,7 +23,7 @@ library(lubridate) #package used to generate julian date from calendar date
 #read in data
 bee <- read.csv("06_cleandata/bee_clean.csv")
 floral <- read.csv("06_cleandata/floral_clean.csv")
-rodent <- read.csv("06_cleandata/rodent_clean.csv")
+rodent <- read.csv("06_cleandata/rodent_cleanv2.csv")
 veg <- read.csv("06_cleandata/veg_clean.csv")
 site_info <- read.csv("06_cleandata/site_info_clean.csv")
 surveys <- read.csv("06_cleandata/surveys.csv")
@@ -157,7 +157,26 @@ surveys$julian.date_scaled <- as.numeric(scale(surveys$julian.date))
 surveys$n_bees_scaled <- as.numeric(scale(surveys$n_bees))
 ```
 
-2.  Try different random effects structures. Use zero-inflated model to account for high abundance of zeros in the dataset.
+2.  Check for zero-inflation in the data by comparing expected proportion of zeros in the dataset to the actual proportion of zeros. If observed \> expected, ZI model is justified.
+
+-   use ZI Poisson model to account for high proportion of zeros in NSQ counts (~70% of plots had zero bumblebees), which exceeded expectations under a standard Poisson distribution (~45%).
+
+```{r}
+# Fit a simple Poisson
+pois_mod <- glm(n_bees ~ 1, family = poisson, data = surveys)
+
+# Observed proportion of zeros
+obs_zeros <- mean(surveys$n_bees == 0)
+
+# Expected proportion of zeros under Poisson
+lambda <- mean(surveys$n_bees)
+exp_zeros <- dpois(0, lambda)
+
+obs_zeros ##0.702381
+exp_zeros ##0.4461309
+```
+
+3.  Try different random effects structures. Use zero-inflated model to account for high abundance of zeros in the dataset.
 
 ```{r}
 caste_glm_full <- glmmTMB(n_bees ~ caste*julian.date_scaled*plot_type +
@@ -199,7 +218,7 @@ anova(caste_glm_noRE, caste_glm_justSite, caste_glm_noArea, caste_glm_full)
 ##no area model is best
 ```
 
-2)  Check diagnostics of model
+4.  Check diagnostics of model
 
 -   look good
 
@@ -208,7 +227,7 @@ anova(caste_glm_noRE, caste_glm_justSite, caste_glm_noArea, caste_glm_full)
 residuals_caste_glm_noArea <- simulateResiduals(fittedModel = caste_glm_noArea, plot = TRUE)
 ```
 
-3)  Plot results
+5.  Plot results
 
 ```{r}
 summary(caste_glm_noArea)
