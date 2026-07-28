@@ -115,9 +115,13 @@ burrows_areaOnly <- glmmTMB(num_burrows ~ grass_forb_perc_scaled +
                            family = poisson, 
                            data = field_data)
 
+burrows_noRE <- glmmTMB(num_burrows ~ grass_forb_perc_scaled,
+                           family = poisson, 
+                           data = field_data)
+
 
 #compare models using maximum likelihood test
-anova(burrows_full, burrows_siteOnly, burrows_areaOnly)
+anova(burrows_full, burrows_siteOnly, burrows_areaOnly, burrows_noRE)
 
 ##results tells us the burrows_siteOnly is best model (lowest AIC)
 ```
@@ -198,9 +202,13 @@ burrows_cover_areaOnly <- glmmTMB(num_burrows ~ cover_type +
                            family = poisson, 
                            data = field_data)
 
+burrows_cover_noRE <- glmmTMB(num_burrows ~ cover_type,
+                           family = poisson, 
+                           data = field_data)
+
 
 #compare models using maximum likelihood test
-anova(burrows_cover_full, burrows_cover_siteOnly, burrows_cover_areaOnly)
+anova(burrows_cover_full, burrows_cover_siteOnly, burrows_cover_areaOnly, burrows_cover_noRE)
 
 ##full model is best (lowest AIC)
 ```
@@ -228,6 +236,12 @@ residuals_burrows_cover_siteOnly <- simulateResiduals(fittedModel = burrows_cove
 
 ```{r}
 summary(burrows_cover_siteOnly)
+```
+
+Back transform effect size to response scale
+
+```{r}
+exp(1.9894) ##7.3
 ```
 
 ## Plots
@@ -300,9 +314,14 @@ I want to determine what influences the proportion of burrows that are inactive 
       family = binomial(link = "logit"), 
       data = field_data)
 
+    burrows_vacancy_noRE <- glmmTMB(
+      cbind(num_inactive_burrows, num_active_burrows) #tells the model that successes = number of inactive (vacant) burrows and failures = number of active burrows
+      ~ cover_type,
+      family = binomial(link = "logit"), 
+      data = field_data)
 
     #compare models using maximum likelihood test
-    anova(burrows_vacancy_full, burrows_vacancy_siteOnly, burrows_vacancy_areaOnly)
+    anova(burrows_vacancy_full, burrows_vacancy_siteOnly, burrows_vacancy_areaOnly, burrows_vacancy_noRE)
 
     ##results tells us the burrows_siteOnly is best model (lowest AIC)
     ```
@@ -408,6 +427,12 @@ floral_siteOnly <- clmm(as.factor(bombus_floral_abun) ~ cover_type +
                        link = "logit", 
                        data = field_data)
 
+floral_areaOnly <- clmm(as.factor(bombus_floral_abun) ~ cover_type +
+                         julian.date_scaled + 
+                         (1|area),
+                       link = "logit", 
+                       data = field_data)
+
 floral_AreaPlot <- clmm(as.factor(bombus_floral_abun) ~ cover_type +
                          julian.date_scaled + 
                          (1|area/plot_id),
@@ -419,7 +444,7 @@ floral_noRE <- polr(as.factor(bombus_floral_abun) ~ cover_type +
                        data = field_data)
 
 #compare models AIC
-AIC(floral_full, floral_noArea, floral_siteOnly, floral_AreaPlot, floral_noRE)
+AIC(floral_full, floral_noArea, floral_siteOnly, floral_areaOnly, floral_AreaPlot, floral_noRE)
 ##shows that model without random effect has best fit
 ```
 
@@ -427,6 +452,20 @@ AIC(floral_full, floral_noArea, floral_siteOnly, floral_AreaPlot, floral_noRE)
 
 ```{r}
 summary(floral_noRE)
+```
+
+Get p-values
+
+```{r}
+coefs <- coef(summary(floral_noRE))
+
+# Two-sided p-values
+p_values <- 2 * (1 - pnorm(abs(coefs[, "t value"])))
+
+# Combine with coefficient table
+coef_table <- cbind(coefs, "p value" = p_values)
+
+coef_table
 ```
 
 ## Plots
@@ -506,9 +545,6 @@ I added bee_season_type as a covariate, since during my exploratory data analyse
 -   use ZI Poisson model to account for high proportion of zeros in NSQ counts (~84% of plots had zero queens), which exceeded expectations under a standard Poisson distribution (~78%).
 
 ```{r}
-# Fit a simple Poisson
-pois_mod <- glm(nest_searching_queens ~ 1, family = poisson, data = field_data)
-
 # Observed proportion of zeros
 obs_zeros <- mean(field_data$nest_searching_queens == 0)
 
@@ -601,6 +637,21 @@ NSQ_AreaPlot <-  glmmTMB(nest_searching_queens ~ cover_type +
                       family = poisson, 
                       data = field_data)
 
+NSQ_Area <-  glmmTMB(nest_searching_queens ~ cover_type + 
+                        bombus_floral_abun_scaled + 
+                        num_burrows_scaled + 
+                        prop_inactive_scaled +
+                        bee_season_type + 
+                        (1|area),
+                      ziformula = ~ cover_type + 
+                        bombus_floral_abun_scaled + 
+                        num_burrows_scaled + 
+                        prop_inactive_scaled +
+                        bee_season_type +
+                        (1|area),
+                      family = poisson, 
+                      data = field_data)
+
 NSQ_noRE <- glmmTMB(nest_searching_queens ~ cover_type + 
                     bombus_floral_abun_scaled + 
                     num_burrows_scaled + 
@@ -632,6 +683,14 @@ residuals_nsq_noRE <- simulateResiduals(fittedModel =NSQ_noRE, plot = TRUE)
 
 ```{r}
 summary(NSQ_noRE)
+```
+
+Calculating predicted per burrow increase in NSQ
+
+```{r}
+sd_burrows <- sd(field_data$num_burrows)
+
+exp(0.5162 / sd_burrows)
 ```
 
 ## Plots
@@ -1061,6 +1120,16 @@ workers_AreaPlot <-  glmmTMB(workers ~ nest_searching_queens_scaled +
                      data = field_data
                        )
 
+workers_Area <-  glmmTMB(workers ~ nest_searching_queens_scaled +
+                       bombus_floral_abun_scaled + 
+                       num_burrows_scaled + 
+                         prop_inactive_scaled +
+                       bee_season_type+
+                         (1|area), 
+                     family = poisson,
+                     data = field_data
+                       )
+
 workers_noRE <- glmmTMB(workers ~ nest_searching_queens_scaled +
                        bombus_floral_abun_scaled + 
                        num_burrows_scaled + 
@@ -1071,7 +1140,7 @@ workers_noRE <- glmmTMB(workers ~ nest_searching_queens_scaled +
                        )
 
 #compare models using maximum likelihood test
-anova(workers_full, workers_noArea, workers_plotOnly, workers_siteOnly, workers_AreaPlot, workers_noRE)
+anova(workers_full, workers_noArea, workers_plotOnly, workers_siteOnly, workers_AreaPlot, workers_Area, workers_noRE)
 
 ##results tells us the model with no area is best (lowest AIC). 
 ```
@@ -1089,6 +1158,13 @@ residuals_workers_noArea <- simulateResiduals(fittedModel = workers_noArea, plot
 
 ```{r}
 summary(workers_noArea)
+```
+
+Calculate estimate of floral abundance on response scale
+
+```{r}
+sd_floral <- sd(field_data$bombus_floral_abun)
+exp(0.71632 / sd_floral) ##1.60
 ```
 
 ## Plots
