@@ -19,7 +19,7 @@ library(lme4) #for mixed effects models
 library(ggpubr) #for adding significance asterisks to graph
 
 #read in data
-data <- read.csv("06_cleandata/combined_plot_data.csv")
+data <- read.csv("06_cleandata/combined_plot_data_ch1.csv")
 
 #check that variables are in appropriate format
 str(data)
@@ -31,32 +31,39 @@ data <- data %>%
      round = as.factor(round),
      plot_id = as.factor(plot_id),
      bee_date = as.Date(bee_date),
-     area = as.factor(area))
+     area = as.factor(area),
+     cover_type = as.factor(cover_type))
 
 #filter data to only include within field data
 data <- data %>%
   filter(plot_id != "d")
 
+#update cover type names
+levels(data$cover_type) <- c("bare", "herbaceous")
+
+View(data)
 ```
 
 # Compare vegetation variables between grassy and bare
 
 \% bare:
 
-p=0.00057 but in wrong direction (more bare_perc in grassy sites) –\> likely due to dry (sprayed) veg, flooding and moss subtracting from bare_perc in bare sites
+p=0.00057 
 
 ```{r}
 ggplot(data, aes(x = cover_type, y = bare_perc)) + 
   geom_boxplot() +
   theme_classic(base_size = 15) +
-  xlab("Cover") +
-  ylab("% Bare") +
+  xlab("Cover type") +
+  ylab("Bare (% cover)") +
   stat_compare_means(
     method = "t.test",        # or "wilcox.test"
     label = "p.format",       # shows formatted p-value
-    size = 3.7,
-    vjust = 0
-  )
+    size = 5,
+    vjust = 0,
+    hjust = -4
+  ) +
+  theme_classic(base_size = 23)
 
 ```
 
@@ -82,17 +89,18 @@ ggplot(data, aes(x = cover_type, y = bare_flood_dry_bryo_perc)) +
 \% grass: p=1e-11
 
 ```{r}
+library(lme4)
+install.packages('lmerTest')
+library(lmerTest)
+
+g <- lmer(grass_perc ~ cover_type + (1 | area/site_id/plot_id), data = data)
+summary(g)
+
 ggplot(data, aes(x=cover_type, y = grass_perc)) + 
   geom_boxplot() +
-  theme_classic(base_size = 15) +
-  xlab("Cover") +
-  ylab("% Grass") +
-  stat_compare_means(
-    method = "t.test",        # or "wilcox.test"
-    label = "p.format",       # shows formatted p-value
-    size = 3.7,
-    vjust = 0
-  )
+  xlab("Cover type") +
+  ylab("Grass (% cover)") +
+  theme_classic(base_size = 23)
 ```
 
 \% grass by area
@@ -100,31 +108,36 @@ ggplot(data, aes(x=cover_type, y = grass_perc)) +
 ```{r}
 ggplot(data, aes(x = area, fill=cover_type, y = grass_perc)) + 
   geom_boxplot() +
-  theme_classic(base_size = 15) +
-  xlab("Area") +
-  ylab("% Grass") +
+  labs (x= "Area",
+        y = "Grass (% cover)",
+        fill = "Cover type") +
   stat_compare_means(
     method = "t.test",        # or "wilcox.test"
     label = "p.format",       # shows formatted p-value
-    size = 3.7,
-    vjust = 0
-  )
+    size = 5,
+    vjust = 0,
+    hjust = -4.3
+  ) + 
+  scale_fill_manual(values = c(
+    "herbaceous" = "darkgreen", 
+    "bare" = "tan4")) +
+  theme_classic(base_size = 23) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1))  # diagonal labels 
 ```
+
 
 \% forb: p=3.7e-07
 
 ```{r}
+f <- lmer(forb_perc ~ cover_type + (1 | area/site_id/plot_id), data = data)
+summary(f)
+
 ggplot(data, aes(x = cover_type, y = forb_perc)) + 
   geom_boxplot() +
-  theme_classic(base_size = 15) +
-  xlab("Cover") +
-  ylab("% Forb") +
-  stat_compare_means(
-    method = "t.test",        # or "wilcox.test"
-    label = "p.format",       # shows formatted p-value
-    size = 3.7,
-    vjust = 0
-  )
+  xlab("Cover type") +
+  ylab("Forb (% cover)") +
+  theme_classic(base_size = 23)
 ```
 
 \% grass + forb: p=\<2e-16
@@ -132,15 +145,16 @@ ggplot(data, aes(x = cover_type, y = forb_perc)) +
 ```{r}
 ggplot(data, aes(x = cover_type, y = grass_forb_perc)) + 
   geom_boxplot() +
-  theme_classic(base_size = 18) +
   xlab("Cover type") +
-  ylab("Percentage of grass/forb") +
+  ylab("Grass and forb (% cover)") +
   stat_compare_means(
     method = "t.test",        # or "wilcox.test"
     label = "p.format",       # shows formatted p-value
     size = 5,
-    vjust = 0
-  )
+    vjust = 0,
+    hjust = -3.2
+  ) +
+  theme_classic(base_size = 23)
 ```
 
 \% grass + forb by area
@@ -148,50 +162,50 @@ ggplot(data, aes(x = cover_type, y = grass_forb_perc)) +
 ```{r}
 ggplot(data, aes(x = area, fill = cover_type, y = grass_forb_perc)) + 
   geom_boxplot() +
-  theme_classic(base_size = 18) +
-  xlab("Area") +
-  ylab("Percentage of grass/forb") +
+  labs (x= "Area",
+        y = "Grass and forb\n(% cover)",
+        fill = "Cover type") +
   stat_compare_means(
     method = "t.test",        # or "wilcox.test"
     label = "p.format",       # shows formatted p-value
-    size = 3,
-    vjust = 0
-  ) +
+    size = 5,
+    vjust = 0,
+    hjust = -4.3
+  ) + 
+  scale_fill_manual(values = c(
+    "herbaceous" = "darkgreen", 
+    "bare" = "tan4")) +
+  theme_classic(base_size = 23) +
   theme(
-    axis.text.x = element_text(angle = 45, hjust = 1)  # diagonal labels
-  )
+    axis.text.x = element_text(angle = 45, hjust = 1))  # diagonal labels 
 ```
 
 grass h: p=1.8e-09
 
 ```{r}
+gh <- lmer(grass_h ~ cover_type + (1 | area/site_id/plot_id), data = data)
+summary(gh)
+anova(gh)
+
 ggplot(data, aes(x = cover_type, y = grass_h)) + 
   geom_boxplot() +
-  theme_classic(base_size = 15) +
-  xlab("Cover") +
-  ylab("Grass H") +
-  stat_compare_means(
-    method = "t.test",        # or "wilcox.test"
-    label = "p.format",       # shows formatted p-value
-    size = 3.7,
-    vjust = 0
-  )
+  xlab("Cover type") +
+  ylab("Grass height (cm)") +
+  theme_classic(base_size = 23)
 ```
 
 forb h: p = 0.00057
 
 ```{r}
+fh <- lmer(forb_h ~ cover_type + (1 | area/site_id/plot_id), data = data)
+summary(fh)
+anova(fh)
+
 ggplot(data, aes(x = cover_type, y = forb_h)) + 
   geom_boxplot() +
-  theme_classic(base_size = 15) +
-  xlab("Cover") +
-  ylab("Forb H") +
-  stat_compare_means(
-    method = "t.test",        # or "wilcox.test"
-    label = "p.format",       # shows formatted p-value
-    size = 3.7,
-    vjust = 0
-  )
+  xlab("Cover type") +
+  ylab("Forb height (cm)") +
+  theme_classic(base_size = 23)
 ```
 
 \% flood: p = 0.063
@@ -209,6 +223,70 @@ ggplot(data, aes(x = round, fill = cover_type, y = flood_perc)) +
     vjust = 0
   )
 ```
+
+Percent floral cover
+
+```{r}
+fc <- lmer(floral_perc ~ cover_type + (1 | area/site_id/plot_id), data = data)
+summary(fc)
+anova(fc)
+
+ggplot(data, aes(x = cover_type, y = floral_perc)) + 
+  geom_boxplot() +
+  xlab("Cover type") +
+  ylab("Floral (% cover)") +
+  theme_classic(base_size = 23)
+```
+
+
+Percent bombus floral cover
+
+```{r}
+bfc <- lmer(bombus_floral_perc ~ cover_type + (1 | area/site_id/plot_id), data = data)
+summary(bfc)
+
+ggplot(data, aes(x = cover_type, y = bombus_floral_perc)) + 
+  geom_boxplot() +
+  xlab("Cover type") +
+  ylab("Floral (% cover)") +
+  theme_classic(base_size = 23)
+```
+
+Floral abundance
+```{r}
+ggplot(data, aes(x = cover_type, y = floral_abun)) + 
+  geom_boxplot() +
+  xlab("Cover type") +
+  ylab("Floral (% cover)") +
+  stat_compare_means(
+    method = "t.test",        # or "wilcox.test"
+    label = "p.format",       # shows formatted p-value
+    size = 5,
+    vjust = 0,
+    hjust = -3.2
+  ) +
+  theme_classic(base_size = 23)
+```
+
+
+Bombus floral abundance
+
+```{r}
+ggplot(data, aes(x = cover_type, y = bombus_floral_abun)) + 
+  geom_boxplot() +
+  xlab("Cover type") +
+  ylab("Floral (% cover)") +
+  stat_compare_means(
+    method = "t.test",        # or "wilcox.test"
+    label = "p.format",       # shows formatted p-value
+    size = 5,
+    vjust = 0,
+    hjust = -3.2
+  ) +
+  theme_classic(base_size = 23)
+```
+
+
 
 # Compare variables of interest between bare and grassy
 
@@ -348,3 +426,7 @@ ggplot(data, aes(x=cover_type, y = forage_vaco))+
     label = "p.format",  # Display p-value 
     size = 3.7) # Adjust this value to make the asterisks larger
 ```
+
+
+
+
