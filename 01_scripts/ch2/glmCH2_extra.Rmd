@@ -162,9 +162,6 @@ surveys$n_bees_scaled <- as.numeric(scale(surveys$n_bees))
 -   use ZI Poisson model to account for high proportion of zeros in NSQ counts (~70% of plots had zero bumblebees), which exceeded expectations under a standard Poisson distribution (~45%).
 
 ```{r}
-# Fit a simple Poisson
-pois_mod <- glm(n_bees ~ 1, family = poisson, data = surveys)
-
 # Observed proportion of zeros
 obs_zeros <- mean(surveys$n_bees == 0)
 
@@ -206,6 +203,35 @@ caste_glm_justSite <- glmmTMB(n_bees ~ caste*julian.date_scaled*plot_type +
                             family = poisson,
                             data = surveys)
 
+caste_glm_justPlot <- glmmTMB(n_bees ~ caste*julian.date_scaled*plot_type +
+                            cover_type +
+                              (1|plot_id),
+                            ziformula = ~ caste*julian.date_scaled*plot_type +
+                            cover_type +
+                              (1|plot_id),
+                            family = poisson,
+                            data = surveys)
+
+caste_glm_justArea <- glmmTMB(n_bees ~ caste*julian.date_scaled*plot_type +
+                            cover_type +
+                              (1|area),
+                            ziformula = ~ caste*julian.date_scaled*plot_type +
+                            cover_type +
+                              (1|area),
+                            family = poisson,
+                            data = surveys)
+
+caste_glm_areaPlot <- glmmTMB(n_bees ~ caste*julian.date_scaled*plot_type +
+                            cover_type +
+                              (1|area/plot_id),
+                            ziformula = ~ caste*julian.date_scaled*plot_type +
+                            cover_type +
+                              (1|area/plot_id),
+                            family = poisson,
+                            data = surveys)
+
+
+
 caste_glm_noRE <- glmmTMB(n_bees ~ caste*julian.date_scaled*plot_type +
                             cover_type,
                           ziformula = ~ caste*julian.date_scaled*plot_type +
@@ -214,7 +240,7 @@ caste_glm_noRE <- glmmTMB(n_bees ~ caste*julian.date_scaled*plot_type +
                             data = surveys)
 
 #compare models
-anova(caste_glm_noRE, caste_glm_justSite, caste_glm_noArea, caste_glm_full)
+anova(caste_glm_noRE, caste_glm_justSite, caste_glm_noArea, caste_glm_justPlot, caste_glm_justArea, caste_glm_areaPlot, caste_glm_full)
 ##no area model is best
 ```
 
@@ -334,4 +360,15 @@ vaco_visit <- count(bee, flower_code == "vaco", caste != "") ##92
 queen_vaco_num/vaco_visit #0.70
 worker_vaco_num/vaco_visit #0.29
 male_vaco_num/vaco_visit #0.01
+
+vaco_caste <- data.frame(
+  caste = c("Queen", "Worker", "Male"),
+  count = c(64, 27, 1)
+)
+
+ggplot(vaco_caste, aes(x = "", y = count, fill = caste)) +
+  geom_col(width = 1) +
+  coord_polar(theta = "y") +
+  theme_void(base_size = 25) +
+  labs(fill = "Caste")
 ```

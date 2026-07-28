@@ -70,7 +70,7 @@ surveys$num_burrows_scaled <- as.numeric(scale(surveys$num_burrows))
 
 # Choosing which vegetation variables to include as predictors
 
-1.  Use PCA to determine which vegetation variables to include in my models. I don't want to include all of the predictors, since some will be correlated with each other and therefore dilute their effects of the response variables. I am using PCA so I can pick one variable that drives each of the main 3 components, and use these as the predictors in my model.
+1.  Use PCA to determine which vegetation variables to include in my models. I don't want to include all of the predictors, since some will be correlated with each other and therefore dilute their effects of the response variables. I am using PCA so I can pick one variable that drives each of the main 2 components, and use these as the predictors in my model.
 
 ```{r}
 pca_res <- prcomp(surveys[, c("bare_perc_scaled",
@@ -114,6 +114,13 @@ cor(surveys[, c("grass_forb_perc_scaled", "bombus_floral_abun_scaled")])
 
 ### Steps
 
+Check raw distribution of grass/forb %
+
+```{r}
+hist(surveys$grass_forb_perc)
+summary(surveys$grass_forb_perc)
+```
+
 Try different random effects structures with gamma model
 
 ```{r}
@@ -151,23 +158,28 @@ ditchVSfield_veg_areaPlot <- glmmTMB(grass_forb_perc_adj ~ cover_type*plot_type 
                             family = Gamma(link = "log"), 
                             data = surveys)
 
+ditchVSfield_veg_area <- glmmTMB(grass_forb_perc_adj ~ cover_type*plot_type + julian.date_scaled +
+                              (1|area),
+                            family = Gamma(link = "log"), 
+                            data = surveys)
+
 ditchVSfield_veg_noRE <- glmmTMB(grass_forb_perc_adj ~ cover_type*plot_type + julian.date_scaled,
                             family = Gamma(link = "log"), 
                             data = surveys)
 
 #compare models
 anova(ditchVSfield_veg_full, ditchVSfield_veg_noArea, ditchVSfield_veg_plotOnly, ditchVSfield_veg_siteOnly, ditchVSfield_veg_siteArea,
-      ditchVSfield_veg_areaPlot, ditchVSfield_veg_noRE)
-##siteArea is best
+      ditchVSfield_veg_areaPlot, ditchVSfield_veg_area, ditchVSfield_veg_noRE)
+##area is best
 ```
 
 Check diagnostics
 
 ```{r}
 #simulate residuals
-residuals_ditchVSfield_veg_siteArea <- simulateResiduals(fittedModel = ditchVSfield_veg_siteArea, plot = TRUE)
+residuals_ditchVSfield_veg_area <- simulateResiduals(fittedModel = ditchVSfield_veg_area, plot = TRUE)
 
-##results indicate plot is not a good fit.
+##results indicate model is not a good fit.
 ```
 
 Try transforming data log(x+1) and running gaussian model
@@ -178,8 +190,8 @@ surveys$log_grass_forb <- log(surveys$grass_forb_perc + 1)
 
 ##Model with gaussian distribution
 
-ditchVSfield_veg_siteArea_gaus <- glmmTMB(log_grass_forb ~ cover_type*plot_type + julian.date_scaled +
-                              (1|area/site_id),
+ditchVSfield_veg_Area_gaus <- glmmTMB(log_grass_forb ~ cover_type*plot_type + julian.date_scaled +
+                              (1|area),
                             family = gaussian(), 
                             data = surveys)
 ```
@@ -188,36 +200,36 @@ Check diagnostics
 
 ```{r}
 #simulate residuals
-residuals_ditchVSfield_veg_siteArea_gaus <- simulateResiduals(fittedModel = ditchVSfield_veg_siteArea_gaus, plot = TRUE)
+residuals_ditchVSfield_veg_Area_gaus <- simulateResiduals(fittedModel = ditchVSfield_veg_Area_gaus, plot = TRUE)
 
 ##model fit is good enough.  
 ```
 
-Try accounting for different variance between cover types.
+Try tweedie model
 
 ```{r}
-ditchVSfield_veg_siteArea_hetVar <- glmmTMB(log_grass_forb ~ 
-                                              cover_type*plot_type + 
-                                              julian.date_scaled +
-                                              (1|area/site_id),
-                                            dispformula = ~ cover_type,
-                                            family = gaussian(), 
-                                            data = surveys)
+ditchVSfield_veg_tweedie <- glmmTMB(
+  grass_forb_perc ~ cover_type*plot_type +
+    julian.date_scaled +
+    (1|area),
+  family = tweedie(link = "log"),
+  data = surveys
+)
 ```
 
 Check diagnostics
 
 ```{r}
 #simulate residuals
-residuals_ditchVSfield_veg_siteArea_hetVar <- simulateResiduals(fittedModel = ditchVSfield_veg_siteArea_hetVar, plot = TRUE)
+residuals_ditchVSfield_veg_tweedie <- simulateResiduals(fittedModel = ditchVSfield_veg_tweedie, plot = TRUE)
 
-##model fit is worse than gaussian 
+##looks good!
 ```
 
-Stick with gaussian. Print results
+Print output
 
 ```{r}
-summary(ditchVSfield_veg_siteArea_gaus)
+summary(ditchVSfield_veg_tweedie)
 ```
 
 Find effect of cover type within each plot type
@@ -225,13 +237,13 @@ Find effect of cover type within each plot type
 ```{r}
 library(emmeans)
 
-pairs(emmeans(ditchVSfield_veg_siteArea_gaus, ~ cover_type | plot_type))
+pairs(emmeans(ditchVSfield_veg_tweedie, ~ cover_type | plot_type))
 ```
 
 Find effect of plot type within each cover type
 
 ```{r}
-pairs(emmeans(ditchVSfield_veg_siteArea_gaus, ~ plot_type | cover_type))
+pairs(emmeans(ditchVSfield_veg_tweedie, ~ plot_type | cover_type))
 ```
 
 ### 
@@ -249,7 +261,7 @@ veg_data<- expand.grid(
 )
 
 # Get predicted probabilities and standard errors
-pred_veg <- predict(ditchVSfield_veg_siteArea_gaus,
+pred_veg <- predict(ditchVSfield_veg_tweedie,
                             newdata = veg_data,
                             se.fit = TRUE,
                             re.form = NA,
@@ -297,7 +309,7 @@ veg_data_date<- expand.grid(
 )
 
 # Get predicted probabilities and standard errors
-pred_veg_date <- predict(ditchVSfield_veg_siteArea,
+pred_veg_date <- predict(ditchVSfield_veg_tweedie,
                             newdata = veg_data_date,
                             se.fit = TRUE,
                             re.form = NA,
@@ -397,13 +409,20 @@ floral_AreaPlot <- clmm(bombus_floral_abun ~ cover_type*plot_type +
                          (1|area/plot_id),
                        link = "logit", 
                        data = surveys)
+
+floral_Area <- clmm(bombus_floral_abun ~ cover_type*plot_type +
+                         julian.date_scaled*plot_type + 
+                         (1|area),
+                       link = "logit", 
+                       data = surveys)
+
 floral_noRE <- polr(bombus_floral_abun ~ cover_type*plot_type +
                          julian.date_scaled*plot_type,
                        method = "logistic", 
                        data = surveys)
 
 #compare models AIC
-AIC(floral_full, floral_noArea, floral_siteOnly, floral_AreaPlot, floral_noRE)
+AIC(floral_full, floral_noArea, floral_siteOnly, floral_AreaPlot, floral_Area, floral_noRE)
 ##shows that model without random effect has best fit
 ```
 
@@ -411,6 +430,20 @@ Print results
 
 ```{r}
 summary(floral_noRE)
+```
+
+Calculate p-values from t-values
+
+```{r}
+coefs <- coef(summary(floral_noRE))
+
+# Two-sided p-values
+p_values <- 2 * (1 - pnorm(abs(coefs[, "t value"])))
+
+# Combine with coefficient table
+coef_table <- cbind(coefs, "p value" = p_values)
+
+coef_table
 ```
 
 ### Plots
@@ -559,8 +592,12 @@ rodent_veg_siteArea <- glmmTMB(num_burrows ~ cover_type*plot_type +
                             family = poisson, 
                             data = surveys)
 
+rodent_veg_noRE <- glmmTMB(num_burrows ~ cover_type*plot_type,
+                            family = poisson, 
+                            data = surveys)
+
 #compare models
-anova(rodent_veg_areaOnly, rodent_veg_siteOnly, rodent_veg_siteArea)
+anova(rodent_veg_areaOnly, rodent_veg_siteOnly, rodent_veg_siteArea, rodent_veg_noRE)
 ##site only is best
 ```
 
@@ -708,9 +745,6 @@ Plot model with interaction between vegetation variables and plot type to invest
 -   use ZI Poisson model to account for high proportion of zeros in NSQ counts (~79% of plots had zero queens), which exceeded expectations under a standard Poisson distribution (~64%).
 
 ```{r}
-# Fit a simple Poisson
-pois_mod <- glm(nest_searching_queens ~ 1, family = poisson, data = surveys)
-
 # Observed proportion of zeros
 obs_zeros <- mean(surveys$nest_searching_queens == 0)
 
@@ -760,6 +794,39 @@ nsq_glm_veg_justSite <- glmmTMB(nest_searching_queens ~ cover_type*plot_type +
                             family = poisson,
                             data = surveys)
 
+nsq_glm_veg_areaPlot <- glmmTMB(nest_searching_queens ~ cover_type*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                              bee_season_type+
+                              (1|area/plot_id),
+                            ziformula = ~cover_type*plot_type +
+                                bombus_floral_abun_scaled*plot_type+
+                              bee_season_type +
+                              (1|area/plot_id),  # zero-inflation model
+                            family = poisson,
+                            data = surveys)
+
+nsq_glm_veg_justarea <- glmmTMB(nest_searching_queens ~ cover_type*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                              bee_season_type+
+                              (1|area),
+                            ziformula = ~cover_type*plot_type +
+                                bombus_floral_abun_scaled*plot_type+
+                              bee_season_type +
+                              (1|area),  # zero-inflation model
+                            family = poisson,
+                            data = surveys)
+
+nsq_glm_veg_justPlot <- glmmTMB(nest_searching_queens ~ cover_type*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                              bee_season_type+
+                              (1|plot_id),
+                            ziformula = ~cover_type*plot_type +
+                                bombus_floral_abun_scaled*plot_type+
+                              bee_season_type +
+                              (1|plot_id),  # zero-inflation model
+                            family = poisson,
+                            data = surveys)
+
 nsq_glm_veg_noRE <- glmmTMB(nest_searching_queens ~ cover_type*plot_type +
                                 bombus_floral_abun_scaled*plot_type +
                               bee_season_type,
@@ -770,7 +837,7 @@ nsq_glm_veg_noRE <- glmmTMB(nest_searching_queens ~ cover_type*plot_type +
                             data = surveys)
 
 #compare models
-anova(nsq_glm_veg_noRE, nsq_glm_veg_justSite, nsq_glm_veg_noArea, nsq_glm_veg_full)
+anova(nsq_glm_veg_noRE, nsq_glm_veg_justSite, nsq_glm_veg_noArea, nsq_glm_veg_areaPlot,nsq_glm_veg_justarea, nsq_glm_veg_justPlot,  nsq_glm_veg_full)
 ##no random effect model is best, followed by just site model
 ```
 
@@ -1125,8 +1192,28 @@ workers_veg_noPlot <- glmmTMB(workers ~ cover_type*plot_type +
                             family = poisson, 
                             data = surveys)
 
+workers_veg_Plot <- glmmTMB(workers ~ cover_type*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                                bee_season_type +
+                              (1|plot_id),
+                            family = poisson, 
+                            data = surveys)
+
+workers_veg_areaPlot<- glmmTMB(workers ~ cover_type*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                                bee_season_type +
+                              (1|area/plot_id),
+                            family = poisson, 
+                            data = surveys)
+
+workers_veg_noRE <- glmmTMB(workers ~ cover_type*plot_type +
+                                bombus_floral_abun_scaled*plot_type +
+                                bee_season_type,
+                            family = poisson, 
+                            data = surveys)
+
 #compare models
-anova(workers_veg_full, workers_veg_noArea, workers_veg_siteOnly, workers_veg_noPlot)
+anova(workers_veg_full, workers_veg_noArea, workers_veg_siteOnly, workers_veg_noPlot, workers_veg_Plot, workers_veg_areaPlot, workers_veg_noRE)
 ##no area is best
 ```
 
