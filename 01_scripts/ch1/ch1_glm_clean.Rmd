@@ -276,6 +276,14 @@ pred_rodent_cover_df <- pred_rodent_cover_df %>%
 
 
 ggplot(pred_rodent_cover_df, aes(x = cover_type, y = fit)) +
+  geom_jitter(
+    data = field_data,
+    aes(x = cover_type, y = num_burrows),
+    width = 0.2,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_point(size = 8) +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Cover type",
@@ -374,6 +382,14 @@ pred_vacancy_cover_df <- pred_vacancy_cover_df %>%
 
 
 ggplot(pred_vacancy_cover_df, aes(x = cover_type, y = fit)) +
+  geom_jitter(
+    data = field_data,
+    aes(x = cover_type, y = prop_inactive),
+    width = 0.2,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_point(size = 8) +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Cover type",
@@ -485,6 +501,14 @@ emm_floral_df <- as.data.frame(emm_floral)
 
 #plot
 ggplot(emm_floral_df, aes(x = cover_type, y = mean.class)) +
+  geom_jitter(
+    data = field_data,
+    aes(x = cover_type, y = bombus_floral_abun),
+    width = 0.2,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_point(size = 6) +
   geom_errorbar(
     aes(ymin = asymp.LCL, ymax = asymp.UCL),
@@ -504,7 +528,7 @@ Julian date
 emm_floral_date <- emmeans(
   floral_noRE,
   ~ julian.date_scaled,
-  at = list(cover_type = "grass",
+  at = list(cover_type = "herbaceous",
              julian.date_scaled = seq(
                min(field_data$julian.date_scaled, na.rm = TRUE), 
                max(field_data$julian.date_scaled, na.rm = TRUE),
@@ -518,6 +542,14 @@ emm_floral_date_df <- as.data.frame(emm_floral_date)
 #plot
   
 ggplot(emm_floral_date_df, aes(x = julian.date_scaled, y = mean.class)) +
+  geom_jitter(
+    data = subset(field_data, cover_type == "herbaceous"),
+    aes(x = julian.date_scaled, y = bombus_floral_abun),
+    width = 0.05,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_line(linewidth = 3) +
   geom_ribbon(
     aes(ymin = asymp.LCL, ymax = asymp.UCL),
@@ -730,6 +762,14 @@ pred_nsq_cover_df <- pred_nsq_cover_df %>%
 
 #plot
 ggplot(pred_nsq_cover_df, aes(x = cover_type, y = cond_fit)) +
+  geom_jitter(
+    data = subset(field_data, bee_season_type == "nestsearching"),
+    aes(x = cover_type, y = nest_searching_queens),
+    width = 0.2,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_point(size = 8) +
   geom_errorbar(aes(ymin = cond_lower, ymax = cond_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(
@@ -778,7 +818,7 @@ floral_seq <- seq(
 # Create data grid over bombus_floral_abun_scaled
 nsq_data_floral <- data.frame(
   bombus_floral_abun_scaled = floral_seq,
-  cover_type = "grass",
+  cover_type = "herbaceous",
   num_burrows_scaled = mean(field_data$num_burrows_scaled, na.rm = TRUE),
   prop_inactive_scaled = mean(field_data$prop_inactive_scaled, na.rm = TRUE),
   bee_season_type = "nestsearching"  
@@ -805,6 +845,14 @@ pred_nsq_floral_df <- pred_nsq_floral_df %>%
 
 # Plot conditional predictions
 ggplot(pred_nsq_floral_df, aes(x = bombus_floral_abun_scaled, y = cond_fit)) +
+  geom_jitter(
+    data = subset(field_data, bee_season_type == "nestsearching" & cover_type =="herbaceous"),
+    aes(x = bombus_floral_abun_scaled, y = nest_searching_queens),
+    width = 0.05,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_line(linewidth = 3) +
   geom_ribbon(aes(ymin = cond_lower, ymax = cond_upper), alpha = 0.2) +
   labs( x = "Floral abundance (scaled)" , y = "Predicted mean NSQ\ncount (per plot)") +
@@ -845,7 +893,7 @@ Conditional model:
 ```{r}
 #create new data grid
 nsq_data_vacancy<- expand.grid(
-  cover_type = "grass",
+  cover_type = "herbaceous",
   bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled, na.rm = TRUE),
   num_burrows_scaled = mean(field_data$num_burrows_scaled, na.rm = TRUE),
   bee_season_type = "nestsearching",
@@ -875,6 +923,14 @@ pred_nsq_vacancy_df <- pred_nsq_vacancy_df %>%
 
 #plot
 ggplot(pred_nsq_vacancy_df, aes(x = prop_inactive_scaled, y = cond_fit)) +
+  geom_jitter(
+    data = subset(field_data, bee_season_type == "nestsearching" & cover_type =="herbaceous"),
+    aes(x = prop_inactive_scaled, y = nest_searching_queens),
+    width = 0.05,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_line(linewidth = 3) +
   geom_ribbon(aes(ymin = cond_lower, ymax = cond_upper), alpha = 0.2) +
   labs(
@@ -917,7 +973,7 @@ Conditional model:
 nsq_data_rodent <- data.frame(
   num_burrows_scaled = seq(min(field_data$num_burrows_scaled), max(field_data$num_burrows_scaled), length.out = 50),
   prop_inactive_scaled = mean(field_data$prop_inactive_scaled, na.rm = TRUE),
-  cover_type = "grass",
+  cover_type = "herbaceous",
   bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled, na.rm = TRUE),
   bee_season_type = "nestsearching"  
 )
@@ -943,6 +999,14 @@ pred_nsq_rodent_df <- pred_nsq_rodent_df %>%
   )
 
 ggplot(pred_nsq_rodent_df, aes(x = num_burrows_scaled, y = cond_fit)) +
+  geom_jitter(
+    data = subset(field_data, bee_season_type == "nestsearching" & cover_type =="herbaceous"),
+    aes(x = num_burrows_scaled, y = nest_searching_queens),
+    width = 0.05,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_line(linewidth = 3) +
   geom_ribbon(aes(ymin = cond_lower, ymax = cond_upper), alpha = 0.2) +
   labs(
@@ -983,7 +1047,7 @@ Conditional model:
 ```{r}
 # Create newdata with discrete factor levels for bee_season_type
 nsq_data_season <- data.frame(
-  cover_type = "grass",
+  cover_type = "herbaceous",
   bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled),
   num_burrows_scaled = mean(field_data$num_burrows_scaled, na.rm = TRUE),
   prop_inactive_scaled = mean(field_data$prop_inactive_scaled, na.rm = TRUE),
@@ -1012,6 +1076,14 @@ pred_nsq_season_df <- pred_nsq_season_df %>%
 
 # Plot conditional predictions
 ggplot(pred_nsq_season_df, aes(x = bee_season_type, y = cond_fit)) +
+  geom_jitter(
+    data = subset(field_data, cover_type =="herbaceous"),
+    aes(x = bee_season_type, y = nest_searching_queens),
+    width = 0.2,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_point(size=8) +
   geom_errorbar(aes(ymin = cond_lower, ymax = cond_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5)+
   labs(x = "Bee season", y = "Predicted mean NSQ\ncount (per plot)") +
@@ -1209,6 +1281,14 @@ pred_worker_nsq_df <- pred_worker_nsq_df %>%
   )
 
 ggplot(pred_worker_nsq_df, aes(x = nest_searching_queens_scaled, y = fit)) +
+  geom_jitter(
+    data = subset(field_data, bee_season_type =="worker"),
+    aes(x = nest_searching_queens_scaled, y = workers),
+    width = 0.05,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_line(size = 3) +
   geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
   labs(
@@ -1250,6 +1330,14 @@ pred_worker_floral_df <- pred_worker_floral_df %>%
   )
 
 ggplot(pred_worker_floral_df, aes(x = bombus_floral_abun_scaled, y = fit)) +
+  geom_jitter(
+    data = subset(field_data, bee_season_type =="worker"),
+    aes(x = bombus_floral_abun_scaled, y = workers),
+    width = 0.05,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_line(size = 3) +
   geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
   labs(
@@ -1297,6 +1385,14 @@ pred_worker_rodent_df <- pred_worker_rodent_df %>%
   )
 
 ggplot(pred_worker_rodent_df, aes(x = num_burrows_scaled, y = fit)) +
+  geom_jitter(
+    data = subset(field_data, bee_season_type =="worker"),
+    aes(x = num_burrows_scaled, y = workers),
+    width = 0.05,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_line(size = 3) +
   geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
   labs(
@@ -1342,6 +1438,14 @@ pred_worker_vacancy_df <- pred_worker_vacancy_df %>%
 
 #plot
 ggplot(pred_worker_vacancy_df, aes(x = prop_inactive_scaled, y = fit)) +
+  geom_jitter(
+    data = subset(field_data, bee_season_type =="worker"),
+    aes(x = prop_inactive_scaled, y = workers),
+    width = 0.05,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_line(linewidth = 3) +
   geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
   labs(
@@ -1383,6 +1487,14 @@ pred_worker_season_df <- pred_worker_season_df %>%
   )
 
 ggplot(pred_worker_season_df, aes(x = bee_season_type, y = fit)) +
+  geom_jitter(
+    data = field_data,
+    aes(x = bee_season_type, y = workers),
+    width = 0.2,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_point(size = 8) +
   geom_errorbar(aes(ymin = lower, ymax = upper), 
                 width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +

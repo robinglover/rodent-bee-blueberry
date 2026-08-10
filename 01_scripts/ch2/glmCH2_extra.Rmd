@@ -18,6 +18,7 @@ knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_anal
 #load packages
 library(tidyverse)
 library(lubridate) #package used to generate julian date from calendar date
+library(ggplot2)
 
 
 #read in data
@@ -277,10 +278,15 @@ ggplot(surveys, aes(x = date_formatted, y = n_bees, color = plot_type)) +
   # Add the bloom window as a shaded background
   annotate("rect", xmin = bloom_start, xmax = bloom_end, ymin = -Inf, ymax = Inf, 
            alpha = .2, fill = "steelblue") +
+  geom_jitter(
+    width = 1,
+    height = 0,
+    size = 2.5,
+    alpha = 0.2
+  ) +
   stat_summary(fun = mean, geom = "line", linewidth = 1.2) +
-  stat_summary(fun.data = mean_se, geom = "ribbon", alpha = 0.1, aes(fill = plot_type), color = NA) +
   facet_wrap(~ caste, ncol = 1, scales = "free_y", labeller = as_labeller(c("w" = "Workers", "q" = "Queens"))) +
-  labs(x = "Date", y = "Mean bumble bee count\n(per plot)", color = "Plot type", fill = "Plot type") +
+  labs(x = "Date", y = "Bumble bee count\n(per plot)", color = "Plot type", fill = "Plot type") +
   theme_classic(base_size = 20)
 ```
 
@@ -371,4 +377,60 @@ ggplot(vaco_caste, aes(x = "", y = count, fill = caste)) +
   coord_polar(theta = "y") +
   theme_void(base_size = 25) +
   labs(fill = "Caste")
+```
+
+Calculate percentage of observations for each behaviour in each plot type for each caste
+
+```{r}
+#queen ditch
+behaviour_queen_ditch <- data.frame(
+  caste = c("nest-searching", "flying", "foraging", "resting"),
+  count = c(63, 31, 5,1)
+)
+
+ggplot(behaviour_queen_ditch, aes(x = "", y = count, fill = caste)) +
+  geom_col(width = 1) +
+  coord_polar(theta = "y") +
+  theme_void(base_size = 25) +
+  scale_fill_brewer(palette = "Set3") +
+  labs(fill = "Behaviour")
+
+#queen field
+behaviour_queen_field <- data.frame(
+  caste = c("nest-searching", "flying", "foraging", "resting"),
+  count = c(20, 37, 43,0)
+)
+
+ggplot(behaviour_queen_field, aes(x = "", y = count, fill = caste)) +
+  geom_col(width = 1) +
+  coord_polar(theta = "y") +
+  theme_void(base_size = 25) +
+  scale_fill_brewer(palette = "Set3") +
+  labs(fill = "Behaviour")
+
+#worker ditch
+behaviour_worker_ditch <- data.frame(
+  caste = c("nest-searching", "flying", "foraging", "resting"),
+  count = c(5, 39, 56,0)
+)
+
+ggplot(behaviour_worker_ditch, aes(x = "", y = count, fill = caste)) +
+  geom_col(width = 1) +
+  coord_polar(theta = "y") +
+  theme_void(base_size = 25) +
+  scale_fill_brewer(palette = "Set3") +
+  labs(fill = "Behaviour")
+
+#worker field
+behaviour_worker_field <- data.frame(
+  caste = c("nest-searching", "flying", "foraging", "resting"),
+  count = c(0, 25, 72, 3)
+)
+
+ggplot(behaviour_worker_field, aes(x = "", y = count, fill = caste)) +
+  geom_col(width = 1) +
+  coord_polar(theta = "y") +
+  theme_void(base_size = 25) +
+  scale_fill_brewer(palette = "Set3") +
+  labs(fill = "Behaviour")
 ```

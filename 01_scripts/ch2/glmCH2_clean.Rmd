@@ -282,6 +282,15 @@ pred_veg_df <- pred_veg_df %>%
 
 # Plot conditional predictions
 ggplot(pred_veg_df, aes(x = plot_type, y = fit, color = cover_type)) +
+  geom_jitter(
+    data = surveys,
+    aes(x = plot_type, y = grass_forb_perc, color = cover_type),
+    position = position_jitterdodge(
+    jitter.width = 0.08,
+    dodge.width = 0.6),
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_point(size=8, position = position_dodge(0.6)) +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5)+
   # Use scale_color_manual to define specific colors
@@ -342,8 +351,25 @@ pred_veg_date_df <- pred_veg_date_df %>%
     date_formatted = as.Date(round(julian_orig) - 1, origin = "2024-01-01")
   )
 
+#add date formatted to surveys data frame
+surveys <- surveys %>%
+  mutate(
+    date_formatted = as.Date(
+      round(julian.date) - 1,
+      origin = "2024-01-01"
+    )
+  )
+
 #Plot
 ggplot(pred_veg_date_df, aes(x = date_formatted, y = fit)) +
+  geom_jitter(
+    data = subset(surveys, cover_type == "herbaceous" & plot_type == "ditch"),
+    aes(x = date_formatted, y = grass_forb_perc),
+    width = 0.05,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_line(linewidth = 1.5) + 
   geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2, color=NA) +
   scale_x_date(date_breaks = "1 month", date_labels = "%b") + # Format x-axis to show Month names (e.g., May, Jun, Jul)
@@ -463,6 +489,14 @@ pred_floral_plot_df <- as.data.frame(pred_floral_plot)
 
 #plot
 ggplot(pred_floral_plot_df, aes(y = mean.class, x = plot_type)) +
+  geom_jitter(
+    data = surveys,
+    aes(x = plot_type, y = bombus_floral_abun),
+    width = 0.2,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_point(size = 8, position = position_dodge(0.6)) +
   geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL), width = 0.2, linewidth = 1.5, position = position_dodge(0.6)) +
   labs(
@@ -487,6 +521,14 @@ pred_floral_cover_df <- as.data.frame(pred_floral_cover)
 
 #plot
 ggplot(pred_floral_cover_df, aes(x = cover_type, y = mean.class)) +
+  geom_jitter(
+    data = surveys,
+    aes(x = cover_type, y = bombus_floral_abun),
+    width = 0.2,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_point(size = 8, position = position_dodge(0.6)) +
   geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL), width = 0.2, linewidth = 1.5, position = position_dodge(0.6)) +
   labs(
@@ -536,8 +578,16 @@ bloom_end <- as.Date("2024-05-24")
 
 #plot
 ggplot(pred_floral_date_df, aes(x = date_formatted, y = mean.class, color = plot_type)) +
+  geom_jitter(
+    data = surveys,
+    aes(x = date_formatted, y = bombus_floral_abun, color = plot_type),
+    width = 0.05,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_line(linewidth = 1.5) +
-  geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL, fill = plot_type), alpha = 0.2, color = NA) +
+  geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL, fill = plot_type, group = plot_type), alpha = 0.2, color = NA) +
   scale_x_date(date_breaks = "1 month", date_labels = "%b") + # Format x-axis to show Month names (e.g., May, Jun, Jul) 
   annotate("rect", xmin = bloom_start, xmax = bloom_end, ymin = -Inf, ymax = Inf, 
            alpha = .2, fill = "steelblue")+
@@ -676,6 +726,14 @@ pred_rodent_plot_df <- pred_rodent_plot_df %>%
 
 # Plot conditional predictions
 ggplot(pred_rodent_plot_df, aes(x = plot_type, y = fit)) +
+  geom_jitter(
+    data = surveys,
+    aes(x = plot_type, y = num_burrows),
+    width = 0.2,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_point(size=8, position = position_dodge(0.6)) +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5)+
   labs(x = "Plot type",
@@ -715,6 +773,15 @@ pred_rodent_veg_df <- pred_rodent_veg_df %>%
 
 # Plot conditional predictions
 ggplot(pred_rodent_veg_df, aes(x = plot_type, y = fit, color = cover_type)) +
+  geom_jitter(
+    data = surveys,
+    aes(x = plot_type, y = num_burrows, color = cover_type),
+    position = position_jitterdodge(
+    jitter.width = 0.08,
+    dodge.width = 0.6),
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_point(size=8, position = position_dodge(0.6)) +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5)+
   labs(x = "Plot type",
@@ -893,6 +960,14 @@ pred_nsq_plottype_df <- pred_nsq_plottype_df %>%
 
 #Plot
 ggplot(pred_nsq_plottype_df, aes(x = plot_type, y = cond_fit)) +
+  geom_jitter(
+    data = subset(surveys, cover_type == "herbaceous" & bee_season_type == "nestsearching"),
+    aes(x = plot_type, y = nest_searching_queens),
+    width = 0.2,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_point(size = 8, position = position_dodge(0.6)) +
   geom_errorbar(aes(ymin = cond_lower, ymax = cond_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Plot type",
@@ -961,6 +1036,14 @@ pred_nsq_covertype_df <- pred_nsq_covertype_df %>%
 
 #Plot
 ggplot(pred_nsq_covertype_df, aes(x = cover_type, y = cond_fit)) +
+  geom_jitter(
+    data = subset(surveys, plot_type == "ditch" & bee_season_type == "nestsearching"),
+    aes(x = cover_type, y = nest_searching_queens),
+    width = 0.2,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_point(size = 8, position = position_dodge(0.6)) +
   geom_errorbar(aes(ymin = cond_lower, ymax = cond_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Cover type",
@@ -1037,6 +1120,14 @@ pred_nsq_floral_df <- pred_nsq_floral_df %>%
 ggplot(pred_nsq_floral_df,
        aes(x = bombus_floral_abun_scaled,
            y = cond_fit)) +
+  geom_jitter(
+    data = subset(surveys, cover_type == "herbaceous" & bee_season_type == "nestsearching" & plot_type == "ditch"),
+    aes(x = bombus_floral_abun_scaled, y = nest_searching_queens),
+    width = 0.05,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_line(linewidth = 1.5) +
   geom_ribbon(aes(ymin = cond_lower, ymax = cond_upper),
               alpha = 0.2,
@@ -1108,6 +1199,14 @@ pred_nsq_season_df <- pred_nsq_season_df %>%
   )
 
 ggplot(pred_nsq_season_df, aes(x = bee_season_type, y = cond_fit)) +
+  geom_jitter(
+    data = subset(surveys, cover_type == "herbaceous" & plot_type == "ditch"),
+    aes(x = bee_season_type, y = nest_searching_queens),
+    width = 0.2,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_point(size = 8) +
   geom_errorbar(aes(ymin = cond_lower, ymax = cond_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Bee season",
@@ -1276,6 +1375,14 @@ pred_worker_plottype_df <- pred_worker_plottype_df %>%
 
 #Plot
 ggplot(pred_worker_plottype_df, aes(x = plot_type, y = fit)) +
+  geom_jitter(
+    data = subset(surveys, cover_type == "herbaceous" & bee_season_type == "worker"),
+    aes(x = plot_type, y = workers),
+    width = 0.2,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_point(size = 8, position = position_dodge(0.6)) +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Plot type",
@@ -1316,6 +1423,14 @@ pred_worker_covertype_df <- pred_worker_covertype_df %>%
 
 #Plot
 ggplot(pred_worker_covertype_df, aes(x = cover_type, y = fit)) +
+  geom_jitter(
+    data = subset(surveys, plot_type == "ditch" & bee_season_type == "worker"),
+    aes(x = cover_type, y = workers),
+    width = 0.2,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_point(size = 8, position = position_dodge(0.6)) +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Cover type",
@@ -1356,6 +1471,14 @@ pred_worker_floral_df <- pred_worker_floral_df %>%
 
 #Plot
 ggplot(pred_worker_floral_df, aes(x = bombus_floral_abun_scaled, y = fit, color = plot_type)) +
+  geom_jitter(
+    data = subset(surveys, cover_type == "herbaceous" & bee_season_type == "worker"),
+    aes(x = bombus_floral_abun_scaled, y = workers, color = plot_type),
+    width = 0.05,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_line(linewidth = 1.5) +
   geom_ribbon(aes(ymin = lower, ymax = upper, fill = plot_type), alpha = 0.2, color=NA) +
   labs(x = "Floral abundance (scaled)",
@@ -1403,6 +1526,14 @@ pred_worker_season_df <- pred_worker_season_df %>%
 
 #Plot
 ggplot(pred_worker_season_df, aes(x = bee_season_type, y = fit)) +
+  geom_jitter(
+    data = subset(surveys, plot_type == "ditch" & cover_type == "herbaceous"),
+    aes(x = bee_season_type, y = workers),
+    width = 0.2,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_point(size = 8) +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Bee season",
