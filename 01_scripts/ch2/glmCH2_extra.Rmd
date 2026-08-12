@@ -158,106 +158,55 @@ surveys$julian.date_scaled <- as.numeric(scale(surveys$julian.date))
 surveys$n_bees_scaled <- as.numeric(scale(surveys$n_bees))
 ```
 
-2.  Check for zero-inflation in the data by comparing expected proportion of zeros in the dataset to the actual proportion of zeros. If observed \> expected, ZI model is justified.
-
--   use ZI Poisson model to account for high proportion of zeros in NSQ counts (~70% of plots had zero bumblebees), which exceeded expectations under a standard Poisson distribution (~45%).
-
-```{r}
-# Observed proportion of zeros
-obs_zeros <- mean(surveys$n_bees == 0)
-
-# Expected proportion of zeros under Poisson
-lambda <- mean(surveys$n_bees)
-exp_zeros <- dpois(0, lambda)
-
-obs_zeros ##0.702381
-exp_zeros ##0.4461309
-```
-
-3.  Try different random effects structures. Use zero-inflated model to account for high abundance of zeros in the dataset.
+2.  Run poisson model
 
 ```{r}
 caste_glm_full <- glmmTMB(n_bees ~ caste*julian.date_scaled*plot_type +
                             cover_type +
                               (1|area/site_id/plot_id),
-                          ziformula = ~ caste*julian.date_scaled*plot_type +
-                            cover_type +
-                              (1|area/site_id/plot_id),  # zero-inflation model
                             family = poisson, 
                             data = surveys)
 
-caste_glm_noArea <- glmmTMB(n_bees ~ caste*julian.date_scaled*plot_type +
-                            cover_type +
-                              (1|site_id/plot_id),
-                            ziformula = ~ caste*julian.date_scaled*plot_type +
-                            cover_type +
-                              (1|site_id/plot_id),
-                            family = poisson, 
-                            data = surveys)
-
-caste_glm_justSite <- glmmTMB(n_bees ~ caste*julian.date_scaled*plot_type +
-                            cover_type +
-                              (1|site_id),
-                            ziformula = ~ caste*julian.date_scaled*plot_type +
-                            cover_type +
-                              (1|site_id),
-                            family = poisson,
-                            data = surveys)
-
-caste_glm_justPlot <- glmmTMB(n_bees ~ caste*julian.date_scaled*plot_type +
-                            cover_type +
-                              (1|plot_id),
-                            ziformula = ~ caste*julian.date_scaled*plot_type +
-                            cover_type +
-                              (1|plot_id),
-                            family = poisson,
-                            data = surveys)
-
-caste_glm_justArea <- glmmTMB(n_bees ~ caste*julian.date_scaled*plot_type +
-                            cover_type +
-                              (1|area),
-                            ziformula = ~ caste*julian.date_scaled*plot_type +
-                            cover_type +
-                              (1|area),
-                            family = poisson,
-                            data = surveys)
-
-caste_glm_areaPlot <- glmmTMB(n_bees ~ caste*julian.date_scaled*plot_type +
-                            cover_type +
-                              (1|area/plot_id),
-                            ziformula = ~ caste*julian.date_scaled*plot_type +
-                            cover_type +
-                              (1|area/plot_id),
-                            family = poisson,
-                            data = surveys)
-
-
-
-caste_glm_noRE <- glmmTMB(n_bees ~ caste*julian.date_scaled*plot_type +
-                            cover_type,
-                          ziformula = ~ caste*julian.date_scaled*plot_type +
-                            cover_type,
-                            family = poisson,
-                            data = surveys)
-
-#compare models
-anova(caste_glm_noRE, caste_glm_justSite, caste_glm_noArea, caste_glm_justPlot, caste_glm_justArea, caste_glm_areaPlot, caste_glm_full)
-##no area model is best
 ```
 
-4.  Check diagnostics of model
+3.  Check diagnostics of model
 
--   look good
+-   significant deviations
 
 ```{r}
 #simulate residuals
-residuals_caste_glm_noArea <- simulateResiduals(fittedModel = caste_glm_noArea, plot = TRUE)
+residuals_caste_glm_full <- simulateResiduals(fittedModel = caste_glm_full, plot = TRUE)
+
+testQuantiles(caste_glm_full) #significant
+testDispersion(caste_glm_full) #significant
+testOutliers(caste_glm_full) #significant
+testZeroInflation(caste_glm_full) #significant
+```
+
+4.  Try negative binomial
+
+-   looks good
+
+```{r}
+caste_glm_nbin <- glmmTMB(n_bees ~ caste*julian.date_scaled*plot_type +
+                            cover_type +
+                              (1|area/site_id/plot_id),
+                            family = nbinom2(), 
+                            data = surveys)
+
+#simulate residuals
+residuals_caste_glm_nbin <- simulateResiduals(fittedModel = caste_glm_nbin, plot = TRUE)
+
+testQuantiles(caste_glm_nbin) #ns
+testDispersion(caste_glm_nbin) #ns
+testOutliers(caste_glm_nbin) #ns
+testZeroInflation(caste_glm_nbin) #ns
 ```
 
 5.  Plot results
 
 ```{r}
-summary(caste_glm_noArea)
+summary(caste_glm_nbin)
 ```
 
 # Plots
