@@ -3,99 +3,25 @@ title: "ch1_glm_clean"
 output: pdf_document
 ---
 
-
-
-# Predicted path diagram
-
-![](images/path diagram.png)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_analysis/rodent-bee-blueberry")
+```
 
 # Load and clean data
 
-
-``` r
+```{r}
 #load packages
 library(tidyverse)   #data manipulation, visualization etc. (dplyr, ggplot2, tidyr)
-```
-
-```
-## -- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
-## v dplyr     1.1.4     v readr     2.1.5
-## v forcats   1.0.0     v stringr   1.5.1
-## v ggplot2   3.5.2     v tibble    3.3.0
-## v lubridate 1.9.4     v tidyr     1.3.1
-## v purrr     1.0.4     
-## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()
-## i Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-```
-
-``` r
 library(DHARMa)      #diagnostic tools for mixed regression models
-```
-
-```
-## This is DHARMa 0.4.7. For overview type '?DHARMa'. For recent changes, type news(package = 'DHARMa')
-```
-
-``` r
 library(ordinal)     #models for ordinal outcomes (e.g., cumulative link models)
-```
-
-```
-## 
-## Attaching package: 'ordinal'
-## 
-## The following object is masked from 'package:dplyr':
-## 
-##     slice
-```
-
-``` r
 library(MASS)        #polr
-```
-
-```
-## 
-## Attaching package: 'MASS'
-## 
-## The following object is masked from 'package:dplyr':
-## 
-##     select
-```
-
-``` r
 library(glmmTMB)     #fits generalized linear mixed models, including zero-inflated and overdispersed models
 library(car)         #tools for regression diagnostics and hypothesis tests
-```
-
-```
-## Loading required package: carData
-## 
-## Attaching package: 'car'
-## 
-## The following object is masked from 'package:dplyr':
-## 
-##     recode
-## 
-## The following object is masked from 'package:purrr':
-## 
-##     some
-```
-
-``` r
 library(emmeans)     #calculates predicted results from models
-```
 
-```
-## Welcome to emmeans.
-## Caution: You lose important information if you filter this package's results.
-## See '? untidy'
-```
-
-``` r
 #read in data
-data <- read.csv("06_cleandata/combined_plot_data.csv")
+data <- read.csv("06_cleandata/combined_plot_data_ch1.csv")
 
 #change character columns to factors
 surveys <- data %>%
@@ -107,6 +33,9 @@ surveys <- data %>%
      bee_season_type = as.factor(bee_season_type),
      area = as.factor(area),
      cover_type = as.factor(cover_type))
+
+#update cover type names
+levels(surveys$cover_type) <- c("bare", "herbaceous")
 
 #scale continuous predictors
 surveys$julian.date_scaled <- as.numeric(scale(surveys$julian.date))
@@ -149,13 +78,6 @@ cor(
   surveys$num_burrows,
   use = "complete.obs"
 )
-```
-
-```
-## [1] 0.06838928
-```
-
-``` r
 ##r = 0.06. This means that the vacancy probability and rodent burrow abundance are largely independent. This means we can include both in our models.
 
 #filter to only include field data
@@ -173,8 +95,7 @@ Since the number of rodent burrows was count data, I knew I had to use either a 
 
 -   best fit = 1\|site_id –\> **area not included**
 
-
-``` r
+```{r}
 burrows_full <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
                              (1|area/site_id),
                            family = poisson, 
@@ -190,30 +111,14 @@ burrows_areaOnly <- glmmTMB(num_burrows ~ grass_forb_perc_scaled +
                            family = poisson, 
                            data = field_data)
 
+burrows_noRE <- glmmTMB(num_burrows ~ grass_forb_perc_scaled,
+                           family = poisson, 
+                           data = field_data)
+
 
 #compare models using maximum likelihood test
-anova(burrows_full, burrows_siteOnly, burrows_areaOnly)
-```
+anova(burrows_full, burrows_siteOnly, burrows_areaOnly, burrows_noRE)
 
-```
-## Data: field_data
-## Models:
-## burrows_siteOnly: num_burrows ~ grass_forb_perc_scaled + (1 | site_id), zi=~0, disp=~1
-## burrows_areaOnly: num_burrows ~ grass_forb_perc_scaled + (1 | area), zi=~0, disp=~1
-## burrows_full: num_burrows ~ grass_forb_perc_scaled + (1 | area/site_id), zi=~0, disp=~1
-##                  Df    AIC    BIC   logLik deviance  Chisq Chi Df Pr(>Chisq)
-## burrows_siteOnly  3 1670.5 1679.3  -832.25   1664.5                         
-## burrows_areaOnly  3 3306.4 3315.2 -1650.18   3300.4    0.0      0          1
-## burrows_full      4 1672.1 1683.9  -832.05   1664.1 1636.3      1     <2e-16
-##                     
-## burrows_siteOnly    
-## burrows_areaOnly    
-## burrows_full     ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-```
-
-``` r
 ##results tells us the burrows_siteOnly is best model (lowest AIC)
 ```
 
@@ -221,20 +126,16 @@ anova(burrows_full, burrows_siteOnly, burrows_areaOnly)
 
 -   Combined adjusted quantile test significant
 
-
-``` r
+```{r}
 #simulate residuals
 residuals_burrows_siteOnly <- simulateResiduals(fittedModel = burrows_siteOnly, plot = TRUE)
 ```
-
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-3-1.pdf)<!-- --> 
 
 3)  Try negative binomial instead and check diagnostics.
 
 -   Combined adjusted quantile test still significant.
 
-
-``` r
+```{r}
 burrows_siteOnly_negBin <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
                              (1|site_id),
                            family = nbinom2, 
@@ -244,14 +145,11 @@ burrows_siteOnly_negBin <- glmmTMB(num_burrows ~ grass_forb_perc_scaled +
 residuals_burrows_siteOnly_negBin <- simulateResiduals(fittedModel = burrows_siteOnly_negBin, plot = TRUE)
 ```
 
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-4-1.pdf)<!-- --> 
-
 4)  Try zero-inflated poisson and check diagnostics.
 
 -   combined adjusted quantile test still significant.
 
-
-``` r
+```{r}
 burrows_zi_pois <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
                              (1|site_id),
                            ziformula = ~ grass_forb_perc_scaled + 
@@ -263,14 +161,11 @@ burrows_zi_pois <- glmmTMB(num_burrows ~ grass_forb_perc_scaled +
 residuals_burrows_zi <- simulateResiduals(fittedModel = burrows_zi_pois, plot = TRUE)
 ```
 
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-5-1.pdf)<!-- --> 
-
 5)  Try zero-inflated negative binomial and check diagnostics.
 
 -   combined adjusted quantile test still significant.
 
-
-``` r
+```{r}
 burrows_zi_nbin <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
                              (1|site_id),
                            ziformula = ~ grass_forb_perc_scaled + 
@@ -280,16 +175,6 @@ burrows_zi_nbin <- glmmTMB(num_burrows ~ grass_forb_perc_scaled +
 
 #simulate residuals
 residuals_burrows_zi_nbin <- simulateResiduals(fittedModel = burrows_zi_nbin, plot = TRUE)
-```
-
-```
-## Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,
-## : Fitting terminated with step failure - check results carefully
-```
-
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-6-1.pdf)<!-- --> 
-
-``` r
 #signficant KS test and combined adjusted quantile test
 ```
 
@@ -297,8 +182,7 @@ residuals_burrows_zi_nbin <- simulateResiduals(fittedModel = burrows_zi_nbin, pl
 
 -   models using continuous percent grass/forb cover as a predictor showed poor fit and significant residual patterns, likely due to the small sample size (n = 24). Because sites were grouped into two distinct habitat types—grassy plots with high vegetation cover and bare plots with little or no cover—the variable was reclassified as a categorical factor (“grass” vs. “bare”). This simplified model structure improved residual diagnostics and provided a clearer ecological interpretation of differences in burrow abundance between habitat types.
 
-
-``` r
+```{r}
 burrows_cover_full <- glmmTMB(num_burrows ~ cover_type + 
                              (1|area/site_id),
                            family = poisson, 
@@ -314,30 +198,14 @@ burrows_cover_areaOnly <- glmmTMB(num_burrows ~ cover_type +
                            family = poisson, 
                            data = field_data)
 
+burrows_cover_noRE <- glmmTMB(num_burrows ~ cover_type,
+                           family = poisson, 
+                           data = field_data)
+
 
 #compare models using maximum likelihood test
-anova(burrows_cover_full, burrows_cover_siteOnly, burrows_cover_areaOnly)
-```
+anova(burrows_cover_full, burrows_cover_siteOnly, burrows_cover_areaOnly, burrows_cover_noRE)
 
-```
-## Data: field_data
-## Models:
-## burrows_cover_siteOnly: num_burrows ~ cover_type + (1 | site_id), zi=~0, disp=~1
-## burrows_cover_areaOnly: num_burrows ~ cover_type + (1 | area), zi=~0, disp=~1
-## burrows_cover_full: num_burrows ~ cover_type + (1 | area/site_id), zi=~0, disp=~1
-##                        Df    AIC    BIC   logLik deviance  Chisq Chi Df
-## burrows_cover_siteOnly  3 1668.2 1677.0  -831.11   1662.2              
-## burrows_cover_areaOnly  3 2664.6 2673.4 -1329.28   2658.6   0.00      0
-## burrows_cover_full      4 1667.7 1679.5  -829.87   1659.7 998.81      1
-##                        Pr(>Chisq)    
-## burrows_cover_siteOnly               
-## burrows_cover_areaOnly          1    
-## burrows_cover_full         <2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-```
-
-``` r
 ##full model is best (lowest AIC)
 ```
 
@@ -345,62 +213,38 @@ anova(burrows_cover_full, burrows_cover_siteOnly, burrows_cover_areaOnly)
 
 -   significant within-group deviations from uniformity
 
+```{r}
 
-``` r
 #simulate residuals
 residuals_burrows_cover_full <- simulateResiduals(fittedModel = burrows_cover_full, plot = TRUE)
 ```
-
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-8-1.pdf)<!-- --> 
 
 8.  Try simpler random effect structure (site-only) and re-check diagnostics
 
 -   No significant problems detected.
 
-
-``` r
+```{r}
 #simulate residuals
 residuals_burrows_cover_siteOnly <- simulateResiduals(fittedModel = burrows_cover_siteOnly, plot = TRUE)
 ```
 
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-9-1.pdf)<!-- --> 
-
 9.  Plot results
 
-
-``` r
+```{r}
 summary(burrows_cover_siteOnly)
 ```
 
-```
-##  Family: poisson  ( log )
-## Formula:          num_burrows ~ cover_type + (1 | site_id)
-## Data: field_data
-## 
-##       AIC       BIC    logLik -2*log(L)  df.resid 
-##    1668.2    1677.0    -831.1    1662.2       137 
-## 
-## Random effects:
-## 
-## Conditional model:
-##  Groups  Name        Variance Std.Dev.
-##  site_id (Intercept) 3.825    1.956   
-## Number of obs: 140, groups:  site_id, 12
-## 
-## Conditional model:
-##                 Estimate Std. Error z value Pr(>|z|)  
-## (Intercept)       0.6365     0.8271   0.770   0.4415  
-## cover_typegrass   1.9894     1.1510   1.728   0.0839 .
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Back transform effect size to response scale
+
+```{r}
+exp(1.9894) ##7.3
 ```
 
 ## Plots
 
 Number of rodent burrows vs cover type
 
-
-``` r
+```{r}
 #create new data grid
 rodent_data_cover<- expand.grid(
   cover_type = unique(field_data$cover_type)
@@ -428,14 +272,20 @@ pred_rodent_cover_df <- pred_rodent_cover_df %>%
 
 
 ggplot(pred_rodent_cover_df, aes(x = cover_type, y = fit)) +
+  geom_jitter(
+    data = field_data,
+    aes(x = cover_type, y = num_burrows),
+    width = 0.2,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_point(size = 8) +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Cover type",
-       y = "Predicted burrow count\n(per plot)") +
+       y = "Predicted mean burrow\ncount (per plot)") +
   theme_classic(base_size = 23)
 ```
-
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-11-1.pdf)<!-- --> 
 
 ## Findings
 
@@ -449,53 +299,34 @@ I want to determine what influences the proportion of burrows that are inactive 
 
 1)  Try different random effect structures in a binomial model. Compare alternative random effect structures using maximum likelihood (ML) via AIC. I did not include plot as a random effect structure since there was only one observation per plot for rodent burrow data.
 
-    
-    ``` r
+    ```{r}
     burrows_vacancy_full <- glmmTMB(
       cbind(num_inactive_burrows, num_active_burrows) #tells the model that successes = number of inactive (vacant) burrows and failures = number of active burrows
       ~ cover_type + (1|area/site_id),
       family = binomial(link = "logit"), 
       data = field_data)
-    
+
     burrows_vacancy_siteOnly <- glmmTMB(
       cbind(num_inactive_burrows, num_active_burrows) #tells the model that successes = number of inactive (vacant) burrows and failures = number of active burrows
       ~ cover_type + (1|site_id),
       family = binomial(link = "logit"), 
       data = field_data)
-    
+
     burrows_vacancy_areaOnly <- glmmTMB(
       cbind(num_inactive_burrows, num_active_burrows) #tells the model that successes = number of inactive (vacant) burrows and failures = number of active burrows
       ~ cover_type + (1|area),
       family = binomial(link = "logit"), 
       data = field_data)
-    
-    
+
+    burrows_vacancy_noRE <- glmmTMB(
+      cbind(num_inactive_burrows, num_active_burrows) #tells the model that successes = number of inactive (vacant) burrows and failures = number of active burrows
+      ~ cover_type,
+      family = binomial(link = "logit"), 
+      data = field_data)
+
     #compare models using maximum likelihood test
-    anova(burrows_vacancy_full, burrows_vacancy_siteOnly, burrows_vacancy_areaOnly)
-    ```
-    
-    ```
-    ## Data: field_data
-    ## Models:
-    ## burrows_vacancy_siteOnly: cbind(num_inactive_burrows, num_active_burrows) ~ cover_type + , zi=~0, disp=~1
-    ## burrows_vacancy_siteOnly:     (1 | site_id), zi=~0, disp=~1
-    ## burrows_vacancy_areaOnly: cbind(num_inactive_burrows, num_active_burrows) ~ cover_type + , zi=~0, disp=~1
-    ## burrows_vacancy_areaOnly:     (1 | area), zi=~0, disp=~1
-    ## burrows_vacancy_full: cbind(num_inactive_burrows, num_active_burrows) ~ cover_type + , zi=~0, disp=~1
-    ## burrows_vacancy_full:     (1 | area/site_id), zi=~0, disp=~1
-    ##                          Df    AIC    BIC  logLik deviance  Chisq Chi Df
-    ## burrows_vacancy_siteOnly  3 463.22 472.04 -228.61   457.22              
-    ## burrows_vacancy_areaOnly  3 497.71 506.54 -245.86   491.71  0.000      0
-    ## burrows_vacancy_full      4 465.22 476.98 -228.61   457.22 34.495      1
-    ##                          Pr(>Chisq)    
-    ## burrows_vacancy_siteOnly               
-    ## burrows_vacancy_areaOnly          1    
-    ## burrows_vacancy_full      4.273e-09 ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ```
-    
-    ``` r
+    anova(burrows_vacancy_full, burrows_vacancy_siteOnly, burrows_vacancy_areaOnly, burrows_vacancy_noRE)
+
     ##results tells us the burrows_siteOnly is best model (lowest AIC)
     ```
 
@@ -503,54 +334,23 @@ I want to determine what influences the proportion of burrows that are inactive 
 
 -   The diagnostic plot indicates a significant KS test. The significant KS test likely reflects low variability in vacancy probabilities across farms, with vacancy rates clustering near 0.5, rather than substantive lack of fit. No evidence of overdispersion, zero inflation, outliers, or group-level structure was detected.
 
-
-``` r
+```{r}
 #simulate residuals 
 residuals_burrows_vacancy_siteOnly <- simulateResiduals(fittedModel = burrows_vacancy_siteOnly, plot = TRUE)
-```
-
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-13-1.pdf)<!-- --> 
-
-``` r
 ##KS test significant
 ```
 
 3.  Print results
 
-
-``` r
+```{r}
 summary(burrows_vacancy_siteOnly)
-```
-
-```
-##  Family: binomial  ( logit )
-## Formula:          
-## cbind(num_inactive_burrows, num_active_burrows) ~ cover_type +  
-##     (1 | site_id)
-## Data: field_data
-## 
-##       AIC       BIC    logLik -2*log(L)  df.resid 
-##     463.2     472.0    -228.6     457.2       137 
-## 
-## Random effects:
-## 
-## Conditional model:
-##  Groups  Name        Variance Std.Dev.
-##  site_id (Intercept) 1.587    1.26    
-## Number of obs: 140, groups:  site_id, 12
-## 
-## Conditional model:
-##                  Estimate Std. Error z value Pr(>|z|)
-## (Intercept)      0.006844   0.620445   0.011    0.991
-## cover_typegrass -0.358816   0.831890  -0.431    0.666
 ```
 
 ## Plots
 
 Proportion of vacant burrows vs cover type
 
-
-``` r
+```{r}
 #create new data grid
 vacancy_data_cover<- expand.grid(
   cover_type = unique(field_data$cover_type)
@@ -578,14 +378,20 @@ pred_vacancy_cover_df <- pred_vacancy_cover_df %>%
 
 
 ggplot(pred_vacancy_cover_df, aes(x = cover_type, y = fit)) +
+  geom_jitter(
+    data = field_data,
+    aes(x = cover_type, y = prop_inactive),
+    width = 0.2,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_point(size = 8) +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(x = "Cover type",
        y = "Predicted proportion\nof vacant burrows\n(per plot)") +
   theme_classic(base_size = 23)
 ```
-
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-15-1.pdf)<!-- --> 
 
 ## Findings
 
@@ -607,8 +413,7 @@ Use cumulative link model aka ordinal logistic regression because bombus-relevan
 
 -   determined that model without random effect had best fit
 
-
-``` r
+```{r}
 floral_full <- clmm(as.factor(bombus_floral_abun) ~ cover_type +
                          julian.date_scaled + 
                          (1|area/site_id/plot_id),
@@ -634,6 +439,12 @@ floral_siteOnly <- clmm(as.factor(bombus_floral_abun) ~ cover_type +
                        link = "logit", 
                        data = field_data)
 
+floral_areaOnly <- clmm(as.factor(bombus_floral_abun) ~ cover_type +
+                         julian.date_scaled + 
+                         (1|area),
+                       link = "logit", 
+                       data = field_data)
+
 floral_AreaPlot <- clmm(as.factor(bombus_floral_abun) ~ cover_type +
                          julian.date_scaled + 
                          (1|area/plot_id),
@@ -645,137 +456,107 @@ floral_noRE <- polr(as.factor(bombus_floral_abun) ~ cover_type +
                        data = field_data)
 
 #compare models AIC
-AIC(floral_full, floral_noArea, floral_siteOnly, floral_AreaPlot, floral_noRE)
-```
-
-```
-##                 df      AIC
-## floral_full      9 441.1731
-## floral_noArea    8 439.1731
-## floral_siteOnly  7 437.1731
-## floral_AreaPlot  8 439.1731
-## floral_noRE      6 435.1731
-```
-
-``` r
+AIC(floral_full, floral_noArea, floral_siteOnly, floral_areaOnly, floral_AreaPlot, floral_noRE)
 ##shows that model without random effect has best fit
 ```
 
 2.  Run final model and look at output
 
-
-``` r
+```{r}
 summary(floral_noRE)
 ```
 
-```
-## 
-## Re-fitting to get Hessian
-```
+Get p-values
 
-```
-## Call:
-## polr(formula = as.factor(bombus_floral_abun) ~ cover_type + julian.date_scaled, 
-##     data = field_data, method = "logistic")
-## 
-## Coefficients:
-##                       Value Std. Error  t value
-## cover_typegrass     0.02647     0.3041  0.08702
-## julian.date_scaled -0.23119     0.1527 -1.51417
-## 
-## Intercepts:
-##     Value   Std. Error t value
-## 0|1 -1.3986  0.2610    -5.3585
-## 1|2 -0.9291  0.2414    -3.8493
-## 2|3 -0.1853  0.2272    -0.8153
-## 3|4  0.6192  0.2332     2.6559
-## 
-## Residual Deviance: 423.1731 
-## AIC: 435.1731
+```{r}
+coefs <- coef(summary(floral_noRE))
+
+# Two-sided p-values
+p_values <- 2 * (1 - pnorm(abs(coefs[, "t value"])))
+
+# Combine with coefficient table
+coef_table <- cbind(coefs, "p value" = p_values)
+
+coef_table
 ```
 
 ## Plots
 
 Vegetation
 
-
-``` r
-floral_veg_data <- data.frame(
-  cover_type = factor(c("bare", "grass"), levels = levels(field_data$cover_type)),
-  julian.date_scaled = mean(field_data$julian.date_scaled, na.rm = TRUE)
+```{r}
+emm_floral <- emmeans(
+  floral_noRE,
+  ~ cover_type,
+  at = list(julian.date_scaled = mean(field_data$julian.date_scaled, na.rm = TRUE)),
+  mode = "mean.class" ## The expected floral abundance category (mean ordinal score)
 )
 
-# Get predicted response for cover_type, holding other variables at their means 
-pred_floral_veg <- predict(floral_noRE,
-                      newdata = floral_veg_data,
-                      type = "prob")
+#convert to dataframe
+emm_floral_df <- as.data.frame(emm_floral)
 
-
-# Convert to long dataframe for plotting
-
-pred_floral_veg_df <- as.data.frame(pred_floral_veg) %>%
-  mutate(cover_type = rownames(pred_floral_veg)) %>%
-  pivot_longer(cols = -cover_type, names_to = "response", values_to = "prob")
-
-# Convert cover_type to factor with proper labels
-pred_floral_veg_df$cover_type <- factor(pred_floral_veg_df$cover_type,
-                                   levels = c(1, 2),
-                                   labels = c("bare", "grass"))
-
-ggplot(pred_floral_veg_df, aes(x = cover_type, y = prob, fill = response)) +
-  geom_bar(stat = "identity", position = position_dodge(width = 0.9), width = 0.8) +
+#plot
+ggplot(emm_floral_df, aes(x = cover_type, y = mean.class)) +
+  geom_jitter(
+    data = field_data,
+    aes(x = cover_type, y = bombus_floral_abun),
+    width = 0.2,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
+  geom_point(size = 6) +
+  geom_errorbar(
+    aes(ymin = asymp.LCL, ymax = asymp.UCL),
+    width = 0.2,
+    linewidth = 1.5
+  ) +
   labs(
     x = "Cover type",
-    y = "Predicted probability",
-    fill = "Floral\nabundance\ncategory"
+    y = "Predicted mean\nlog-scaled floral\nabundance category\n(per plot)"
   ) +
   theme_classic(base_size = 23)
 ```
 
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-18-1.pdf)<!-- --> 
-
 Julian date
 
-
-``` r
-# Define a sequence of values for grass_forb_perc_scaled across its observed range
-date_seq <- seq(
-  from = min(field_data$julian.date_scaled, na.rm = TRUE),
-  to = max(field_data$julian.date_scaled, na.rm = TRUE),
-  length.out = 50
+```{r}
+emm_floral_date <- emmeans(
+  floral_noRE,
+  ~ julian.date_scaled,
+  at = list(cover_type = "herbaceous",
+             julian.date_scaled = seq(
+               min(field_data$julian.date_scaled, na.rm = TRUE), 
+               max(field_data$julian.date_scaled, na.rm = TRUE),
+               length.out = 50)),
+  mode = "mean.class" ## The expected floral abundance category (mean ordinal score)
 )
 
-floral_date_data <- data.frame(
-  cover_type = "grass",
-  julian.date_scaled = date_seq
-)
+#convert to dataframe
+emm_floral_date_df <- as.data.frame(emm_floral_date)
 
-# Get predicted response for cover_type, holding other variables at their means 
-pred_floral_date <- predict(floral_noRE,
-                      newdata = floral_date_data,
-                      type = "prob")
-
-
-# Convert to long dataframe for plotting
-pred_floral_date_df <- as.data.frame(pred_floral_date) %>%
-  mutate(julian.date_scaled = floral_date_data$julian.date_scaled) %>%
-  pivot_longer(
-    cols = 0:5,
-    names_to = "floral_abun_cat",
-    values_to = "prob"
-  )
-
-ggplot(pred_floral_date_df, aes(x = julian.date_scaled, y = prob, color = floral_abun_cat)) +
+#plot
+  
+ggplot(emm_floral_date_df, aes(x = julian.date_scaled, y = mean.class)) +
+  geom_jitter(
+    data = subset(field_data, cover_type == "herbaceous"),
+    aes(x = julian.date_scaled, y = bombus_floral_abun),
+    width = 0.05,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_line(linewidth = 3) +
+  geom_ribbon(
+    aes(ymin = asymp.LCL, ymax = asymp.UCL),
+    alpha = 0.2
+  ) +
   labs(
     x = "Julian date (scaled)",
-    y = "Predicted probability",
-    color = "Floral\nabundance\ncategory"
+    y = "Predicted mean\nlog-scaled floral\nabundance category\n(per plot)"
   ) +
-  theme_classic(base_size = 27)
+  theme_classic(base_size = 23)
 ```
-
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-19-1.pdf)<!-- --> 
 
 ## Findings
 
@@ -783,16 +564,31 @@ No significant effect of either grass+ forb% or julian date.
 
 # Number of nest-searching queens vs flowers, rodents, and field management technique
 
-Start by plotting a zero-inflated poisson, since \# of nest-searching queens is count data with a lot of zeros. I added bee_season_type as a covariate, since during my exploratory data analyses I saw that there was only a significant different in nest-searching queens among grassy vs bare sites during nesting season.
+I added bee_season_type as a covariate, since during my exploratory data analyses I saw that there was only a significant different in nest-searching queens among grassy vs bare sites during nesting season.
 
 ## Steps
 
-1.  Try multiple random effects structures
+1.  Check for zero-inflation in the data by comparing expected proportion of zeros in the dataset to the actual proportion of zeros. If observed \> expected, ZI model is justified.
+
+-   use ZI Poisson model to account for high proportion of zeros in NSQ counts (~84% of plots had zero queens), which exceeded expectations under a standard Poisson distribution (~78%).
+
+```{r}
+# Observed proportion of zeros
+obs_zeros <- mean(field_data$nest_searching_queens == 0)
+
+# Expected proportion of zeros under Poisson
+lambda <- mean(field_data$nest_searching_queens)
+exp_zeros <- dpois(0, lambda)
+
+obs_zeros
+exp_zeros
+```
+
+2.  Try multiple random effects structures
 
 -   best fit = no random effect
 
-
-``` r
+```{r}
 NSQ_full <- glmmTMB(nest_searching_queens ~ cover_type + 
                       bombus_floral_abun_scaled + 
                       num_burrows_scaled + 
@@ -807,14 +603,8 @@ NSQ_full <- glmmTMB(nest_searching_queens ~ cover_type +
                       (1|area/site_id/plot_id),
                     family = poisson, 
                     data = field_data)
-```
 
-```
-## Warning in finalizeTMB(TMBStruc, obj, fit, h, data.tmb.old): Model convergence
-## problem; non-positive-definite Hessian matrix. See vignette('troubleshooting')
-```
 
-``` r
 NSQ_noArea <- glmmTMB(nest_searching_queens ~ cover_type + 
                         bombus_floral_abun_scaled + 
                         num_burrows_scaled + 
@@ -829,14 +619,7 @@ NSQ_noArea <- glmmTMB(nest_searching_queens ~ cover_type +
                         (1|site_id/plot_id),
                       family = poisson, 
                       data = field_data)
-```
 
-```
-## Warning in finalizeTMB(TMBStruc, obj, fit, h, data.tmb.old): Model convergence
-## problem; non-positive-definite Hessian matrix. See vignette('troubleshooting')
-```
-
-``` r
 NSQ_plotOnly <-  glmmTMB(nest_searching_queens ~ cover_type + 
                         bombus_floral_abun_scaled + 
                         num_burrows_scaled + 
@@ -851,14 +634,7 @@ NSQ_plotOnly <-  glmmTMB(nest_searching_queens ~ cover_type +
                         (1|plot_id),
                       family = poisson, 
                       data = field_data)
-```
 
-```
-## Warning in finalizeTMB(TMBStruc, obj, fit, h, data.tmb.old): Model convergence
-## problem; non-positive-definite Hessian matrix. See vignette('troubleshooting')
-```
-
-``` r
 NSQ_siteOnly <- glmmTMB(nest_searching_queens ~ cover_type + 
                         bombus_floral_abun_scaled + 
                         num_burrows_scaled + 
@@ -888,14 +664,22 @@ NSQ_AreaPlot <-  glmmTMB(nest_searching_queens ~ cover_type +
                         (1|area/plot_id),
                       family = poisson, 
                       data = field_data)
-```
 
-```
-## Warning in finalizeTMB(TMBStruc, obj, fit, h, data.tmb.old): Model convergence
-## problem; non-positive-definite Hessian matrix. See vignette('troubleshooting')
-```
+NSQ_Area <-  glmmTMB(nest_searching_queens ~ cover_type + 
+                        bombus_floral_abun_scaled + 
+                        num_burrows_scaled + 
+                        prop_inactive_scaled +
+                        bee_season_type + 
+                        (1|area),
+                      ziformula = ~ cover_type + 
+                        bombus_floral_abun_scaled + 
+                        num_burrows_scaled + 
+                        prop_inactive_scaled +
+                        bee_season_type +
+                        (1|area),
+                      family = poisson, 
+                      data = field_data)
 
-``` r
 NSQ_noRE <- glmmTMB(nest_searching_queens ~ cover_type + 
                     bombus_floral_abun_scaled + 
                     num_burrows_scaled + 
@@ -911,92 +695,30 @@ NSQ_noRE <- glmmTMB(nest_searching_queens ~ cover_type +
 
 #compare models using maximum likelihood test
 anova(NSQ_full, NSQ_noArea, NSQ_plotOnly, NSQ_siteOnly, NSQ_AreaPlot, NSQ_noRE)
-```
 
-```
-## Data: field_data
-## Models:
-## NSQ_noRE: nest_searching_queens ~ cover_type + bombus_floral_abun_scaled + , zi=~cover_type + bombus_floral_abun_scaled + num_burrows_scaled + , disp=~1
-## NSQ_noRE:     num_burrows_scaled + prop_inactive_scaled + bee_season_type, zi=    prop_inactive_scaled + bee_season_type, disp=~1
-## NSQ_plotOnly: nest_searching_queens ~ cover_type + bombus_floral_abun_scaled + , zi=~cover_type + bombus_floral_abun_scaled + num_burrows_scaled + , disp=~1
-## NSQ_plotOnly:     num_burrows_scaled + prop_inactive_scaled + bee_season_type + , zi=    prop_inactive_scaled + bee_season_type + (1 | plot_id), disp=~1
-## NSQ_plotOnly:     (1 | plot_id), zi=~cover_type + bombus_floral_abun_scaled + num_burrows_scaled + , disp=~1
-## NSQ_siteOnly: nest_searching_queens ~ cover_type + bombus_floral_abun_scaled + , zi=    prop_inactive_scaled + bee_season_type + (1 | site_id), disp=~1
-## NSQ_siteOnly:     num_burrows_scaled + prop_inactive_scaled + bee_season_type + , zi=~cover_type + bombus_floral_abun_scaled + num_burrows_scaled + , disp=~1
-## NSQ_siteOnly:     (1 | site_id), zi=    prop_inactive_scaled + bee_season_type + (1 | site_id/plot_id), disp=~1
-## NSQ_noArea: nest_searching_queens ~ cover_type + bombus_floral_abun_scaled + , zi=~cover_type + bombus_floral_abun_scaled + num_burrows_scaled + , disp=~1
-## NSQ_noArea:     num_burrows_scaled + prop_inactive_scaled + bee_season_type + , zi=    prop_inactive_scaled + bee_season_type + (1 | area/plot_id), disp=~1
-## NSQ_noArea:     (1 | site_id/plot_id), zi=~cover_type + bombus_floral_abun_scaled + num_burrows_scaled + , disp=~1
-## NSQ_AreaPlot: nest_searching_queens ~ cover_type + bombus_floral_abun_scaled + , zi=    prop_inactive_scaled + bee_season_type + (1 | area/site_id/plot_id), disp=~1
-## NSQ_AreaPlot:     num_burrows_scaled + prop_inactive_scaled + bee_season_type + , zi=~cover_type + bombus_floral_abun_scaled + num_burrows_scaled + , disp=~1
-## NSQ_AreaPlot:     (1 | area/plot_id), zi=    prop_inactive_scaled + bee_season_type, disp=~1
-## NSQ_full: nest_searching_queens ~ cover_type + bombus_floral_abun_scaled + , zi=~cover_type + bombus_floral_abun_scaled + num_burrows_scaled + , disp=~1
-## NSQ_full:     num_burrows_scaled + prop_inactive_scaled + bee_season_type + , zi=    prop_inactive_scaled + bee_season_type + (1 | plot_id), disp=~1
-## NSQ_full:     (1 | area/site_id/plot_id), zi=~cover_type + bombus_floral_abun_scaled + num_burrows_scaled + , disp=~1
-##              Df    AIC    BIC  logLik deviance Chisq Chi Df Pr(>Chisq)
-## NSQ_noRE     12 122.36 155.40 -49.178   98.356                        
-## NSQ_plotOnly 14                                           2           
-## NSQ_siteOnly 14 126.36 164.91 -49.178   98.356            0           
-## NSQ_noArea   16                                           2           
-## NSQ_AreaPlot 16                                           0           
-## NSQ_full     18                                           2
-```
-
-``` r
 ##results tells us the model without random effects is best (lowest AIC). 
 ```
 
-2.  Check diagnostics of best model.
+3.  Check diagnostics of best model.
 
 -   Looks good
 
-
-``` r
+```{r}
 residuals_nsq_noRE <- simulateResiduals(fittedModel =NSQ_noRE, plot = TRUE)
 ```
 
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-21-1.pdf)<!-- --> 
+4.  Look at results
 
-3.  Look at results
-
-
-``` r
+```{r}
 summary(NSQ_noRE)
 ```
 
-```
-##  Family: poisson  ( log )
-## Formula:          
-## nest_searching_queens ~ cover_type + bombus_floral_abun_scaled +  
-##     num_burrows_scaled + prop_inactive_scaled + bee_season_type
-## Zero inflation:                         
-## ~cover_type + bombus_floral_abun_scaled + num_burrows_scaled + 
-##     prop_inactive_scaled + bee_season_type
-## Data: field_data
-## 
-##       AIC       BIC    logLik -2*log(L)  df.resid 
-##     122.4     155.4     -49.2      98.4       104 
-## 
-## 
-## Conditional model:
-##                           Estimate Std. Error z value Pr(>|z|)   
-## (Intercept)                -0.5946     0.4351  -1.367   0.1717   
-## cover_typegrass             0.7957     0.4964   1.603   0.1090   
-## bombus_floral_abun_scaled  -0.1537     0.2124  -0.724   0.4691   
-## num_burrows_scaled          0.6810     0.3346   2.036   0.0418 * 
-## prop_inactive_scaled       -0.4053     0.2592  -1.564   0.1179   
-## bee_season_typeworker      -2.3731     0.7604  -3.121   0.0018 **
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Zero-inflation model:
-##                           Estimate Std. Error z value Pr(>|z|)
-## (Intercept)                 -7.340      6.223  -1.180    0.238
-## cover_typegrass            -22.434     17.284  -1.298    0.194
-## bombus_floral_abun_scaled   -8.652      6.776  -1.277    0.202
-## num_burrows_scaled          25.258     18.300   1.380    0.168
-## prop_inactive_scaled       -38.354     28.059  -1.367    0.172
-## bee_season_typeworker        1.863      3.655   0.510    0.610
+Calculating predicted per burrow increase in NSQ
+
+```{r}
+sd_burrows <- sd(field_data$num_burrows)
+
+exp(0.5162 / sd_burrows)
 ```
 
 ## Plots
@@ -1005,8 +727,7 @@ Number of nest-searching queens vs grass/forb
 
 Conditional model:
 
-
-``` r
+```{r}
 #create new data grid
 nsq_data_cover<- expand.grid(
   cover_type = unique(field_data$cover_type),
@@ -1037,6 +758,14 @@ pred_nsq_cover_df <- pred_nsq_cover_df %>%
 
 #plot
 ggplot(pred_nsq_cover_df, aes(x = cover_type, y = cond_fit)) +
+  geom_jitter(
+    data = subset(field_data, bee_season_type == "nestsearching"),
+    aes(x = cover_type, y = nest_searching_queens),
+    width = 0.2,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_point(size = 8) +
   geom_errorbar(aes(ymin = cond_lower, ymax = cond_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
   labs(
@@ -1045,12 +774,9 @@ ggplot(pred_nsq_cover_df, aes(x = cover_type, y = cond_fit)) +
   theme_classic(base_size = 23)
 ```
 
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-23-1.pdf)<!-- --> 
-
 Zero-inflated model:
 
-
-``` r
+```{r}
 # Predictions for ZI model 
 pred_nsq_cover_zi <- predict(NSQ_noRE, 
                                 newdata = nsq_data_cover, 
@@ -1073,14 +799,11 @@ ggplot(pred_nsq_cover_df, aes(x = cover_type, y = zi_fit)) +
   theme_classic(base_size = 23) 
 ```
 
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-24-1.pdf)<!-- --> 
-
 Number of nest-searching queens vs floral abundance
 
 Conditional model:
 
-
-``` r
+```{r}
 # Define a sequence of values for bombus_floral_abun_scaled across its observed range
 floral_seq <- seq(
   from = min(field_data$bombus_floral_abun_scaled, na.rm = TRUE),
@@ -1091,7 +814,7 @@ floral_seq <- seq(
 # Create data grid over bombus_floral_abun_scaled
 nsq_data_floral <- data.frame(
   bombus_floral_abun_scaled = floral_seq,
-  cover_type = "grass",
+  cover_type = "herbaceous",
   num_burrows_scaled = mean(field_data$num_burrows_scaled, na.rm = TRUE),
   prop_inactive_scaled = mean(field_data$prop_inactive_scaled, na.rm = TRUE),
   bee_season_type = "nestsearching"  
@@ -1118,18 +841,24 @@ pred_nsq_floral_df <- pred_nsq_floral_df %>%
 
 # Plot conditional predictions
 ggplot(pred_nsq_floral_df, aes(x = bombus_floral_abun_scaled, y = cond_fit)) +
+  geom_jitter(
+    data = subset(field_data, bee_season_type == "nestsearching" & cover_type =="herbaceous"),
+    aes(x = bombus_floral_abun_scaled, y = nest_searching_queens),
+    width = 0.05,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_line(linewidth = 3) +
   geom_ribbon(aes(ymin = cond_lower, ymax = cond_upper), alpha = 0.2) +
   labs( x = "Floral abundance (scaled)" , y = "Predicted mean NSQ\ncount (per plot)") +
   theme_classic(base_size = 23)
-```
 
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-25-1.pdf)<!-- --> 
+```
 
 Zero-inflated model:
 
-
-``` r
+```{r}
 # Predictions for ZI model 
 pred_nsq_floral_zi <- predict(NSQ_noRE, 
                                 newdata = nsq_data_floral, 
@@ -1150,19 +879,17 @@ ggplot(pred_nsq_floral_df, aes(x = bombus_floral_abun_scaled, y = zi_fit)) +
   geom_ribbon(aes(ymin = zi_lower, ymax = zi_upper), alpha = 0.2) +
   labs(x = "Floral abundance (scaled)", y = "Predicted probability\nof structural zeros") +
   theme_classic(base_size = 23)
-```
 
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-26-1.pdf)<!-- --> 
+```
 
 Number of nest-searching queens vs burrow vacancy proportion
 
 Conditional model:
 
-
-``` r
+```{r}
 #create new data grid
 nsq_data_vacancy<- expand.grid(
-  cover_type = "grass",
+  cover_type = "herbaceous",
   bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled, na.rm = TRUE),
   num_burrows_scaled = mean(field_data$num_burrows_scaled, na.rm = TRUE),
   bee_season_type = "nestsearching",
@@ -1192,6 +919,14 @@ pred_nsq_vacancy_df <- pred_nsq_vacancy_df %>%
 
 #plot
 ggplot(pred_nsq_vacancy_df, aes(x = prop_inactive_scaled, y = cond_fit)) +
+  geom_jitter(
+    data = subset(field_data, bee_season_type == "nestsearching" & cover_type =="herbaceous"),
+    aes(x = prop_inactive_scaled, y = nest_searching_queens),
+    width = 0.05,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_line(linewidth = 3) +
   geom_ribbon(aes(ymin = cond_lower, ymax = cond_upper), alpha = 0.2) +
   labs(
@@ -1200,12 +935,9 @@ ggplot(pred_nsq_vacancy_df, aes(x = prop_inactive_scaled, y = cond_fit)) +
   theme_classic(base_size = 23)
 ```
 
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-27-1.pdf)<!-- --> 
-
 Zero-inflated model:
 
-
-``` r
+```{r}
 # Predictions for ZI model 
 pred_nsq_vacancy_zi <- predict(NSQ_noRE, 
                                 newdata = nsq_data_vacancy, 
@@ -1228,19 +960,16 @@ ggplot(pred_nsq_vacancy_df, aes(x = prop_inactive_scaled, y = zi_fit)) +
   theme_classic(base_size = 23) 
 ```
 
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-28-1.pdf)<!-- --> 
-
 Number of nest-searching queens vs number of rodent burrows
 
 Conditional model:
 
-
-``` r
+```{r}
 # Create data grid over rodent_burrows_scaled
 nsq_data_rodent <- data.frame(
   num_burrows_scaled = seq(min(field_data$num_burrows_scaled), max(field_data$num_burrows_scaled), length.out = 50),
   prop_inactive_scaled = mean(field_data$prop_inactive_scaled, na.rm = TRUE),
-  cover_type = "grass",
+  cover_type = "herbaceous",
   bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled, na.rm = TRUE),
   bee_season_type = "nestsearching"  
 )
@@ -1266,7 +995,15 @@ pred_nsq_rodent_df <- pred_nsq_rodent_df %>%
   )
 
 ggplot(pred_nsq_rodent_df, aes(x = num_burrows_scaled, y = cond_fit)) +
-  geom_line(size = 3) +
+  geom_jitter(
+    data = subset(field_data, bee_season_type == "nestsearching" & cover_type =="herbaceous"),
+    aes(x = num_burrows_scaled, y = nest_searching_queens),
+    width = 0.05,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
+  geom_line(linewidth = 3) +
   geom_ribbon(aes(ymin = cond_lower, ymax = cond_upper), alpha = 0.2) +
   labs(
     x = "Burrow abundance (scaled)",
@@ -1275,20 +1012,9 @@ ggplot(pred_nsq_rodent_df, aes(x = num_burrows_scaled, y = cond_fit)) +
   theme_classic(base_size = 23)
 ```
 
-```
-## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-## i Please use `linewidth` instead.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-## generated.
-```
-
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-29-1.pdf)<!-- --> 
-
 Zero-inflated model:
 
-
-``` r
+```{r}
 # Predictions for ZI model 
 pred_nsq_rodent_zi <- predict(NSQ_noRE, 
                                 newdata = nsq_data_rodent, 
@@ -1310,17 +1036,14 @@ ggplot(pred_nsq_rodent_df, aes(x = num_burrows_scaled, y = zi_fit)) +
   theme_classic(base_size = 23)
 ```
 
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-30-1.pdf)<!-- --> 
-
 Number of nest-searching queens vs season type
 
 Conditional model:
 
-
-``` r
+```{r}
 # Create newdata with discrete factor levels for bee_season_type
 nsq_data_season <- data.frame(
-  cover_type = "grass",
+  cover_type = "herbaceous",
   bombus_floral_abun_scaled = mean(field_data$bombus_floral_abun_scaled),
   num_burrows_scaled = mean(field_data$num_burrows_scaled, na.rm = TRUE),
   prop_inactive_scaled = mean(field_data$prop_inactive_scaled, na.rm = TRUE),
@@ -1349,18 +1072,23 @@ pred_nsq_season_df <- pred_nsq_season_df %>%
 
 # Plot conditional predictions
 ggplot(pred_nsq_season_df, aes(x = bee_season_type, y = cond_fit)) +
+  geom_jitter(
+    data = subset(field_data, cover_type =="herbaceous"),
+    aes(x = bee_season_type, y = nest_searching_queens),
+    width = 0.2,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_point(size=8) +
   geom_errorbar(aes(ymin = cond_lower, ymax = cond_upper), width = 0.2, position = position_dodge(0.6), linewidth = 1.5)+
   labs(x = "Bee season", y = "Predicted mean NSQ\ncount (per plot)") +
   theme_classic(base_size = 23)
 ```
 
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-31-1.pdf)<!-- --> 
-
 Zero-inflated model:
 
-
-``` r
+```{r}
 # Predictions for ZI model 
 pred_nsq_season_zi <- predict(NSQ_noRE, 
                                 newdata = nsq_data_season, 
@@ -1381,8 +1109,6 @@ ggplot(pred_nsq_season_df, aes(x = bee_season_type, y = zi_fit)) +
   labs(x = "Bee season", y = "Predicted probability\nof structural zeros") +
   theme_classic(base_size = 23)
 ```
-
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-32-1.pdf)<!-- --> 
 
 ## Findings
 
@@ -1410,8 +1136,7 @@ Go through similar model selection steps as for the rodent burrow model.
 
 -   best fit = 1\|site_id/plot_id –\> **area not included**
 
-
-``` r
+```{r}
 workers_full <- glmmTMB(workers ~ nest_searching_queens_scaled +
                        bombus_floral_abun_scaled + 
                        num_burrows_scaled + 
@@ -1463,6 +1188,16 @@ workers_AreaPlot <-  glmmTMB(workers ~ nest_searching_queens_scaled +
                      data = field_data
                        )
 
+workers_Area <-  glmmTMB(workers ~ nest_searching_queens_scaled +
+                       bombus_floral_abun_scaled + 
+                       num_burrows_scaled + 
+                         prop_inactive_scaled +
+                       bee_season_type+
+                         (1|area), 
+                     family = poisson,
+                     data = field_data
+                       )
+
 workers_noRE <- glmmTMB(workers ~ nest_searching_queens_scaled +
                        bombus_floral_abun_scaled + 
                        num_burrows_scaled + 
@@ -1473,41 +1208,8 @@ workers_noRE <- glmmTMB(workers ~ nest_searching_queens_scaled +
                        )
 
 #compare models using maximum likelihood test
-anova(workers_full, workers_noArea, workers_plotOnly, workers_siteOnly, workers_AreaPlot, workers_noRE)
-```
+anova(workers_full, workers_noArea, workers_plotOnly, workers_siteOnly, workers_AreaPlot, workers_Area, workers_noRE)
 
-```
-## Data: field_data
-## Models:
-## workers_noRE: workers ~ nest_searching_queens_scaled + bombus_floral_abun_scaled + , zi=~0, disp=~1
-## workers_noRE:     num_burrows_scaled + prop_inactive_scaled + bee_season_type, zi=~0, disp=~1
-## workers_plotOnly: workers ~ nest_searching_queens_scaled + bombus_floral_abun_scaled + , zi=~0, disp=~1
-## workers_plotOnly:     num_burrows_scaled + prop_inactive_scaled + bee_season_type + , zi=~0, disp=~1
-## workers_plotOnly:     (1 | plot_id), zi=~0, disp=~1
-## workers_siteOnly: workers ~ nest_searching_queens_scaled + bombus_floral_abun_scaled + , zi=~0, disp=~1
-## workers_siteOnly:     num_burrows_scaled + prop_inactive_scaled + bee_season_type + , zi=~0, disp=~1
-## workers_siteOnly:     (1 | site_id), zi=~0, disp=~1
-## workers_noArea: workers ~ nest_searching_queens_scaled + bombus_floral_abun_scaled + , zi=~0, disp=~1
-## workers_noArea:     num_burrows_scaled + prop_inactive_scaled + bee_season_type + , zi=~0, disp=~1
-## workers_noArea:     (1 | site_id/plot_id), zi=~0, disp=~1
-## workers_AreaPlot: workers ~ nest_searching_queens_scaled + bombus_floral_abun_scaled + , zi=~0, disp=~1
-## workers_AreaPlot:     num_burrows_scaled + prop_inactive_scaled + bee_season_type + , zi=~0, disp=~1
-## workers_AreaPlot:     (1 | area/plot_id), zi=~0, disp=~1
-## workers_full: workers ~ nest_searching_queens_scaled + bombus_floral_abun_scaled + , zi=~0, disp=~1
-## workers_full:     num_burrows_scaled + prop_inactive_scaled + bee_season_type + , zi=~0, disp=~1
-## workers_full:     (1 | area/site_id/plot_id), zi=~0, disp=~1
-##                  Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(>Chisq)    
-## workers_noRE      6 175.50 192.02 -81.748   163.50                             
-## workers_plotOnly  7 173.90 193.18 -79.952   159.90 3.5910      1    0.05809 .  
-## workers_siteOnly  7 165.67 184.95 -75.836   151.67 8.2316      0    < 2e-16 ***
-## workers_noArea    8 164.91 186.94 -74.455   148.91 2.7629      1    0.09647 .  
-## workers_AreaPlot  8 168.75 190.78 -76.374   152.75 0.0000      0    1.00000    
-## workers_full      9 166.91 191.69 -74.455   148.91 3.8374      1    0.05012 .  
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-```
-
-``` r
 ##results tells us the model with no area is best (lowest AIC). 
 ```
 
@@ -1515,58 +1217,29 @@ anova(workers_full, workers_noArea, workers_plotOnly, workers_siteOnly, workers_
 
 -   No significant diagnostic tests. Good to go.
 
-
-``` r
+```{r}
 #simulate residuals
 residuals_workers_noArea <- simulateResiduals(fittedModel = workers_noArea, plot = TRUE)
 ```
 
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-34-1.pdf)<!-- --> 
-
 3.  Check results of final model
 
-
-``` r
+```{r}
 summary(workers_noArea)
 ```
 
-```
-##  Family: poisson  ( log )
-## Formula:          
-## workers ~ nest_searching_queens_scaled + bombus_floral_abun_scaled +  
-##     num_burrows_scaled + prop_inactive_scaled + bee_season_type +  
-##     (1 | site_id/plot_id)
-## Data: field_data
-## 
-##       AIC       BIC    logLik -2*log(L)  df.resid 
-##     164.9     186.9     -74.5     148.9       108 
-## 
-## Random effects:
-## 
-## Conditional model:
-##  Groups          Name        Variance Std.Dev.
-##  plot_id:site_id (Intercept) 0.7704   0.8777  
-##  site_id         (Intercept) 0.2976   0.5455  
-## Number of obs: 116, groups:  plot_id:site_id, 20; site_id, 11
-## 
-## Conditional model:
-##                              Estimate Std. Error z value Pr(>|z|)    
-## (Intercept)                  -3.56408    0.65332  -5.455 4.89e-08 ***
-## nest_searching_queens_scaled  0.01148    0.55155   0.021 0.983388    
-## bombus_floral_abun_scaled     0.71632    0.22172   3.231 0.001235 ** 
-## num_burrows_scaled            0.31621    0.37307   0.848 0.396675    
-## prop_inactive_scaled         -0.18788    0.35360  -0.531 0.595182    
-## bee_season_typeworker         2.33515    0.61408   3.803 0.000143 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Calculate estimate of floral abundance on response scale
+
+```{r}
+sd_floral <- sd(field_data$bombus_floral_abun)
+exp(0.71632 / sd_floral) ##1.60
 ```
 
 ## Plots
 
 Number of workers vs number of nest-searching queens
 
-
-``` r
+```{r}
 # Define a sequence of values for nsq across its observed range
 queen_seq <- seq(
   from = min(field_data$nest_searching_queens_scaled, na.rm = TRUE),
@@ -1604,6 +1277,14 @@ pred_worker_nsq_df <- pred_worker_nsq_df %>%
   )
 
 ggplot(pred_worker_nsq_df, aes(x = nest_searching_queens_scaled, y = fit)) +
+  geom_jitter(
+    data = subset(field_data, bee_season_type =="worker"),
+    aes(x = nest_searching_queens_scaled, y = workers),
+    width = 0.05,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_line(size = 3) +
   geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
   labs(
@@ -1612,12 +1293,9 @@ ggplot(pred_worker_nsq_df, aes(x = nest_searching_queens_scaled, y = fit)) +
   theme_classic(base_size = 23)
 ```
 
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-36-1.pdf)<!-- --> 
-
 Number of workers vs floral abundance
 
-
-``` r
+```{r}
 #create new data grid
 worker_data_floral<- expand.grid(
   nest_searching_queens_scaled = mean(field_data$nest_searching_queens_scaled, na.rm = TRUE),
@@ -1648,6 +1326,14 @@ pred_worker_floral_df <- pred_worker_floral_df %>%
   )
 
 ggplot(pred_worker_floral_df, aes(x = bombus_floral_abun_scaled, y = fit)) +
+  geom_jitter(
+    data = subset(field_data, bee_season_type =="worker"),
+    aes(x = bombus_floral_abun_scaled, y = workers),
+    width = 0.05,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_line(size = 3) +
   geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
   labs(
@@ -1656,12 +1342,9 @@ ggplot(pred_worker_floral_df, aes(x = bombus_floral_abun_scaled, y = fit)) +
   theme_classic(base_size = 23)
 ```
 
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-37-1.pdf)<!-- --> 
-
 Number of workers vs number of rodent burrows
 
-
-``` r
+```{r}
 # Define a sequence of values for rodent burrows across its observed range
 rodent_seq <- seq(
   from = min(field_data$num_burrows_scaled, na.rm = TRUE),
@@ -1698,6 +1381,14 @@ pred_worker_rodent_df <- pred_worker_rodent_df %>%
   )
 
 ggplot(pred_worker_rodent_df, aes(x = num_burrows_scaled, y = fit)) +
+  geom_jitter(
+    data = subset(field_data, bee_season_type =="worker"),
+    aes(x = num_burrows_scaled, y = workers),
+    width = 0.05,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_line(size = 3) +
   geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
   labs(
@@ -1706,12 +1397,9 @@ ggplot(pred_worker_rodent_df, aes(x = num_burrows_scaled, y = fit)) +
   theme_classic(base_size = 23)
 ```
 
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-38-1.pdf)<!-- --> 
-
 Number of workers vs burrow vacancy proportion
 
-
-``` r
+```{r}
 #create new data grid
 worker_data_vacancy <- expand.grid(
   nest_searching_queens_scaled = mean(field_data$nest_searching_queens_scaled, na.rm = TRUE),
@@ -1746,6 +1434,14 @@ pred_worker_vacancy_df <- pred_worker_vacancy_df %>%
 
 #plot
 ggplot(pred_worker_vacancy_df, aes(x = prop_inactive_scaled, y = fit)) +
+  geom_jitter(
+    data = subset(field_data, bee_season_type =="worker"),
+    aes(x = prop_inactive_scaled, y = workers),
+    width = 0.05,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_line(linewidth = 3) +
   geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
   labs(
@@ -1754,12 +1450,9 @@ ggplot(pred_worker_vacancy_df, aes(x = prop_inactive_scaled, y = fit)) +
   theme_classic(base_size = 23)
 ```
 
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-39-1.pdf)<!-- --> 
-
 Number of workers vs season
 
-
-``` r
+```{r}
 #create new data grid
 worker_data_season<- expand.grid(
   nest_searching_queens_scaled = mean(field_data$nest_searching_queens_scaled, na.rm = TRUE),
@@ -1790,6 +1483,14 @@ pred_worker_season_df <- pred_worker_season_df %>%
   )
 
 ggplot(pred_worker_season_df, aes(x = bee_season_type, y = fit)) +
+  geom_jitter(
+    data = field_data,
+    aes(x = bee_season_type, y = workers),
+    width = 0.2,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   geom_point(size = 8) +
   geom_errorbar(aes(ymin = lower, ymax = upper), 
                 width = 0.2, position = position_dodge(0.6), linewidth = 1.5) +
@@ -1799,12 +1500,7 @@ ggplot(pred_worker_season_df, aes(x = bee_season_type, y = fit)) +
   theme_classic(base_size = 23)
 ```
 
-![](ch1_glm_clean_files/figure-latex/unnamed-chunk-40-1.pdf)<!-- --> 
-
 ## Findings
 
 Number of nest-searching queens, number of rodent burrows and the proportion of burrow vacancy does not significantly predict number of workers. Significantly more workers during worker season than during nest-searching season. Significant positive effect of bombus-relevant floral abundance on worker abundance (p=0.0012).
 
-# Final Path Diagram
-
-![](images/path diagram final.png)

@@ -576,6 +576,39 @@ max(pred_floral_date_df$date_formatted, na.rm = TRUE)
 bloom_start <- as.Date("2024-04-19")
 bloom_end <- as.Date("2024-05-24")
 
+#find intersection date
+head(pred_floral_date_df)
+
+intersection_data <- pred_floral_date_df %>%
+  dplyr::select(julian.date_scaled, plot_type, mean.class) %>%
+  tidyr::pivot_wider(
+    names_from = plot_type,
+    values_from = mean.class
+  ) %>%
+  mutate(
+    difference = field - ditch
+  )
+
+View(intersection_data)
+
+#find intersection point
+x1 <- 0.300246069
+x2 <- 0.315683377
+y1 <- 0.005342021
+y2 <- -0.005638066
+
+julian_intersection <- x1 + (0 - y1) * (x2 - x1) / (y2 - y1)
+
+julian_intersection ##0.3077566
+
+#convert to original julian date
+julian_orig = (0.3077566 * jd_sd) + jd_mean
+julian_orig ##148.7023
+
+#convert to original date
+date_formatted = as.Date(round(148.7023) - 1, origin = "2024-01-01")
+date_formatted ##2024-05-28
+
 #plot
 ggplot(pred_floral_date_df, aes(x = date_formatted, y = mean.class, color = plot_type)) +
   geom_jitter(
@@ -586,11 +619,17 @@ ggplot(pred_floral_date_df, aes(x = date_formatted, y = mean.class, color = plot
     size = 3,
     alpha = 0.2,
     inherit.aes = FALSE) +
+  facet_wrap(~plot_type, dir = "v") +
   geom_line(linewidth = 1.5) +
   geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL, fill = plot_type, group = plot_type), alpha = 0.2, color = NA) +
   scale_x_date(date_breaks = "1 month", date_labels = "%b") + # Format x-axis to show Month names (e.g., May, Jun, Jul) 
   annotate("rect", xmin = bloom_start, xmax = bloom_end, ymin = -Inf, ymax = Inf, 
            alpha = .2, fill = "steelblue")+
+  geom_vline(
+  xintercept = as.Date("2024-05-28"),
+  linetype = "dashed",
+  color = "grey",
+  linewidth = 0.8) +
   labs(
     x = "Month",
     y = "Predicted mean floral\nabundance category\n(log-scaled)",
