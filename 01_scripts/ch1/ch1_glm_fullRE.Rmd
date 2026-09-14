@@ -8,10 +8,6 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-UBC/MSc/12_analysis/rodent-bee-blueberry")
 ```
 
-# Predicted path diagram
-
-![](images/path%20diagram.png)
-
 # Load and clean data
 
 ```{r}
@@ -97,8 +93,6 @@ Since the number of rodent burrows was count data, I knew I had to use either a 
 
 1)  Run model with site nested within area as random effect. I did not include plot as a random effect structure since there was only one observation per plot for rodent burrow data.
 
--   best fit = 1\|site_id –\> **area not included**
-
 ```{r}
 burrows_full <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
                              (1|area/site_id),
@@ -183,7 +177,7 @@ burrows_cover_full <- glmmTMB(num_burrows ~ cover_type +
 residuals_burrows_cover_full <- simulateResiduals(fittedModel = burrows_cover_full, plot = TRUE)
 ```
 
-8.  Try simpler random effect structure (site-only) and re-check diagnostics
+8.  Try negative binomial
 
 -   No significant problems detected.
 
@@ -256,17 +250,13 @@ ggplot(pred_rodent_cover_df, aes(x = cover_type, y = fit)) +
   theme_classic(base_size = 23)
 ```
 
-## Findings
-
-Neither grass + forb % nor julian date had significant effects on rodent burrow abundance. However, cover type showed a marginally insignificant trend (p=0.0839), where grassy sites had a higher abundance of burrows.
-
 # Rodent burrow vacancy analysis
 
 I want to determine what influences the proportion of burrows that are inactive (available as nest sites for bumble bees) across my sites.
 
 ## Steps
 
-1)  Try different random effect structures in a binomial model. Compare alternative random effect structures using maximum likelihood (ML) via AIC. I did not include plot as a random effect structure since there was only one observation per plot for rodent burrow data.
+1)  Model using binomial distribution. I did not include plot as a random effect structure since there was only one observation per plot for rodent burrow data.
 
     ```{r}
     burrows_vacancy_full <- glmmTMB(
@@ -338,10 +328,6 @@ ggplot(pred_vacancy_cover_df, aes(x = cover_type, y = fit)) +
        y = "Predicted proportion\nof vacant burrows\n(per plot)") +
   theme_classic(base_size = 23)
 ```
-
-## Findings
-
-There was not a significant difference in burrow vacancy probability between grassy and bare sites (log-odds difference = –0.36, SE = 0.83, *p* = 0.67). Burrow vacancy probability was approximately 50% across sites, meaning that roughly one in two burrows at blueberry farms in this study were available as potential nest sites for bumble bees.
 
 # Floral abundance vs field management (%grass+forb)
 
@@ -449,10 +435,6 @@ ggplot(emm_floral_date_df, aes(x = julian.date_scaled, y = mean.class)) +
   theme_classic(base_size = 23)
 ```
 
-## Findings
-
-No significant effect of either grass+ forb% or julian date.
-
 # Number of nest-searching queens vs flowers, rodents, and field management technique
 
 I added bee_season_type as a covariate, since during my exploratory data analyses I saw that there was only a significant different in nest-searching queens among grassy vs bare sites during nesting season.
@@ -475,10 +457,7 @@ I added bee_season_type as a covariate, since during my exploratory data analyse
 2.  Check diagnostics
 
 ```{r}
-residuals_nsq_pois <- simulateResiduals(fittedModel =NSQ_full, plot = TRUE) ##significant outlier test
-testZeroInflation(residuals_nsq_pois) #no zero inflation
-testDispersion(residuals_nsq_pois) #no overdispersion
-testOutliers(residuals_nsq_pois)
+residuals_nsq_pois <- simulateResiduals(fittedModel =NSQ_full, plot = TRUE) 
 ```
 
 4.  Look at results
@@ -496,8 +475,6 @@ exp(1.01943) #2.8x higher in herbaceous-cover sites than bare sires
 ## Plots
 
 Number of nest-searching queens vs grass/forb
-
-Conditional model:
 
 ```{r}
 #create new data grid
@@ -755,22 +732,6 @@ ggplot(pred_nsq_season_df, aes(x = bee_season_type, y = cond_fit)) +
   theme_classic(base_size = 23)
 ```
 
-## Findings
-
-In conditional model (modelling abundance of nest-searching queens):
-
--   no significant effect of grass+forb%, floral abundance, bee season
-
--   significant positive effect of number of burrows
-
-In zero-inflation model (modelling presence/absence of nest-searching queens):
-
--   no significant effect of floral abundance
-
--   Significant effect of grass+forb% (less likely to be absent with more grass/forb), number of burrows (more likely to be absent with more burrows), bee season (more likely to be absent during worker season than nest-searching season).
-
-Interestingly, the number of rodent burrows is associated with more bombus nest-searching in the conditional model, but the number of rodent burrows is associated with more structural zeros in the zero-inflation model. This means that if a site is suitable for nesting, more rodent burrows is associated with more bombus nest-searching. However, in some cases, rodent burrows may signal inhospitable habitat conditions for bumble bees.
-
 # Number of workers vs nest-searching queens, floral abundance, rodent burrows.
 
 Go through similar model selection steps as for the rodent burrow model.
@@ -795,17 +756,10 @@ workers_full <- glmmTMB(workers ~ nest_searching_queens_scaled +
 
 2.  Check diagnostics of model.
 
--   Combined quantile test significant. No
-
 ```{r}
 #simulate residuals
 residuals_workers <- simulateResiduals(fittedModel = workers_full, plot = TRUE)
 
-testQuantiles(residuals_workers)
-
-testZeroInflation(residuals_workers) #no zero inflation
-testDispersion(residuals_workers) #no overdispersion
-testOutliers(residuals_workers) #ns
 ```
 
 3.  Check results of final model
@@ -1141,11 +1095,3 @@ ggplot(pred_worker_season_df, aes(x = bee_season_type, y = fit)) +
        y = "Predicted mean worker\ncount (per plot)") +
   theme_classic(base_size = 23)
 ```
-
-## Findings
-
-Number of nest-searching queens, number of rodent burrows and the proportion of burrow vacancy does not significantly predict number of workers. Significantly more workers during worker season than during nest-searching season. Significant positive effect of bombus-relevant floral abundance on worker abundance (p=0.0012).
-
-# Final Path Diagram
-
-![](images/path%20diagram%20final.png)

@@ -140,11 +140,6 @@ Check diagnostics
 residuals_ditchVSfield_veg_tweedie <- simulateResiduals(fittedModel = ditchVSfield_veg_tweedie, plot = TRUE)
 
 ##looks good!
-
-testQuantiles(residuals_ditchVSfield_veg_tweedie) #ns
-testDispersion(residuals_ditchVSfield_veg_tweedie) #ns
-testOutliers(residuals_ditchVSfield_veg_tweedie) #ns
-testZeroInflation(residuals_ditchVSfield_veg_tweedie) #ns
 ```
 
 Print output
@@ -158,13 +153,15 @@ Find effect of cover type within each plot type
 ```{r}
 library(emmeans)
 
-pairs(emmeans(ditchVSfield_veg_tweedie, ~ cover_type | plot_type))
+pairs(emmeans(ditchVSfield_veg_tweedie, ~ cover_type | plot_type),
+      type = "response")
 ```
 
 Find effect of plot type within each cover type
 
 ```{r}
-pairs(emmeans(ditchVSfield_veg_tweedie, ~ plot_type | cover_type))
+pairs(emmeans(ditchVSfield_veg_tweedie, ~ plot_type | cover_type),
+      type = "response")
 ```
 
 ### Plots
@@ -567,13 +564,15 @@ summary(rodent_veg_full_nbin)
 Find effect of cover type in each plot type
 
 ```{r}
-pairs(emmeans(rodent_veg_full_nbin, ~ cover_type | plot_type))
+pairs(emmeans(rodent_veg_full_nbin, ~ cover_type | plot_type),
+      type = "response")
 ```
 
 Find effect of plot type in each cover type
 
 ```{r}
-pairs(emmeans(rodent_veg_full_nbin, ~ plot_type | cover_type))
+pairs(emmeans(rodent_veg_full_nbin, ~ plot_type | cover_type),
+      type = "response")
 ```
 
 ### Plots
