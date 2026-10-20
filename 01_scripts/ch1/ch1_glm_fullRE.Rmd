@@ -98,6 +98,8 @@ burrows_full <- glmmTMB(num_burrows ~ grass_forb_perc_scaled +
                              (1|area/site_id),
                            family = poisson, 
                            data = field_data)
+
+AIC(burrows_full)
 ```
 
 2)  Check diagnostics of the model using DHARMa package.
@@ -119,6 +121,8 @@ burrows_negBin <- glmmTMB(num_burrows ~ grass_forb_perc_scaled +
                            family = nbinom2, 
                            data = field_data)
 
+AIC(burrows_negBin)
+
 #simulate residuals
 residuals_burrowsy_negBin <- simulateResiduals(fittedModel = burrows_negBin, plot = TRUE)
 ```
@@ -135,13 +139,15 @@ burrows_zi_pois <- glmmTMB(num_burrows ~ grass_forb_perc_scaled +
                            family = poisson, 
                            data = field_data)
 
+AIC(burrows_zi_pois)
+
 #simulate residuals
 residuals_burrows_zi <- simulateResiduals(fittedModel = burrows_zi_pois, plot = TRUE)
 ```
 
 5)  Try zero-inflated negative binomial and check diagnostics.
 
--   combined adjusted quantile test still significant.
+-   KS test and combined adjusted quantile test significant.
 
 ```{r}
 burrows_zi_nbin <- glmmTMB(num_burrows ~ grass_forb_perc_scaled + 
@@ -150,6 +156,8 @@ burrows_zi_nbin <- glmmTMB(num_burrows ~ grass_forb_perc_scaled +
                              (1|area/site_id),
                            family = nbinom2, 
                            data = field_data)
+
+summary(burrows_zi_nbin)
 
 #simulate residuals
 residuals_burrows_zi_nbin <- simulateResiduals(fittedModel = burrows_zi_nbin, plot = TRUE)
@@ -165,6 +173,8 @@ burrows_cover_full <- glmmTMB(num_burrows ~ cover_type +
                              (1|area/site_id),
                            family = poisson, 
                            data = field_data)
+
+AIC(burrows_cover_full)
 ```
 
 7.  Check diagnostics

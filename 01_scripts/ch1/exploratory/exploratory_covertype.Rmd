@@ -98,6 +98,14 @@ summary(g)
 
 ggplot(data, aes(x=cover_type, y = grass_perc)) + 
   geom_boxplot() +
+  geom_jitter(
+    data = data,
+    aes(x = cover_type, y = grass_perc),
+    width = 0.2,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   xlab("Cover type") +
   ylab("Grass (% cover)") +
   theme_classic(base_size = 23)
@@ -135,6 +143,14 @@ summary(f)
 
 ggplot(data, aes(x = cover_type, y = forb_perc)) + 
   geom_boxplot() +
+  geom_jitter(
+    data = data,
+    aes(x = cover_type, y = forb_perc),
+    width = 0.2,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   xlab("Cover type") +
   ylab("Forb (% cover)") +
   theme_classic(base_size = 23)
@@ -233,6 +249,14 @@ anova(fc)
 
 ggplot(data, aes(x = cover_type, y = floral_perc)) + 
   geom_boxplot() +
+  geom_jitter(
+    data = data,
+    aes(x = cover_type, y = grass_perc),
+    width = 0.2,
+    height = 0,
+    size = 3,
+    alpha = 0.2,
+    inherit.aes = FALSE) +
   xlab("Cover type") +
   ylab("Floral (% cover)") +
   theme_classic(base_size = 23)
@@ -247,6 +271,7 @@ summary(bfc)
 
 ggplot(data, aes(x = cover_type, y = bombus_floral_perc)) + 
   geom_boxplot() +
+  
   xlab("Cover type") +
   ylab("Floral (% cover)") +
   theme_classic(base_size = 23)
