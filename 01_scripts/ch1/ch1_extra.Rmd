@@ -20,7 +20,7 @@ library(lme4) #for mixed effects models
 library(ggpubr) #for adding significance asterisks to graph
 
 #read in data
-data <- read.csv("06_cleandata/combined_plot_data.csv")
+data <- read.csv("06_cleandata/combined_plot_data_ch1.csv")
 
 #check that variables are in appropriate format
 str(data)
@@ -121,6 +121,29 @@ ggplot(data, aes(x=cover_type, y = num_burrows))+
     size = 3.7)  # Adjust this value to make the asterisks larger
 ```
 
+Variance in rodent burrow count between cover types
+
+```{r}
+data %>%
+  group_by(cover_type) %>%
+  summarise(
+    n = n(),
+    mean_burrows = mean(num_burrows, na.rm = TRUE),
+    sd_burrows = sd(num_burrows, na.rm = TRUE),
+    min_burrows = min(num_burrows, na.rm = TRUE),
+    max_burrows = max(num_burrows, na.rm = TRUE)
+  )
+
+ggplot(data, aes(x = cover_type, y = num_burrows)) +
+  geom_boxplot(width = 0.4, outlier.shape = NA) +
+  geom_jitter(width = 0.08, height = 0, size = 2) +
+  labs(
+    x = "Cover type",
+    y = "Rodent burrow abundance"
+  ) +
+  theme_classic()
+```
+
 ## Floral abundance (relevant to bees)
 
 ```{r}
@@ -197,7 +220,7 @@ weighted_avg_prop_inactive
 ##0.4928571
 ```
 
-# Number of individuals observed 
+# Number of individuals observed
 
 ## Bees
 
